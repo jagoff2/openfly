@@ -2346,3 +2346,38 @@ Interpretation:
 - Initialize Git in the workspace.
 - Stage the publishable tree under the new ignore rules.
 - If the user provides a GitHub remote URL, add it and push the first commit.
+
+## 2026-03-09 - GitHub remote added, local repo committed, push blocked by account mismatch
+
+1. What I attempted
+- Initialized Git in `G:\\flysim`, staged the publishable tree under the new ignore rules, and created the first local commit.
+- Added the user-provided remote:
+  - `https://github.com/jagoff412/openfly`
+- Tried both HTTPS and SSH push paths.
+
+2. What succeeded
+- Local repo is now initialized and committed:
+  - `29d14e5 Initial public flysim reproduction repo`
+- The remote is configured and the working tree is clean.
+- SSH authentication to GitHub itself works on this machine.
+
+3. What failed
+- HTTPS push failed because this machine does not have a usable interactive GitHub credential helper in this shell:
+  - `git: 'credential-manager-core' is not a git command`
+  - `fatal: could not read Username for 'https://github.com': terminal prompts disabled`
+- SSH push also failed, but for a clearer reason:
+  - the local SSH key authenticates as GitHub user `jagoff2`
+  - the target repo is `jagoff412/openfly`
+  - GitHub rejected the push with:
+    - `ERROR: Permission to jagoff412/openfly.git denied to jagoff2.`
+
+4. Evidence paths
+- `.gitignore`
+- `GITHUB_UPLOAD_NOTES.md`
+- local commit:
+  - `29d14e5`
+
+5. Honest conclusion
+- The repo is ready to push technically.
+- The remaining blocker is account/auth ownership, not repo state.
+- To finish the upload, the authenticated GitHub identity must have write access to `jagoff412/openfly`, or the remote must be changed to a repo owned by `jagoff2`.
