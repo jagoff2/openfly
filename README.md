@@ -61,6 +61,11 @@ WSL public `P9` context experiment benchmark:
 Host search for lateralized public sensory anchors:
 - `python scripts/search_lateralized_public_anchors.py`
 
+Brain-task probes from the Shiu et al. paper:
+- `python scripts/run_feeding_probe.py --config configs/default.yaml`
+- `python scripts/run_grooming_probe.py --config configs/default.yaml`
+- docs: `docs/feeding_and_grooming_brain_tasks.md`
+
 ## Replicate Current Results
 
 These are the exact runs behind the current strongest claim: the descending-only embodied splice branch is brain-driven and visually driven, and the moving target modulates steering and drive.

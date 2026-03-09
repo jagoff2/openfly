@@ -1,0 +1,78 @@
+{
+  "task": "grooming",
+  "duration_ms": 100.0,
+  "inputs": [
+    "jon_all",
+    "jon_ce",
+    "jon_dm",
+    "jon_f"
+  ],
+  "peak_adn1_rows": [
+    {
+      "input_group": "jon_all",
+      "peak_frequency_hz": 20.0,
+      "peak_adn1_total_hz": 0.0,
+      "peak_abn1_hz_at_adn1_peak": 0.0,
+      "peak_adn1_left_hz": 0.0,
+      "peak_adn1_right_hz": 0.0
+    },
+    {
+      "input_group": "jon_ce",
+      "peak_frequency_hz": 20.0,
+      "peak_adn1_total_hz": 0.0,
+      "peak_abn1_hz_at_adn1_peak": 0.0,
+      "peak_adn1_left_hz": 0.0,
+      "peak_adn1_right_hz": 0.0
+    },
+    {
+      "input_group": "jon_dm",
+      "peak_frequency_hz": 20.0,
+      "peak_adn1_total_hz": 0.0,
+      "peak_abn1_hz_at_adn1_peak": 0.0,
+      "peak_adn1_left_hz": 0.0,
+      "peak_adn1_right_hz": 0.0
+    },
+    {
+      "input_group": "jon_f",
+      "peak_frequency_hz": 20.0,
+      "peak_adn1_total_hz": 0.0,
+      "peak_abn1_hz_at_adn1_peak": 0.0,
+      "peak_adn1_left_hz": 0.0,
+      "peak_adn1_right_hz": 0.0
+    }
+  ],
+  "peak_abn1_rows": [
+    {
+      "input_group": "jon_all",
+      "peak_frequency_hz": 160.0,
+      "peak_abn1_hz": 20.0,
+      "peak_adn1_total_hz_at_abn1_peak": 0.0,
+      "peak_adn1_left_hz": 0.0,
+      "peak_adn1_right_hz": 0.0
+    },
+    {
+      "input_group": "jon_ce",
+      "peak_frequency_hz": 160.0,
+      "peak_abn1_hz": 20.0,
+      "peak_adn1_total_hz_at_abn1_peak": 0.0,
+      "peak_adn1_left_hz": 0.0,
+      "peak_adn1_right_hz": 0.0
+    },
+    {
+      "input_group": "jon_dm",
+      "peak_frequency_hz": 20.0,
+      "peak_abn1_hz": 0.0,
+      "peak_adn1_total_hz_at_abn1_peak": 0.0,
+      "peak_adn1_left_hz": 0.0,
+      "peak_adn1_right_hz": 0.0
+    },
+    {
+      "input_group": "jon_f",
+      "peak_frequency_hz": 20.0,
+      "peak_abn1_hz": 0.0,
+      "peak_adn1_total_hz_at_abn1_peak": 0.0,
+      "peak_adn1_left_hz": 0.0,
+      "peak_adn1_right_hz": 0.0
+    }
+  ]
+}

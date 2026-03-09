@@ -2432,3 +2432,58 @@ Interpretation:
 - The remaining open claims are still clearly limited:
   - current strongest branch is brain-driven and visually driven
   - but not yet a final proof of the exact biological motor code or a clean mirrored short side-specific pursuit reflex
+
+## 2026-03-09 - Paper-grounded feeding and grooming brain tasks added
+
+1. What I attempted
+- Added the two public Shiu-paper sensorimotor tasks as runnable brain-only probes:
+  - feeding
+  - grooming
+- Kept them grounded in the public notebook IDs already present in the checked-out `fly-brain` repo.
+- Kept them explicitly brain-only so they are ready for later embodiment experiments without pretending the body-side interfaces already exist.
+
+2. What succeeded
+- Added grounded task ID definitions:
+  - `src/brain/paper_task_ids.py`
+- Added reusable probe logic:
+  - `src/brain/paper_task_probes.py`
+- Added runnable scripts:
+  - `scripts/run_feeding_probe.py`
+  - `scripts/run_grooming_probe.py`
+- Added test coverage:
+  - `tests/test_paper_task_ids.py`
+- Added documentation:
+  - `docs/feeding_and_grooming_brain_tasks.md`
+- Generated initial local artifacts:
+  - `outputs/metrics/feeding_probe.csv`
+  - `outputs/metrics/feeding_probe_summary.json`
+  - `outputs/plots/feeding_probe.png`
+  - `outputs/metrics/grooming_probe.csv`
+  - `outputs/metrics/grooming_probe_summary.json`
+  - `outputs/plots/grooming_probe.png`
+  - `outputs/metrics/grooming_probe_500ms.csv`
+  - `outputs/metrics/grooming_probe_500ms_summary.json`
+  - `outputs/plots/grooming_probe_500ms.png`
+
+3. What the first local probe results show
+- Feeding:
+  - the right-hemisphere sugar GRN set produces a clear `MN9` response in the short `100 ms` sweep
+  - strongest observed row:
+    - `sugar_right @ 180 Hz`
+    - `mn9_left = 60 Hz`
+    - `mn9_right = 40 Hz`
+    - `mn9_total = 100 Hz`
+  - the left-hemisphere sugar set stayed silent in that same short window
+- Grooming:
+  - the short `100 ms` sweep shows `aBN1` activation under `JON_CE` and `JON_all`
+  - the short `100 ms` sweep does not show `aDN1` spiking
+  - the longer `500 ms` follow-up does show a weaker downstream grooming response:
+    - `jon_all @ 220 Hz` gives `aDN1_right = 6 Hz` and `aBN1 = 28 Hz`
+
+4. Honest conclusion
+- These tasks are now added as grounded brain-side probes.
+- They are useful and reproducible today.
+- They are not yet embodied behaviors.
+- The next embodiment step is now narrower and cleaner:
+  - map body-side gustatory/contact state into the published sugar/JON inputs
+  - then map `MN9` / `aDN1` / `aBN1` into actual proboscis or grooming actuation interfaces
