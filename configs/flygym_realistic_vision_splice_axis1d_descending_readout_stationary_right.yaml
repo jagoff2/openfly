@@ -1,0 +1,54 @@
+brain:
+  backend: torch
+  completeness_path: external/fly-brain/data/2025_Completeness_783.csv
+  connectivity_path: external/fly-brain/data/2025_Connectivity_783.parquet
+  cache_dir: outputs/cache
+  device: cpu
+  dt_ms: 0.1
+body:
+  terrain_type: flat
+  leading_fly_speed: 0.0
+  leading_fly_radius: 10.0
+  target_fly_enabled: true
+  target_initial_phase_rad: 3.141592653589793
+  target_angular_direction: 1.0
+brain_context:
+  mode: none
+visual_splice:
+  enabled: true
+  annotation_path: outputs/cache/flywire_annotation_supplement.tsv
+  spatial_mode: axis1d
+  spatial_bins: 4
+  min_roots_per_bin: 20
+  value_scale: 101.94613788960949
+  max_abs_current: 120.0
+  baseline_update_alpha: 0.0
+decoder:
+  forward_gain: 1.0
+  turn_gain: 0.45
+  signal_smoothing_alpha: 0.12
+  population_candidates_json: outputs/metrics/descending_readout_candidates_strict.json
+  population_forward_cell_types:
+    - DNp103
+    - DNp06
+    - DNp18
+    - DNp35
+  population_turn_cell_types:
+    - DNpe056
+    - DNp71
+    - DNpe040
+  population_forward_scale_hz: 60.0
+  population_turn_scale_hz: 25.0
+  population_forward_weight: 1.0
+  population_turn_weight: 0.75
+runtime:
+  seed: 0
+  duration_s: 1.0
+  body_timestep_s: 0.0001
+  control_interval_s: 0.002
+  initial_left_drive: 0.0
+  initial_right_drive: 0.0
+  force_cpu_vision: true
+  vision_payload_mode: fast
+  video_stride: 5
+  video_fps: 24

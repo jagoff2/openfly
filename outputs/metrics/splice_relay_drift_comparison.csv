@@ -1,0 +1,4 @@
+summary_json,window_key,input_pulse_ms,value_scale,left_turn_bias,right_turn_bias,sign_match
+outputs\metrics\splice_relay_probe_summary.json,100ms,,101.94613788960949,-10.0,10.0,True
+outputs\metrics\splice_relay_probe_summary.json,500ms,,101.94613788960949,-17.0,-9.0,False
+outputs\metrics\splice_relay_probe_500ms_pulse25_summary.json,500ms,25.0,101.94613788960949,0.0,-6.315789461135864,False

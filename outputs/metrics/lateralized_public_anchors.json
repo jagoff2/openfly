@@ -1,0 +1,412 @@
+{
+  "visual_lateralized_hits": [],
+  "visual_non_lateralized_hits": [
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 21,
+      "line_number_in_cell": 1,
+      "categories": [
+        "visual"
+      ],
+      "variable_name": "LC_4s",
+      "laterality_terms": [],
+      "line": "LC_4s =[720575940605598892,720575940611134833,720575940612580977,720575940613256863,720575940613260959,720575940614914107,720575940615462587,720575940617176321,720575940617266722,720575940618807105,720575940620795728,720575940622108001,720575940624017251,720575940625038090,720575940625934973,720575940625991043,720575940626605200,720575940626626895,720575940628454522,720575940628462340,720575940630851036,720575940638496720,720575940603637438,720575940610522009,720575940612093351,720575940612323025,720575940612380723,720575940612498129,720575940612518055,720575940612968421,720575940613609484,720575940613638041,720575940614572742,720575940614582946,720575940615053580,720575940615127227,720575940615232217,720575940615575007,720575940616066705,720575940616713355,720575940617026260,720575940617348379,720575940618002644,720575940618234704,720575940618234715,720575940618266459,720575940618267227,720575940618275520,720575940618312606,720575940618676440,720575940618709158,720575940618723749,720575940619397542,720575940620314221,720575940620314612,720575940620731380,720575940620903551,720575940621145821,720575940621522458,720575940621753579,720575940622330582,720575940622531767,720575940622939836,720575940624111763,720575940624790781,720575940624856762,720575940625841351,720575940625845447,720575940625906702,720575940625932421,720575940626553596,720575940626916936,720575940627519107,720575940628064260,720575940628081541,720575940628419527,720575940628518400,720575940628599895,720575940628606713,720575940628699560,720575940628891863,720575940629753807,720575940629964591,720575940630154660,720575940630484495,720575940630998339,720575940631032657,720575940631338271,720575940632475449,720575940632715234,720575940632769180,720575940633013355,720575940633218863,720575940633580384,720575940634517856,720575940635835967,720575940636957006,720575940638456227,720575940639817947,720575940640612480,720575940641213824,720575940645821316,720575940649229433,720575940652611745]",
+      "markdown_context": "#Vision: Looming \u2192 Escape"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 22,
+      "line_number_in_cell": 1,
+      "categories": [
+        "visual"
+      ],
+      "variable_name": "Activation_freq",
+      "laterality_terms": [],
+      "line": "Activation_freq=200",
+      "markdown_context": "#Vision: Looming \u2192 Escape"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 23,
+      "line_number_in_cell": 1,
+      "categories": [
+        "visual"
+      ],
+      "variable_name": "ps",
+      "laterality_terms": [],
+      "line": "ps = [",
+      "markdown_context": "#Vision: Looming \u2192 Escape"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 23,
+      "line_number_in_cell": 6,
+      "categories": [
+        "visual"
+      ],
+      "variable_name": "df_spike",
+      "laterality_terms": [],
+      "line": "df_spike = utl.load_exps(ps)",
+      "markdown_context": "#Vision: Looming \u2192 Escape"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 24,
+      "line_number_in_cell": 1,
+      "categories": [
+        "visual"
+      ],
+      "variable_name": "relevant_neurons",
+      "laterality_terms": [],
+      "line": "relevant_neurons = [neuron for neuron in output_neurons if neuron in df_rate.index]",
+      "markdown_context": "#Vision: Looming \u2192 Escape"
+    }
+  ],
+  "mechanosensory_lateralized_hits": [],
+  "mechanosensory_non_lateralized_hits": [
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 1,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "JO_EV",
+      "laterality_terms": [],
+      "line": "JO_EV = [720575940645106376,720575940615272415,720575940619869120,720575940620257345,720575940620382889,720575940630834683,720575940632449619,720575940634020508,720575940605530302,720575940607140035,720575940608742409,720575940615590843,720575940620410177,",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 4,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "JO_EDC",
+      "laterality_terms": [],
+      "line": "JO_EDC=[720575940606154370,720575940605919334,720575940608884931,720575940616655989,720575940620543110,720575940622937528,720575940624799290,",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 7,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "JO_EDM",
+      "laterality_terms": [],
+      "line": "JO_EDM=[720575940615972027,720575940618941037,720575940619729835,720575940627282279,720575940628903247,720575940604122982,720575940609486690,",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 14,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "JO_EDP",
+      "laterality_terms": [],
+      "line": "JO_EDP=[720575940609522461,720575940610261346,720575940613641915,720575940615469785,720575940616589878,720575940616951124,720575940619479979,",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 16,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "JO_EVL",
+      "laterality_terms": [],
+      "line": "JO_EVL=[720575940615573597,720575940615848788,720575940619083349,720575940621397417,720575940621625597,720575940622283912,720575940627049731,",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 20,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "JO_EVM",
+      "laterality_terms": [],
+      "line": "JO_EVM=[720575940602132509,720575940602506208,720575940610759634,720575940614188149,720575940615809349,720575940615976891,720575940619341105,",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 27,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "JO_EVP",
+      "laterality_terms": [],
+      "line": "JO_EVP=[720575940620444654,720575940631866508,720575940607853833,720575940611088563,720575940612773374,720575940613221928,720575940615024543,720575940615986459,720575940617811013,720575940618467195,720575940621442224,",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 29,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "JO_CA",
+      "laterality_terms": [],
+      "line": "JO_CA=[720575940605800369,720575940608784579,720575940618135109,720575940626719101,720575940629296185,720575940636137591,720575940602720940,720575940610079857,720575940614427195,720575940616501787,720575940617156445,720575940625909962,720575940626241369,720575940629105658,720575940629138959,720575940636559534,720575940641372661]",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 30,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "JO_CL",
+      "laterality_terms": [],
+      "line": "JO_CL=[720575940626135548,720575940627751567,720575940604753437,720575940613971485,720575940614835362,720575940623399059,720575940630319671,720575940639082062]",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 31,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "JO_CM",
+      "laterality_terms": [],
+      "line": "JO_CM=[720575940607386307,720575940634512992,720575940614035485,720575940618901424,720575940630070343,720575940633443353,720575940635058612,720575940637632419,720575940625626000]",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\example.ipynb",
+      "cell_index": 27,
+      "line_number_in_cell": 32,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "all_JOs",
+      "laterality_terms": [],
+      "line": "all_JOs = JO_EV+JO_EDC+JO_EDM+JO_EDP+JO_EVL+JO_EVM+JO_EVP+JO_CA+JO_CL+JO_CM",
+      "markdown_context": "JO-CEs are vibration/touch sensitive neurons that trigger grooming when moved."
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 50,
+      "line_number_in_cell": 32,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "flyid2name",
+      "laterality_terms": [],
+      "line": "flyid2name = { f: 'JON_{}'.format(i+1) for i, f in enumerate(neu_JON_all) }",
+      "markdown_context": "## Figure 5b"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 52,
+      "line_number_in_cell": 3,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "ps",
+      "laterality_terms": [],
+      "line": "ps = [ config['path_res'] / 'JON_All_{}Hz.parquet'.format(f) for f in freqs ]",
+      "markdown_context": "## Figure 5b"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 52,
+      "line_number_in_cell": 14,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "id_top300_JON",
+      "laterality_terms": [],
+      "line": "id_top300_JON = df_rate.sort_values('JON_All_220Hz', ascending=False).index[:300]",
+      "markdown_context": "## Figure 5b"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 60,
+      "line_number_in_cell": 3,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "ps",
+      "laterality_terms": [],
+      "line": "ps = [ '{}/JON-silencing{}_{}_Hz.parquet'.format(config['path_res'], i, freq) for i in id_top300_JON ]",
+      "markdown_context": "## Figure 5d"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 65,
+      "line_number_in_cell": 3,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "ps",
+      "laterality_terms": [],
+      "line": "ps = ['{}/JON_CE_{}Hz.parquet'.format(config['path_res'], f) for f in freqs ]",
+      "markdown_context": "### JON-CE"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 65,
+      "line_number_in_cell": 6,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "df_spike",
+      "laterality_terms": [],
+      "line": "df_spike = utl.load_exps(ps)",
+      "markdown_context": "### JON-CE"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 68,
+      "line_number_in_cell": 2,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "ps",
+      "laterality_terms": [],
+      "line": "ps = ['{}/JON_F_{}Hz.parquet'.format(config['path_res'], f) for f in freqs ]",
+      "markdown_context": "### JON-F"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 68,
+      "line_number_in_cell": 5,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "df_spike",
+      "laterality_terms": [],
+      "line": "df_spike = utl.load_exps(ps)",
+      "markdown_context": "### JON-F"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 70,
+      "line_number_in_cell": 1,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "three_inhibitory",
+      "laterality_terms": [],
+      "line": "three_inhibitory = [720575940636066222,720575940609957315,720575940624986407]",
+      "markdown_context": "### JON-F + silencing"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 72,
+      "line_number_in_cell": 2,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "ps",
+      "laterality_terms": [],
+      "line": "ps = ['{}/JON_F_Three_Silenced_{}Hz.parquet'.format(config['path_res'], f) for f in freqs ]",
+      "markdown_context": "### JON-F + silencing"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 72,
+      "line_number_in_cell": 5,
+      "categories": [
+        "mechanosensory"
+      ],
+      "variable_name": "df_spike",
+      "laterality_terms": [],
+      "line": "df_spike = utl.load_exps(ps)",
+      "markdown_context": "### JON-F + silencing"
+    }
+  ],
+  "gustatory_lateralized_hits": [
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 4,
+      "line_number_in_cell": 2,
+      "categories": [
+        "gustatory"
+      ],
+      "variable_name": null,
+      "laterality_terms": [
+        "right"
+      ],
+      "line": "# list of the labellar sugar-sensing gustatory receptor neurons on right hemisphere",
+      "markdown_context": "## Figure 1 D"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 23,
+      "line_number_in_cell": 2,
+      "categories": [
+        "gustatory"
+      ],
+      "variable_name": null,
+      "laterality_terms": [
+        "right"
+      ],
+      "line": "# lists of all the labellar sugar-sensing gustatory receptor neurons on right hemisphere",
+      "markdown_context": "## Figure 3 A"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 32,
+      "line_number_in_cell": 2,
+      "categories": [
+        "gustatory"
+      ],
+      "variable_name": null,
+      "laterality_terms": [
+        "right"
+      ],
+      "line": "# list of the labellar water-sensing gustatory receptor neurons on right hemisphere",
+      "markdown_context": "## Figure 4a"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 44,
+      "line_number_in_cell": 2,
+      "categories": [
+        "gustatory"
+      ],
+      "variable_name": null,
+      "laterality_terms": [
+        "right"
+      ],
+      "line": "# lists of all the labellar sugar-sensing gustatory receptor neurons on right hemisphere",
+      "markdown_context": "## Figure 4e"
+    },
+    {
+      "path": "external\\fly-brain\\code\\paper-phil-drosophila\\figures.ipynb",
+      "cell_index": 76,
+      "line_number_in_cell": 2,
+      "categories": [
+        "gustatory"
+      ],
+      "variable_name": null,
+      "laterality_terms": [
+        "left"
+      ],
+      "line": "# left hemisphere sugar",
+      "markdown_context": "## Figure S1D"
+    }
+  ],
+  "olfactory_lateralized_hits": [],
+  "notes": [
+    "This search only reflects the checked public artifacts in the local workspace.",
+    "A hit is marked lateralized when the code line or the immediately preceding markdown context contains 'left', 'right', or 'bilateral'.",
+    "Non-lateralized visual and mechanosensory hits are useful for showing what public anchors exist but are not explicitly side-specific."
+  ],
+  "scanned_root": "external\\fly-brain\\code\\paper-phil-drosophila",
+  "num_hits": 41
+}

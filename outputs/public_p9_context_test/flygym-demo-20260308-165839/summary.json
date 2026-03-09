@@ -1,0 +1,17 @@
+{
+  "run_dir": "outputs/public_p9_context_test/flygym-demo-20260308-165839",
+  "metrics_path": "outputs/public_p9_context_test/flygym-demo-20260308-165839/metrics.csv",
+  "video_path": "outputs/public_p9_context_test/flygym-demo-20260308-165839/demo.mp4",
+  "log_path": "outputs/public_p9_context_test/flygym-demo-20260308-165839/run.jsonl",
+  "metrics": {
+    "sim_seconds": 0.018000000000000002,
+    "avg_forward_speed": 8.773101537239155,
+    "trajectory_smoothness": 0.13868285433695046,
+    "path_length": 0.15791582767030482,
+    "stable": 1.0,
+    "wall_seconds": 5.0650771999999975,
+    "real_time_factor": 0.003553746426609255,
+    "device": "cpu",
+    "mode": "flygym"
+  }
+}

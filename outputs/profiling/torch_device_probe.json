@@ -1,0 +1,16 @@
+[
+  {
+    "device": "cuda:0",
+    "wall_seconds": 0.927973000005295,
+    "sim_seconds": 0.1,
+    "real_time_factor": 0.10776175599875147,
+    "end_to_end_seconds": 0.9279795000038575
+  },
+  {
+    "device": "cuda:1",
+    "wall_seconds": 0.8857703999965452,
+    "sim_seconds": 0.1,
+    "real_time_factor": 0.11289607329437747,
+    "end_to_end_seconds": 0.8857759000020451
+  }
+]

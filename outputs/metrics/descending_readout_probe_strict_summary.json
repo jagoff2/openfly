@@ -1,0 +1,3135 @@
+{
+  "descending_candidates_json": "outputs/metrics/descending_readout_candidates_strict.json",
+  "spatial_mode": "axis1d",
+  "value_scale": 83.94888794512428,
+  "windows_ms": [
+    100.0,
+    500.0
+  ],
+  "pairs": [
+    {
+      "candidate_label": "DNp09",
+      "left_root_ids": [
+        720575940635872101
+      ],
+      "right_root_ids": [
+        720575940627652358
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 462.0,
+      "right_total_from_relays": 704.0,
+      "pair_score": 1166.0,
+      "left_cell_types": [],
+      "right_cell_types": [],
+      "left_hemibrain_types": [
+        "DNp09"
+      ],
+      "right_hemibrain_types": [
+        "DNp09"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        106056.0,
+        48904.0,
+        5468.0
+      ],
+      "right_soma_xyz": [
+        158656.0,
+        49592.0,
+        5300.0
+      ],
+      "left_pos_xyz": [
+        112164.0,
+        77404.0,
+        4098.0
+      ],
+      "right_pos_xyz": [
+        158656.0,
+        49592.0,
+        5300.0
+      ]
+    },
+    {
+      "candidate_label": "DNp35",
+      "left_root_ids": [
+        720575940628437291
+      ],
+      "right_root_ids": [
+        720575940623276168
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 269.0,
+      "right_total_from_relays": 348.0,
+      "pair_score": 617.0,
+      "left_cell_types": [
+        "DNp35"
+      ],
+      "right_cell_types": [
+        "DNp35"
+      ],
+      "left_hemibrain_types": [
+        "PVLP136"
+      ],
+      "right_hemibrain_types": [
+        "PVLP136"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        106488.0,
+        51472.0,
+        5322.0
+      ],
+      "right_soma_xyz": [
+        156416.0,
+        50800.0,
+        4935.0
+      ],
+      "left_pos_xyz": [
+        111288.0,
+        50024.0,
+        3537.0
+      ],
+      "right_pos_xyz": [
+        156416.0,
+        50800.0,
+        4935.0
+      ]
+    },
+    {
+      "candidate_label": "DNp06",
+      "left_root_ids": [
+        720575940622673860
+      ],
+      "right_root_ids": [
+        720575940611644529
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 245.0,
+      "right_total_from_relays": 347.0,
+      "pair_score": 592.0,
+      "left_cell_types": [],
+      "right_cell_types": [],
+      "left_hemibrain_types": [
+        "DNp06"
+      ],
+      "right_hemibrain_types": [
+        "DNp06"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        107216.0,
+        50288.0,
+        5411.0
+      ],
+      "right_soma_xyz": [
+        156616.0,
+        52472.0,
+        5064.0
+      ],
+      "left_pos_xyz": [
+        105327.0,
+        60596.0,
+        3301.0
+      ],
+      "right_pos_xyz": [
+        156616.0,
+        52472.0,
+        5064.0
+      ]
+    },
+    {
+      "candidate_label": "DNpe031",
+      "left_root_ids": [
+        720575940627750216,
+        720575940634750871
+      ],
+      "right_root_ids": [
+        720575940621554112,
+        720575940622843530
+      ],
+      "left_num_roots": 2,
+      "right_num_roots": 2,
+      "left_total_from_relays": 291.0,
+      "right_total_from_relays": 251.0,
+      "pair_score": 542.0,
+      "left_cell_types": [
+        "DNpe031"
+      ],
+      "right_cell_types": [
+        "DNpe031"
+      ],
+      "left_hemibrain_types": [
+        "PVLP116"
+      ],
+      "right_hemibrain_types": [
+        "PVLP116"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        102132.0,
+        52784.0,
+        5392.0
+      ],
+      "right_soma_xyz": [
+        160544.0,
+        58912.0,
+        5083.5
+      ],
+      "left_pos_xyz": [
+        103926.5,
+        54805.5,
+        5022.5
+      ],
+      "right_pos_xyz": [
+        160544.0,
+        58912.0,
+        5083.5
+      ]
+    },
+    {
+      "candidate_label": "DNb01",
+      "left_root_ids": [
+        720575940625878160
+      ],
+      "right_root_ids": [
+        720575940630758418
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 243.0,
+      "right_total_from_relays": 276.0,
+      "pair_score": 519.0,
+      "left_cell_types": [],
+      "right_cell_types": [],
+      "left_hemibrain_types": [
+        "DNb01"
+      ],
+      "right_hemibrain_types": [
+        "DNb01"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        106488.0,
+        59896.0,
+        2278.0
+      ],
+      "right_soma_xyz": [
+        154536.0,
+        63168.0,
+        1729.0
+      ],
+      "left_pos_xyz": [
+        106488.0,
+        59896.0,
+        2278.0
+      ],
+      "right_pos_xyz": [
+        154536.0,
+        63168.0,
+        1729.0
+      ]
+    },
+    {
+      "candidate_label": "DNp71",
+      "left_root_ids": [
+        720575940625673196
+      ],
+      "right_root_ids": [
+        720575940633095137
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 180.0,
+      "right_total_from_relays": 218.0,
+      "pair_score": 398.0,
+      "left_cell_types": [
+        "DNp71"
+      ],
+      "right_cell_types": [
+        "DNp71"
+      ],
+      "left_hemibrain_types": [
+        "DNp09"
+      ],
+      "right_hemibrain_types": [
+        "DNp09"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        108408.0,
+        49192.0,
+        5307.0
+      ],
+      "right_soma_xyz": [
+        156704.0,
+        48680.0,
+        4866.0
+      ],
+      "left_pos_xyz": [
+        110199.0,
+        50048.0,
+        3430.0
+      ],
+      "right_pos_xyz": [
+        156704.0,
+        48680.0,
+        4866.0
+      ]
+    },
+    {
+      "candidate_label": "DNb09",
+      "left_root_ids": [
+        720575940616826380
+      ],
+      "right_root_ids": [
+        720575940648636292
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 222.0,
+      "right_total_from_relays": 149.0,
+      "pair_score": 371.0,
+      "left_cell_types": [
+        "DNb09"
+      ],
+      "right_cell_types": [
+        "DNb09"
+      ],
+      "left_hemibrain_types": [
+        "DNb01"
+      ],
+      "right_hemibrain_types": [
+        "DNb01"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        106752.0,
+        59560.0,
+        2155.0
+      ],
+      "right_soma_xyz": [
+        160048.0,
+        61384.0,
+        994.0
+      ],
+      "left_pos_xyz": [
+        106752.0,
+        59560.0,
+        2155.0
+      ],
+      "right_pos_xyz": [
+        160048.0,
+        61384.0,
+        994.0
+      ]
+    },
+    {
+      "candidate_label": "DNp103",
+      "left_root_ids": [
+        720575940623781127
+      ],
+      "right_root_ids": [
+        720575940610505006
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 167.0,
+      "right_total_from_relays": 198.0,
+      "pair_score": 365.0,
+      "left_cell_types": [
+        "DNp103"
+      ],
+      "right_cell_types": [
+        "DNp103"
+      ],
+      "left_hemibrain_types": [
+        "PVLP119"
+      ],
+      "right_hemibrain_types": [
+        "PVLP119"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        107304.0,
+        55320.0,
+        5479.0
+      ],
+      "right_soma_xyz": [
+        160192.0,
+        60856.0,
+        5042.0
+      ],
+      "left_pos_xyz": [
+        110817.0,
+        53903.0,
+        3469.0
+      ],
+      "right_pos_xyz": [
+        160192.0,
+        60856.0,
+        5042.0
+      ]
+    },
+    {
+      "candidate_label": "DNp43",
+      "left_root_ids": [
+        720575940631122191
+      ],
+      "right_root_ids": [
+        720575940641278965
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 156.0,
+      "right_total_from_relays": 171.0,
+      "pair_score": 327.0,
+      "left_cell_types": [
+        "DNp43"
+      ],
+      "right_cell_types": [
+        "DNp43"
+      ],
+      "left_hemibrain_types": [
+        "CL332"
+      ],
+      "right_hemibrain_types": [
+        "CL332"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        118280.0,
+        50328.0,
+        5640.0
+      ],
+      "right_soma_xyz": [
+        150616.0,
+        42344.0,
+        5175.0
+      ],
+      "left_pos_xyz": [
+        116332.0,
+        47706.0,
+        3404.0
+      ],
+      "right_pos_xyz": [
+        147654.0,
+        49771.0,
+        3114.0
+      ]
+    },
+    {
+      "candidate_label": "DNg97",
+      "left_root_ids": [
+        720575940626730883
+      ],
+      "right_root_ids": [
+        720575940620300308
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 155.0,
+      "right_total_from_relays": 170.0,
+      "pair_score": 325.0,
+      "left_cell_types": [
+        "DNg97"
+      ],
+      "right_cell_types": [
+        "DNg97"
+      ],
+      "left_hemibrain_types": [],
+      "right_hemibrain_types": [],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        118592.0,
+        89448.0,
+        2817.0
+      ],
+      "right_soma_xyz": [
+        141040.0,
+        89776.0,
+        2454.0
+      ],
+      "left_pos_xyz": [
+        118592.0,
+        89448.0,
+        2817.0
+      ],
+      "right_pos_xyz": [
+        126507.0,
+        70522.0,
+        4373.0
+      ]
+    },
+    {
+      "candidate_label": "DNp18",
+      "left_root_ids": [
+        720575940618440000
+      ],
+      "right_root_ids": [
+        720575940627949589
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 163.0,
+      "right_total_from_relays": 157.0,
+      "pair_score": 320.0,
+      "left_cell_types": [],
+      "right_cell_types": [],
+      "left_hemibrain_types": [
+        "DNp18"
+      ],
+      "right_hemibrain_types": [
+        "DNp18"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        113488.0,
+        47432.0,
+        5295.0
+      ],
+      "right_soma_xyz": [
+        153768.0,
+        52048.0,
+        5053.0
+      ],
+      "left_pos_xyz": [
+        122530.0,
+        56192.0,
+        4905.0
+      ],
+      "right_pos_xyz": [
+        153768.0,
+        52048.0,
+        5053.0
+      ]
+    },
+    {
+      "candidate_label": "DNpe056",
+      "left_root_ids": [
+        720575940634458719
+      ],
+      "right_root_ids": [
+        720575940632472850
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 104.0,
+      "right_total_from_relays": 186.0,
+      "pair_score": 290.0,
+      "left_cell_types": [
+        "DNpe056"
+      ],
+      "right_cell_types": [
+        "DNpe056"
+      ],
+      "left_hemibrain_types": [
+        "PVLP146"
+      ],
+      "right_hemibrain_types": [
+        "PVLP146"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        110984.0,
+        47144.0,
+        5348.0
+      ],
+      "right_soma_xyz": [
+        153008.0,
+        46320.0,
+        5022.0
+      ],
+      "left_pos_xyz": [
+        110984.0,
+        47144.0,
+        5348.0
+      ],
+      "right_pos_xyz": [
+        153008.0,
+        46320.0,
+        5022.0
+      ]
+    },
+    {
+      "candidate_label": "DNae002",
+      "left_root_ids": [
+        720575940627139530
+      ],
+      "right_root_ids": [
+        720575940620380449
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 141.0,
+      "right_total_from_relays": 139.0,
+      "pair_score": 280.0,
+      "left_cell_types": [
+        "DNae002"
+      ],
+      "right_cell_types": [
+        "DNae002"
+      ],
+      "left_hemibrain_types": [
+        "DNa04"
+      ],
+      "right_hemibrain_types": [
+        "DNa04"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        105072.0,
+        36336.0,
+        1709.0
+      ],
+      "right_soma_xyz": [
+        157304.0,
+        40488.0,
+        1040.0
+      ],
+      "left_pos_xyz": [
+        116879.0,
+        64542.0,
+        4214.0
+      ],
+      "right_pos_xyz": [
+        152035.0,
+        41995.0,
+        2086.0
+      ]
+    },
+    {
+      "candidate_label": "DNpe040",
+      "left_root_ids": [
+        720575940624801771
+      ],
+      "right_root_ids": [
+        720575940605702944
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 148.0,
+      "right_total_from_relays": 117.0,
+      "pair_score": 265.0,
+      "left_cell_types": [
+        "DNpe040"
+      ],
+      "right_cell_types": [
+        "DNpe040"
+      ],
+      "left_hemibrain_types": [
+        "CL320"
+      ],
+      "right_hemibrain_types": [
+        "CL320"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        117576.0,
+        48712.0,
+        5538.0
+      ],
+      "right_soma_xyz": [
+        149624.0,
+        45032.0,
+        5101.0
+      ],
+      "left_pos_xyz": [
+        118096.0,
+        52921.0,
+        3358.0
+      ],
+      "right_pos_xyz": [
+        149298.0,
+        45623.0,
+        4612.0
+      ]
+    },
+    {
+      "candidate_label": "DNpe016",
+      "left_root_ids": [
+        720575940623556755
+      ],
+      "right_root_ids": [
+        720575940614236200
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 105.0,
+      "right_total_from_relays": 155.0,
+      "pair_score": 260.0,
+      "left_cell_types": [
+        "DNpe016"
+      ],
+      "right_cell_types": [
+        "DNpe016"
+      ],
+      "left_hemibrain_types": [
+        "PS211"
+      ],
+      "right_hemibrain_types": [
+        "PS211"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        130056.0,
+        58144.0,
+        4615.0
+      ],
+      "right_soma_xyz": [
+        140632.0,
+        47896.0,
+        4995.0
+      ],
+      "left_pos_xyz": [
+        122204.0,
+        48246.0,
+        4429.0
+      ],
+      "right_pos_xyz": [
+        143814.0,
+        47759.0,
+        4644.0
+      ]
+    },
+    {
+      "candidate_label": "DNp69",
+      "left_root_ids": [
+        720575940641173632
+      ],
+      "right_root_ids": [
+        720575940617809181
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 102.0,
+      "right_total_from_relays": 113.0,
+      "pair_score": 215.0,
+      "left_cell_types": [
+        "DNp69"
+      ],
+      "right_cell_types": [
+        "DNp69"
+      ],
+      "left_hemibrain_types": [
+        "CL304"
+      ],
+      "right_hemibrain_types": [
+        "CL304"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        111728.0,
+        52880.0,
+        5370.0
+      ],
+      "right_soma_xyz": [
+        155808.0,
+        52648.0,
+        5169.0
+      ],
+      "left_pos_xyz": [
+        111660.0,
+        50613.0,
+        3619.0
+      ],
+      "right_pos_xyz": [
+        155808.0,
+        52648.0,
+        5169.0
+      ]
+    }
+  ],
+  "results": {
+    "100ms": {
+      "baseline_gray": {
+        "groups": {
+          "DNp09": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp35": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp06": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNpe031": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNb01": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp71": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNb09": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp103": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp43": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNg97": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp18": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNpe056": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNae002": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNpe040": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNpe016": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp69": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          }
+        }
+      },
+      "body_left_dark": {
+        "groups": {
+          "DNp09": {
+            "left": {
+              "rate_hz": 10.0,
+              "voltage_mv": -52.42577362060547,
+              "conductance": 1.6303181648254395
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -72.37042236328125,
+              "conductance": -28.22361183166504
+            },
+            "right_minus_left": {
+              "rate_hz": -10.0,
+              "voltage_mv": -19.94464874267578,
+              "conductance": -29.85392999649048
+            }
+          },
+          "DNp35": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -89.45664978027344,
+              "conductance": -48.225406646728516
+            },
+            "right": {
+              "rate_hz": 10.0,
+              "voltage_mv": -134.798583984375,
+              "conductance": -111.03063201904297
+            },
+            "right_minus_left": {
+              "rate_hz": -10.0,
+              "voltage_mv": -45.34193420410156,
+              "conductance": -62.80522537231445
+            }
+          },
+          "DNp06": {
+            "left": {
+              "rate_hz": 30.0,
+              "voltage_mv": -76.89061737060547,
+              "conductance": -27.705280303955078
+            },
+            "right": {
+              "rate_hz": 30.0,
+              "voltage_mv": -71.76844787597656,
+              "conductance": -24.60733413696289
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 5.122169494628906,
+              "conductance": 3.0979461669921875
+            }
+          },
+          "DNpe031": {
+            "left": {
+              "rate_hz": 50.0,
+              "voltage_mv": -49.830142974853516,
+              "conductance": 9.540949821472168
+            },
+            "right": {
+              "rate_hz": 30.0,
+              "voltage_mv": -51.01632881164551,
+              "conductance": 5.152836561203003
+            },
+            "right_minus_left": {
+              "rate_hz": -20.0,
+              "voltage_mv": -1.1861858367919922,
+              "conductance": -4.388113260269165
+            }
+          },
+          "DNb01": {
+            "left": {
+              "rate_hz": 50.0,
+              "voltage_mv": -50.49772644042969,
+              "conductance": 8.597092628479004
+            },
+            "right": {
+              "rate_hz": 70.0,
+              "voltage_mv": -50.98918533325195,
+              "conductance": 10.980252265930176
+            },
+            "right_minus_left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -0.4914588928222656,
+              "conductance": 2.383159637451172
+            }
+          },
+          "DNp71": {
+            "left": {
+              "rate_hz": 70.0,
+              "voltage_mv": -50.20879364013672,
+              "conductance": 11.716856002807617
+            },
+            "right": {
+              "rate_hz": 30.0,
+              "voltage_mv": -51.52188491821289,
+              "conductance": 4.847650527954102
+            },
+            "right_minus_left": {
+              "rate_hz": -40.0,
+              "voltage_mv": -1.3130912780761719,
+              "conductance": -6.869205474853516
+            }
+          },
+          "DNb09": {
+            "left": {
+              "rate_hz": 30.0,
+              "voltage_mv": -52.442264556884766,
+              "conductance": 1.9621373414993286
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -53.55013656616211,
+              "conductance": -2.005899667739868
+            },
+            "right_minus_left": {
+              "rate_hz": -30.0,
+              "voltage_mv": -1.1078720092773438,
+              "conductance": -3.9680370092391968
+            }
+          },
+          "DNp103": {
+            "left": {
+              "rate_hz": 130.0,
+              "voltage_mv": -51.191551208496094,
+              "conductance": 20.43039321899414
+            },
+            "right": {
+              "rate_hz": 140.0,
+              "voltage_mv": -51.0112419128418,
+              "conductance": 21.817380905151367
+            },
+            "right_minus_left": {
+              "rate_hz": 10.0,
+              "voltage_mv": 0.18030929565429688,
+              "conductance": 1.3869876861572266
+            }
+          },
+          "DNp43": {
+            "left": {
+              "rate_hz": 40.0,
+              "voltage_mv": -53.31338882446289,
+              "conductance": 4.646976947784424
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -74.80146026611328,
+              "conductance": -29.551164627075195
+            },
+            "right_minus_left": {
+              "rate_hz": -40.0,
+              "voltage_mv": -21.48807144165039,
+              "conductance": -34.19814157485962
+            }
+          },
+          "DNg97": {
+            "left": {
+              "rate_hz": 60.0,
+              "voltage_mv": -55.347686767578125,
+              "conductance": 5.600286960601807
+            },
+            "right": {
+              "rate_hz": 80.0,
+              "voltage_mv": -51.6068229675293,
+              "conductance": 11.97878646850586
+            },
+            "right_minus_left": {
+              "rate_hz": 20.0,
+              "voltage_mv": 3.740863800048828,
+              "conductance": 6.378499507904053
+            }
+          },
+          "DNp18": {
+            "left": {
+              "rate_hz": 50.0,
+              "voltage_mv": -51.825050354003906,
+              "conductance": 6.24709415435791
+            },
+            "right": {
+              "rate_hz": 70.0,
+              "voltage_mv": -50.7725715637207,
+              "conductance": 12.383227348327637
+            },
+            "right_minus_left": {
+              "rate_hz": 20.0,
+              "voltage_mv": 1.0524787902832031,
+              "conductance": 6.136133193969727
+            }
+          },
+          "DNpe056": {
+            "left": {
+              "rate_hz": 70.0,
+              "voltage_mv": -49.853511810302734,
+              "conductance": 12.017899513244629
+            },
+            "right": {
+              "rate_hz": 110.0,
+              "voltage_mv": -50.98239517211914,
+              "conductance": 16.709524154663086
+            },
+            "right_minus_left": {
+              "rate_hz": 40.0,
+              "voltage_mv": -1.1288833618164062,
+              "conductance": 4.691624641418457
+            }
+          },
+          "DNae002": {
+            "left": {
+              "rate_hz": 30.0,
+              "voltage_mv": -58.358219146728516,
+              "conductance": -5.395618915557861
+            },
+            "right": {
+              "rate_hz": 90.0,
+              "voltage_mv": -52.397499084472656,
+              "conductance": 12.56433391571045
+            },
+            "right_minus_left": {
+              "rate_hz": 60.0,
+              "voltage_mv": 5.960720062255859,
+              "conductance": 17.95995283126831
+            }
+          },
+          "DNpe040": {
+            "left": {
+              "rate_hz": 60.0,
+              "voltage_mv": -50.03373718261719,
+              "conductance": 11.179328918457031
+            },
+            "right": {
+              "rate_hz": 50.0,
+              "voltage_mv": -50.12981414794922,
+              "conductance": 8.977580070495605
+            },
+            "right_minus_left": {
+              "rate_hz": -10.0,
+              "voltage_mv": -0.09607696533203125,
+              "conductance": -2.201748847961426
+            }
+          },
+          "DNpe016": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -51.367305755615234,
+              "conductance": 2.9612374305725098
+            },
+            "right": {
+              "rate_hz": 80.0,
+              "voltage_mv": -51.92987060546875,
+              "conductance": 11.220911026000977
+            },
+            "right_minus_left": {
+              "rate_hz": 60.0,
+              "voltage_mv": -0.5625648498535156,
+              "conductance": 8.259673595428467
+            }
+          },
+          "DNp69": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -91.01647186279297,
+              "conductance": -52.15769577026367
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -113.9195785522461,
+              "conductance": -79.72889709472656
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -22.903106689453125,
+              "conductance": -27.57120132446289
+            }
+          }
+        }
+      },
+      "body_center_dark": {
+        "groups": {
+          "DNp09": {
+            "left": {
+              "rate_hz": 10.0,
+              "voltage_mv": -54.09341049194336,
+              "conductance": -2.3648040294647217
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -95.85073852539062,
+              "conductance": -59.327842712402344
+            },
+            "right_minus_left": {
+              "rate_hz": -10.0,
+              "voltage_mv": -41.757328033447266,
+              "conductance": -56.96303868293762
+            }
+          },
+          "DNp35": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -72.39976501464844,
+              "conductance": -23.968944549560547
+            },
+            "right": {
+              "rate_hz": 20.0,
+              "voltage_mv": -102.87327575683594,
+              "conductance": -67.83941650390625
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -30.4735107421875,
+              "conductance": -43.8704719543457
+            }
+          },
+          "DNp06": {
+            "left": {
+              "rate_hz": 70.0,
+              "voltage_mv": -54.92880630493164,
+              "conductance": 7.16562032699585
+            },
+            "right": {
+              "rate_hz": 60.0,
+              "voltage_mv": -56.43803405761719,
+              "conductance": 4.90430212020874
+            },
+            "right_minus_left": {
+              "rate_hz": -10.0,
+              "voltage_mv": -1.5092277526855469,
+              "conductance": -2.2613182067871094
+            }
+          },
+          "DNpe031": {
+            "left": {
+              "rate_hz": 55.0,
+              "voltage_mv": -49.972829818725586,
+              "conductance": 9.955459594726562
+            },
+            "right": {
+              "rate_hz": 45.0,
+              "voltage_mv": -50.00406265258789,
+              "conductance": 9.046694278717041
+            },
+            "right_minus_left": {
+              "rate_hz": -10.0,
+              "voltage_mv": -0.031232833862304688,
+              "conductance": -0.9087653160095215
+            }
+          },
+          "DNb01": {
+            "left": {
+              "rate_hz": 30.0,
+              "voltage_mv": -55.17465591430664,
+              "conductance": 0.6939458250999451
+            },
+            "right": {
+              "rate_hz": 80.0,
+              "voltage_mv": -50.379676818847656,
+              "conductance": 12.98214054107666
+            },
+            "right_minus_left": {
+              "rate_hz": 50.0,
+              "voltage_mv": 4.794979095458984,
+              "conductance": 12.288194715976715
+            }
+          },
+          "DNp71": {
+            "left": {
+              "rate_hz": 70.0,
+              "voltage_mv": -50.934181213378906,
+              "conductance": 10.647199630737305
+            },
+            "right": {
+              "rate_hz": 70.0,
+              "voltage_mv": -50.35574722290039,
+              "conductance": 12.432748794555664
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.5784339904785156,
+              "conductance": 1.7855491638183594
+            }
+          },
+          "DNb09": {
+            "left": {
+              "rate_hz": 60.0,
+              "voltage_mv": -51.0202522277832,
+              "conductance": 9.47474479675293
+            },
+            "right": {
+              "rate_hz": 40.0,
+              "voltage_mv": -50.95100402832031,
+              "conductance": 7.545453071594238
+            },
+            "right_minus_left": {
+              "rate_hz": -20.0,
+              "voltage_mv": 0.06924819946289062,
+              "conductance": -1.9292917251586914
+            }
+          },
+          "DNp103": {
+            "left": {
+              "rate_hz": 140.0,
+              "voltage_mv": -51.06025314331055,
+              "conductance": 21.202030181884766
+            },
+            "right": {
+              "rate_hz": 140.0,
+              "voltage_mv": -51.216941833496094,
+              "conductance": 21.029144287109375
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -0.15668869018554688,
+              "conductance": -0.17288589477539062
+            }
+          },
+          "DNp43": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -52.66984558105469,
+              "conductance": 2.07200026512146
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -69.4685287475586,
+              "conductance": -24.21636962890625
+            },
+            "right_minus_left": {
+              "rate_hz": -20.0,
+              "voltage_mv": -16.798683166503906,
+              "conductance": -26.28836989402771
+            }
+          },
+          "DNg97": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -57.090240478515625,
+              "conductance": -1.7345844507217407
+            },
+            "right": {
+              "rate_hz": 30.0,
+              "voltage_mv": -57.2652587890625,
+              "conductance": -1.3329893350601196
+            },
+            "right_minus_left": {
+              "rate_hz": 10.0,
+              "voltage_mv": -0.175018310546875,
+              "conductance": 0.4015951156616211
+            }
+          },
+          "DNp18": {
+            "left": {
+              "rate_hz": 80.0,
+              "voltage_mv": -50.8173828125,
+              "conductance": 12.6766357421875
+            },
+            "right": {
+              "rate_hz": 100.0,
+              "voltage_mv": -50.49995803833008,
+              "conductance": 15.736679077148438
+            },
+            "right_minus_left": {
+              "rate_hz": 20.0,
+              "voltage_mv": 0.3174247741699219,
+              "conductance": 3.0600433349609375
+            }
+          },
+          "DNpe056": {
+            "left": {
+              "rate_hz": 70.0,
+              "voltage_mv": -50.34660339355469,
+              "conductance": 12.34829044342041
+            },
+            "right": {
+              "rate_hz": 100.0,
+              "voltage_mv": -50.10581970214844,
+              "conductance": 16.11971092224121
+            },
+            "right_minus_left": {
+              "rate_hz": 30.0,
+              "voltage_mv": 0.24078369140625,
+              "conductance": 3.771420478820801
+            }
+          },
+          "DNae002": {
+            "left": {
+              "rate_hz": 30.0,
+              "voltage_mv": -58.410057067871094,
+              "conductance": -4.469073295593262
+            },
+            "right": {
+              "rate_hz": 90.0,
+              "voltage_mv": -52.79572677612305,
+              "conductance": 10.220706939697266
+            },
+            "right_minus_left": {
+              "rate_hz": 60.0,
+              "voltage_mv": 5.614330291748047,
+              "conductance": 14.689780235290527
+            }
+          },
+          "DNpe040": {
+            "left": {
+              "rate_hz": 70.0,
+              "voltage_mv": -49.961036682128906,
+              "conductance": 13.332368850708008
+            },
+            "right": {
+              "rate_hz": 60.0,
+              "voltage_mv": -50.26661682128906,
+              "conductance": 11.336877822875977
+            },
+            "right_minus_left": {
+              "rate_hz": -10.0,
+              "voltage_mv": -0.30558013916015625,
+              "conductance": -1.9954910278320312
+            }
+          },
+          "DNpe016": {
+            "left": {
+              "rate_hz": 10.0,
+              "voltage_mv": -53.84111785888672,
+              "conductance": -1.5877716541290283
+            },
+            "right": {
+              "rate_hz": 70.0,
+              "voltage_mv": -52.03617477416992,
+              "conductance": 10.325284957885742
+            },
+            "right_minus_left": {
+              "rate_hz": 60.0,
+              "voltage_mv": 1.8049430847167969,
+              "conductance": 11.91305661201477
+            }
+          },
+          "DNp69": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -88.87566375732422,
+              "conductance": -50.109230041503906
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -115.91746520996094,
+              "conductance": -85.33460235595703
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -27.04180145263672,
+              "conductance": -35.225372314453125
+            }
+          }
+        }
+      },
+      "body_right_dark": {
+        "groups": {
+          "DNp09": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -51.37744903564453,
+              "conductance": 3.368201494216919
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -90.62329864501953,
+              "conductance": -50.7107048034668
+            },
+            "right_minus_left": {
+              "rate_hz": -20.0,
+              "voltage_mv": -39.245849609375,
+              "conductance": -54.078906297683716
+            }
+          },
+          "DNp35": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -77.30826568603516,
+              "conductance": -33.02077102661133
+            },
+            "right": {
+              "rate_hz": 20.0,
+              "voltage_mv": -118.38859558105469,
+              "conductance": -86.58132934570312
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -41.08032989501953,
+              "conductance": -53.5605583190918
+            }
+          },
+          "DNp06": {
+            "left": {
+              "rate_hz": 60.0,
+              "voltage_mv": -55.458919525146484,
+              "conductance": 2.541536331176758
+            },
+            "right": {
+              "rate_hz": 70.0,
+              "voltage_mv": -54.65541076660156,
+              "conductance": 7.424824237823486
+            },
+            "right_minus_left": {
+              "rate_hz": 10.0,
+              "voltage_mv": 0.8035087585449219,
+              "conductance": 4.8832879066467285
+            }
+          },
+          "DNpe031": {
+            "left": {
+              "rate_hz": 55.0,
+              "voltage_mv": -50.38871955871582,
+              "conductance": 9.535361289978027
+            },
+            "right": {
+              "rate_hz": 45.0,
+              "voltage_mv": -49.98051834106445,
+              "conductance": 8.645172595977783
+            },
+            "right_minus_left": {
+              "rate_hz": -10.0,
+              "voltage_mv": 0.4082012176513672,
+              "conductance": -0.8901886940002441
+            }
+          },
+          "DNb01": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -53.63246154785156,
+              "conductance": 1.1841365098953247
+            },
+            "right": {
+              "rate_hz": 70.0,
+              "voltage_mv": -49.92208480834961,
+              "conductance": 12.557140350341797
+            },
+            "right_minus_left": {
+              "rate_hz": 50.0,
+              "voltage_mv": 3.710376739501953,
+              "conductance": 11.373003840446472
+            }
+          },
+          "DNp71": {
+            "left": {
+              "rate_hz": 50.0,
+              "voltage_mv": -49.723052978515625,
+              "conductance": 10.088865280151367
+            },
+            "right": {
+              "rate_hz": 60.0,
+              "voltage_mv": -51.8752326965332,
+              "conductance": 8.586856842041016
+            },
+            "right_minus_left": {
+              "rate_hz": 10.0,
+              "voltage_mv": -2.152179718017578,
+              "conductance": -1.5020084381103516
+            }
+          },
+          "DNb09": {
+            "left": {
+              "rate_hz": 30.0,
+              "voltage_mv": -51.85163116455078,
+              "conductance": 4.524533748626709
+            },
+            "right": {
+              "rate_hz": 10.0,
+              "voltage_mv": -52.11144256591797,
+              "conductance": 1.17633056640625
+            },
+            "right_minus_left": {
+              "rate_hz": -20.0,
+              "voltage_mv": -0.2598114013671875,
+              "conductance": -3.348203182220459
+            }
+          },
+          "DNp103": {
+            "left": {
+              "rate_hz": 150.0,
+              "voltage_mv": -50.92308807373047,
+              "conductance": 22.734325408935547
+            },
+            "right": {
+              "rate_hz": 150.0,
+              "voltage_mv": -50.94448471069336,
+              "conductance": 22.709415435791016
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -0.021396636962890625,
+              "conductance": -0.02490997314453125
+            }
+          },
+          "DNp43": {
+            "left": {
+              "rate_hz": 10.0,
+              "voltage_mv": -55.97077941894531,
+              "conductance": -4.4678521156311035
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -69.4629135131836,
+              "conductance": -23.35064125061035
+            },
+            "right_minus_left": {
+              "rate_hz": -10.0,
+              "voltage_mv": -13.492134094238281,
+              "conductance": -18.882789134979248
+            }
+          },
+          "DNg97": {
+            "left": {
+              "rate_hz": 30.0,
+              "voltage_mv": -55.252471923828125,
+              "conductance": 0.7483240365982056
+            },
+            "right": {
+              "rate_hz": 80.0,
+              "voltage_mv": -51.264835357666016,
+              "conductance": 12.094160079956055
+            },
+            "right_minus_left": {
+              "rate_hz": 50.0,
+              "voltage_mv": 3.9876365661621094,
+              "conductance": 11.34583604335785
+            }
+          },
+          "DNp18": {
+            "left": {
+              "rate_hz": 60.0,
+              "voltage_mv": -50.906890869140625,
+              "conductance": 10.316999435424805
+            },
+            "right": {
+              "rate_hz": 80.0,
+              "voltage_mv": -51.26422882080078,
+              "conductance": 11.9733247756958
+            },
+            "right_minus_left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -0.35733795166015625,
+              "conductance": 1.656325340270996
+            }
+          },
+          "DNpe056": {
+            "left": {
+              "rate_hz": 90.0,
+              "voltage_mv": -50.25602340698242,
+              "conductance": 14.529023170471191
+            },
+            "right": {
+              "rate_hz": 70.0,
+              "voltage_mv": -50.471397399902344,
+              "conductance": 12.083948135375977
+            },
+            "right_minus_left": {
+              "rate_hz": -20.0,
+              "voltage_mv": -0.21537399291992188,
+              "conductance": -2.445075035095215
+            }
+          },
+          "DNae002": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -56.69755172729492,
+              "conductance": -1.879741907119751
+            },
+            "right": {
+              "rate_hz": 80.0,
+              "voltage_mv": -52.30913162231445,
+              "conductance": 12.159441947937012
+            },
+            "right_minus_left": {
+              "rate_hz": 60.0,
+              "voltage_mv": 4.388420104980469,
+              "conductance": 14.039183855056763
+            }
+          },
+          "DNpe040": {
+            "left": {
+              "rate_hz": 60.0,
+              "voltage_mv": -50.25498580932617,
+              "conductance": 11.268213272094727
+            },
+            "right": {
+              "rate_hz": 70.0,
+              "voltage_mv": -50.239444732666016,
+              "conductance": 11.908113479614258
+            },
+            "right_minus_left": {
+              "rate_hz": 10.0,
+              "voltage_mv": 0.01554107666015625,
+              "conductance": 0.6399002075195312
+            }
+          },
+          "DNpe016": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -54.51731872558594,
+              "conductance": -1.6488758325576782
+            },
+            "right": {
+              "rate_hz": 70.0,
+              "voltage_mv": -51.0392951965332,
+              "conductance": 10.970528602600098
+            },
+            "right_minus_left": {
+              "rate_hz": 70.0,
+              "voltage_mv": 3.4780235290527344,
+              "conductance": 12.619404435157776
+            }
+          },
+          "DNp69": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -88.81471252441406,
+              "conductance": -50.91719055175781
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -109.33269500732422,
+              "conductance": -77.65341186523438
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -20.517982482910156,
+              "conductance": -26.736221313476562
+            }
+          }
+        }
+      }
+    },
+    "500ms": {
+      "baseline_gray": {
+        "groups": {
+          "DNp09": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp35": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp06": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNpe031": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNb01": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp71": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNb09": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp103": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp43": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNg97": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp18": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNpe056": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNae002": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNpe040": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNpe016": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "DNp69": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          }
+        }
+      },
+      "body_left_dark": {
+        "groups": {
+          "DNp09": {
+            "left": {
+              "rate_hz": 18.0,
+              "voltage_mv": -51.08685302734375,
+              "conductance": 3.4656078815460205
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -87.531982421875,
+              "conductance": -36.66964340209961
+            },
+            "right_minus_left": {
+              "rate_hz": -18.0,
+              "voltage_mv": -36.44512939453125,
+              "conductance": -40.13525128364563
+            }
+          },
+          "DNp35": {
+            "left": {
+              "rate_hz": 4.0,
+              "voltage_mv": -103.94038391113281,
+              "conductance": -53.625057220458984
+            },
+            "right": {
+              "rate_hz": 2.0,
+              "voltage_mv": -179.7996826171875,
+              "conductance": -133.6217803955078
+            },
+            "right_minus_left": {
+              "rate_hz": -2.0,
+              "voltage_mv": -75.85929870605469,
+              "conductance": -79.99672317504883
+            }
+          },
+          "DNp06": {
+            "left": {
+              "rate_hz": 10.0,
+              "voltage_mv": -67.81822204589844,
+              "conductance": -14.597495079040527
+            },
+            "right": {
+              "rate_hz": 12.0,
+              "voltage_mv": -73.36076354980469,
+              "conductance": -19.799179077148438
+            },
+            "right_minus_left": {
+              "rate_hz": 2.0,
+              "voltage_mv": -5.54254150390625,
+              "conductance": -5.20168399810791
+            }
+          },
+          "DNpe031": {
+            "left": {
+              "rate_hz": 64.0,
+              "voltage_mv": -49.667572021484375,
+              "conductance": 11.389505863189697
+            },
+            "right": {
+              "rate_hz": 35.0,
+              "voltage_mv": -49.68182945251465,
+              "conductance": 7.433964729309082
+            },
+            "right_minus_left": {
+              "rate_hz": -29.0,
+              "voltage_mv": -0.014257431030273438,
+              "conductance": -3.9555411338806152
+            }
+          },
+          "DNb01": {
+            "left": {
+              "rate_hz": 66.0,
+              "voltage_mv": -50.771881103515625,
+              "conductance": 10.552528381347656
+            },
+            "right": {
+              "rate_hz": 82.0,
+              "voltage_mv": -50.8243293762207,
+              "conductance": 12.852652549743652
+            },
+            "right_minus_left": {
+              "rate_hz": 16.0,
+              "voltage_mv": -0.052448272705078125,
+              "conductance": 2.300124168395996
+            }
+          },
+          "DNp71": {
+            "left": {
+              "rate_hz": 70.0,
+              "voltage_mv": -50.718448638916016,
+              "conductance": 11.068151473999023
+            },
+            "right": {
+              "rate_hz": 30.0,
+              "voltage_mv": -52.2593879699707,
+              "conductance": 3.900604724884033
+            },
+            "right_minus_left": {
+              "rate_hz": -40.0,
+              "voltage_mv": -1.5409393310546875,
+              "conductance": -7.16754674911499
+            }
+          },
+          "DNb09": {
+            "left": {
+              "rate_hz": 16.0,
+              "voltage_mv": -53.432350158691406,
+              "conductance": 0.4338928759098053
+            },
+            "right": {
+              "rate_hz": 4.0,
+              "voltage_mv": -59.3243293762207,
+              "conductance": -7.06195068359375
+            },
+            "right_minus_left": {
+              "rate_hz": -12.0,
+              "voltage_mv": -5.891979217529297,
+              "conductance": -7.495843559503555
+            }
+          },
+          "DNp103": {
+            "left": {
+              "rate_hz": 158.0,
+              "voltage_mv": -50.84310531616211,
+              "conductance": 23.9638614654541
+            },
+            "right": {
+              "rate_hz": 154.0,
+              "voltage_mv": -50.86529541015625,
+              "conductance": 23.553054809570312
+            },
+            "right_minus_left": {
+              "rate_hz": -4.0,
+              "voltage_mv": -0.022190093994140625,
+              "conductance": -0.41080665588378906
+            }
+          },
+          "DNp43": {
+            "left": {
+              "rate_hz": 34.0,
+              "voltage_mv": -52.27830505371094,
+              "conductance": 4.688770294189453
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -85.49268341064453,
+              "conductance": -35.13064956665039
+            },
+            "right_minus_left": {
+              "rate_hz": -34.0,
+              "voltage_mv": -33.214378356933594,
+              "conductance": -39.819419860839844
+            }
+          },
+          "DNg97": {
+            "left": {
+              "rate_hz": 72.0,
+              "voltage_mv": -54.103981018066406,
+              "conductance": 8.184205055236816
+            },
+            "right": {
+              "rate_hz": 80.0,
+              "voltage_mv": -52.00632858276367,
+              "conductance": 11.514333724975586
+            },
+            "right_minus_left": {
+              "rate_hz": 8.0,
+              "voltage_mv": 2.0976524353027344,
+              "conductance": 3.3301286697387695
+            }
+          },
+          "DNp18": {
+            "left": {
+              "rate_hz": 40.0,
+              "voltage_mv": -52.0025634765625,
+              "conductance": 5.179289817810059
+            },
+            "right": {
+              "rate_hz": 76.0,
+              "voltage_mv": -51.321556091308594,
+              "conductance": 11.525699615478516
+            },
+            "right_minus_left": {
+              "rate_hz": 36.0,
+              "voltage_mv": 0.6810073852539062,
+              "conductance": 6.346409797668457
+            }
+          },
+          "DNpe056": {
+            "left": {
+              "rate_hz": 80.0,
+              "voltage_mv": -49.71905517578125,
+              "conductance": 13.673248291015625
+            },
+            "right": {
+              "rate_hz": 104.0,
+              "voltage_mv": -50.71195983886719,
+              "conductance": 16.346546173095703
+            },
+            "right_minus_left": {
+              "rate_hz": 24.0,
+              "voltage_mv": -0.9929046630859375,
+              "conductance": 2.673297882080078
+            }
+          },
+          "DNae002": {
+            "left": {
+              "rate_hz": 14.0,
+              "voltage_mv": -62.356929779052734,
+              "conductance": -9.078041076660156
+            },
+            "right": {
+              "rate_hz": 86.0,
+              "voltage_mv": -52.44621276855469,
+              "conductance": 11.893064498901367
+            },
+            "right_minus_left": {
+              "rate_hz": 72.0,
+              "voltage_mv": 9.910717010498047,
+              "conductance": 20.971105575561523
+            }
+          },
+          "DNpe040": {
+            "left": {
+              "rate_hz": 76.0,
+              "voltage_mv": -49.78556823730469,
+              "conductance": 12.93346881866455
+            },
+            "right": {
+              "rate_hz": 72.0,
+              "voltage_mv": -49.89057159423828,
+              "conductance": 12.540900230407715
+            },
+            "right_minus_left": {
+              "rate_hz": -4.0,
+              "voltage_mv": -0.10500335693359375,
+              "conductance": -0.39256858825683594
+            }
+          },
+          "DNpe016": {
+            "left": {
+              "rate_hz": 54.0,
+              "voltage_mv": -51.6612663269043,
+              "conductance": 7.968960762023926
+            },
+            "right": {
+              "rate_hz": 94.0,
+              "voltage_mv": -51.28668975830078,
+              "conductance": 14.246045112609863
+            },
+            "right_minus_left": {
+              "rate_hz": 40.0,
+              "voltage_mv": 0.3745765686035156,
+              "conductance": 6.2770843505859375
+            }
+          },
+          "DNp69": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -117.75540924072266,
+              "conductance": -68.53443145751953
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -148.21194458007812,
+              "conductance": -100.64168548583984
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -30.45653533935547,
+              "conductance": -32.10725402832031
+            }
+          }
+        }
+      },
+      "body_center_dark": {
+        "groups": {
+          "DNp09": {
+            "left": {
+              "rate_hz": 14.0,
+              "voltage_mv": -52.863075256347656,
+              "conductance": 1.3338491916656494
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -108.55941009521484,
+              "conductance": -58.55375671386719
+            },
+            "right_minus_left": {
+              "rate_hz": -14.0,
+              "voltage_mv": -55.69633483886719,
+              "conductance": -59.88760590553284
+            }
+          },
+          "DNp35": {
+            "left": {
+              "rate_hz": 4.0,
+              "voltage_mv": -87.21691131591797,
+              "conductance": -35.648475646972656
+            },
+            "right": {
+              "rate_hz": 4.0,
+              "voltage_mv": -158.45152282714844,
+              "conductance": -110.62169647216797
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -71.23461151123047,
+              "conductance": -74.97322082519531
+            }
+          },
+          "DNp06": {
+            "left": {
+              "rate_hz": 36.0,
+              "voltage_mv": -62.154693603515625,
+              "conductance": -4.8147196769714355
+            },
+            "right": {
+              "rate_hz": 52.0,
+              "voltage_mv": -54.44045639038086,
+              "conductance": 5.135965347290039
+            },
+            "right_minus_left": {
+              "rate_hz": 16.0,
+              "voltage_mv": 7.714237213134766,
+              "conductance": 9.950685024261475
+            }
+          },
+          "DNpe031": {
+            "left": {
+              "rate_hz": 69.0,
+              "voltage_mv": -49.865800857543945,
+              "conductance": 11.883264064788818
+            },
+            "right": {
+              "rate_hz": 54.0,
+              "voltage_mv": -49.596853256225586,
+              "conductance": 9.982393264770508
+            },
+            "right_minus_left": {
+              "rate_hz": -15.0,
+              "voltage_mv": 0.2689476013183594,
+              "conductance": -1.9008708000183105
+            }
+          },
+          "DNb01": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -53.11711120605469,
+              "conductance": 1.6107884645462036
+            },
+            "right": {
+              "rate_hz": 70.0,
+              "voltage_mv": -50.66024398803711,
+              "conductance": 11.251224517822266
+            },
+            "right_minus_left": {
+              "rate_hz": 50.0,
+              "voltage_mv": 2.456867218017578,
+              "conductance": 9.640436053276062
+            }
+          },
+          "DNp71": {
+            "left": {
+              "rate_hz": 78.0,
+              "voltage_mv": -50.39735794067383,
+              "conductance": 12.670599937438965
+            },
+            "right": {
+              "rate_hz": 76.0,
+              "voltage_mv": -50.7311897277832,
+              "conductance": 12.051223754882812
+            },
+            "right_minus_left": {
+              "rate_hz": -2.0,
+              "voltage_mv": -0.333831787109375,
+              "conductance": -0.6193761825561523
+            }
+          },
+          "DNb09": {
+            "left": {
+              "rate_hz": 34.0,
+              "voltage_mv": -50.46648025512695,
+              "conductance": 6.558197021484375
+            },
+            "right": {
+              "rate_hz": 36.0,
+              "voltage_mv": -50.02033996582031,
+              "conductance": 7.0748515129089355
+            },
+            "right_minus_left": {
+              "rate_hz": 2.0,
+              "voltage_mv": 0.4461402893066406,
+              "conductance": 0.5166544914245605
+            }
+          },
+          "DNp103": {
+            "left": {
+              "rate_hz": 162.0,
+              "voltage_mv": -50.77056884765625,
+              "conductance": 24.655134201049805
+            },
+            "right": {
+              "rate_hz": 162.0,
+              "voltage_mv": -50.87543869018555,
+              "conductance": 24.576902389526367
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -0.10486984252929688,
+              "conductance": -0.0782318115234375
+            }
+          },
+          "DNp43": {
+            "left": {
+              "rate_hz": 32.0,
+              "voltage_mv": -52.744537353515625,
+              "conductance": 3.780006170272827
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -76.4636001586914,
+              "conductance": -25.06871795654297
+            },
+            "right_minus_left": {
+              "rate_hz": -32.0,
+              "voltage_mv": -23.71906280517578,
+              "conductance": -28.848724126815796
+            }
+          },
+          "DNg97": {
+            "left": {
+              "rate_hz": 50.0,
+              "voltage_mv": -55.253562927246094,
+              "conductance": 3.816380023956299
+            },
+            "right": {
+              "rate_hz": 64.0,
+              "voltage_mv": -54.918575286865234,
+              "conductance": 6.28030252456665
+            },
+            "right_minus_left": {
+              "rate_hz": 14.0,
+              "voltage_mv": 0.3349876403808594,
+              "conductance": 2.4639225006103516
+            }
+          },
+          "DNp18": {
+            "left": {
+              "rate_hz": 90.0,
+              "voltage_mv": -50.5649299621582,
+              "conductance": 14.210203170776367
+            },
+            "right": {
+              "rate_hz": 108.0,
+              "voltage_mv": -50.92048645019531,
+              "conductance": 16.568674087524414
+            },
+            "right_minus_left": {
+              "rate_hz": 18.0,
+              "voltage_mv": -0.3555564880371094,
+              "conductance": 2.358470916748047
+            }
+          },
+          "DNpe056": {
+            "left": {
+              "rate_hz": 94.0,
+              "voltage_mv": -50.043914794921875,
+              "conductance": 15.320615768432617
+            },
+            "right": {
+              "rate_hz": 86.0,
+              "voltage_mv": -50.413856506347656,
+              "conductance": 14.00516414642334
+            },
+            "right_minus_left": {
+              "rate_hz": -8.0,
+              "voltage_mv": -0.36994171142578125,
+              "conductance": -1.3154516220092773
+            }
+          },
+          "DNae002": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -63.9031867980957,
+              "conductance": -9.636404037475586
+            },
+            "right": {
+              "rate_hz": 66.0,
+              "voltage_mv": -53.877811431884766,
+              "conductance": 7.308806419372559
+            },
+            "right_minus_left": {
+              "rate_hz": 46.0,
+              "voltage_mv": 10.025375366210938,
+              "conductance": 16.945210456848145
+            }
+          },
+          "DNpe040": {
+            "left": {
+              "rate_hz": 82.0,
+              "voltage_mv": -49.83018493652344,
+              "conductance": 13.749829292297363
+            },
+            "right": {
+              "rate_hz": 86.0,
+              "voltage_mv": -49.97659683227539,
+              "conductance": 14.20012378692627
+            },
+            "right_minus_left": {
+              "rate_hz": 4.0,
+              "voltage_mv": -0.14641189575195312,
+              "conductance": 0.45029449462890625
+            }
+          },
+          "DNpe016": {
+            "left": {
+              "rate_hz": 14.0,
+              "voltage_mv": -54.04146957397461,
+              "conductance": -0.1411190927028656
+            },
+            "right": {
+              "rate_hz": 84.0,
+              "voltage_mv": -51.09255599975586,
+              "conductance": 12.912496566772461
+            },
+            "right_minus_left": {
+              "rate_hz": 70.0,
+              "voltage_mv": 2.94891357421875,
+              "conductance": 13.053615659475327
+            }
+          },
+          "DNp69": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -113.76861572265625,
+              "conductance": -64.73455810546875
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -153.5433807373047,
+              "conductance": -105.1192855834961
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -39.77476501464844,
+              "conductance": -40.384727478027344
+            }
+          }
+        }
+      },
+      "body_right_dark": {
+        "groups": {
+          "DNp09": {
+            "left": {
+              "rate_hz": 14.0,
+              "voltage_mv": -50.61686706542969,
+              "conductance": 3.3812479972839355
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -102.82157135009766,
+              "conductance": -52.7695198059082
+            },
+            "right_minus_left": {
+              "rate_hz": -14.0,
+              "voltage_mv": -52.20470428466797,
+              "conductance": -56.15076780319214
+            }
+          },
+          "DNp35": {
+            "left": {
+              "rate_hz": 4.0,
+              "voltage_mv": -97.82283782958984,
+              "conductance": -47.706443786621094
+            },
+            "right": {
+              "rate_hz": 4.0,
+              "voltage_mv": -174.37669372558594,
+              "conductance": -127.0952377319336
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -76.5538558959961,
+              "conductance": -79.3887939453125
+            }
+          },
+          "DNp06": {
+            "left": {
+              "rate_hz": 14.0,
+              "voltage_mv": -71.34584045410156,
+              "conductance": -18.499797821044922
+            },
+            "right": {
+              "rate_hz": 40.0,
+              "voltage_mv": -59.736080169677734,
+              "conductance": -2.092118263244629
+            },
+            "right_minus_left": {
+              "rate_hz": 26.0,
+              "voltage_mv": 11.609760284423828,
+              "conductance": 16.407679557800293
+            }
+          },
+          "DNpe031": {
+            "left": {
+              "rate_hz": 64.0,
+              "voltage_mv": -49.72518730163574,
+              "conductance": 11.303592205047607
+            },
+            "right": {
+              "rate_hz": 47.0,
+              "voltage_mv": -49.58465003967285,
+              "conductance": 9.206446647644043
+            },
+            "right_minus_left": {
+              "rate_hz": -17.0,
+              "voltage_mv": 0.14053726196289062,
+              "conductance": -2.0971455574035645
+            }
+          },
+          "DNb01": {
+            "left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -54.19968795776367,
+              "conductance": 0.5626049041748047
+            },
+            "right": {
+              "rate_hz": 66.0,
+              "voltage_mv": -50.83810806274414,
+              "conductance": 10.469576835632324
+            },
+            "right_minus_left": {
+              "rate_hz": 46.0,
+              "voltage_mv": 3.3615798950195312,
+              "conductance": 9.90697193145752
+            }
+          },
+          "DNp71": {
+            "left": {
+              "rate_hz": 54.0,
+              "voltage_mv": -50.57876968383789,
+              "conductance": 9.162148475646973
+            },
+            "right": {
+              "rate_hz": 60.0,
+              "voltage_mv": -51.32490539550781,
+              "conductance": 9.196930885314941
+            },
+            "right_minus_left": {
+              "rate_hz": 6.0,
+              "voltage_mv": -0.7461357116699219,
+              "conductance": 0.03478240966796875
+            }
+          },
+          "DNb09": {
+            "left": {
+              "rate_hz": 28.0,
+              "voltage_mv": -51.76021957397461,
+              "conductance": 3.855637550354004
+            },
+            "right": {
+              "rate_hz": 16.0,
+              "voltage_mv": -51.02089309692383,
+              "conductance": 2.9371206760406494
+            },
+            "right_minus_left": {
+              "rate_hz": -12.0,
+              "voltage_mv": 0.7393264770507812,
+              "conductance": -0.9185168743133545
+            }
+          },
+          "DNp103": {
+            "left": {
+              "rate_hz": 152.0,
+              "voltage_mv": -50.79949951171875,
+              "conductance": 23.279260635375977
+            },
+            "right": {
+              "rate_hz": 154.0,
+              "voltage_mv": -50.82810592651367,
+              "conductance": 23.326011657714844
+            },
+            "right_minus_left": {
+              "rate_hz": 2.0,
+              "voltage_mv": -0.028606414794921875,
+              "conductance": 0.04675102233886719
+            }
+          },
+          "DNp43": {
+            "left": {
+              "rate_hz": 10.0,
+              "voltage_mv": -54.11910629272461,
+              "conductance": -1.0291725397109985
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -77.18634796142578,
+              "conductance": -26.2087459564209
+            },
+            "right_minus_left": {
+              "rate_hz": -10.0,
+              "voltage_mv": -23.067241668701172,
+              "conductance": -25.1795734167099
+            }
+          },
+          "DNg97": {
+            "left": {
+              "rate_hz": 46.0,
+              "voltage_mv": -57.49695587158203,
+              "conductance": 0.9674817323684692
+            },
+            "right": {
+              "rate_hz": 64.0,
+              "voltage_mv": -54.637420654296875,
+              "conductance": 6.526478290557861
+            },
+            "right_minus_left": {
+              "rate_hz": 18.0,
+              "voltage_mv": 2.8595352172851562,
+              "conductance": 5.558996558189392
+            }
+          },
+          "DNp18": {
+            "left": {
+              "rate_hz": 80.0,
+              "voltage_mv": -50.488548278808594,
+              "conductance": 12.787235260009766
+            },
+            "right": {
+              "rate_hz": 100.0,
+              "voltage_mv": -50.79471206665039,
+              "conductance": 15.671977996826172
+            },
+            "right_minus_left": {
+              "rate_hz": 20.0,
+              "voltage_mv": -0.3061637878417969,
+              "conductance": 2.8847427368164062
+            }
+          },
+          "DNpe056": {
+            "left": {
+              "rate_hz": 94.0,
+              "voltage_mv": -50.11759567260742,
+              "conductance": 15.230332374572754
+            },
+            "right": {
+              "rate_hz": 66.0,
+              "voltage_mv": -50.174137115478516,
+              "conductance": 11.319519996643066
+            },
+            "right_minus_left": {
+              "rate_hz": -28.0,
+              "voltage_mv": -0.05654144287109375,
+              "conductance": -3.9108123779296875
+            }
+          },
+          "DNae002": {
+            "left": {
+              "rate_hz": 6.0,
+              "voltage_mv": -62.242637634277344,
+              "conductance": -10.160673141479492
+            },
+            "right": {
+              "rate_hz": 62.0,
+              "voltage_mv": -55.243629455566406,
+              "conductance": 5.51099967956543
+            },
+            "right_minus_left": {
+              "rate_hz": 56.0,
+              "voltage_mv": 6.9990081787109375,
+              "conductance": 15.671672821044922
+            }
+          },
+          "DNpe040": {
+            "left": {
+              "rate_hz": 70.0,
+              "voltage_mv": -49.80642318725586,
+              "conductance": 12.068530082702637
+            },
+            "right": {
+              "rate_hz": 80.0,
+              "voltage_mv": -49.954063415527344,
+              "conductance": 13.556268692016602
+            },
+            "right_minus_left": {
+              "rate_hz": 10.0,
+              "voltage_mv": -0.14764022827148438,
+              "conductance": 1.4877386093139648
+            }
+          },
+          "DNpe016": {
+            "left": {
+              "rate_hz": 12.0,
+              "voltage_mv": -54.972755432128906,
+              "conductance": -1.410658359527588
+            },
+            "right": {
+              "rate_hz": 72.0,
+              "voltage_mv": -51.2032356262207,
+              "conductance": 11.275603294372559
+            },
+            "right_minus_left": {
+              "rate_hz": 60.0,
+              "voltage_mv": 3.769519805908203,
+              "conductance": 12.686261653900146
+            }
+          },
+          "DNp69": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -122.32472229003906,
+              "conductance": -73.65160369873047
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -158.39913940429688,
+              "conductance": -112.85956573486328
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -36.07441711425781,
+              "conductance": -39.20796203613281
+            }
+          }
+        }
+      }
+    }
+  }
+}

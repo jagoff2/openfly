@@ -1,0 +1,87 @@
+{
+  "selection_rule": [
+    "Use the 100 ms body-free descending probe because the splice still drifts at 500 ms.",
+    "Forward groups are selected by high bilateral firing with low left/right imbalance.",
+    "Turn groups are selected by rate-level left/right sign flip under left-dark vs right-dark conditions.",
+    "Labels already covered by the fixed decoder DN set are excluded from the supplemental population lists."
+  ],
+  "pairs_csv": "outputs/metrics/descending_readout_probe_strict_pairs.csv",
+  "candidates_json": "outputs/metrics/descending_readout_candidates_strict.json",
+  "window_ms": 100.0,
+  "excluded_labels": [
+    "DNa02",
+    "DNg97",
+    "DNp09"
+  ],
+  "forward_cell_types": [
+    "DNp103",
+    "DNp06",
+    "DNp18",
+    "DNp35"
+  ],
+  "turn_cell_types": [
+    "DNpe056",
+    "DNp71",
+    "DNpe040"
+  ],
+  "forward_ranking": [
+    {
+      "candidate_label": "DNp103",
+      "forward_balance_score": 12.878787878787877,
+      "bilateral_mean_rate_hz": 141.66666666666666,
+      "left_dark_right_minus_left_rate_hz": 10.0,
+      "right_dark_right_minus_left_rate_hz": 0.0,
+      "pair_score": 365.0
+    },
+    {
+      "candidate_label": "DNp06",
+      "forward_balance_score": 4.848484848484849,
+      "bilateral_mean_rate_hz": 53.333333333333336,
+      "left_dark_right_minus_left_rate_hz": 0.0,
+      "right_dark_right_minus_left_rate_hz": 10.0,
+      "pair_score": 592.0
+    },
+    {
+      "candidate_label": "DNp18",
+      "forward_balance_score": 1.7886178861788617,
+      "bilateral_mean_rate_hz": 73.33333333333333,
+      "left_dark_right_minus_left_rate_hz": 20.0,
+      "right_dark_right_minus_left_rate_hz": 20.0,
+      "pair_score": 320.0
+    },
+    {
+      "candidate_label": "DNp35",
+      "forward_balance_score": 1.6666666666666663,
+      "bilateral_mean_rate_hz": 18.33333333333333,
+      "left_dark_right_minus_left_rate_hz": -10.0,
+      "right_dark_right_minus_left_rate_hz": 0.0,
+      "pair_score": 617.0
+    }
+  ],
+  "turn_ranking": [
+    {
+      "candidate_label": "DNpe056",
+      "turn_flip_rate_score": 20.0,
+      "bilateral_mean_rate_hz": 85.0,
+      "left_dark_right_minus_left_rate_hz": 40.0,
+      "right_dark_right_minus_left_rate_hz": -20.0,
+      "pair_score": 290.0
+    },
+    {
+      "candidate_label": "DNp71",
+      "turn_flip_rate_score": 10.0,
+      "bilateral_mean_rate_hz": 58.333333333333336,
+      "left_dark_right_minus_left_rate_hz": -40.0,
+      "right_dark_right_minus_left_rate_hz": 10.0,
+      "pair_score": 398.0
+    },
+    {
+      "candidate_label": "DNpe040",
+      "turn_flip_rate_score": 10.0,
+      "bilateral_mean_rate_hz": 61.66666666666666,
+      "left_dark_right_minus_left_rate_hz": -10.0,
+      "right_dark_right_minus_left_rate_hz": 10.0,
+      "pair_score": 265.0
+    }
+  ]
+}

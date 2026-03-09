@@ -1,0 +1,2 @@
+sim_seconds,avg_forward_speed,trajectory_smoothness,path_length,net_displacement,displacement_efficiency,bbox_width,bbox_height,bbox_area,stable,wall_seconds,real_time_factor,device,mode,completed_cycles,target_duration_s,completed_full_duration,failure_type,failure_message
+2.0000000000000013,0.7723587279485592,0.994760457738125,1.5292702813381476,1.5113062561948036,0.988253204575698,1.4640087799295165,0.37513316609284475,0.5491982488026823,1.0,0.06396959999983665,31.26485080421182,mock,mock,100,2.0,1.0,,

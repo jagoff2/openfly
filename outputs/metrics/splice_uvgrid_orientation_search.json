@@ -1,0 +1,130 @@
+{
+  "brain_sim_ms": 100.0,
+  "max_abs_current": 120.0,
+  "spatial_u_bins": 2,
+  "spatial_v_bins": 2,
+  "best_orientation": {
+    "swap_uv": false,
+    "flip_u": true,
+    "flip_v": false,
+    "mean_voltage_group_corr": 0.8764179586837813,
+    "mean_voltage_side_corr": 0.8466385477243819,
+    "left_turn_bias": 5.0,
+    "right_turn_bias": -10.0,
+    "sign_match": false,
+    "score": -0.4269434935918369,
+    "num_nonzero_inputs_left": 55214,
+    "num_nonzero_inputs_right": 55215
+  },
+  "rows": [
+    {
+      "swap_uv": false,
+      "flip_u": true,
+      "flip_v": false,
+      "mean_voltage_group_corr": 0.8764179586837813,
+      "mean_voltage_side_corr": 0.8466385477243819,
+      "left_turn_bias": 5.0,
+      "right_turn_bias": -10.0,
+      "sign_match": false,
+      "score": -0.4269434935918369,
+      "num_nonzero_inputs_left": 55214,
+      "num_nonzero_inputs_right": 55215
+    },
+    {
+      "swap_uv": true,
+      "flip_u": false,
+      "flip_v": false,
+      "mean_voltage_group_corr": 0.8714523973658747,
+      "mean_voltage_side_corr": 0.8231346728647686,
+      "left_turn_bias": 10.0,
+      "right_turn_bias": -5.0,
+      "sign_match": false,
+      "score": -0.45541292976935666,
+      "num_nonzero_inputs_left": 55214,
+      "num_nonzero_inputs_right": 55215
+    },
+    {
+      "swap_uv": false,
+      "flip_u": false,
+      "flip_v": true,
+      "mean_voltage_group_corr": 0.8764257332571136,
+      "mean_voltage_side_corr": 0.8466820736426895,
+      "left_turn_bias": -30.0,
+      "right_turn_bias": 0.0,
+      "sign_match": false,
+      "score": -0.5768921931001969,
+      "num_nonzero_inputs_left": 55215,
+      "num_nonzero_inputs_right": 55214
+    },
+    {
+      "swap_uv": true,
+      "flip_u": true,
+      "flip_v": true,
+      "mean_voltage_group_corr": 0.8714496264040061,
+      "mean_voltage_side_corr": 0.8230674573363125,
+      "left_turn_bias": -15.0,
+      "right_turn_bias": -15.0,
+      "sign_match": false,
+      "score": -0.6054829162596815,
+      "num_nonzero_inputs_left": 55215,
+      "num_nonzero_inputs_right": 55214
+    },
+    {
+      "swap_uv": true,
+      "flip_u": false,
+      "flip_v": true,
+      "mean_voltage_group_corr": 0.8764294397092572,
+      "mean_voltage_side_corr": 0.8465286440929434,
+      "left_turn_bias": -35.0,
+      "right_turn_bias": -5.0,
+      "sign_match": false,
+      "score": -0.6770419161977995,
+      "num_nonzero_inputs_left": 55215,
+      "num_nonzero_inputs_right": 55214
+    },
+    {
+      "swap_uv": false,
+      "flip_u": true,
+      "flip_v": true,
+      "mean_voltage_group_corr": 0.8714491303179036,
+      "mean_voltage_side_corr": 0.8233234929059732,
+      "left_turn_bias": 10.0,
+      "right_turn_bias": 30.0,
+      "sign_match": false,
+      "score": -0.7052273767761231,
+      "num_nonzero_inputs_left": 55215,
+      "num_nonzero_inputs_right": 55214
+    },
+    {
+      "swap_uv": true,
+      "flip_u": true,
+      "flip_v": false,
+      "mean_voltage_group_corr": 0.8764384355314507,
+      "mean_voltage_side_corr": 0.8466013030397931,
+      "left_turn_bias": -5.0,
+      "right_turn_bias": -40.0,
+      "sign_match": false,
+      "score": -0.7269602614287562,
+      "num_nonzero_inputs_left": 55214,
+      "num_nonzero_inputs_right": 55215
+    },
+    {
+      "swap_uv": false,
+      "flip_u": false,
+      "flip_v": false,
+      "mean_voltage_group_corr": 0.8714338397274694,
+      "mean_voltage_side_corr": 0.8232517046348646,
+      "left_turn_bias": 35.0,
+      "right_turn_bias": -15.0,
+      "sign_match": false,
+      "score": -0.8053144556376659,
+      "num_nonzero_inputs_left": 55214,
+      "num_nonzero_inputs_right": 55215
+    }
+  ],
+  "selection_rule": [
+    "Prefer orientations that preserve the correct downstream sign: left-dark negative and right-dark positive turn bias.",
+    "Among sign-correct orientations, maximize mean voltage group and side-difference correlation.",
+    "If no orientation is sign-correct, rank by the same boundary metrics but keep that failure explicit."
+  ]
+}

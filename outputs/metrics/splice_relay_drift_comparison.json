@@ -1,0 +1,42 @@
+{
+  "rows": [
+    {
+      "summary_json": "outputs\\metrics\\splice_relay_probe_summary.json",
+      "window_key": "100ms",
+      "input_pulse_ms": null,
+      "value_scale": 101.94613788960949,
+      "left_turn_bias": -10.0,
+      "right_turn_bias": 10.0,
+      "sign_match": true
+    },
+    {
+      "summary_json": "outputs\\metrics\\splice_relay_probe_summary.json",
+      "window_key": "500ms",
+      "input_pulse_ms": null,
+      "value_scale": 101.94613788960949,
+      "left_turn_bias": -17.0,
+      "right_turn_bias": -9.0,
+      "sign_match": false
+    },
+    {
+      "summary_json": "outputs\\metrics\\splice_relay_probe_500ms_pulse25_summary.json",
+      "window_key": "500ms",
+      "input_pulse_ms": 25.0,
+      "value_scale": 101.94613788960949,
+      "left_turn_bias": 0.0,
+      "right_turn_bias": -6.315789461135864,
+      "sign_match": false
+    }
+  ],
+  "best_sign_preserving_rows": [
+    {
+      "summary_json": "outputs\\metrics\\splice_relay_probe_summary.json",
+      "window_key": "100ms",
+      "input_pulse_ms": null,
+      "value_scale": 101.94613788960949,
+      "left_turn_bias": -10.0,
+      "right_turn_bias": 10.0,
+      "sign_match": true
+    }
+  ]
+}

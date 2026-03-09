@@ -1,0 +1,114 @@
+{
+  "source_csv": "outputs/metrics/inferred_lateralized_visual_candidates.csv",
+  "min_score": 0.02,
+  "tracking_limit": 6,
+  "flow_limit": 4,
+  "recommended_cell_types": [
+    "TmY14",
+    "TmY15",
+    "TmY5a",
+    "TmY4",
+    "TmY18",
+    "TmY9",
+    "T5d",
+    "T5c",
+    "T4b",
+    "T5a"
+  ],
+  "recommended_tracking": [
+    "TmY14",
+    "TmY15",
+    "TmY5a",
+    "TmY4",
+    "TmY18",
+    "TmY9"
+  ],
+  "recommended_flow": [
+    "T5d",
+    "T5c",
+    "T4b",
+    "T5a"
+  ],
+  "selected": [
+    {
+      "cell_type": "TmY14",
+      "mirror_selectivity_score": 0.43168627960502537,
+      "body_right_eye_diff": 0.21584313980251268,
+      "right_side_polarity": 1.0,
+      "is_tracking_cell": true,
+      "is_flow_cell": false
+    },
+    {
+      "cell_type": "TmY15",
+      "mirror_selectivity_score": 0.15752254496147144,
+      "body_right_eye_diff": -0.07876127248073572,
+      "right_side_polarity": -1.0,
+      "is_tracking_cell": true,
+      "is_flow_cell": false
+    },
+    {
+      "cell_type": "TmY5a",
+      "mirror_selectivity_score": 0.060043236955565016,
+      "body_right_eye_diff": 0.030021618477782508,
+      "right_side_polarity": 1.0,
+      "is_tracking_cell": true,
+      "is_flow_cell": false
+    },
+    {
+      "cell_type": "TmY4",
+      "mirror_selectivity_score": 0.05973592553576523,
+      "body_right_eye_diff": -0.029867962767882617,
+      "right_side_polarity": -1.0,
+      "is_tracking_cell": true,
+      "is_flow_cell": false
+    },
+    {
+      "cell_type": "TmY18",
+      "mirror_selectivity_score": 0.058805916990552376,
+      "body_right_eye_diff": 0.029402958495276188,
+      "right_side_polarity": 1.0,
+      "is_tracking_cell": true,
+      "is_flow_cell": false
+    },
+    {
+      "cell_type": "TmY9",
+      "mirror_selectivity_score": 0.04978291400067225,
+      "body_right_eye_diff": 0.024891457000336126,
+      "right_side_polarity": 1.0,
+      "is_tracking_cell": true,
+      "is_flow_cell": false
+    },
+    {
+      "cell_type": "T5d",
+      "mirror_selectivity_score": 0.11549990887842365,
+      "body_right_eye_diff": 0.057749954439211826,
+      "right_side_polarity": 1.0,
+      "is_tracking_cell": false,
+      "is_flow_cell": true
+    },
+    {
+      "cell_type": "T5c",
+      "mirror_selectivity_score": 0.07915853168016596,
+      "body_right_eye_diff": 0.03957926584008298,
+      "right_side_polarity": 1.0,
+      "is_tracking_cell": false,
+      "is_flow_cell": true
+    },
+    {
+      "cell_type": "T4b",
+      "mirror_selectivity_score": 0.07415159271805227,
+      "body_right_eye_diff": -0.037075796359026136,
+      "right_side_polarity": -1.0,
+      "is_tracking_cell": false,
+      "is_flow_cell": true
+    },
+    {
+      "cell_type": "T5a",
+      "mirror_selectivity_score": 0.054314244138449874,
+      "body_right_eye_diff": 0.027157122069224937,
+      "right_side_polarity": 1.0,
+      "is_tracking_cell": false,
+      "is_flow_cell": true
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+benchmark_name,backend,device,wall_seconds,sim_seconds,real_time_factor,config,commit_hash,status
+brain_0.100s,torch,cuda:0,0.9232243000005838,0.1,0.1083160397748811,configs/default.yaml,not_a_git_repo,success
+brain_0.100s,brian2cpu,cpu,10.852,0.1,0.009214891264283081,configs/default.yaml,not_a_git_repo,success

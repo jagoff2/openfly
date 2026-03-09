@@ -1,0 +1,143 @@
+• Bottleneck
+  The bottleneck is not the connectome core. It is the realistic-vision path.
+
+  Evidence from this repo:
+
+  - Brain-only Torch benchmark: about 0.108x real time in outputs/benchmarks/brain_benchmarks.csv
+  - Body-only FlyGym benchmark: about 0.07x real time in outputs/benchmarks/body_benchmarks.csv
+  - Vision-only realistic-vision benchmark: about 0.000883x real time in outputs/benchmarks/vision_benchmarks.csv
+  - Full stack: about 0.00078x real time in outputs/benchmarks/fullstack_benchmarks.csv
+
+  So the full-stack number is basically the vision number.
+
+  Profile evidence:
+
+  - outputs/profiling/fullstack_flygym_0p02.txt shows the dominant cost is:
+      - src/body/flygym_runtime.py:63
+      - FlyGym step
+      - flygym.examples.vision.realistic_vision._get_visual_nn_activities
+      - datamate.io.__getitem__
+      - built-in time.sleep
+
+  Why it is so slow:
+
+  1. The run is using real FlyGym realistic vision at 500 Hz, not a toy camera path: src/body/flygym_runtime.py:50.
+  2. On this machine, WSL FlyVis cannot use GPU because the public PyTorch wheel does not support RTX 5060 Ti sm_120, so the production config forces CPU vision: configs/
+     flygym_realistic_vision.yaml:19.
+  3. Each control cycle builds visual neural activities, then wraps them into LayerActivity; the profile shows a lot of time inside datamate file-backed access/retry logic, including
+     time.sleep.
+  4. The brain backend is comparatively cheaper than that vision stack.
+
+  So the low sim/wall ratio is mainly:
+
+  - real FlyGym physics
+  - real FlyVis inference
+  - CPU-only fallback in WSL
+  - extra overhead in FlyVis activity packaging
+
+  Not mainly:
+
+  - the in-repo bridge
+  - the connectome stepping itself
+
+  What Must Change To Move From 2 Drives To Motor-Neuron-Level Control
+  Right now:
+
+  - output is BodyCommand(left_drive, right_drive) in src/body/interfaces.py:8
+  - decoder maps a few descending-neuron groups into those two drives in src/bridge/decoder.py:40
+  - FlyGym consumes those two values in src/body/flygym_runtime.py:67
+
+  To get motor-neuron-level control, you need these changes:
+
+  1. Add VNC, not just brain
+
+  - Real limb motor neurons are in the ventral nerve cord, not the brain.
+  - Current backend is brain-only.
+  - So a true motor-neuron controller requires a brain+VNC model.
+
+  2. Replace the command type
+
+  - BodyCommand must stop being two scalars.
+  - It should become either:
+      - motor-neuron firing vector
+      - muscle activation vector
+      - low-level joint target vector
+
+  3. Replace the decoder
+
+  - src/bridge/decoder.py now reads only a few DN groups.
+  - It would need to decode either:
+      - brain DNs -> VNC populations
+      - VNC motor neurons -> muscles/joints
+
+  4. Replace the body interface
+
+  - src/body/flygym_runtime.py currently drives a high-level turning controller.
+  - You need a lower-level FlyGym actuation path, ideally muscle- or joint-level.
+
+  5. Add real proprioceptive closure
+
+  - Current encoder compresses body state into a few proxy sensory pools in src/bridge/encoder.py:32.
+  - A richer system needs joint/load/contact/stride feedback mapped into VNC and ascending pathways, not just a few pooled rates.
+
+  6. Expand monitored neural outputs
+
+  - src/brain/pytorch_backend.py:137 only monitors selected readout IDs.
+  - A motor-neuron-level system needs many more monitored populations, likely including VNC interneurons and motor neurons.
+
+  Concrete Roadmap
+  1. Near-Term: Better Than 2 Drives, Still Tractable
+  Goal: richer control without full biology.
+
+  - Keep current brain backend.
+  - Replace left_drive/right_drive with a moderate-size action vector.
+  - Use more descending-neuron groups, not just P9, DNa01/02, MDN.
+  - Drive joint synergies or leg-group commands in FlyGym.
+  - Keep current real vision path.
+
+  This is tractable now.
+
+  2. Mid-Term: Brain + VNC Integration
+  Goal: stop hand-authoring the DN-to-motor bridge.
+
+  - Import public VNC connectome and neck-connective DN/AN mappings.
+  - Build a combined brain+VNC graph.
+  - Route current brain outputs into VNC, not straight to body commands.
+  - Route body feedback into VNC/ascending pathways.
+
+  This is tractable as a research prototype, but slower.
+
+  3. Mid/Late: Motor-Neuron Or Muscle-Level Actuation
+  Goal: real motor output layer.
+
+  - Map VNC motor neurons to FlyGym actuators.
+  - Replace high-level locomotion controller with lower-level actuation.
+  - Add muscle or joint-state feedback back into sensory pathways.
+  - Recalibrate so gait stays stable.
+
+  This is tractable offline, probably not near real time on this machine.
+
+  4. Late: Biological Hardening
+  Goal: reduce engineering shortcuts.
+
+  - use more complete neurotransmitter/sign handling
+  - add gap-junction/neuromodulatory approximations where public data supports it
+  - improve sensory transduction models
+  - validate against more real behavioral observables
+
+  This is the least tractable part, because the scientific gaps matter more than the coding gaps.
+
+  Bottom Line
+
+  - The current bottleneck is real realistic vision, not the connectome core.
+  - Moving to motor-neuron-level control requires adding VNC and replacing the two-scalar motor interface.
+  - A public, simplified brain+VNC+muscle prototype is plausible.
+  - A faithful biological end-to-end connectome-to-muscle system is still a research program, not just an engineering task.
+
+  Sources:
+
+  - Whole-brain FlyWire wiring diagram: https://www.nature.com/articles/s41586-024-07558-y
+  - Whole-brain network stats and v783: https://www.nature.com/articles/s41586-024-07968-y
+  - Computational whole-brain model: https://www.nature.com/articles/s41586-024-07763-9
+  - Female VNC connectome: https://www.nature.com/articles/s41586-024-07389-x
+  - Brain/VNC descending-ascending integration: https://www.nature.com/articles/s41586-025-08925-z

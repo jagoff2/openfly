@@ -1,0 +1,3 @@
+benchmark_name,backend,device,wall_seconds,sim_seconds,real_time_factor,config,commit_hash,status
+body_0.02s,flygym_body,cpu,0.28526510000000016,0.02,0.07011022378832878,configs/flygym_realistic_vision.yaml,not_a_git_repo,success
+body_0.05s,flygym_body,cpu,0.7320400999999999,0.05,0.06830226923361167,configs/flygym_realistic_vision.yaml,not_a_git_repo,success

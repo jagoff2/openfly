@@ -1,0 +1,17 @@
+{
+  "run_dir": "outputs/demos/flygym-demo-20260308-121237",
+  "metrics_path": "outputs/demos/flygym-demo-20260308-121237/metrics.csv",
+  "video_path": "outputs/demos/flygym-demo-20260308-121237/demo.mp4",
+  "log_path": "outputs/demos/flygym-demo-20260308-121237/run.jsonl",
+  "metrics": {
+    "sim_seconds": 0.018000000000000002,
+    "avg_forward_speed": 7.3095363678410195,
+    "trajectory_smoothness": 0.16217275421623023,
+    "path_length": 0.13157165462113835,
+    "stable": 1.0,
+    "wall_seconds": 24.479481652,
+    "real_time_factor": 0.0007353096873490939,
+    "device": "cpu",
+    "mode": "flygym"
+  }
+}

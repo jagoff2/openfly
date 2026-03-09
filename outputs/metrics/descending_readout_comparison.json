@@ -1,0 +1,32 @@
+[
+  {
+    "run": "baseline_splice",
+    "sim_seconds": 1.9999999999997962,
+    "avg_forward_speed": 1.0916253476635753,
+    "path_length": 2.1810674446318234,
+    "net_displacement": 0.11315538386569819,
+    "displacement_efficiency": 0.05188073580402254,
+    "stable": 1.0,
+    "real_time_factor": 0.0023333628497789155,
+    "nonzero_command_cycles": 982,
+    "mean_left_drive": 0.04576752944365208,
+    "mean_right_drive": 0.038295875266585365,
+    "max_left_drive": 0.13965930025907064,
+    "max_right_drive": 0.14243771313159515
+  },
+  {
+    "run": "descending_readout",
+    "sim_seconds": 1.9999999999997962,
+    "avg_forward_speed": 4.563790532043783,
+    "path_length": 9.11845348302348,
+    "net_displacement": 5.633006914226428,
+    "displacement_efficiency": 0.6177590229213569,
+    "stable": 1.0,
+    "real_time_factor": 0.0024065159023714164,
+    "nonzero_command_cycles": 993,
+    "mean_left_drive": 0.31380241125955,
+    "mean_right_drive": 0.19510758948955362,
+    "max_left_drive": 0.6430851601651894,
+    "max_right_drive": 0.6038926955914254
+  }
+]

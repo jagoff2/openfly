@@ -1,0 +1,17 @@
+{
+  "run_dir": "outputs\\inferred_visual_turn_mock_test\\mock-demo-20260308-174921",
+  "metrics_path": "outputs\\inferred_visual_turn_mock_test\\mock-demo-20260308-174921\\metrics.csv",
+  "video_path": "outputs\\inferred_visual_turn_mock_test\\mock-demo-20260308-174921\\demo.mp4",
+  "log_path": "outputs\\inferred_visual_turn_mock_test\\mock-demo-20260308-174921\\run.jsonl",
+  "metrics": {
+    "sim_seconds": 0.18,
+    "avg_forward_speed": 0.7552463464124671,
+    "trajectory_smoothness": 0.9748072364725809,
+    "path_length": 0.1359443423542441,
+    "stable": 1.0,
+    "wall_seconds": 0.0062821999890729785,
+    "real_time_factor": 28.65238297301665,
+    "device": "mock",
+    "mode": "mock"
+  }
+}

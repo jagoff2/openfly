@@ -1,0 +1,2 @@
+benchmark_name,backend,device,wall_seconds,sim_seconds,real_time_factor,config,commit_hash,status
+vision_flygym_legacy,flygym_realistic_vision_legacy,cpu,22.68404426999996,0.02,0.0008816769955986353,configs/flygym_realistic_vision.yaml,not_a_git_repo,success

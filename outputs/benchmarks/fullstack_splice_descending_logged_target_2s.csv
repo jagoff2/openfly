@@ -1,0 +1,2 @@
+benchmark_name,backend,device,wall_seconds,sim_seconds,real_time_factor,config,commit_hash,status
+fullstack_flygym_fast_2s,torch_fast,cpu,858.9026448430001,1.9999999999997962,0.0023285526153728154,configs/flygym_realistic_vision_splice_axis1d_descending_readout.yaml,not_a_git_repo,success

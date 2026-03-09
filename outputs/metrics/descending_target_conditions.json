@@ -1,0 +1,38 @@
+[
+  {
+    "run": "target_left",
+    "log_path": "outputs\\requested_1s_splice_descending_target_left\\flygym-demo-20260309-134958\\run.jsonl",
+    "metrics_path": "outputs\\requested_1s_splice_descending_target_left\\flygym-demo-20260309-134958\\metrics.csv",
+    "sim_seconds": 0.9999999999999062,
+    "avg_forward_speed": 3.805047661522109,
+    "net_displacement": 2.3714445502959998,
+    "displacement_efficiency": 0.6244854613026933,
+    "initial_target_bearing_body": 1.5697550741127948,
+    "initial_target_distance": 9.99257404565486,
+    "early_mean_target_bearing_body": 1.5011814030490525,
+    "early_mean_drive_diff": -0.05511041478293597,
+    "early_mean_abs_yaw_rate": 0.713644776438667,
+    "full_corr_drive_diff_vs_target_bearing": -0.06555808392727999,
+    "full_corr_total_drive_vs_neg_abs_target_bearing": 0.6543787944962236,
+    "full_sign_match_rate": 0.5279503105590062,
+    "full_sign_opp_rate": 0.432712215320911
+  },
+  {
+    "run": "target_right",
+    "log_path": "outputs\\requested_1s_splice_descending_target_right\\flygym-demo-20260309-135758\\run.jsonl",
+    "metrics_path": "outputs\\requested_1s_splice_descending_target_right\\flygym-demo-20260309-135758\\metrics.csv",
+    "sim_seconds": 0.9999999999999062,
+    "avg_forward_speed": 3.9274606417824387,
+    "net_displacement": 2.0844987712420537,
+    "displacement_efficiency": 0.5318133812134416,
+    "initial_target_bearing_body": -1.5755194594138011,
+    "initial_target_distance": 10.007459844973894,
+    "early_mean_target_bearing_body": -1.6559224806152957,
+    "early_mean_drive_diff": -0.021594800448792844,
+    "early_mean_abs_yaw_rate": 0.6312286039952151,
+    "full_corr_drive_diff_vs_target_bearing": -0.2426674379967951,
+    "full_corr_total_drive_vs_neg_abs_target_bearing": -0.5898140179912817,
+    "full_sign_match_rate": 0.596,
+    "full_sign_opp_rate": 0.368
+  }
+]

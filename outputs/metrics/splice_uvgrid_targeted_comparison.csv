@@ -1,0 +1,6 @@
+summary_json,swap_uv,flip_u,flip_v,mirror_u_by_side,mean_voltage_group_corr,mean_voltage_side_corr,left_turn_bias,right_turn_bias,sign_match
+outputs\metrics\splice_probe_uvgrid_flipv_mirror_summary.json,False,False,True,True,0.876434917715533,0.8467039781241985,-15.0,-5.0,False
+outputs\metrics\splice_probe_uvgrid_flipu_mirror_summary.json,False,True,False,True,0.8764341680265636,0.8466959266656898,35.0,0.0,False
+outputs\metrics\splice_probe_uvgrid_flipu_summary.json,False,True,False,False,0.8764179586837813,0.8466385477243819,5.0,-10.0,False
+outputs\metrics\splice_probe_uvgrid_mirror_summary.json,False,False,False,True,0.8714218844873742,0.8232328102944644,20.0,-20.0,False
+outputs\metrics\splice_probe_uvgrid_swap_mirror_summary.json,True,False,False,True,0.8714433721852294,0.8231580756392081,15.0,-25.0,False

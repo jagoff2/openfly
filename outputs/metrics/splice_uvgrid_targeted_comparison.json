@@ -1,0 +1,76 @@
+{
+  "best_row": {
+    "summary_json": "outputs\\metrics\\splice_probe_uvgrid_flipv_mirror_summary.json",
+    "swap_uv": false,
+    "flip_u": false,
+    "flip_v": true,
+    "mirror_u_by_side": true,
+    "mean_voltage_group_corr": 0.876434917715533,
+    "mean_voltage_side_corr": 0.8467039781241985,
+    "left_turn_bias": -15.0,
+    "right_turn_bias": -5.0,
+    "sign_match": false
+  },
+  "rows": [
+    {
+      "summary_json": "outputs\\metrics\\splice_probe_uvgrid_flipv_mirror_summary.json",
+      "swap_uv": false,
+      "flip_u": false,
+      "flip_v": true,
+      "mirror_u_by_side": true,
+      "mean_voltage_group_corr": 0.876434917715533,
+      "mean_voltage_side_corr": 0.8467039781241985,
+      "left_turn_bias": -15.0,
+      "right_turn_bias": -5.0,
+      "sign_match": false
+    },
+    {
+      "summary_json": "outputs\\metrics\\splice_probe_uvgrid_flipu_mirror_summary.json",
+      "swap_uv": false,
+      "flip_u": true,
+      "flip_v": false,
+      "mirror_u_by_side": true,
+      "mean_voltage_group_corr": 0.8764341680265636,
+      "mean_voltage_side_corr": 0.8466959266656898,
+      "left_turn_bias": 35.0,
+      "right_turn_bias": 0.0,
+      "sign_match": false
+    },
+    {
+      "summary_json": "outputs\\metrics\\splice_probe_uvgrid_flipu_summary.json",
+      "swap_uv": false,
+      "flip_u": true,
+      "flip_v": false,
+      "mirror_u_by_side": false,
+      "mean_voltage_group_corr": 0.8764179586837813,
+      "mean_voltage_side_corr": 0.8466385477243819,
+      "left_turn_bias": 5.0,
+      "right_turn_bias": -10.0,
+      "sign_match": false
+    },
+    {
+      "summary_json": "outputs\\metrics\\splice_probe_uvgrid_mirror_summary.json",
+      "swap_uv": false,
+      "flip_u": false,
+      "flip_v": false,
+      "mirror_u_by_side": true,
+      "mean_voltage_group_corr": 0.8714218844873742,
+      "mean_voltage_side_corr": 0.8232328102944644,
+      "left_turn_bias": 20.0,
+      "right_turn_bias": -20.0,
+      "sign_match": false
+    },
+    {
+      "summary_json": "outputs\\metrics\\splice_probe_uvgrid_swap_mirror_summary.json",
+      "swap_uv": true,
+      "flip_u": false,
+      "flip_v": false,
+      "mirror_u_by_side": true,
+      "mean_voltage_group_corr": 0.8714433721852294,
+      "mean_voltage_side_corr": 0.8231580756392081,
+      "left_turn_bias": 15.0,
+      "right_turn_bias": -25.0,
+      "sign_match": false
+    }
+  ]
+}

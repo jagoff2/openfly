@@ -1,0 +1,22 @@
+{
+  "run_dir": "outputs/compare_5s_strict_fast/flygym-demo-20260308-180228",
+  "metrics_path": "outputs/compare_5s_strict_fast/flygym-demo-20260308-180228/metrics.csv",
+  "video_path": "outputs/compare_5s_strict_fast/flygym-demo-20260308-180228/demo.mp4",
+  "log_path": "outputs/compare_5s_strict_fast/flygym-demo-20260308-180228/run.jsonl",
+  "metrics": {
+    "sim_seconds": 0.5699999999999535,
+    "avg_forward_speed": 8.948491635565512,
+    "trajectory_smoothness": 0.29242079678849003,
+    "path_length": 5.0827432490012106,
+    "stable": 0.0,
+    "wall_seconds": 142.17050696799998,
+    "real_time_factor": 0.004009270362440575,
+    "device": "cpu",
+    "mode": "flygym",
+    "completed_cycles": 285,
+    "target_duration_s": 5.0,
+    "completed_full_duration": 0.0,
+    "failure_type": "PhysicsError",
+    "failure_message": "Physics state is invalid. Warning(s) raised: mjWARN_INERTIA"
+  }
+}

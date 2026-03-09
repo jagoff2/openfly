@@ -1,0 +1,24 @@
+[project]
+name = "flysim"
+version = "0.1.0"
+description = "Public-equivalent embodied fruit-fly simulation bridge"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26,<3",
+  "pandas>=2.0,<3",
+  "pyarrow>=12,<20",
+  "PyYAML>=6,<7",
+  "matplotlib>=3.8,<4",
+  "psutil>=5.9,<7",
+  "tqdm>=4.66,<5",
+]
+
+[project.optional-dependencies]
+torch = ["torch>=2.4,<3"]
+dev = ["pytest>=8,<9", "imageio>=2.34,<3"]
+full = ["flygym[examples]==1.2.1", "torch>=2.4,<3", "imageio>=2.34,<3"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

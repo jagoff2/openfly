@@ -1,0 +1,42 @@
+brain:
+  backend: mock
+  completeness_path: external/fly-brain/data/2025_Completeness_783.csv
+  connectivity_path: external/fly-brain/data/2025_Connectivity_783.parquet
+  cache_dir: outputs/cache
+  device: cpu
+  dt_ms: 0.1
+body:
+  terrain_type: flat
+  leading_fly_speed: 0.0
+  leading_fly_radius: 0.0
+brain_context:
+  mode: inferred_visual_p9_context
+  inferred_base_p9_rate_hz: 0.0
+  inferred_p9_gain_hz: 120.0
+  inferred_forward_on_threshold: 0.55
+  inferred_forward_off_threshold: 0.50
+  inferred_forward_scale: 0.12
+  inferred_gate_tau_s: 0.05
+  inferred_turn_bias_scale: 0.20
+  inferred_balance_scale: 0.20
+  inferred_p9_asymmetry_gain: 0.45
+inferred_visual:
+  enabled: true
+  probe_csv: outputs/metrics/inferred_lateralized_visual_candidates.csv
+  min_score: 0.02
+  tracking_limit: 6
+  flow_limit: 4
+decoder:
+  forward_asymmetry_scale_hz: 20.0
+  forward_asymmetry_turn_gain: 0.75
+  signal_smoothing_alpha: 0.15
+runtime:
+  seed: 0
+  duration_s: 2.0
+  body_timestep_s: 0.01
+  control_interval_s: 0.02
+  initial_left_drive: 0.0
+  initial_right_drive: 0.0
+  vision_payload_mode: fast
+  video_stride: 1
+  video_fps: 24

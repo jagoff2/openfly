@@ -1,0 +1,1099 @@
+{
+  "relay_candidates_json": "outputs/metrics/splice_relay_candidates.json",
+  "spatial_mode": "axis1d",
+  "overlap_summary": {
+    "mode": "axis1d",
+    "num_bins": 4
+  },
+  "value_scale": 101.94613788960949,
+  "windows_ms": [
+    100.0,
+    500.0
+  ],
+  "relay_pairs": [
+    {
+      "cell_type": "LC31a",
+      "left_root_ids": [
+        720575940605024386,
+        720575940611036643,
+        720575940611905331,
+        720575940612854378,
+        720575940619992444,
+        720575940620101247,
+        720575940621800431,
+        720575940622028029,
+        720575940624956805,
+        720575940626276682,
+        720575940627836354,
+        720575940628397896,
+        720575940631193856,
+        720575940632448191,
+        720575940634908272,
+        720575940637602621,
+        720575940638866404,
+        720575940647528500
+      ],
+      "right_root_ids": [
+        720575940605934112,
+        720575940610116570,
+        720575940612037073,
+        720575940612737174,
+        720575940616133186,
+        720575940616640310,
+        720575940618135973,
+        720575940619507184,
+        720575940621107336,
+        720575940621318084,
+        720575940622408542,
+        720575940622928764,
+        720575940623637396,
+        720575940626863107,
+        720575940628314167,
+        720575940637761112,
+        720575940651404278
+      ],
+      "left_total_score": 45174.0,
+      "right_total_score": 94873.0,
+      "pair_score": 140047.0,
+      "left_num_roots": 18,
+      "right_num_roots": 17
+    },
+    {
+      "cell_type": "LC31b",
+      "left_root_ids": [
+        720575940602483424,
+        720575940613829388,
+        720575940616951739,
+        720575940619592768,
+        720575940626860817
+      ],
+      "right_root_ids": [
+        720575940607800242,
+        720575940609109602,
+        720575940622680724,
+        720575940628463468,
+        720575940637064926
+      ],
+      "left_total_score": 19378.0,
+      "right_total_score": 50964.0,
+      "pair_score": 70342.0,
+      "left_num_roots": 5,
+      "right_num_roots": 5
+    },
+    {
+      "cell_type": "LC19",
+      "left_root_ids": [
+        720575940618540834,
+        720575940623232392,
+        720575940627278321,
+        720575940630161914,
+        720575940630937923,
+        720575940632227155,
+        720575940633668020,
+        720575940645460260
+      ],
+      "right_root_ids": [
+        720575940606696382,
+        720575940619870656,
+        720575940623194845,
+        720575940630191447,
+        720575940631253820,
+        720575940638681203
+      ],
+      "left_total_score": 27506.0,
+      "right_total_score": 27514.0,
+      "pair_score": 55020.0,
+      "left_num_roots": 8,
+      "right_num_roots": 6
+    },
+    {
+      "cell_type": "LCe06",
+      "left_root_ids": [
+        720575940603174572,
+        720575940611928930,
+        720575940612874898,
+        720575940624373898,
+        720575940634895514
+      ],
+      "right_root_ids": [
+        720575940609234130,
+        720575940613477023,
+        720575940614370610,
+        720575940625019696,
+        720575940627435283,
+        720575940641188304
+      ],
+      "left_total_score": 4401.0,
+      "right_total_score": 6566.0,
+      "pair_score": 10967.0,
+      "left_num_roots": 5,
+      "right_num_roots": 6
+    },
+    {
+      "cell_type": "LT82a",
+      "left_root_ids": [
+        720575940610739918,
+        720575940615391638
+      ],
+      "right_root_ids": [
+        720575940612752611,
+        720575940628120744
+      ],
+      "left_total_score": 2366.0,
+      "right_total_score": 5622.0,
+      "pair_score": 7988.0,
+      "left_num_roots": 2,
+      "right_num_roots": 2
+    },
+    {
+      "cell_type": "LCe04",
+      "left_root_ids": [
+        720575940610421913,
+        720575940610825458,
+        720575940616883387,
+        720575940617253666,
+        720575940617678897,
+        720575940624082238,
+        720575940625607811,
+        720575940627941931,
+        720575940629470572,
+        720575940634228843,
+        720575940636178239,
+        720575940640440910
+      ],
+      "right_root_ids": [
+        720575940606522123,
+        720575940612138927,
+        720575940613990706,
+        720575940617780683,
+        720575940622500872,
+        720575940623275081,
+        720575940623905255,
+        720575940626055994,
+        720575940627940599,
+        720575940628076816,
+        720575940628431222,
+        720575940632718050,
+        720575940635243127,
+        720575940635268471,
+        720575940635692919,
+        720575940639779547
+      ],
+      "left_total_score": 769.0,
+      "right_total_score": 2398.0,
+      "pair_score": 3167.0,
+      "left_num_roots": 12,
+      "right_num_roots": 16
+    }
+  ],
+  "results": {
+    "100ms": {
+      "baseline_gray": {
+        "motor_rates_hz": {
+          "forward_left": 0.0,
+          "forward_right": 0.0,
+          "turn_left": 0.0,
+          "turn_right": 0.0,
+          "reverse": 0.0
+        },
+        "relay_groups": {
+          "LC31a": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "LC31b": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "LC19": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "LCe06": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "LT82a": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "LCe04": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          }
+        }
+      },
+      "body_left_dark": {
+        "motor_rates_hz": {
+          "forward_left": 35.0,
+          "forward_right": 45.0,
+          "turn_left": 35.0,
+          "turn_right": 25.0,
+          "reverse": 7.5
+        },
+        "relay_groups": {
+          "LC31a": {
+            "left": {
+              "rate_hz": 2.2222222222222223,
+              "voltage_mv": -53.848254945543076,
+              "conductance": -2.2544043308330908
+            },
+            "right": {
+              "rate_hz": 3.5294117647058822,
+              "voltage_mv": -56.45277674057905,
+              "conductance": -5.285502349629121
+            },
+            "right_minus_left": {
+              "rate_hz": 1.30718954248366,
+              "voltage_mv": -2.6045217950359714,
+              "conductance": -3.0310980187960306
+            }
+          },
+          "LC31b": {
+            "left": {
+              "rate_hz": 50.0,
+              "voltage_mv": -49.52440643310547,
+              "conductance": 10.106752729415893
+            },
+            "right": {
+              "rate_hz": 54.0,
+              "voltage_mv": -49.73263702392578,
+              "conductance": 10.11174521446228
+            },
+            "right_minus_left": {
+              "rate_hz": 4.0,
+              "voltage_mv": -0.20823059082031392,
+              "conductance": 0.004992485046386719
+            }
+          },
+          "LC19": {
+            "left": {
+              "rate_hz": 1.25,
+              "voltage_mv": -62.40349531173706,
+              "conductance": -13.946979481726885
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -58.0623582204183,
+              "conductance": -7.173058936993281
+            },
+            "right_minus_left": {
+              "rate_hz": -1.25,
+              "voltage_mv": 4.341137091318764,
+              "conductance": 6.7739205447336035
+            }
+          },
+          "LCe06": {
+            "left": {
+              "rate_hz": 78.0,
+              "voltage_mv": -49.96467666625976,
+              "conductance": 13.610353660583495
+            },
+            "right": {
+              "rate_hz": 71.66666666666667,
+              "voltage_mv": -49.83863131205241,
+              "conductance": 12.678609848022461
+            },
+            "right_minus_left": {
+              "rate_hz": -6.333333333333329,
+              "voltage_mv": 0.1260453542073563,
+              "conductance": -0.9317438125610344
+            }
+          },
+          "LT82a": {
+            "left": {
+              "rate_hz": 85.0,
+              "voltage_mv": -49.995357513427734,
+              "conductance": 14.26331377029419
+            },
+            "right": {
+              "rate_hz": 40.0,
+              "voltage_mv": -57.704566955566406,
+              "conductance": -2.004061698913574
+            },
+            "right_minus_left": {
+              "rate_hz": -45.0,
+              "voltage_mv": -7.709209442138672,
+              "conductance": -16.267375469207764
+            }
+          },
+          "LCe04": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.70847988128662,
+              "conductance": -0.9785488756994406
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -51.94580268859863,
+              "conductance": -0.018504294333979487
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.7626771926879883,
+              "conductance": 0.9600445813654611
+            }
+          }
+        }
+      },
+      "body_center_dark": {
+        "motor_rates_hz": {
+          "forward_left": 25.0,
+          "forward_right": 50.0,
+          "turn_left": 55.0,
+          "turn_right": 45.0,
+          "reverse": 35.0
+        },
+        "relay_groups": {
+          "LC31a": {
+            "left": {
+              "rate_hz": 1.1111111111111112,
+              "voltage_mv": -53.47956233554416,
+              "conductance": -1.9006001353263855
+            },
+            "right": {
+              "rate_hz": 4.117647058823529,
+              "voltage_mv": -55.755281784955194,
+              "conductance": -4.457707562867333
+            },
+            "right_minus_left": {
+              "rate_hz": 3.006535947712418,
+              "voltage_mv": -2.275719449411035,
+              "conductance": -2.5571074275409478
+            }
+          },
+          "LC31b": {
+            "left": {
+              "rate_hz": 54.0,
+              "voltage_mv": -49.47631072998047,
+              "conductance": 10.810082530975341
+            },
+            "right": {
+              "rate_hz": 46.0,
+              "voltage_mv": -50.40343399047852,
+              "conductance": 8.486016058921814
+            },
+            "right_minus_left": {
+              "rate_hz": -8.0,
+              "voltage_mv": -0.9271232604980497,
+              "conductance": -2.324066472053527
+            }
+          },
+          "LC19": {
+            "left": {
+              "rate_hz": 1.25,
+              "voltage_mv": -61.482295989990234,
+              "conductance": -12.803706288337708
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -60.15036710103353,
+              "conductance": -9.768142650524775
+            },
+            "right_minus_left": {
+              "rate_hz": -1.25,
+              "voltage_mv": 1.3319288889567034,
+              "conductance": 3.035563637812933
+            }
+          },
+          "LCe06": {
+            "left": {
+              "rate_hz": 80.0,
+              "voltage_mv": -49.99643783569336,
+              "conductance": 13.833011054992676
+            },
+            "right": {
+              "rate_hz": 75.0,
+              "voltage_mv": -49.99406433105469,
+              "conductance": 13.138676961263021
+            },
+            "right_minus_left": {
+              "rate_hz": -5.0,
+              "voltage_mv": 0.002373504638669033,
+              "conductance": -0.6943340937296547
+            }
+          },
+          "LT82a": {
+            "left": {
+              "rate_hz": 90.0,
+              "voltage_mv": -50.29483222961426,
+              "conductance": 14.498139381408691
+            },
+            "right": {
+              "rate_hz": 60.0,
+              "voltage_mv": -53.87265586853027,
+              "conductance": 4.871122598648071
+            },
+            "right_minus_left": {
+              "rate_hz": -30.0,
+              "voltage_mv": -3.5778236389160156,
+              "conductance": -9.62701678276062
+            }
+          },
+          "LCe04": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.62149747212728,
+              "conductance": -0.8525719853738943
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -51.986525535583496,
+              "conductance": -0.058667526580393314
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.6349719365437849,
+              "conductance": 0.793904458793501
+            }
+          }
+        }
+      },
+      "body_right_dark": {
+        "motor_rates_hz": {
+          "forward_left": 10.0,
+          "forward_right": 45.0,
+          "turn_left": 35.0,
+          "turn_right": 45.0,
+          "reverse": 32.5
+        },
+        "relay_groups": {
+          "LC31a": {
+            "left": {
+              "rate_hz": 1.6666666666666667,
+              "voltage_mv": -53.62734285990397,
+              "conductance": -2.0737585690286426
+            },
+            "right": {
+              "rate_hz": 4.117647058823529,
+              "voltage_mv": -55.48455563713522,
+              "conductance": -4.170146900064805
+            },
+            "right_minus_left": {
+              "rate_hz": 2.450980392156862,
+              "voltage_mv": -1.857212777231254,
+              "conductance": -2.096388331036162
+            }
+          },
+          "LC31b": {
+            "left": {
+              "rate_hz": 54.0,
+              "voltage_mv": -49.43589859008789,
+              "conductance": 10.89091715812683
+            },
+            "right": {
+              "rate_hz": 40.0,
+              "voltage_mv": -49.98709945678711,
+              "conductance": 8.211363890022039
+            },
+            "right_minus_left": {
+              "rate_hz": -14.0,
+              "voltage_mv": -0.5512008666992188,
+              "conductance": -2.679553268104792
+            }
+          },
+          "LC19": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -62.50500011444092,
+              "conductance": -13.48941796272993
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -57.84759521484375,
+              "conductance": -8.34096095369508
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 4.657404899597168,
+              "conductance": 5.148457009034852
+            }
+          },
+          "LCe06": {
+            "left": {
+              "rate_hz": 46.0,
+              "voltage_mv": -49.700401306152344,
+              "conductance": 9.650294589996339
+            },
+            "right": {
+              "rate_hz": 56.666666666666664,
+              "voltage_mv": -49.79858716328939,
+              "conductance": 10.37145193417867
+            },
+            "right_minus_left": {
+              "rate_hz": 10.666666666666664,
+              "voltage_mv": -0.09818585713704664,
+              "conductance": 0.7211573441823322
+            }
+          },
+          "LT82a": {
+            "left": {
+              "rate_hz": 60.0,
+              "voltage_mv": -50.33744430541992,
+              "conductance": 10.411808490753174
+            },
+            "right": {
+              "rate_hz": 60.0,
+              "voltage_mv": -54.84910583496094,
+              "conductance": 4.207061290740967
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -4.511661529541016,
+              "conductance": -6.204747200012207
+            }
+          },
+          "LCe04": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.62707773844401,
+              "conductance": -0.8284452309211096
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.67726397514343,
+              "conductance": -0.9078793367370963
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -0.05018623669942457,
+              "conductance": -0.07943410581598676
+            }
+          }
+        }
+      }
+    },
+    "500ms": {
+      "baseline_gray": {
+        "motor_rates_hz": {
+          "forward_left": 0.0,
+          "forward_right": 0.0,
+          "turn_left": 0.0,
+          "turn_right": 0.0,
+          "reverse": 0.0
+        },
+        "relay_groups": {
+          "LC31a": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "LC31b": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "LC19": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "LCe06": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "LT82a": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          },
+          "LCe04": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.0,
+              "conductance": 0.0
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.0,
+              "conductance": 0.0
+            }
+          }
+        }
+      },
+      "body_left_dark": {
+        "motor_rates_hz": {
+          "forward_left": 42.0,
+          "forward_right": 55.0,
+          "turn_left": 36.0,
+          "turn_right": 19.0,
+          "reverse": 8.5
+        },
+        "relay_groups": {
+          "LC31a": {
+            "left": {
+              "rate_hz": 2.111111111111111,
+              "voltage_mv": -55.08521758185493,
+              "conductance": -2.938154222236739
+            },
+            "right": {
+              "rate_hz": 3.764705882352941,
+              "voltage_mv": -58.720024333280676,
+              "conductance": -6.506187144447775
+            },
+            "right_minus_left": {
+              "rate_hz": 1.65359477124183,
+              "voltage_mv": -3.6348067514257494,
+              "conductance": -3.568032922211036
+            }
+          },
+          "LC31b": {
+            "left": {
+              "rate_hz": 55.6,
+              "voltage_mv": -49.213375091552734,
+              "conductance": 10.718794012069703
+            },
+            "right": {
+              "rate_hz": 55.6,
+              "voltage_mv": -49.66124954223633,
+              "conductance": 10.295335912704468
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -0.44787445068359233,
+              "conductance": -0.4234580993652344
+            }
+          },
+          "LC19": {
+            "left": {
+              "rate_hz": 0.25,
+              "voltage_mv": -67.64831113815308,
+              "conductance": -16.146632343530655
+            },
+            "right": {
+              "rate_hz": 2.3333333333333335,
+              "voltage_mv": -60.325127919514976,
+              "conductance": -8.47392968336741
+            },
+            "right_minus_left": {
+              "rate_hz": 2.0833333333333335,
+              "voltage_mv": 7.3231832186381,
+              "conductance": 7.672702660163244
+            }
+          },
+          "LCe06": {
+            "left": {
+              "rate_hz": 83.2,
+              "voltage_mv": -49.80052108764649,
+              "conductance": 14.103643989562988
+            },
+            "right": {
+              "rate_hz": 75.66666666666667,
+              "voltage_mv": -49.831582387288414,
+              "conductance": 12.919725100199381
+            },
+            "right_minus_left": {
+              "rate_hz": -7.533333333333331,
+              "voltage_mv": -0.03106129964192661,
+              "conductance": -1.183918889363607
+            }
+          },
+          "LT82a": {
+            "left": {
+              "rate_hz": 83.0,
+              "voltage_mv": -49.90464210510254,
+              "conductance": 13.919533729553223
+            },
+            "right": {
+              "rate_hz": 40.0,
+              "voltage_mv": -62.316200256347656,
+              "conductance": -5.148043632507324
+            },
+            "right_minus_left": {
+              "rate_hz": -43.0,
+              "voltage_mv": -12.411558151245117,
+              "conductance": -19.067577362060547
+            }
+          },
+          "LCe04": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -53.108177502950035,
+              "conductance": -1.1534723776082199
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.14627718925476,
+              "conductance": -0.15843419265002012
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.9619003136952742,
+              "conductance": 0.9950381849581997
+            }
+          }
+        }
+      },
+      "body_center_dark": {
+        "motor_rates_hz": {
+          "forward_left": 31.0,
+          "forward_right": 54.0,
+          "turn_left": 62.0,
+          "turn_right": 33.0,
+          "reverse": 36.5
+        },
+        "relay_groups": {
+          "LC31a": {
+            "left": {
+              "rate_hz": 1.6666666666666667,
+              "voltage_mv": -54.67005581325955,
+              "conductance": -2.578614819380972
+            },
+            "right": {
+              "rate_hz": 3.764705882352941,
+              "voltage_mv": -57.576052497414985,
+              "conductance": -5.291681110858917
+            },
+            "right_minus_left": {
+              "rate_hz": 2.098039215686274,
+              "voltage_mv": -2.9059966841554328,
+              "conductance": -2.7130662914779453
+            }
+          },
+          "LC31b": {
+            "left": {
+              "rate_hz": 57.6,
+              "voltage_mv": -49.224064636230466,
+              "conductance": 11.079796934127808
+            },
+            "right": {
+              "rate_hz": 52.0,
+              "voltage_mv": -50.3741958618164,
+              "conductance": 8.990079206228256
+            },
+            "right_minus_left": {
+              "rate_hz": -5.600000000000001,
+              "voltage_mv": -1.1501312255859375,
+              "conductance": -2.0897177278995525
+            }
+          },
+          "LC19": {
+            "left": {
+              "rate_hz": 1.75,
+              "voltage_mv": -67.05986261367798,
+              "conductance": -15.357112728059292
+            },
+            "right": {
+              "rate_hz": 3.3333333333333335,
+              "voltage_mv": -60.71421559651693,
+              "conductance": -8.930649717648825
+            },
+            "right_minus_left": {
+              "rate_hz": 1.5833333333333335,
+              "voltage_mv": 6.345647017161049,
+              "conductance": 6.426463010410467
+            }
+          },
+          "LCe06": {
+            "left": {
+              "rate_hz": 84.8,
+              "voltage_mv": -49.789730834960935,
+              "conductance": 14.311871147155761
+            },
+            "right": {
+              "rate_hz": 84.33333333333333,
+              "voltage_mv": -49.8905340830485,
+              "conductance": 14.10848887761434
+            },
+            "right_minus_left": {
+              "rate_hz": -0.46666666666666856,
+              "voltage_mv": -0.10080324808756558,
+              "conductance": -0.20338226954142158
+            }
+          },
+          "LT82a": {
+            "left": {
+              "rate_hz": 93.0,
+              "voltage_mv": -50.05544662475586,
+              "conductance": 15.120327472686768
+            },
+            "right": {
+              "rate_hz": 56.0,
+              "voltage_mv": -57.59111976623535,
+              "conductance": 2.1832547187805176
+            },
+            "right_minus_left": {
+              "rate_hz": -37.0,
+              "voltage_mv": -7.535673141479492,
+              "conductance": -12.93707275390625
+            }
+          },
+          "LCe04": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.91833813985189,
+              "conductance": -0.9590996466577053
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.172532081604004,
+              "conductance": -0.18413164466619492
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": 0.7458060582478865,
+              "conductance": 0.7749680019915104
+            }
+          }
+        }
+      },
+      "body_right_dark": {
+        "motor_rates_hz": {
+          "forward_left": 28.0,
+          "forward_right": 45.0,
+          "turn_left": 50.0,
+          "turn_right": 41.0,
+          "reverse": 34.5
+        },
+        "relay_groups": {
+          "LC31a": {
+            "left": {
+              "rate_hz": 1.6666666666666667,
+              "voltage_mv": -54.92976824442545,
+              "conductance": -2.8175773206684323
+            },
+            "right": {
+              "rate_hz": 4.0,
+              "voltage_mv": -57.265903921688306,
+              "conductance": -4.929244886426365
+            },
+            "right_minus_left": {
+              "rate_hz": 2.333333333333333,
+              "voltage_mv": -2.3361356772628525,
+              "conductance": -2.1116675657579327
+            }
+          },
+          "LC31b": {
+            "left": {
+              "rate_hz": 59.2,
+              "voltage_mv": -49.26644515991211,
+              "conductance": 11.235653686523438
+            },
+            "right": {
+              "rate_hz": 44.0,
+              "voltage_mv": -50.04954605102539,
+              "conductance": 8.24264636039734
+            },
+            "right_minus_left": {
+              "rate_hz": -15.200000000000003,
+              "voltage_mv": -0.7831008911132784,
+              "conductance": -2.993007326126099
+            }
+          },
+          "LC19": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -68.30477333068848,
+              "conductance": -16.944260500371456
+            },
+            "right": {
+              "rate_hz": 1.0,
+              "voltage_mv": -61.41646258036295,
+              "conductance": -9.694983581701914
+            },
+            "right_minus_left": {
+              "rate_hz": 1.0,
+              "voltage_mv": 6.888310750325523,
+              "conductance": 7.249276918669542
+            }
+          },
+          "LCe06": {
+            "left": {
+              "rate_hz": 52.8,
+              "voltage_mv": -49.652741241455075,
+              "conductance": 9.834833121299743
+            },
+            "right": {
+              "rate_hz": 61.333333333333336,
+              "voltage_mv": -49.56493377685547,
+              "conductance": 11.171132564544678
+            },
+            "right_minus_left": {
+              "rate_hz": 8.533333333333339,
+              "voltage_mv": 0.08780746459960653,
+              "conductance": 1.3362994432449344
+            }
+          },
+          "LT82a": {
+            "left": {
+              "rate_hz": 67.0,
+              "voltage_mv": -49.89120674133301,
+              "conductance": 11.667984962463379
+            },
+            "right": {
+              "rate_hz": 63.0,
+              "voltage_mv": -59.93391227722168,
+              "conductance": 0.6555871963500977
+            },
+            "right_minus_left": {
+              "rate_hz": -4.0,
+              "voltage_mv": -10.042705535888672,
+              "conductance": -11.012397766113281
+            }
+          },
+          "LCe04": {
+            "left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -52.93627071380615,
+              "conductance": -0.9755933955311775
+            },
+            "right": {
+              "rate_hz": 0.0,
+              "voltage_mv": -53.071603775024414,
+              "conductance": -1.1181989256292582
+            },
+            "right_minus_left": {
+              "rate_hz": 0.0,
+              "voltage_mv": -0.13533306121826172,
+              "conductance": -0.14260553009808064
+            }
+          }
+        }
+      }
+    }
+  }
+}

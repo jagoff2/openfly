@@ -1,0 +1,38 @@
+         25515233 function calls (24837660 primitive calls) in 44.966 seconds
+
+   Ordered by: cumulative time
+   List reduced from 21936 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001   44.975   44.975 /mnt/g/flysim/src/runtime/closed_loop.py:40(run_closed_loop)
+       10    0.002    0.000   23.873    2.387 /mnt/g/flysim/src/body/flygym_runtime.py:63(step)
+      200    0.000    0.000   23.546    0.118 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flygym/simulation.py:419(step)
+      200    0.002    0.000   23.546    0.118 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flygym/simulation.py:180(step)
+       11    0.001    0.000   23.269    2.115 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flygym/examples/vision/realistic_vision.py:112(_get_visual_nn_activities)
+       11    0.006    0.001   23.090    2.099 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flyvis/utils/activity_utils.py:244(__init__)
+      200    0.001    0.000   23.025    0.115 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flygym/examples/vision/realistic_vision.py:44(post_step)
+     1397    0.047    0.000   20.356    0.015 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/datamate/io.py:87(__getitem__)
+      200   19.852    0.099   19.852    0.099 {built-in method time.sleep}
+       11    0.024    0.002   10.122    0.920 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flyvis/utils/activity_utils.py:269(<listcomp>)
+       11    0.004    0.000   10.003    0.909 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flyvis/utils/activity_utils.py:266(<listcomp>)
+        1    0.000    0.000    8.980    8.980 /mnt/g/flysim/src/body/flygym_runtime.py:55(reset)
+        1    0.000    0.000    8.805    8.805 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flygym/simulation.py:390(reset)
+        1    0.000    0.000    8.805    8.805 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flygym/simulation.py:139(reset)
+        1    0.000    0.000    8.787    8.787 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flygym/examples/vision/realistic_vision.py:80(reset)
+        1    0.000    0.000    8.697    8.697 /mnt/g/flysim/src/runtime/closed_loop.py:25(build_body_runtime)
+        1    0.000    0.000    8.693    8.693 /mnt/g/flysim/src/body/flygym_runtime.py:22(__post_init__)
+    17147    0.135    0.000    6.001    0.000 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/torch/utils/_device.py:105(__torch_function__)
+ 1512/212    0.004    0.000    5.686    0.027 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/torch/nn/modules/module.py:1772(_wrapped_call_impl)
+ 1512/212    0.009    0.000    5.686    0.027 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/torch/nn/modules/module.py:1780(_call_impl)
+ 6976/322    0.016    0.000    4.844    0.015 <frozen importlib._bootstrap>:1022(_find_and_load)
+  3917/69    0.009    0.000    4.840    0.070 <frozen importlib._bootstrap>:987(_find_and_load_unlocked)
+  3799/69    0.009    0.000    4.831    0.070 <frozen importlib._bootstrap>:664(_load_unlocked)
+  3522/68    0.005    0.000    4.828    0.071 <frozen importlib._bootstrap_external>:877(exec_module)
+  5003/69    0.002    0.000    4.819    0.070 <frozen importlib._bootstrap>:233(_call_with_frames_removed)
+      401    0.077    0.000    4.811    0.012 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flygym/fly.py:1140(get_observation)
+  6408/73    0.107    0.000    4.804    0.066 {built-in method builtins.exec}
+        1    0.000    0.000    4.720    4.720 /mnt/g/flysim/src/body/flygym_runtime.py:32(_setup_imports)
+      401    0.014    0.000    4.303    0.011 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flygym/fly.py:1067(_update_vision)
+        1    0.000    0.000    3.983    3.983 /root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flygym/examples/vision/realistic_vision.py:94(_initialize_vision_network)
+
+

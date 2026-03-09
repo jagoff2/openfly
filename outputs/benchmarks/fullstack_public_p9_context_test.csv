@@ -1,0 +1,2 @@
+benchmark_name,backend,device,wall_seconds,sim_seconds,real_time_factor,config,commit_hash,status
+fullstack_flygym_fast_public_p9_context_0.02s,torch_fast_public_p9_context,cpu,5.0650771999999975,0.018000000000000002,0.003553746426609255,configs/flygym_realistic_vision_public_p9_context.yaml,not_a_git_repo,success

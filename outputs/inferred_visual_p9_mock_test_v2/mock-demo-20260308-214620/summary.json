@@ -1,0 +1,27 @@
+{
+  "run_dir": "outputs\\inferred_visual_p9_mock_test_v2\\mock-demo-20260308-214620",
+  "metrics_path": "outputs\\inferred_visual_p9_mock_test_v2\\mock-demo-20260308-214620\\metrics.csv",
+  "video_path": "outputs\\inferred_visual_p9_mock_test_v2\\mock-demo-20260308-214620\\demo.mp4",
+  "log_path": "outputs\\inferred_visual_p9_mock_test_v2\\mock-demo-20260308-214620\\run.jsonl",
+  "metrics": {
+    "sim_seconds": 2.0000000000000013,
+    "avg_forward_speed": 0.723577435992542,
+    "trajectory_smoothness": 0.9925054260710237,
+    "path_length": 1.4326833232652332,
+    "net_displacement": 1.4055475242671047,
+    "displacement_efficiency": 0.9810594577618987,
+    "bbox_width": 1.305911093896456,
+    "bbox_height": 0.519769235153014,
+    "bbox_area": 0.6787724104523968,
+    "stable": 1.0,
+    "wall_seconds": 0.06323490000795573,
+    "real_time_factor": 31.62810409676265,
+    "device": "mock",
+    "mode": "mock",
+    "completed_cycles": 100,
+    "target_duration_s": 2.0,
+    "completed_full_duration": 1.0,
+    "failure_type": "",
+    "failure_message": ""
+  }
+}

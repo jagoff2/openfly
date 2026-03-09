@@ -1,0 +1,319 @@
+{
+  "annotation_path": "outputs/cache/flywire_annotation_supplement.tsv",
+  "brain_device": "cpu",
+  "input_mode": "current_signed",
+  "spatial_bins": 4,
+  "num_overlap_cell_types": 49,
+  "overlap_summary": {
+    "num_groups": 392,
+    "num_complete_bilateral_cell_types": 49,
+    "complete_bilateral_cell_types": [
+      "Am",
+      "C2",
+      "C3",
+      "L1",
+      "L2",
+      "L3",
+      "L4",
+      "L5",
+      "Lawf1",
+      "Lawf2",
+      "Mi1",
+      "Mi10",
+      "Mi13",
+      "Mi14",
+      "Mi15",
+      "Mi2",
+      "Mi4",
+      "Mi9",
+      "R7",
+      "R8",
+      "T1",
+      "T2",
+      "T2a",
+      "T3",
+      "T4a",
+      "T4b",
+      "T4c",
+      "T4d",
+      "T5a",
+      "T5b",
+      "T5c",
+      "T5d",
+      "Tm1",
+      "Tm16",
+      "Tm2",
+      "Tm20",
+      "Tm3",
+      "Tm4",
+      "Tm5Y",
+      "Tm5a",
+      "Tm5c",
+      "Tm9",
+      "TmY14",
+      "TmY15",
+      "TmY18",
+      "TmY3",
+      "TmY4",
+      "TmY5a",
+      "TmY9"
+    ],
+    "counts_by_cell_type": {
+      "Am": {
+        "left": 84,
+        "right": 229
+      },
+      "C2": {
+        "left": 723,
+        "right": 733
+      },
+      "C3": {
+        "left": 699,
+        "right": 761
+      },
+      "L1": {
+        "left": 789,
+        "right": 790
+      },
+      "L2": {
+        "left": 764,
+        "right": 790
+      },
+      "L3": {
+        "left": 680,
+        "right": 726
+      },
+      "L4": {
+        "left": 659,
+        "right": 739
+      },
+      "L5": {
+        "left": 821,
+        "right": 786
+      },
+      "Lawf1": {
+        "left": 199,
+        "right": 156
+      },
+      "Lawf2": {
+        "left": 145,
+        "right": 168
+      },
+      "Mi1": {
+        "left": 787,
+        "right": 793
+      },
+      "Mi10": {
+        "left": 195,
+        "right": 206
+      },
+      "Mi13": {
+        "left": 367,
+        "right": 353
+      },
+      "Mi14": {
+        "left": 124,
+        "right": 124
+      },
+      "Mi15": {
+        "left": 498,
+        "right": 482
+      },
+      "Mi2": {
+        "left": 410,
+        "right": 419
+      },
+      "Mi4": {
+        "left": 764,
+        "right": 764
+      },
+      "Mi9": {
+        "left": 801,
+        "right": 767
+      },
+      "R7": {
+        "left": 672,
+        "right": 671
+      },
+      "R8": {
+        "left": 670,
+        "right": 654
+      },
+      "T1": {
+        "left": 645,
+        "right": 745
+      },
+      "T2": {
+        "left": 738,
+        "right": 716
+      },
+      "T2a": {
+        "left": 910,
+        "right": 871
+      },
+      "T3": {
+        "left": 825,
+        "right": 790
+      },
+      "T4a": {
+        "left": 729,
+        "right": 734
+      },
+      "T4b": {
+        "left": 756,
+        "right": 751
+      },
+      "T4c": {
+        "left": 850,
+        "right": 842
+      },
+      "T4d": {
+        "left": 802,
+        "right": 776
+      },
+      "T5a": {
+        "left": 742,
+        "right": 740
+      },
+      "T5b": {
+        "left": 758,
+        "right": 762
+      },
+      "T5c": {
+        "left": 763,
+        "right": 766
+      },
+      "T5d": {
+        "left": 740,
+        "right": 727
+      },
+      "Tm1": {
+        "left": 773,
+        "right": 771
+      },
+      "Tm16": {
+        "left": 168,
+        "right": 175
+      },
+      "Tm2": {
+        "left": 765,
+        "right": 763
+      },
+      "Tm20": {
+        "left": 747,
+        "right": 741
+      },
+      "Tm3": {
+        "left": 889,
+        "right": 857
+      },
+      "Tm4": {
+        "left": 755,
+        "right": 734
+      },
+      "Tm5Y": {
+        "left": 407,
+        "right": 401
+      },
+      "Tm5a": {
+        "left": 229,
+        "right": 221
+      },
+      "Tm5c": {
+        "left": 297,
+        "right": 310
+      },
+      "Tm9": {
+        "left": 756,
+        "right": 750
+      },
+      "TmY14": {
+        "left": 185,
+        "right": 185
+      },
+      "TmY15": {
+        "left": 106,
+        "right": 119
+      },
+      "TmY18": {
+        "left": 569,
+        "right": 559
+      },
+      "TmY3": {
+        "left": 374,
+        "right": 360
+      },
+      "TmY4": {
+        "left": 215,
+        "right": 211
+      },
+      "TmY5a": {
+        "left": 504,
+        "right": 521
+      },
+      "TmY9": {
+        "left": 371,
+        "right": 356
+      }
+    },
+    "num_bins": 4,
+    "mode": "spatial_bins"
+  },
+  "value_scale": 101.94613788960949,
+  "conditions": {
+    "baseline_gray": {
+      "teacher_student_group_correlation": null,
+      "teacher_student_side_diff_correlation": null,
+      "num_nonzero_direct_inputs": 0,
+      "motor_rates_hz": {
+        "forward_left": 0.0,
+        "forward_right": 0.0,
+        "turn_left": 0.0,
+        "turn_right": 0.0,
+        "reverse": 0.0
+      }
+    },
+    "body_left_dark": {
+      "teacher_student_group_correlation": 0.7456860573347461,
+      "teacher_student_side_diff_correlation": 0.42025481576497814,
+      "num_nonzero_direct_inputs": 56584,
+      "motor_rates_hz": {
+        "forward_left": 35.0,
+        "forward_right": 45.0,
+        "turn_left": 35.0,
+        "turn_right": 25.0,
+        "reverse": 7.5
+      }
+    },
+    "body_center_dark": {
+      "teacher_student_group_correlation": 0.8190406061497372,
+      "teacher_student_side_diff_correlation": null,
+      "num_nonzero_direct_inputs": 56584,
+      "motor_rates_hz": {
+        "forward_left": 25.0,
+        "forward_right": 50.0,
+        "turn_left": 55.0,
+        "turn_right": 45.0,
+        "reverse": 35.0
+      }
+    },
+    "body_right_dark": {
+      "teacher_student_group_correlation": 0.7454841704046333,
+      "teacher_student_side_diff_correlation": 0.418785805008449,
+      "num_nonzero_direct_inputs": 56584,
+      "motor_rates_hz": {
+        "forward_left": 10.0,
+        "forward_right": 45.0,
+        "turn_left": 35.0,
+        "turn_right": 45.0,
+        "reverse": 32.5
+      }
+    }
+  },
+  "notes": [
+    "This probe uses the official FlyWire annotation supplement to ground the overlap by exact cell_type labels plus side, not by fabricated left/right splits.",
+    "When input_mode=current_signed, the body-free splice can represent inhibitory visual deviations at the boundary via signed direct current, not only positive rate deltas.",
+    "When spatial_bins>1, the whole-brain side uses inferred coarse spatial bins from public soma/position coordinates; this is more grounded than arbitrary halves, but it is still an inferred retinotopic proxy rather than a proven column identity map.",
+    "This is a body-free splice probe. It validates the splice boundary before any embodied claims."
+  ]
+}

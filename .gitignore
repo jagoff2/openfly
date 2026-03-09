@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+*.egg-info/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+
+# Checked-out external repos and downloaded public datasets
+external/
+
+# Large generated runtime caches and logs
+outputs/cache/
+outputs/**/*.jsonl
+outputs/**/*.prof
+outputs/**/*.pkl
+outputs/**/*.parquet
+outputs/**/*.feather
+
+# Temporary test outputs
+tests/.tmp/

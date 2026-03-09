@@ -1,0 +1,2 @@
+sim_seconds,avg_forward_speed,trajectory_smoothness,path_length,stable,wall_seconds,real_time_factor,device,mode
+0.018000000000000002,7.3095363678410195,0.16217275421623023,0.13157165462113835,1.0,24.479481652,0.0007353096873490939,cpu,flygym

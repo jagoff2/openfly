@@ -1,0 +1,17 @@
+{
+  "run_dir": "outputs\\demos\\mock-demo-20260308-110606",
+  "metrics_path": "outputs\\demos\\mock-demo-20260308-110606\\metrics.csv",
+  "video_path": "outputs\\demos\\mock-demo-20260308-110606\\demo.mp4",
+  "log_path": "outputs\\demos\\mock-demo-20260308-110606\\run.jsonl",
+  "metrics": {
+    "sim_seconds": 0.98,
+    "avg_forward_speed": 2.100588094257645,
+    "trajectory_smoothness": 0.9927575245310574,
+    "path_length": 2.058576332372492,
+    "stable": 1.0,
+    "wall_seconds": 0.02356829999916954,
+    "real_time_factor": 41.58127654665511,
+    "device": "mock",
+    "mode": "mock"
+  }
+}

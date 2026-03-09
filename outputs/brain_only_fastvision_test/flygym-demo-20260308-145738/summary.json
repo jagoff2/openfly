@@ -1,0 +1,17 @@
+{
+  "run_dir": "outputs/brain_only_fastvision_test/flygym-demo-20260308-145738",
+  "metrics_path": "outputs/brain_only_fastvision_test/flygym-demo-20260308-145738/metrics.csv",
+  "video_path": "outputs/brain_only_fastvision_test/flygym-demo-20260308-145738/demo.mp4",
+  "log_path": "outputs/brain_only_fastvision_test/flygym-demo-20260308-145738/run.jsonl",
+  "metrics": {
+    "sim_seconds": 0.018000000000000002,
+    "avg_forward_speed": 14.674505561307086,
+    "trajectory_smoothness": 0.11855046634200207,
+    "path_length": 0.26414110010352754,
+    "stable": 1.0,
+    "wall_seconds": 4.936921699999999,
+    "real_time_factor": 0.003645996654149894,
+    "device": "cpu",
+    "mode": "flygym"
+  }
+}

@@ -1,0 +1,2 @@
+sim_seconds,avg_forward_speed,trajectory_smoothness,path_length,stable,wall_seconds,real_time_factor,device,mode
+0.08,2.068836149024411,0.9425053280530712,0.1655068919219529,1.0,0.0023893999969004653,33.48120871506494,mock,mock

@@ -1,0 +1,919 @@
+{
+  "selection_rule": [
+    "Candidates are restricted to strict descending annotations only: `super_class == descending`, `flow == efferent`, and DN/oDN/MDN-like labels.",
+    "Candidates are ranked by summed structural input from the previously selected relay roots, not by optic-lobe activity directly.",
+    "Only bilateral labels with roots on both sides are retained for the expanded descending-only readout experiment."
+  ],
+  "selected_paired_cell_types": [
+    {
+      "candidate_label": "DNp09",
+      "left_root_ids": [
+        720575940635872101
+      ],
+      "right_root_ids": [
+        720575940627652358
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 462.0,
+      "right_total_from_relays": 704.0,
+      "pair_score": 1166.0,
+      "left_cell_types": [],
+      "right_cell_types": [],
+      "left_hemibrain_types": [
+        "DNp09"
+      ],
+      "right_hemibrain_types": [
+        "DNp09"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        106056.0,
+        48904.0,
+        5468.0
+      ],
+      "right_soma_xyz": [
+        158656.0,
+        49592.0,
+        5300.0
+      ],
+      "left_pos_xyz": [
+        112164.0,
+        77404.0,
+        4098.0
+      ],
+      "right_pos_xyz": [
+        158656.0,
+        49592.0,
+        5300.0
+      ]
+    },
+    {
+      "candidate_label": "DNp35",
+      "left_root_ids": [
+        720575940628437291
+      ],
+      "right_root_ids": [
+        720575940623276168
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 269.0,
+      "right_total_from_relays": 348.0,
+      "pair_score": 617.0,
+      "left_cell_types": [
+        "DNp35"
+      ],
+      "right_cell_types": [
+        "DNp35"
+      ],
+      "left_hemibrain_types": [
+        "PVLP136"
+      ],
+      "right_hemibrain_types": [
+        "PVLP136"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        106488.0,
+        51472.0,
+        5322.0
+      ],
+      "right_soma_xyz": [
+        156416.0,
+        50800.0,
+        4935.0
+      ],
+      "left_pos_xyz": [
+        111288.0,
+        50024.0,
+        3537.0
+      ],
+      "right_pos_xyz": [
+        156416.0,
+        50800.0,
+        4935.0
+      ]
+    },
+    {
+      "candidate_label": "DNp06",
+      "left_root_ids": [
+        720575940622673860
+      ],
+      "right_root_ids": [
+        720575940611644529
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 245.0,
+      "right_total_from_relays": 347.0,
+      "pair_score": 592.0,
+      "left_cell_types": [],
+      "right_cell_types": [],
+      "left_hemibrain_types": [
+        "DNp06"
+      ],
+      "right_hemibrain_types": [
+        "DNp06"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        107216.0,
+        50288.0,
+        5411.0
+      ],
+      "right_soma_xyz": [
+        156616.0,
+        52472.0,
+        5064.0
+      ],
+      "left_pos_xyz": [
+        105327.0,
+        60596.0,
+        3301.0
+      ],
+      "right_pos_xyz": [
+        156616.0,
+        52472.0,
+        5064.0
+      ]
+    },
+    {
+      "candidate_label": "DNpe031",
+      "left_root_ids": [
+        720575940627750216,
+        720575940634750871
+      ],
+      "right_root_ids": [
+        720575940621554112,
+        720575940622843530
+      ],
+      "left_num_roots": 2,
+      "right_num_roots": 2,
+      "left_total_from_relays": 291.0,
+      "right_total_from_relays": 251.0,
+      "pair_score": 542.0,
+      "left_cell_types": [
+        "DNpe031"
+      ],
+      "right_cell_types": [
+        "DNpe031"
+      ],
+      "left_hemibrain_types": [
+        "PVLP116"
+      ],
+      "right_hemibrain_types": [
+        "PVLP116"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        102132.0,
+        52784.0,
+        5392.0
+      ],
+      "right_soma_xyz": [
+        160544.0,
+        58912.0,
+        5083.5
+      ],
+      "left_pos_xyz": [
+        103926.5,
+        54805.5,
+        5022.5
+      ],
+      "right_pos_xyz": [
+        160544.0,
+        58912.0,
+        5083.5
+      ]
+    },
+    {
+      "candidate_label": "DNb01",
+      "left_root_ids": [
+        720575940625878160
+      ],
+      "right_root_ids": [
+        720575940630758418
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 243.0,
+      "right_total_from_relays": 276.0,
+      "pair_score": 519.0,
+      "left_cell_types": [],
+      "right_cell_types": [],
+      "left_hemibrain_types": [
+        "DNb01"
+      ],
+      "right_hemibrain_types": [
+        "DNb01"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        106488.0,
+        59896.0,
+        2278.0
+      ],
+      "right_soma_xyz": [
+        154536.0,
+        63168.0,
+        1729.0
+      ],
+      "left_pos_xyz": [
+        106488.0,
+        59896.0,
+        2278.0
+      ],
+      "right_pos_xyz": [
+        154536.0,
+        63168.0,
+        1729.0
+      ]
+    },
+    {
+      "candidate_label": "DNp71",
+      "left_root_ids": [
+        720575940625673196
+      ],
+      "right_root_ids": [
+        720575940633095137
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 180.0,
+      "right_total_from_relays": 218.0,
+      "pair_score": 398.0,
+      "left_cell_types": [
+        "DNp71"
+      ],
+      "right_cell_types": [
+        "DNp71"
+      ],
+      "left_hemibrain_types": [
+        "DNp09"
+      ],
+      "right_hemibrain_types": [
+        "DNp09"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        108408.0,
+        49192.0,
+        5307.0
+      ],
+      "right_soma_xyz": [
+        156704.0,
+        48680.0,
+        4866.0
+      ],
+      "left_pos_xyz": [
+        110199.0,
+        50048.0,
+        3430.0
+      ],
+      "right_pos_xyz": [
+        156704.0,
+        48680.0,
+        4866.0
+      ]
+    },
+    {
+      "candidate_label": "DNb09",
+      "left_root_ids": [
+        720575940616826380
+      ],
+      "right_root_ids": [
+        720575940648636292
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 222.0,
+      "right_total_from_relays": 149.0,
+      "pair_score": 371.0,
+      "left_cell_types": [
+        "DNb09"
+      ],
+      "right_cell_types": [
+        "DNb09"
+      ],
+      "left_hemibrain_types": [
+        "DNb01"
+      ],
+      "right_hemibrain_types": [
+        "DNb01"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        106752.0,
+        59560.0,
+        2155.0
+      ],
+      "right_soma_xyz": [
+        160048.0,
+        61384.0,
+        994.0
+      ],
+      "left_pos_xyz": [
+        106752.0,
+        59560.0,
+        2155.0
+      ],
+      "right_pos_xyz": [
+        160048.0,
+        61384.0,
+        994.0
+      ]
+    },
+    {
+      "candidate_label": "DNp103",
+      "left_root_ids": [
+        720575940623781127
+      ],
+      "right_root_ids": [
+        720575940610505006
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 167.0,
+      "right_total_from_relays": 198.0,
+      "pair_score": 365.0,
+      "left_cell_types": [
+        "DNp103"
+      ],
+      "right_cell_types": [
+        "DNp103"
+      ],
+      "left_hemibrain_types": [
+        "PVLP119"
+      ],
+      "right_hemibrain_types": [
+        "PVLP119"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        107304.0,
+        55320.0,
+        5479.0
+      ],
+      "right_soma_xyz": [
+        160192.0,
+        60856.0,
+        5042.0
+      ],
+      "left_pos_xyz": [
+        110817.0,
+        53903.0,
+        3469.0
+      ],
+      "right_pos_xyz": [
+        160192.0,
+        60856.0,
+        5042.0
+      ]
+    },
+    {
+      "candidate_label": "DNp43",
+      "left_root_ids": [
+        720575940631122191
+      ],
+      "right_root_ids": [
+        720575940641278965
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 156.0,
+      "right_total_from_relays": 171.0,
+      "pair_score": 327.0,
+      "left_cell_types": [
+        "DNp43"
+      ],
+      "right_cell_types": [
+        "DNp43"
+      ],
+      "left_hemibrain_types": [
+        "CL332"
+      ],
+      "right_hemibrain_types": [
+        "CL332"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        118280.0,
+        50328.0,
+        5640.0
+      ],
+      "right_soma_xyz": [
+        150616.0,
+        42344.0,
+        5175.0
+      ],
+      "left_pos_xyz": [
+        116332.0,
+        47706.0,
+        3404.0
+      ],
+      "right_pos_xyz": [
+        147654.0,
+        49771.0,
+        3114.0
+      ]
+    },
+    {
+      "candidate_label": "DNg97",
+      "left_root_ids": [
+        720575940626730883
+      ],
+      "right_root_ids": [
+        720575940620300308
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 155.0,
+      "right_total_from_relays": 170.0,
+      "pair_score": 325.0,
+      "left_cell_types": [
+        "DNg97"
+      ],
+      "right_cell_types": [
+        "DNg97"
+      ],
+      "left_hemibrain_types": [],
+      "right_hemibrain_types": [],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        118592.0,
+        89448.0,
+        2817.0
+      ],
+      "right_soma_xyz": [
+        141040.0,
+        89776.0,
+        2454.0
+      ],
+      "left_pos_xyz": [
+        118592.0,
+        89448.0,
+        2817.0
+      ],
+      "right_pos_xyz": [
+        126507.0,
+        70522.0,
+        4373.0
+      ]
+    },
+    {
+      "candidate_label": "DNp18",
+      "left_root_ids": [
+        720575940618440000
+      ],
+      "right_root_ids": [
+        720575940627949589
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 163.0,
+      "right_total_from_relays": 157.0,
+      "pair_score": 320.0,
+      "left_cell_types": [],
+      "right_cell_types": [],
+      "left_hemibrain_types": [
+        "DNp18"
+      ],
+      "right_hemibrain_types": [
+        "DNp18"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        113488.0,
+        47432.0,
+        5295.0
+      ],
+      "right_soma_xyz": [
+        153768.0,
+        52048.0,
+        5053.0
+      ],
+      "left_pos_xyz": [
+        122530.0,
+        56192.0,
+        4905.0
+      ],
+      "right_pos_xyz": [
+        153768.0,
+        52048.0,
+        5053.0
+      ]
+    },
+    {
+      "candidate_label": "DNpe056",
+      "left_root_ids": [
+        720575940634458719
+      ],
+      "right_root_ids": [
+        720575940632472850
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 104.0,
+      "right_total_from_relays": 186.0,
+      "pair_score": 290.0,
+      "left_cell_types": [
+        "DNpe056"
+      ],
+      "right_cell_types": [
+        "DNpe056"
+      ],
+      "left_hemibrain_types": [
+        "PVLP146"
+      ],
+      "right_hemibrain_types": [
+        "PVLP146"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        110984.0,
+        47144.0,
+        5348.0
+      ],
+      "right_soma_xyz": [
+        153008.0,
+        46320.0,
+        5022.0
+      ],
+      "left_pos_xyz": [
+        110984.0,
+        47144.0,
+        5348.0
+      ],
+      "right_pos_xyz": [
+        153008.0,
+        46320.0,
+        5022.0
+      ]
+    },
+    {
+      "candidate_label": "DNae002",
+      "left_root_ids": [
+        720575940627139530
+      ],
+      "right_root_ids": [
+        720575940620380449
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 141.0,
+      "right_total_from_relays": 139.0,
+      "pair_score": 280.0,
+      "left_cell_types": [
+        "DNae002"
+      ],
+      "right_cell_types": [
+        "DNae002"
+      ],
+      "left_hemibrain_types": [
+        "DNa04"
+      ],
+      "right_hemibrain_types": [
+        "DNa04"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        105072.0,
+        36336.0,
+        1709.0
+      ],
+      "right_soma_xyz": [
+        157304.0,
+        40488.0,
+        1040.0
+      ],
+      "left_pos_xyz": [
+        116879.0,
+        64542.0,
+        4214.0
+      ],
+      "right_pos_xyz": [
+        152035.0,
+        41995.0,
+        2086.0
+      ]
+    },
+    {
+      "candidate_label": "DNpe040",
+      "left_root_ids": [
+        720575940624801771
+      ],
+      "right_root_ids": [
+        720575940605702944
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 148.0,
+      "right_total_from_relays": 117.0,
+      "pair_score": 265.0,
+      "left_cell_types": [
+        "DNpe040"
+      ],
+      "right_cell_types": [
+        "DNpe040"
+      ],
+      "left_hemibrain_types": [
+        "CL320"
+      ],
+      "right_hemibrain_types": [
+        "CL320"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        117576.0,
+        48712.0,
+        5538.0
+      ],
+      "right_soma_xyz": [
+        149624.0,
+        45032.0,
+        5101.0
+      ],
+      "left_pos_xyz": [
+        118096.0,
+        52921.0,
+        3358.0
+      ],
+      "right_pos_xyz": [
+        149298.0,
+        45623.0,
+        4612.0
+      ]
+    },
+    {
+      "candidate_label": "DNpe016",
+      "left_root_ids": [
+        720575940623556755
+      ],
+      "right_root_ids": [
+        720575940614236200
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 105.0,
+      "right_total_from_relays": 155.0,
+      "pair_score": 260.0,
+      "left_cell_types": [
+        "DNpe016"
+      ],
+      "right_cell_types": [
+        "DNpe016"
+      ],
+      "left_hemibrain_types": [
+        "PS211"
+      ],
+      "right_hemibrain_types": [
+        "PS211"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        130056.0,
+        58144.0,
+        4615.0
+      ],
+      "right_soma_xyz": [
+        140632.0,
+        47896.0,
+        4995.0
+      ],
+      "left_pos_xyz": [
+        122204.0,
+        48246.0,
+        4429.0
+      ],
+      "right_pos_xyz": [
+        143814.0,
+        47759.0,
+        4644.0
+      ]
+    },
+    {
+      "candidate_label": "DNp69",
+      "left_root_ids": [
+        720575940641173632
+      ],
+      "right_root_ids": [
+        720575940617809181
+      ],
+      "left_num_roots": 1,
+      "right_num_roots": 1,
+      "left_total_from_relays": 102.0,
+      "right_total_from_relays": 113.0,
+      "pair_score": 215.0,
+      "left_cell_types": [
+        "DNp69"
+      ],
+      "right_cell_types": [
+        "DNp69"
+      ],
+      "left_hemibrain_types": [
+        "CL304"
+      ],
+      "right_hemibrain_types": [
+        "CL304"
+      ],
+      "left_super_classes": [
+        "descending"
+      ],
+      "right_super_classes": [
+        "descending"
+      ],
+      "left_flows": [
+        "efferent"
+      ],
+      "right_flows": [
+        "efferent"
+      ],
+      "left_soma_xyz": [
+        111728.0,
+        52880.0,
+        5370.0
+      ],
+      "right_soma_xyz": [
+        155808.0,
+        52648.0,
+        5169.0
+      ],
+      "left_pos_xyz": [
+        111660.0,
+        50613.0,
+        3619.0
+      ],
+      "right_pos_xyz": [
+        155808.0,
+        52648.0,
+        5169.0
+      ]
+    }
+  ]
+}

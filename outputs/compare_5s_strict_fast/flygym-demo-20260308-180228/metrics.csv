@@ -1,0 +1,2 @@
+sim_seconds,avg_forward_speed,trajectory_smoothness,path_length,stable,wall_seconds,real_time_factor,device,mode,completed_cycles,target_duration_s,completed_full_duration,failure_type,failure_message
+0.5699999999999535,8.948491635565512,0.29242079678849003,5.0827432490012106,0.0,142.17050696799998,0.004009270362440575,cpu,flygym,285,5.0,0.0,PhysicsError,Physics state is invalid. Warning(s) raised: mjWARN_INERTIA

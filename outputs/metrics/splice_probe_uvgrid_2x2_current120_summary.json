@@ -1,0 +1,361 @@
+{
+  "annotation_path": "outputs/cache/flywire_annotation_supplement.tsv",
+  "brain_device": "cpu",
+  "input_mode": "current_signed",
+  "spatial_bins": 1,
+  "spatial_mode": "uv_grid",
+  "spatial_u_bins": 2,
+  "spatial_v_bins": 2,
+  "num_overlap_cell_types": 49,
+  "overlap_summary": {
+    "num_groups": 390,
+    "num_complete_bilateral_cell_types": 49,
+    "complete_bilateral_cell_types": [
+      "Am",
+      "C2",
+      "C3",
+      "L1",
+      "L2",
+      "L3",
+      "L4",
+      "L5",
+      "Lawf1",
+      "Lawf2",
+      "Mi1",
+      "Mi10",
+      "Mi13",
+      "Mi14",
+      "Mi15",
+      "Mi2",
+      "Mi4",
+      "Mi9",
+      "R7",
+      "R8",
+      "T1",
+      "T2",
+      "T2a",
+      "T3",
+      "T4a",
+      "T4b",
+      "T4c",
+      "T4d",
+      "T5a",
+      "T5b",
+      "T5c",
+      "T5d",
+      "Tm1",
+      "Tm16",
+      "Tm2",
+      "Tm20",
+      "Tm3",
+      "Tm4",
+      "Tm5Y",
+      "Tm5a",
+      "Tm5c",
+      "Tm9",
+      "TmY14",
+      "TmY15",
+      "TmY18",
+      "TmY3",
+      "TmY4",
+      "TmY5a",
+      "TmY9"
+    ],
+    "counts_by_cell_type": {
+      "Am": {
+        "left": 48,
+        "right": 229
+      },
+      "C2": {
+        "left": 723,
+        "right": 733
+      },
+      "C3": {
+        "left": 699,
+        "right": 761
+      },
+      "L1": {
+        "left": 789,
+        "right": 790
+      },
+      "L2": {
+        "left": 764,
+        "right": 790
+      },
+      "L3": {
+        "left": 680,
+        "right": 726
+      },
+      "L4": {
+        "left": 659,
+        "right": 739
+      },
+      "L5": {
+        "left": 821,
+        "right": 786
+      },
+      "Lawf1": {
+        "left": 199,
+        "right": 156
+      },
+      "Lawf2": {
+        "left": 145,
+        "right": 168
+      },
+      "Mi1": {
+        "left": 787,
+        "right": 793
+      },
+      "Mi10": {
+        "left": 195,
+        "right": 206
+      },
+      "Mi13": {
+        "left": 367,
+        "right": 353
+      },
+      "Mi14": {
+        "left": 124,
+        "right": 124
+      },
+      "Mi15": {
+        "left": 498,
+        "right": 482
+      },
+      "Mi2": {
+        "left": 410,
+        "right": 419
+      },
+      "Mi4": {
+        "left": 764,
+        "right": 764
+      },
+      "Mi9": {
+        "left": 801,
+        "right": 767
+      },
+      "R7": {
+        "left": 672,
+        "right": 671
+      },
+      "R8": {
+        "left": 670,
+        "right": 654
+      },
+      "T1": {
+        "left": 645,
+        "right": 745
+      },
+      "T2": {
+        "left": 738,
+        "right": 716
+      },
+      "T2a": {
+        "left": 910,
+        "right": 871
+      },
+      "T3": {
+        "left": 825,
+        "right": 790
+      },
+      "T4a": {
+        "left": 729,
+        "right": 734
+      },
+      "T4b": {
+        "left": 756,
+        "right": 751
+      },
+      "T4c": {
+        "left": 850,
+        "right": 842
+      },
+      "T4d": {
+        "left": 802,
+        "right": 776
+      },
+      "T5a": {
+        "left": 742,
+        "right": 740
+      },
+      "T5b": {
+        "left": 758,
+        "right": 762
+      },
+      "T5c": {
+        "left": 763,
+        "right": 766
+      },
+      "T5d": {
+        "left": 740,
+        "right": 727
+      },
+      "Tm1": {
+        "left": 773,
+        "right": 771
+      },
+      "Tm16": {
+        "left": 168,
+        "right": 175
+      },
+      "Tm2": {
+        "left": 765,
+        "right": 763
+      },
+      "Tm20": {
+        "left": 747,
+        "right": 741
+      },
+      "Tm3": {
+        "left": 889,
+        "right": 857
+      },
+      "Tm4": {
+        "left": 755,
+        "right": 734
+      },
+      "Tm5Y": {
+        "left": 407,
+        "right": 401
+      },
+      "Tm5a": {
+        "left": 229,
+        "right": 221
+      },
+      "Tm5c": {
+        "left": 297,
+        "right": 310
+      },
+      "Tm9": {
+        "left": 756,
+        "right": 750
+      },
+      "TmY14": {
+        "left": 185,
+        "right": 185
+      },
+      "TmY15": {
+        "left": 106,
+        "right": 119
+      },
+      "TmY18": {
+        "left": 569,
+        "right": 559
+      },
+      "TmY3": {
+        "left": 374,
+        "right": 360
+      },
+      "TmY4": {
+        "left": 215,
+        "right": 211
+      },
+      "TmY5a": {
+        "left": 504,
+        "right": 521
+      },
+      "TmY9": {
+        "left": 371,
+        "right": 356
+      }
+    },
+    "num_bins": 4,
+    "num_u_bins": 2,
+    "num_v_bins": 2,
+    "mode": "uv_grid"
+  },
+  "value_scale": 76.31366870960272,
+  "conditions": {
+    "baseline_gray": {
+      "teacher_student_group_correlation": null,
+      "teacher_student_side_diff_correlation": null,
+      "teacher_student_group_correlation_rate": null,
+      "teacher_student_side_diff_correlation_rate": null,
+      "teacher_student_group_correlation_voltage": null,
+      "teacher_student_side_diff_correlation_voltage": null,
+      "teacher_student_group_correlation_conductance": null,
+      "teacher_student_side_diff_correlation_conductance": null,
+      "num_nonzero_direct_inputs": 0,
+      "motor_rates_hz": {
+        "forward_left": 0.0,
+        "forward_right": 0.0,
+        "turn_left": 0.0,
+        "turn_right": 0.0,
+        "reverse": 0.0
+      },
+      "max_abs_student_delta_rate_hz": 0.0,
+      "max_abs_student_delta_voltage_mv": 0.0,
+      "max_abs_student_delta_conductance": 0.0
+    },
+    "body_left_dark": {
+      "teacher_student_group_correlation": 0.6164465218092038,
+      "teacher_student_side_diff_correlation": 0.4855745732004857,
+      "teacher_student_group_correlation_rate": 0.6164465218092038,
+      "teacher_student_side_diff_correlation_rate": 0.4855745732004857,
+      "teacher_student_group_correlation_voltage": 0.8520122132864267,
+      "teacher_student_side_diff_correlation_voltage": 0.8233233941678758,
+      "teacher_student_group_correlation_conductance": 0.8600772432915259,
+      "teacher_student_side_diff_correlation_conductance": 0.8330834253577748,
+      "num_nonzero_direct_inputs": 55214,
+      "motor_rates_hz": {
+        "forward_left": 15.0,
+        "forward_right": 30.0,
+        "turn_left": 40.0,
+        "turn_right": 75.0,
+        "reverse": 17.5
+      },
+      "max_abs_student_delta_rate_hz": 350.0,
+      "max_abs_student_delta_voltage_mv": 4409.6792822265625,
+      "max_abs_student_delta_conductance": 5599.664128417969
+    },
+    "body_center_dark": {
+      "teacher_student_group_correlation": 0.7873120492524663,
+      "teacher_student_side_diff_correlation": null,
+      "teacher_student_group_correlation_rate": 0.7873120492524663,
+      "teacher_student_side_diff_correlation_rate": null,
+      "teacher_student_group_correlation_voltage": 0.9103570908133304,
+      "teacher_student_side_diff_correlation_voltage": null,
+      "teacher_student_group_correlation_conductance": 0.9171417936290466,
+      "teacher_student_side_diff_correlation_conductance": null,
+      "num_nonzero_direct_inputs": 56548,
+      "motor_rates_hz": {
+        "forward_left": 15.0,
+        "forward_right": 45.0,
+        "turn_left": 65.0,
+        "turn_right": 70.0,
+        "reverse": 42.5
+      },
+      "max_abs_student_delta_rate_hz": 320.0,
+      "max_abs_student_delta_voltage_mv": 3099.073487669557,
+      "max_abs_student_delta_conductance": 3935.4764551854396
+    },
+    "body_right_dark": {
+      "teacher_student_group_correlation": 0.6162019991566926,
+      "teacher_student_side_diff_correlation": 0.4856908940227091,
+      "teacher_student_group_correlation_rate": 0.6162019991566926,
+      "teacher_student_side_diff_correlation_rate": 0.4856908940227091,
+      "teacher_student_group_correlation_voltage": 0.8519322150826509,
+      "teacher_student_side_diff_correlation_voltage": 0.8231800151018535,
+      "teacher_student_group_correlation_conductance": 0.8600016713393233,
+      "teacher_student_side_diff_correlation_conductance": 0.832955276600045,
+      "num_nonzero_direct_inputs": 55215,
+      "motor_rates_hz": {
+        "forward_left": 20.0,
+        "forward_right": 50.0,
+        "turn_left": 40.0,
+        "turn_right": 25.0,
+        "reverse": 2.5
+      },
+      "max_abs_student_delta_rate_hz": 350.0,
+      "max_abs_student_delta_voltage_mv": 4410.1489523182745,
+      "max_abs_student_delta_conductance": 5600.314410665761
+    }
+  },
+  "notes": [
+    "This probe uses the official FlyWire annotation supplement to ground the overlap by exact cell_type labels plus side, not by fabricated left/right splits.",
+    "When input_mode=current_signed, the body-free splice can represent inhibitory visual deviations at the boundary via signed direct current, not only positive rate deltas.",
+    "When spatial_mode=axis1d and spatial_bins>1, the whole-brain side uses inferred coarse one-axis spatial bins from public soma/position coordinates; this is more grounded than arbitrary halves, but it is still an inferred retinotopic proxy rather than a proven column identity map.",
+    "When spatial_mode=uv_grid, the whole-brain side uses the first two public spatial principal axes and the FlyVis side uses native u/v coordinates; this is a better correspondence than the old one-axis binning, but it is still a public-inferred retinotopic proxy rather than an exact column identity map.",
+    "This is a body-free splice probe. It validates the splice boundary before any embodied claims."
+  ]
+}
