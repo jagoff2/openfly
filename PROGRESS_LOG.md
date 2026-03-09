@@ -2381,3 +2381,27 @@ Interpretation:
 - The repo is ready to push technically.
 - The remaining blocker is account/auth ownership, not repo state.
 - To finish the upload, the authenticated GitHub identity must have write access to `jagoff412/openfly`, or the remote must be changed to a repo owned by `jagoff2`.
+
+## 2026-03-09 - GitHub upload completed
+
+1. What I attempted
+- Switched the remote from the mismatched `jagoff412/openfly` repo to the user-provided repo owned by the authenticated account:
+  - `git@github.com:jagoff2/openfly.git`
+- Retried the push over SSH.
+
+2. What succeeded
+- The push completed successfully.
+- `main` now tracks `origin/main`.
+- Current local commit history pushed:
+  - `7098bfa Document GitHub push blocker`
+  - `29d14e5 Initial public flysim reproduction repo`
+
+3. Evidence paths
+- Remote:
+  - `git@github.com:jagoff2/openfly.git`
+- Branch:
+  - `main`
+
+4. Honest conclusion
+- The repo is now uploaded to GitHub.
+- The current GitHub remote matches the authenticated account and no longer has the earlier ownership mismatch.
