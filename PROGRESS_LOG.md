@@ -2405,3 +2405,30 @@ Interpretation:
 4. Honest conclusion
 - The repo is now uploaded to GitHub.
 - The current GitHub remote matches the authenticated account and no longer has the earlier ownership mismatch.
+
+## 2026-03-09 - Public-facing docs refreshed for the current strongest branch
+
+1. What I attempted
+- Audited the public-facing docs after the README still described the old strict diagnostic as if it were the current main result.
+- Updated the README to describe the actual strongest branch and added exact commands to reproduce the current target/no-target/zero-brain evidence.
+- Updated the parity report so it no longer uses the old strict default diagnostic as the main embodied reference.
+
+2. What succeeded
+- `README.md` now:
+  - states that the strongest current branch is `configs/flygym_realistic_vision_splice_axis1d_descending_readout.yaml`
+  - points readers to the current strongest demo and control artifacts
+  - documents exact reproduction commands for:
+    - target + real brain
+    - no target + real brain
+    - target + zero brain
+    - controlled target-side follow-ups
+- `REPRO_PARITY_REPORT.md` now:
+  - promotes the descending-only embodied splice branch into the main parity narrative
+  - marks locomotion and reaction-to-visual-stimulus according to the current stronger evidence
+  - keeps the remaining open issues focused on biological correctness and mixed short left/right side conditions
+
+3. Honest conclusion
+- The public-facing docs are now aligned with the current evidence instead of the older strict-only failure mode.
+- The remaining open claims are still clearly limited:
+  - current strongest branch is brain-driven and visually driven
+  - but not yet a final proof of the exact biological motor code or a clean mirrored short side-specific pursuit reflex

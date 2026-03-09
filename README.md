@@ -5,6 +5,7 @@ Public-equivalent local reproduction of the embodied fruit-fly stack described i
 ## Status
 
 - The `AGENTS.MD` acceptance gate is met for the public-equivalent stack: the repo is runnable, tests pass, benchmark CSVs and plots exist, and realistic-vision closed-loop demos run locally.
+- The strongest current embodied branch is `configs/flygym_realistic_vision_splice_axis1d_descending_readout.yaml`: it uses the calibrated FlyVis-to-whole-brain splice plus a descending-only readout, and matched controls now support the claim that this branch is brain-driven and visually driven.
 - The final parity verdict is still `partial`, not `pass`, because the exact private Eon glue is not public and the current public WSL PyTorch wheel does not support RTX 5060 Ti `sm_120` for FlyVis GPU execution.
 - Ground-truth progress tracking lives in `TASKS.md` and `PROGRESS_LOG.md`.
 
@@ -60,17 +61,46 @@ WSL public `P9` context experiment benchmark:
 Host search for lateralized public sensory anchors:
 - `python scripts/search_lateralized_public_anchors.py`
 
+## Replicate Current Results
+
+These are the exact runs behind the current strongest claim: the descending-only embodied splice branch is brain-driven and visually driven, and the moving target modulates steering and drive.
+
+Run these from WSL:
+
+1. Target + real brain:
+   - `export MUJOCO_GL=egl && ~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_axis1d_descending_readout.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_descending_logged_target --output-csv outputs/benchmarks/fullstack_splice_descending_logged_target_2s.csv`
+2. No target + real brain:
+   - `export MUJOCO_GL=egl && ~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_axis1d_descending_readout_no_target.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_descending_no_target --output-csv outputs/benchmarks/fullstack_splice_descending_no_target_2s.csv`
+3. Target + zero brain:
+   - `export MUJOCO_GL=egl && ~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_axis1d_descending_readout_zero_brain.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_descending_zero_brain --output-csv outputs/benchmarks/fullstack_splice_descending_zero_brain_2s.csv`
+4. Summarize the matched controls:
+   - `python scripts/summarize_descending_visual_drive.py`
+5. Optional controlled target-side checks:
+   - `export MUJOCO_GL=egl && ~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_axis1d_descending_readout_target_left.yaml --mode flygym --duration 1.0 --output-root outputs/requested_1s_splice_descending_target_left --output-csv outputs/benchmarks/fullstack_splice_descending_target_left_1s.csv`
+   - `export MUJOCO_GL=egl && ~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_axis1d_descending_readout_target_right.yaml --mode flygym --duration 1.0 --output-root outputs/requested_1s_splice_descending_target_right --output-csv outputs/benchmarks/fullstack_splice_descending_target_right_1s.csv`
+   - `export MUJOCO_GL=egl && ~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_axis1d_descending_readout_stationary_left.yaml --mode flygym --duration 1.0 --output-root outputs/requested_1s_splice_descending_stationary_left --output-csv outputs/benchmarks/fullstack_splice_descending_stationary_left_1s.csv`
+   - `export MUJOCO_GL=egl && ~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_axis1d_descending_readout_stationary_right.yaml --mode flygym --duration 1.0 --output-root outputs/requested_1s_splice_descending_stationary_right --output-csv outputs/benchmarks/fullstack_splice_descending_stationary_right_1s.csv`
+   - `python scripts/summarize_descending_target_conditions.py`
+
+Expected evidence after those runs:
+
+- `outputs/metrics/descending_visual_drive_validation.json`
+- `outputs/metrics/descending_target_conditions.json`
+- `outputs/metrics/descending_stationary_target_conditions.json`
+- `docs/descending_visual_drive_validation.md`
+
 ## Demo Artifacts
 
-Current real FlyGym realistic-vision demo artifacts:
+Current strongest real embodied splice artifacts:
 
-- short: `outputs/demos/flygym-demo-20260308-121237.mp4`
-- medium: `outputs/demos/flygym-demo-20260308-121318.mp4`
-- longest stable: `outputs/demos/flygym-demo-20260308-121432.mp4`
-- screenshots: `outputs/screenshots/flygym-demo-20260308-121237.png`, `outputs/screenshots/flygym-demo-20260308-121318.png`, `outputs/screenshots/flygym-demo-20260308-121432.png`
-- parity summary CSV: `outputs/metrics/parity_runs.csv`
+- target + real brain: `outputs/requested_2s_splice_descending_logged_target/flygym-demo-20260309-142600/demo.mp4`
+- no target + real brain: `outputs/requested_2s_splice_descending_no_target/flygym-demo-20260309-122723/demo.mp4`
+- target + zero brain: `outputs/requested_2s_splice_descending_zero_brain/flygym-demo-20260309-122135/demo.mp4`
+- visual-drive summary: `outputs/metrics/descending_visual_drive_validation.json`
+- target-condition summary: `outputs/metrics/descending_target_conditions.json`
 - benchmark summary: `docs/benchmark_summary.md`
 - parity report: `REPRO_PARITY_REPORT.md`
+- descending-branch validation: `docs/descending_visual_drive_validation.md`
 
 ## Repo Layout
 
@@ -86,10 +116,11 @@ Current real FlyGym realistic-vision demo artifacts:
 
 - Exact private Eon glue is unavailable, so the bridge is an explicit public-equivalent substitute.
 - The public WSL `cu126` PyTorch wheel used by FlyVis does not support RTX 5060 Ti `sm_120`; production WSL runs therefore use `force_cpu_vision: true` in `configs/flygym_realistic_vision.yaml`.
-- The production path now enforces brain-only motor output: the decoder idle-drive floor is removed and the public bilateral `LC4` / `JON` anchors are no longer split into fabricated left/right hemispheres.
-- Under this stricter production path, short real diagnostics currently produce zero monitored motor cycles and only small passive body settling motion, so convincing brain-driven pursuit behavior is still not established.
-- `docs/motor_path_audit.md` and `outputs/metrics/motor_path_audit.json` show why: the current strict bilateral public sensory inputs weakly reach the monitored locomotor DN set, while direct public `P9` stimulation remains a strong positive control.
+- The strict default public bilateral-anchor path is still weak: it was useful as a falsification step, but by itself it does not yet produce strong pursuit behavior. The repo's strongest current branch is the newer descending-only embodied splice path documented in `docs/descending_visual_drive_validation.md`.
+- That stronger branch is not a hidden locomotion hack: matched `zero_brain` controls produce zero commands and negligible displacement, while target-present runs show stronger drive and steering than no-target runs.
+- What is still not proven is final biological correctness of the motor interface. The current decoder still compresses descending/efferent population activity into `left_drive` / `right_drive`, so this is not yet a full neck-connective / VNC / muscle-level reconstruction.
 - `docs/public_p9_context_mode.md` documents a clearly labeled public-experiment analogue that injects direct `P9` drive on the brain side without restoring decoder or body fallback locomotion.
 - `docs/lateralized_public_anchors.md` and `outputs/metrics/lateralized_public_anchors.json` show that the checked public artifacts do not expose clearly lateralized visual or mechanosensory anchor pools, so the repo does not currently claim honest public left/right visual steering input.
+- The short controlled left/right target conditions are still mixed rather than a clean mirrored pursuit reflex; see `outputs/metrics/descending_target_conditions.json`, `outputs/metrics/descending_stationary_target_conditions.json`, and `TASKS.md:T072`.
 - `Brian2CUDA` and `NEST GPU` were not validated locally; the second benchmarked neural backend is `Brian2` CPU.
-- This workspace is not inside a Git repository, so benchmark CSVs record `commit_hash = not_a_git_repo`.
+- The repo is now in Git and published on GitHub, but older benchmark CSVs created before Git initialization may still carry `commit_hash = not_a_git_repo`.

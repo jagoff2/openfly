@@ -14,8 +14,9 @@ This repo now reproduces the public-equivalent stack locally with:
 - real FlyGym realistic-vision runs in WSL
 - short, medium, and longest-stable real demo artifacts
 - strict brain-only motor diagnostics with the decoder idle floor removed and the fake left/right public sensory split removed
-- a standalone motor-path audit that explains why the current strict public sensory path produces no meaningful locomotor output
+- a standalone motor-path audit that explains why the old strict public sensory path produces no meaningful locomotor output on its own
 - a clearly labeled `public_p9_context` experiment mode that reproduces the public notebook's direct `P9` locomotor baseline without restoring decoder or body fallback
+- a stronger descending-only embodied splice branch with matched `zero_brain`, no-target, and direct target-state logging controls
 - benchmark CSVs and plots for brain, body, vision, and full stack
 - a second neural backend benchmark using `Brian2` CPU
 - profiling evidence and an explicit assumptions-and-gaps register
@@ -29,9 +30,9 @@ Evidence source for run-level metrics: `outputs/metrics/parity_runs.csv`
 | Persistent closed-loop runtime | yes | real bridge loop runs locally with `FlyGymRealisticVisionRuntime` and `WholeBrainTorchBackend` | pass |
 | Realistic vision enabled in production path | yes | validated through `outputs/benchmarks/vision_benchmarks.csv` and real FlyGym demos | pass |
 | Whole-brain backend integrated | yes | Torch backend participates in the real closed loop; secondary `Brian2` CPU benchmark also exists | pass |
-| Walking / locomotion artifact | yes | pre-strict demos exist, but the current strict brain-only production diagnostic shows zero monitored motor cycles and only `0.0136` path length from passive settling over `0.018 s` | partial |
-| Turning / orientation artifact | yes | pre-strict demos showed turn asymmetry, but the current strict brain-only production diagnostic shows zero decoded turning output | partial |
-| Reaction to visual stimulus | yes | realistic vision reaches the bridge, but the current strict brain-only production diagnostic shows zero monitored motor cycles under both `fast` and `legacy` payload modes | fail |
+| Walking / locomotion artifact | yes | the descending-only embodied splice branch now produces meaningful traversal with `net_displacement = 4.9439` and `displacement_efficiency = 0.5719` in the logged-target `2 s` run, while the matched `zero_brain` control stays near zero | pass |
+| Turning / orientation artifact | yes | steering command tracks directly logged target bearing with correlation `0.7228`, but the short isolated left/right target conditions are still mixed rather than a clean mirrored reflex | partial |
+| Reaction to visual stimulus | yes | target-present runs show higher drive and steering asymmetry than no-target runs, and target-bearing alignment is now computed from directly logged target state | pass |
 | Stable demo video capture | yes | real videos exist for short, medium, and longest-stable runs | pass |
 | Timing logs and metrics CSV | yes | JSONL logs and metrics CSVs exist for all real demo runs | pass |
 | Sim-speed vs wall-time benchmarks | yes | benchmark CSVs and plots exist for brain, body, vision, and full stack | pass |
@@ -74,6 +75,23 @@ Evidence source for run-level metrics: `outputs/metrics/parity_runs.csv`
 - motor-path audit summary: `docs/motor_path_audit.md`
 - motor-path audit JSON: `outputs/metrics/motor_path_audit.json`
 - motor-path audit sweep CSV: `outputs/metrics/motor_path_audit_sweeps.csv`
+
+### Current strongest descending-only embodied branch
+
+- config: `configs/flygym_realistic_vision_splice_axis1d_descending_readout.yaml`
+- target + real brain:
+  - video: `outputs/requested_2s_splice_descending_logged_target/flygym-demo-20260309-142600/demo.mp4`
+  - log: `outputs/requested_2s_splice_descending_logged_target/flygym-demo-20260309-142600/run.jsonl`
+  - metrics: `outputs/requested_2s_splice_descending_logged_target/flygym-demo-20260309-142600/metrics.csv`
+- no target + real brain:
+  - video: `outputs/requested_2s_splice_descending_no_target/flygym-demo-20260309-122723/demo.mp4`
+  - metrics: `outputs/requested_2s_splice_descending_no_target/flygym-demo-20260309-122723/metrics.csv`
+- target + zero brain:
+  - video: `outputs/requested_2s_splice_descending_zero_brain/flygym-demo-20260309-122135/demo.mp4`
+  - metrics: `outputs/requested_2s_splice_descending_zero_brain/flygym-demo-20260309-122135/metrics.csv`
+- summary:
+  - `outputs/metrics/descending_visual_drive_validation.json`
+  - `docs/descending_visual_drive_validation.md`
 
 ### Public `P9` context experiment mode
 
@@ -185,8 +203,11 @@ Evidence source for run-level metrics: `outputs/metrics/parity_runs.csv`
   - explicit target-state logging is now in place for that branch, so the main target-bearing correlation no longer depends on reconstructing `MovingFlyArena` kinematics
   - controlled left/right moving and stationary target conditions now exist, but the short side-isolated conditions remain mixed rather than a clean mirrored pursuit reflex
 - The new `inferred_visual_turn_context` mode and the newer `inferred_visual_p9_context` mode are both experimental only. They are useful diagnostics, but neither one should be treated as the final faithful splice.
-- The current core blocker is now a splice issue between the FlyVis visual model and the whole-brain backend. The next iteration should focus on body-free FlyVis-to-brain overlap matching rather than more body-loop tuning.
-- The strict default path is now stably runnable for `5 s` and the zero-brain comparison shows that its motion is brain-driven, but the resulting locomotor policy is still sparse and not yet a strong parity match to the public demo.
+- The current core blocker is no longer whether the stack can produce brain-driven visually modulated locomotion; it can. The remaining blockers are biological correctness and control specificity:
+  - the visual splice is still an inferred overlap splice, not a proven final endogenous interface
+  - the motor decoder still compresses descending/efferent activity into `left_drive` / `right_drive`
+  - the short isolated left/right target conditions are still mixed rather than a clean mirrored pursuit reflex
+- The strict default path remains useful as a falsification diagnostic, but it is no longer the repo's strongest embodied result and should not be treated as the main parity reference.
 
 ## Final Verdict
 
