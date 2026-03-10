@@ -2487,3 +2487,46 @@ Interpretation:
 - The next embodiment step is now narrower and cleaner:
   - map body-side gustatory/contact state into the published sugar/JON inputs
   - then map `MN9` / `aDN1` / `aBN1` into actual proboscis or grooming actuation interfaces
+
+## 2026-03-10 - Journal-style whitepaper draft added
+
+1. What I attempted
+- Consolidated the repo's architecture, benchmark evidence, negative findings, splice-discovery work, embodied validation, and feeding/grooming brain tasks into one long-form publication-style document.
+- Kept the write-up aligned with `AGENTS.MD`: evidence-heavy, explicit about remaining gaps, and careful not to overclaim exact Eon parity.
+
+2. What succeeded
+- Added `docs/openfly_whitepaper.md`.
+- The document includes:
+  - abstract and scope
+  - architecture and methods
+  - benchmark and profiler results
+  - failure analysis of the original scalar public-anchor bridge
+  - body-free visual splice discovery and calibration results
+  - descending-only embodied readout expansion
+  - matched `zero_brain`, no-target, and logged-target validation results
+  - feeding and grooming brain-task probe results
+  - limitations, next steps, and exact reproduction commands
+
+3. Honest conclusion
+- The whitepaper does not claim that the repo has solved final biological motor semantics or exact private-demo parity.
+- It does capture the strongest supported current claim:
+  - the repo now has a realistic-vision, whole-brain, embodied closed loop whose strongest current branch is brain-driven and visually driven under matched controls.
+- It also preserves the key negative findings that shaped the architecture, which are necessary for an honest technical record.
+
+## 2026-03-10 - Whitepaper signed, README archived, and repo landing page replaced
+
+1. What I attempted
+- Added explicit authorship metadata to the new whitepaper.
+- Archived the previous operational `README.md`.
+- Replaced the repo root `README.md` with the whitepaper content as requested.
+- Prepared the doc update for GitHub push.
+
+2. What succeeded
+- `docs/openfly_whitepaper.md` now carries explicit `Author: Codex` metadata.
+- The prior operational README is preserved at:
+  - `docs/README_legacy.md`
+- `README.md` now mirrors the whitepaper so the GitHub landing page presents the full long-form technical write-up instead of the shorter operational README.
+
+3. Honest conclusion
+- This changes the public presentation layer, not the experimental evidence.
+- The old operational README is still preserved in-repo, so replication instructions and prior structure are not lost.
