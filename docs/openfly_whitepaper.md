@@ -366,9 +366,90 @@ Fourth, the visual splice is still an inferred overlap splice. It is grounded mo
 
 Fifth, the current strongest locomotion result is not pure target pursuit. The rest of the visual scene still drives locomotion substantially.
 
-## 8. Reproducibility
+## 8. Comparison With The Subsequent Eon Embodiment Update
 
-### 8.1 Core setup
+After the work in this repo, Eon published a new embodiment update:
+
+- `https://eon.systems/updates/embodied-brain-emulation`
+
+The post is important because it narrows what their current public embodiment appears to be.
+
+### 8.1 What the new Eon update now makes explicit
+
+The post says, in substance:
+
+- they are using the Shiu-style simplified LIF whole-brain model rather than disclosing a radically different full biological brain core
+- they run a visual-system model and feed those activations into the brain model
+- they synchronize brain and body every `15 ms`
+- they use slightly modified existing NeuroMechFly controllers trained by imitation learning for walking
+- they do not know the exact mapping from brain outputs to locomotion-controller inputs
+- their current visual input is not yet significantly influencing the embodied behavior
+
+This matters because it weakens any theory that the public demo must already have depended on a fully solved, biologically faithful, end-to-end controller hidden behind the scenes.
+
+### 8.2 What the Eon update confirms from this repo
+
+The new post largely confirms the central diagnosis reached here:
+
+1. The hard problem is the interface.
+- The unresolved system is the splice between vision, brain, and embodied control.
+- That matches the findings in `docs/splice_probe_results.md`.
+
+2. Existing locomotion controllers still matter.
+- Their disclosed embodiment still uses modified NeuroMechFly controllers.
+- This repo also still relies on FlyGym / NeuroMechFly control machinery underneath the body wrappers.
+
+3. Output mapping is still heuristic.
+- Their post now explicitly says they do not know the exact correspondence between brain outputs and controller inputs.
+- That matches the current limitation here: `src/bridge/decoder.py` still compresses descending and efferent population activity into `left_drive` and `right_drive`.
+
+### 8.3 Where this repo is currently stronger
+
+This repo currently has stronger explicit evidence that the embodied branch is visually driven.
+
+The strongest current branch:
+
+- has a matched `zero_brain` control
+- has a matched no-target control
+- logs target state directly from simulation
+- shows:
+  - `corr(right_drive - left_drive, target_bearing) = 0.7228`
+  - target-present runs increase drive and steering asymmetry relative to no-target runs
+
+Those results are documented in:
+
+- `docs/descending_visual_drive_validation.md`
+
+By contrast, the Eon update explicitly says that their current visual input is not yet significantly influencing the embodied behavior.
+
+### 8.4 Where the Eon path may still be ahead
+
+The Eon post likely reflects a more polished controller-mediated embodiment layer.
+
+In particular:
+
+- they describe modified imitation-learning-based NeuroMechFly walking controllers
+- this repo still uses a hand-built descending-population decoder into a two-drive interface
+
+So the most likely tradeoff is:
+
+- their disclosed embodiment may currently be smoother as a practical controller stack
+- this repo is currently stronger on explicit visual-drive validation and falsification logic
+
+### 8.5 Bottom line of the comparison
+
+The subsequent Eon post does not invalidate the direction of this repo. It mostly confirms it.
+
+The public evidence now supports this interpretation:
+
+- the whole-brain core is only one part of the problem
+- the real systems bottleneck is the interface between vision, brain dynamics, and embodied control
+- the current public state of the art is still controller-mediated and heuristic at the body interface
+- exact biologically grounded output semantics remain unresolved on both sides
+
+## 9. Reproducibility
+
+### 9.1 Core setup
 
 From WSL:
 
@@ -380,7 +461,7 @@ bash scripts/bootstrap_env.sh
 python -m pytest tests/test_imports.py tests/test_bridge_unit.py tests/test_closed_loop_smoke.py tests/test_realistic_vision_path.py tests/test_benchmark_output_format.py tests/test_artifact_generation.py
 ```
 
-### 8.2 Reproduce the strongest current embodied claim
+### 9.2 Reproduce the strongest current embodied claim
 
 Run these from WSL:
 
@@ -397,7 +478,7 @@ Expected summary artifacts:
 - `outputs/metrics/descending_visual_drive_validation.json`
 - `docs/descending_visual_drive_validation.md`
 
-### 8.3 Reproduce the body-free splice program
+### 9.3 Reproduce the body-free splice program
 
 ```bash
 python scripts/run_splice_probe.py
@@ -408,14 +489,14 @@ python scripts/run_splice_relay_probe.py
 python scripts/summarize_relay_drift.py
 ```
 
-### 8.4 Reproduce feeding and grooming brain tasks
+### 9.4 Reproduce feeding and grooming brain tasks
 
 ```bash
 python scripts/run_feeding_probe.py --config configs/default.yaml
 python scripts/run_grooming_probe.py --config configs/default.yaml
 ```
 
-## 9. Immediate Next Steps
+## 10. Immediate Next Steps
 
 The current next steps are already tracked in `TASKS.md`:
 
@@ -426,7 +507,7 @@ The current next steps are already tracked in `TASKS.md`:
 
 The highest-value next loop remains body-free splice refinement plus descending-path analysis. That is the shortest path to a more defensible embodied controller because it isolates interface failures before expensive body runs are reintroduced.
 
-## 10. Conclusion
+## 11. Conclusion
 
 This project now provides a reproducible public-equivalent embodied fly stack that is materially stronger than a thin demo wrapper around public repos. It includes persistent online control, realistic vision, a recurrent whole-brain backend, benchmark and profiler evidence, negative-control logic, and a descending-only embodied branch whose movement disappears in a `zero_brain` control and is measurably modulated by a moving target under realistic vision. It also includes grounded feeding and grooming brain-task reproductions ready for later embodiment work.
 

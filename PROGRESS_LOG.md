@@ -2530,3 +2530,44 @@ Interpretation:
 3. Honest conclusion
 - This changes the public presentation layer, not the experimental evidence.
 - The old operational README is still preserved in-repo, so replication instructions and prior structure are not lost.
+
+## 2026-03-10 - Reviewed new Eon embodiment update against local results
+
+1. What I attempted
+- Reviewed the new Eon update at `https://eon.systems/updates/embodied-brain-emulation`.
+- Followed the main method-bearing links from the post:
+  - Shiu brain-model paper
+  - whole-brain connectome and annotation papers
+  - FlyVis paper
+  - NeuroMechFly v2 paper
+  - NeuroMechFly advanced-vision docs
+  - NeuroMechFly controller docs
+- Compared the disclosed Eon architecture to the current strongest local branch and wrote the result into the repo.
+
+2. What succeeded
+- Added `docs/eon_embodiment_update_review_2026-03-10.md`.
+- Main comparison result:
+  - the new Eon post largely confirms our later diagnosis that the hard problem is the interface between vision, brain, and embodied controllers
+  - it also confirms that their current embodiment is still controller-mediated and heuristic
+  - they explicitly state that visual input is not yet significantly influencing their current embodied behavior
+  - our strongest current local branch still has stronger target-vs-control evidence for visual drive
+
+3. Honest conclusion
+- The new Eon post does not reveal a hidden fully biological end-to-end controller that would invalidate the local reconstruction strategy here.
+- It instead supports the view that the public brain core is only one part of the problem and that the unresolved splice/output interface is the real systems bottleneck.
+
+## 2026-03-10 - Eon comparison integrated into whitepaper and pushed
+
+1. What I attempted
+- Added the new Eon-update comparison into the main whitepaper so the repo has one long-form document that includes both the local results and the subsequent public Eon disclosure.
+- Prepared the new review doc, updated trackers, and pushed the documentation update to GitHub.
+
+2. What succeeded
+- `docs/openfly_whitepaper.md` now has a dedicated section comparing this repo to the later Eon embodiment update.
+- `docs/eon_embodiment_update_review_2026-03-10.md` remains as the standalone comparison note.
+- The doc update was committed and pushed to `origin/main`.
+
+3. Honest conclusion
+- The comparison section does not claim the local repo exceeds Eon in every way.
+- It makes the narrower supported point:
+  - the later Eon post largely confirms that the unresolved interface between vision, brain, and embodied control is the real bottleneck, and that the current disclosed embodiment remains controller-mediated rather than a fully solved biological motor stack.
