@@ -1,0 +1,28 @@
+{
+  "rows": [
+    {
+      "variant": "old_best_global_uvgrid",
+      "mean_voltage_group_corr": 0.876434917715533,
+      "mean_voltage_side_corr": 0.8467039781241985,
+      "left_turn_bias": -15.0,
+      "right_turn_bias": -5.0,
+      "sign_match": false
+    },
+    {
+      "variant": "new_celltype_search_best",
+      "mean_voltage_group_corr": 0.8765130738992976,
+      "mean_voltage_side_corr": 0.8468029518854727,
+      "left_turn_bias": -50.0,
+      "right_turn_bias": 60.0,
+      "sign_match": true
+    },
+    {
+      "variant": "new_celltype_canonical_probe",
+      "mean_voltage_group_corr": 0.8636736801226069,
+      "mean_voltage_side_corr": 0.8271703279848202,
+      "left_turn_bias": -30.0,
+      "right_turn_bias": 45.0,
+      "sign_match": true
+    }
+  ]
+}

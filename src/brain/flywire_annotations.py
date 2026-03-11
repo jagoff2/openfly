@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Sequence
+from typing import Iterable, Mapping, Sequence
 
 import numpy as np
 import pandas as pd
@@ -23,6 +23,77 @@ class FlywireSpatialOverlapGroup:
     root_ids: tuple[int, ...]
     u_bin: int | None = None
     v_bin: int | None = None
+
+
+@dataclass(frozen=True)
+class FlywireSpatialTransform:
+    swap_uv: bool = False
+    flip_u: bool = False
+    flip_v: bool = False
+    mirror_u_by_side: bool = False
+    u_permutation: tuple[int, ...] | None = None
+    v_permutation: tuple[int, ...] | None = None
+
+
+def _validate_bin_permutation(
+    values: Sequence[int] | None,
+    *,
+    num_bins: int,
+    label: str,
+) -> tuple[int, ...] | None:
+    if values is None:
+        return None
+    permutation = tuple(int(value) for value in values)
+    if len(permutation) != int(num_bins):
+        raise ValueError(f"{label} must contain exactly {int(num_bins)} entries")
+    if tuple(sorted(permutation)) != tuple(range(int(num_bins))):
+        raise ValueError(f"{label} must be a permutation of 0..{int(num_bins) - 1}")
+    return permutation
+
+
+def _coerce_spatial_transform(
+    value: FlywireSpatialTransform | Mapping[str, object] | None,
+    *,
+    base: FlywireSpatialTransform,
+    num_u_bins: int,
+    num_v_bins: int,
+) -> FlywireSpatialTransform:
+    if value is None:
+        return FlywireSpatialTransform(
+            swap_uv=bool(base.swap_uv),
+            flip_u=bool(base.flip_u),
+            flip_v=bool(base.flip_v),
+            mirror_u_by_side=bool(base.mirror_u_by_side),
+            u_permutation=_validate_bin_permutation(base.u_permutation, num_bins=num_u_bins, label="u_permutation"),
+            v_permutation=_validate_bin_permutation(base.v_permutation, num_bins=num_v_bins, label="v_permutation"),
+        )
+    if isinstance(value, FlywireSpatialTransform):
+        return FlywireSpatialTransform(
+            swap_uv=bool(value.swap_uv),
+            flip_u=bool(value.flip_u),
+            flip_v=bool(value.flip_v),
+            mirror_u_by_side=bool(value.mirror_u_by_side),
+            u_permutation=_validate_bin_permutation(value.u_permutation, num_bins=num_u_bins, label="u_permutation"),
+            v_permutation=_validate_bin_permutation(value.v_permutation, num_bins=num_v_bins, label="v_permutation"),
+        )
+    if not isinstance(value, Mapping):
+        raise TypeError("cell_type_transforms values must be mappings or FlywireSpatialTransform instances")
+    return FlywireSpatialTransform(
+        swap_uv=bool(value.get("swap_uv", base.swap_uv)),
+        flip_u=bool(value.get("flip_u", base.flip_u)),
+        flip_v=bool(value.get("flip_v", base.flip_v)),
+        mirror_u_by_side=bool(value.get("mirror_u_by_side", base.mirror_u_by_side)),
+        u_permutation=_validate_bin_permutation(
+            value.get("u_permutation", base.u_permutation),
+            num_bins=num_u_bins,
+            label="u_permutation",
+        ),
+        v_permutation=_validate_bin_permutation(
+            value.get("v_permutation", base.v_permutation),
+            num_bins=num_v_bins,
+            label="v_permutation",
+        ),
+    )
 
 
 def load_flywire_annotation_table(path: str | Path) -> pd.DataFrame:
@@ -170,6 +241,7 @@ def build_spatial_grid_overlap_groups(
     flip_u: bool = False,
     flip_v: bool = False,
     mirror_u_by_side: bool = False,
+    cell_type_transforms: Mapping[str, FlywireSpatialTransform | Mapping[str, object]] | None = None,
     sides: Sequence[str] = ("left", "right"),
     min_roots_per_bin: int = 1,
 ) -> list[FlywireSpatialOverlapGroup]:
@@ -210,22 +282,38 @@ def build_spatial_grid_overlap_groups(
 
     groups: list[FlywireSpatialOverlapGroup] = []
     sub = annotation_table[annotation_table["cell_type"].isin(cell_types)].copy()
+    base_transform = FlywireSpatialTransform(
+        swap_uv=bool(swap_uv),
+        flip_u=bool(flip_u),
+        flip_v=bool(flip_v),
+        mirror_u_by_side=bool(mirror_u_by_side),
+    )
     for cell_type in sorted(set(cell_types)):
+        transform = _coerce_spatial_transform(
+            None if cell_type_transforms is None else cell_type_transforms.get(cell_type),
+            base=base_transform,
+            num_u_bins=int(num_u_bins),
+            num_v_bins=int(num_v_bins),
+        )
         for side in sides:
             group_df = sub[(sub["cell_type"] == cell_type) & (sub["side"] == side)].copy()
             if group_df.empty:
                 continue
             coords = projection_2d(group_df)
-            u_coords = coords[:, 1] if swap_uv else coords[:, 0]
-            v_coords = coords[:, 0] if swap_uv else coords[:, 1]
+            u_coords = coords[:, 1] if transform.swap_uv else coords[:, 0]
+            v_coords = coords[:, 0] if transform.swap_uv else coords[:, 1]
             u_labels = quantile_labels(u_coords, int(num_u_bins))
             v_labels = quantile_labels(v_coords, int(num_v_bins))
-            if flip_u:
+            if transform.flip_u:
                 u_labels = (int(num_u_bins) - 1) - u_labels
-            if flip_v:
+            if transform.flip_v:
                 v_labels = (int(num_v_bins) - 1) - v_labels
-            if mirror_u_by_side and str(side).lower() == "right":
+            if transform.mirror_u_by_side and str(side).lower() == "right":
                 u_labels = (int(num_u_bins) - 1) - u_labels
+            if transform.u_permutation is not None:
+                u_labels = np.asarray(transform.u_permutation, dtype=int)[u_labels]
+            if transform.v_permutation is not None:
+                v_labels = np.asarray(transform.v_permutation, dtype=int)[v_labels]
             root_ids_arr = group_df["root_id"].astype("int64").to_numpy()
             for u_bin in range(int(num_u_bins)):
                 for v_bin in range(int(num_v_bins)):

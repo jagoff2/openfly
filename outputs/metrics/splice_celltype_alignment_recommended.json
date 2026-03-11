@@ -1,0 +1,76 @@
+{
+  "global": {
+    "swap_uv": false,
+    "flip_u": false,
+    "flip_v": true,
+    "mirror_u_by_side": true
+  },
+  "cell_types": {
+    "Mi4": {
+      "swap_uv": true,
+      "flip_u": false,
+      "flip_v": true,
+      "mirror_u_by_side": true
+    },
+    "Am": {
+      "swap_uv": false,
+      "flip_u": true,
+      "flip_v": false,
+      "mirror_u_by_side": true
+    },
+    "T2": {
+      "swap_uv": false,
+      "flip_u": true,
+      "flip_v": true,
+      "mirror_u_by_side": false
+    },
+    "Mi1": {
+      "swap_uv": true,
+      "flip_u": true,
+      "flip_v": true,
+      "mirror_u_by_side": false
+    },
+    "TmY18": {
+      "swap_uv": true,
+      "flip_u": false,
+      "flip_v": true,
+      "mirror_u_by_side": true
+    },
+    "Mi9": {
+      "swap_uv": true,
+      "flip_u": true,
+      "flip_v": true,
+      "mirror_u_by_side": false
+    },
+    "Mi15": {
+      "swap_uv": true,
+      "flip_u": true,
+      "flip_v": true,
+      "mirror_u_by_side": true
+    },
+    "Tm3": {
+      "swap_uv": false,
+      "flip_u": false,
+      "flip_v": false,
+      "mirror_u_by_side": false
+    },
+    "R8": {
+      "swap_uv": true,
+      "flip_u": true,
+      "flip_v": true,
+      "mirror_u_by_side": false
+    },
+    "T4a": {
+      "swap_uv": true,
+      "flip_u": false,
+      "flip_v": false,
+      "mirror_u_by_side": false
+    },
+    "L2": {
+      "swap_uv": false,
+      "flip_u": true,
+      "flip_v": false,
+      "mirror_u_by_side": true
+    }
+  }
+}

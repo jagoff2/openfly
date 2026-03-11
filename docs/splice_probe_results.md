@@ -763,6 +763,254 @@ It is:
 
 - how to improve retinotopic correspondence and downstream recruitment beyond the current coarse calibrated splice
 
+## Per-cell-type UV-grid alignment follow-up
+
+The earlier UV-grid work established a narrower problem:
+
+- one global transform plus optional right-side mirroring was not enough
+- boundary agreement could be strong while downstream turn sign was still wrong
+
+That left two live possibilities:
+
+1. exact column alignment differs by cell type
+2. the whole problem is purely downstream and no better spatial mapping exists
+
+To separate those, I added per-cell-type transform support on the whole-brain side.
+
+Code:
+
+- `src/brain/flywire_annotations.py`
+- `src/bridge/visual_splice.py`
+- `scripts/run_splice_probe.py`
+- `scripts/run_celltype_uvgrid_alignment_search.py`
+
+The new path keeps the same grounded overlap:
+
+- exact shared FlyVis / FlyWire `cell_type`
+- exact `side`
+- same coarse `2 x 2` UV grid
+
+but it no longer forces every cell type to share one orientation transform.
+
+### Search method
+
+The new search script:
+
+- `scripts/run_celltype_uvgrid_alignment_search.py`
+
+does the following:
+
+1. starts from the old best global UV-grid transform:
+   - `flip_v = true`
+   - `mirror_u_by_side = true`
+2. ranks cell types by teacher left-vs-right asymmetry magnitude under the body-left and body-right stimuli
+3. greedily tests per-cell-type overrides chosen from:
+   - `swap_uv`
+   - `flip_u`
+   - `flip_v`
+   - `mirror_u_by_side`
+4. keeps any override that improves a combined score over:
+   - voltage boundary agreement
+   - downstream left/right turn-sign correctness
+
+Artifacts:
+
+- `outputs/metrics/splice_celltype_alignment_search.json`
+- `outputs/metrics/splice_celltype_alignment_search.csv`
+- `outputs/metrics/splice_celltype_alignment_recommended.json`
+
+### What the search found
+
+The strongest candidate cell types were:
+
+- `Mi4`
+- `Am`
+- `T2`
+- `Mi1`
+- `TmY18`
+- `Mi9`
+- `Mi15`
+- `Tm3`
+- `R8`
+- `T4a`
+- `L2`
+- `TmY14`
+
+The selected override set is written to:
+
+- `outputs/metrics/splice_celltype_alignment_recommended.json`
+
+It keeps the old best global transform:
+
+- `flip_v = true`
+- `mirror_u_by_side = true`
+
+but adds per-cell-type exceptions for a subset of visual classes, including:
+
+- `Mi4`
+- `Am`
+- `T2`
+- `Mi1`
+- `TmY18`
+- `Mi9`
+- `Mi15`
+- `Tm3`
+- `R8`
+- `T4a`
+- `L2`
+
+### Result
+
+This is the first splice result in the repo where the coarse UV-grid sign problem is actually fixed without another prosthetic.
+
+From `outputs/metrics/splice_celltype_alignment_search.json`:
+
+- old best global UV-grid:
+  - left turn bias: `-15`
+  - right turn bias: `-5`
+  - `sign_match = false`
+- new per-cell-type search best:
+  - left turn bias: `-50`
+  - right turn bias: `+60`
+  - `sign_match = true`
+
+So the remaining blocker is not "no spatial alignment can recover the correct sign."
+
+It is now narrower:
+
+- coarse global alignment was too blunt
+- at least part of the mismatch is genuinely cell-type-specific
+
+### Canonical re-run
+
+I also ran the standard body-free probe using the recommended transform file:
+
+- `outputs/metrics/splice_probe_uvgrid_celltype_aligned_summary.json`
+- `outputs/metrics/splice_probe_uvgrid_celltype_aligned_groups.csv`
+- `outputs/metrics/splice_probe_uvgrid_celltype_aligned_side_differences.csv`
+
+That canonical re-run still preserved the correct downstream sign:
+
+- left-dark:
+  - `turn_right - turn_left = -30`
+- right-dark:
+  - `turn_right - turn_left = +45`
+
+So the sign correction is not only an internal search artifact.
+
+### Comparison to the old best global UV-grid
+
+Comparison artifact:
+
+- `outputs/metrics/splice_celltype_alignment_comparison.json`
+- `outputs/metrics/splice_celltype_alignment_comparison.csv`
+
+What changed:
+
+- old best global UV-grid:
+  - strong boundary agreement
+  - wrong downstream sign
+- new per-cell-type alignment:
+  - still strong boundary agreement
+  - now correct downstream sign
+
+The canonical re-run does show a modest drop in voltage boundary correlation relative to the search-internal best score.
+That means the result is good enough to close the original coarse sign problem, but it does not remove the need for:
+
+- longer-window drift analysis
+- embodied validation
+
+## Updated next splice steps
+
+1. `T064`: explain the `500 ms` recurrent sign collapse now that the coarse spatial sign error is no longer the main blocker.
+2. Test the new per-cell-type UV-grid splice in the embodied descending-only branch.
+
+## Time-resolved drift audit after the per-cell-type splice fix
+
+The per-cell-type UV-grid result solved the coarse sign error at `100 ms`, but it did not yet answer the long-window question.
+
+To answer that, I added:
+
+- `scripts/run_splice_drift_audit.py`
+
+Artifacts:
+
+- `outputs/metrics/splice_drift_audit_summary.json`
+- `outputs/metrics/splice_drift_audit_timeseries.csv`
+- `outputs/metrics/splice_drift_audit_key_findings.json`
+- `docs/splice_drift_audit.md`
+
+### What the audit tested
+
+It used the sign-correct per-cell-type UV-grid splice:
+
+- `outputs/metrics/splice_celltype_alignment_recommended.json`
+
+and then compared two schedules:
+
+1. sustained `hold`
+2. `pulse_25ms`
+
+while monitoring:
+
+- relay groups
+- the fixed tiny DN motor readout
+- the broader strict descending/efferent candidate groups
+
+### Main result
+
+The long-window failure is **not** a total collapse of relay asymmetry.
+
+Under sustained input:
+
+- relay asymmetry persists through `500 ms`
+- several broader descending groups still carry asymmetric rates at `500 ms`
+- but the original fixed DN turn readout equalizes to zero by `500 ms`
+
+Concrete examples:
+
+- fixed DN turn bias:
+  - `100 ms`
+    - left: `-40`
+    - right: `+100`
+  - `500 ms`
+    - left: `0`
+    - right: `0`
+
+- relay contrastive voltage:
+  - `LC31a`
+    - `100 ms`: `+14.53`
+    - `500 ms`: `+13.81`
+  - `LC31b`
+    - `100 ms`: `+24.44`
+    - `500 ms`: `+22.63`
+  - `LCe04`
+    - `100 ms`: `+5.88`
+    - `500 ms`: `+5.90`
+
+So the earlier "drift" is better understood as:
+
+- a readout collapse in the tiny fixed DN set
+- not a complete loss of asymmetric signal everywhere downstream
+
+### What the pulse test adds
+
+Under a `25 ms` pulse:
+
+- relay contrastive signals decay to about zero by `500 ms`
+- descending contrastive signals also decay to about zero
+
+So the current public recurrent dynamics do **not** maintain a strong self-sustaining visuomotor state once the external splice input is removed.
+
+### Updated interpretation
+
+This narrows the remaining problem again:
+
+1. `T063` showed that coarse global column alignment was too blunt
+2. `T064` now shows that the old long-window failure was also partly a readout problem
+
+So the next embodied step should not rely on the tiny fixed DN readout as the only long-window motor interpretation layer.
+
 ## What this means
 
 ### 1. We were too lossy before

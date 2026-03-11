@@ -76,6 +76,62 @@ See:
 
 So the plan in this file remains relevant, but it is now downstream of the splice work rather than the next immediate loop.
 
+Latest update after the per-cell-type UV-grid search:
+
+- `T063` is now closed at the body-free splice level
+- the repo now has a sign-correct per-cell-type UV-grid alignment:
+  - `outputs/metrics/splice_celltype_alignment_search.json`
+  - `outputs/metrics/splice_celltype_alignment_recommended.json`
+  - `outputs/metrics/splice_probe_uvgrid_celltype_aligned_summary.json`
+
+What changed:
+
+- the old best global UV-grid transform could not restore the correct downstream left/right sign
+- the new per-cell-type transform search can
+
+So the immediate body-free blocker list is now:
+
+1. explain or stabilize the `100 ms -> 500 ms` recurrent drift
+2. validate whether the new per-cell-type splice improves the embodied descending-only branch
+
+Latest embodied follow-up:
+
+- that validation is now complete
+- see:
+  - `docs/descending_uvgrid_visual_drive_validation.md`
+  - `outputs/metrics/descending_uvgrid_visual_drive_validation.json`
+  - `outputs/metrics/descending_uvgrid_vs_axis1d_comparison.json`
+
+Result:
+
+- the per-cell-type UV-grid splice remains experimentally useful at the body-free boundary
+- but it does not currently improve the embodied descending-only branch over the simpler axis1d splice
+- zero-brain still cleanly ablates movement, so the embodied UV-grid branch is real and brain-driven
+- however, target-bearing tracking and target-vs-no-target modulation are both weaker than the axis1d branch
+
+So the embodied reference branch remains:
+
+- `configs/flygym_realistic_vision_splice_axis1d_descending_readout.yaml`
+
+and the per-cell-type UV-grid branch should stay experimental until a downstream calibration step recovers the embodied gains suggested by the body-free splice work.
+
+Latest follow-up:
+
+- that downstream calibration step is now done
+- see:
+  - `docs/uvgrid_decoder_calibration.md`
+  - `outputs/metrics/uvgrid_decoder_calibration_best.json`
+  - `outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.json`
+
+Result:
+
+- the calibrated UV-grid branch now outperforms the old axis1d branch on the matched `2 s` target run
+- the calibrated `zero_brain` control remains near-zero
+
+So the current embodied reference branch is now:
+
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml`
+
 ## Problems To Fix
 
 1. `path_length` overstates local twitching as locomotion.

@@ -7,6 +7,7 @@ from brain.flywire_annotations import (
     build_spatial_grid_overlap_groups,
     build_spatial_overlap_groups,
     find_exact_cell_type_overlap,
+    FlywireSpatialTransform,
     load_flywire_annotation_table,
 )
 
@@ -178,3 +179,41 @@ def test_spatial_grid_overlap_groups_support_side_specific_u_mirroring(tmp_path:
     mirrored_right = sorted((group.u_bin, group.root_ids) for group in groups_mirrored if group.side == "right")
     assert default_left == mirrored_left
     assert default_right != mirrored_right
+
+
+def test_spatial_grid_overlap_groups_support_per_cell_type_transform_overrides(tmp_path: Path) -> None:
+    path = tmp_path / "annotations.tsv"
+    path.write_text(
+        "root_id\tcell_type\tside\tpos_x\tpos_y\tpos_z\n"
+        "1\tT4a\tleft\t0\t0\t0\n"
+        "2\tT4a\tleft\t2\t0\t0\n"
+        "3\tT4a\tright\t0\t0\t0\n"
+        "4\tT4a\tright\t2\t0\t0\n"
+        "5\tT5a\tleft\t0\t0\t0\n"
+        "6\tT5a\tleft\t2\t0\t0\n"
+        "7\tT5a\tright\t0\t0\t0\n"
+        "8\tT5a\tright\t2\t0\t0\n",
+        encoding="utf-8",
+    )
+    table = load_flywire_annotation_table(path)
+    groups_default = build_spatial_grid_overlap_groups(
+        table,
+        cell_types=["T4a", "T5a"],
+        num_u_bins=2,
+        num_v_bins=1,
+        min_roots_per_bin=1,
+    )
+    groups_overridden = build_spatial_grid_overlap_groups(
+        table,
+        cell_types=["T4a", "T5a"],
+        num_u_bins=2,
+        num_v_bins=1,
+        cell_type_transforms={"T4a": FlywireSpatialTransform(mirror_u_by_side=True)},
+        min_roots_per_bin=1,
+    )
+    default_t4a_right = sorted((group.u_bin, group.root_ids) for group in groups_default if group.cell_type == "T4a" and group.side == "right")
+    override_t4a_right = sorted((group.u_bin, group.root_ids) for group in groups_overridden if group.cell_type == "T4a" and group.side == "right")
+    default_t5a_right = sorted((group.u_bin, group.root_ids) for group in groups_default if group.cell_type == "T5a" and group.side == "right")
+    override_t5a_right = sorted((group.u_bin, group.root_ids) for group in groups_overridden if group.cell_type == "T5a" and group.side == "right")
+    assert default_t4a_right != override_t4a_right
+    assert default_t5a_right == override_t5a_right

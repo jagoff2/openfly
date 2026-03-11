@@ -309,6 +309,53 @@ So the next spatial problem is no longer:
 
 It is now:
 
+Further embodied update after the per-cell-type UV-grid follow-up:
+
+- the per-cell-type UV-grid splice was tested directly in the embodied descending-only branch
+- matched artifacts now exist for:
+  - target + real brain
+  - no target + real brain
+  - zero brain
+- summary artifacts:
+  - `outputs/metrics/descending_uvgrid_visual_drive_validation.json`
+  - `outputs/metrics/descending_uvgrid_vs_axis1d_comparison.json`
+
+What that embodied follow-up showed:
+
+- the branch remains brain-driven because the matched `zero_brain` run still collapses to zero commands and negligible displacement
+- but the per-cell-type UV-grid splice does **not** beat the current axis1d descending baseline in embodiment
+- target-bearing steering correlation regressed from about `0.723` to about `0.459`
+- target-run net displacement regressed from about `4.94` to about `4.28`
+- target-run forward speed regressed from about `4.33` to about `3.67`
+
+So the body-free sign-correct splice is now a stronger experimental boundary result than it is an embodied production result.
+
+Current embodied decision:
+
+- keep `configs/flygym_realistic_vision_splice_axis1d_descending_readout.yaml` as the main embodied branch
+- keep the per-cell-type UV-grid splice as an experimental branch until it exceeds the axis1d branch on target modulation and bearing tracking
+
+Latest decoder-calibration update:
+
+- that embodied limitation is now materially changed
+- the repo now has a UV-grid-specific decoder calibration:
+  - `scripts/run_uvgrid_decoder_calibration.py`
+  - `outputs/metrics/uvgrid_decoder_calibration_best.json`
+  - `docs/uvgrid_decoder_calibration.md`
+
+What changed:
+
+- the per-cell-type UV-grid splice itself was not the final embodied blocker
+- the main embodied mismatch was downstream calibration
+- after calibrating the decoder specifically for the UV-grid signal statistics, the UV-grid embodied branch now exceeds both:
+  - the old UV-grid branch
+  - the old axis1d descending branch
+
+Current embodied decision is therefore now:
+
+- use `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml` as the strongest embodied branch
+- keep the older axis1d branch as the previous baseline, not the current best result
+
 - "how do we orient and align the two-dimensional visual columns correctly relative to the downstream circuit?"
 
 And the next temporal problem is no longer:
@@ -336,6 +383,64 @@ So the splice problem is now narrower than before:
 - the input splice was not the only blocker
 - the output-side readout bottleneck was also fundamental
 - the current remaining questions are now:
-  - whether the chosen descending-only supplemental readout is the right one biologically
-  - whether matched ablations still confirm the new traversal is brain-driven in this exact branch
-  - how much more of the remaining mismatch is still input-side versus downstream recurrent / motor-structure mismatch
+- whether the chosen descending-only supplemental readout is the right one biologically
+- whether matched ablations still confirm the new traversal is brain-driven in this exact branch
+- how much more of the remaining mismatch is still input-side versus downstream recurrent / motor-structure mismatch
+
+Further body-free update after per-cell-type UV-grid alignment:
+
+- the repo now supports per-cell-type UV-grid transform overrides on the whole-brain side:
+  - `src/brain/flywire_annotations.py`
+  - `src/bridge/visual_splice.py`
+  - `scripts/run_splice_probe.py`
+- a dedicated greedy body-free search now exists:
+  - `scripts/run_celltype_uvgrid_alignment_search.py`
+
+What that follow-up proved:
+
+- the remaining UV-grid error was not purely downstream
+- one shared global orientation transform was too blunt
+- a per-cell-type alignment can recover the correct downstream left/right turn sign in the body-free splice probe
+
+Evidence:
+
+- `outputs/metrics/splice_celltype_alignment_search.json`
+- `outputs/metrics/splice_celltype_alignment_recommended.json`
+- `outputs/metrics/splice_probe_uvgrid_celltype_aligned_summary.json`
+
+Why this matters:
+
+- old best global UV-grid:
+  - good boundary fit
+  - wrong downstream sign
+- new per-cell-type UV-grid:
+  - still good boundary fit
+  - correct downstream sign
+
+So the next blocker is now narrower again:
+
+- not "can any grounded UV-grid mapping launch the right sign?"
+- now "why does that sign still drift over longer windows, and does the improved mapping help the embodied branch?"
+
+Further update after the time-resolved drift audit:
+
+- the repo now has a time-resolved body-free drift audit:
+  - `scripts/run_splice_drift_audit.py`
+  - `docs/splice_drift_audit.md`
+
+What that audit proved:
+
+- the old `500 ms` failure is not a complete collapse of relay asymmetry
+- under sustained input, several relay groups keep strong left-vs-right contrast through `500 ms`
+- several broader descending/efferent groups also remain asymmetric
+- but the original tiny fixed DN motor readout equalizes by `500 ms`
+
+What the pulse schedule proved:
+
+- once the external input is removed after `25 ms`, both relay and descending asymmetry decay almost completely
+- so the current public recurrent dynamics do not maintain a strong self-sustaining visuomotor state after a brief launch pulse
+
+This narrows the long-window problem further:
+
+- one part is a brittle fixed-readout problem
+- the other part is missing persistent internal state after brief input

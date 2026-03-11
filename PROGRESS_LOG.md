@@ -2585,3 +2585,400 @@ Interpretation:
 3. Honest conclusion
 - This was a presentation-layer sync only.
 - No experimental claims or artifacts changed.
+
+## 2026-03-11 - T063 review and restart
+
+1. What I attempted
+- Re-read `TASKS.md`, `PROGRESS_LOG.md`, `docs/visual_splice_strategy.md`, `docs/cold_start_visual_brain_plan.md`, and `docs/splice_probe_results.md` after context compaction.
+- Re-inspected the current alignment code in `src/brain/flywire_annotations.py` and the body-free splice harness in `scripts/run_splice_probe.py` before making changes.
+
+2. What succeeded
+- Reconstructed the current state accurately enough to resume `T063` on the right branch.
+- Confirmed that the current `uv_grid` alignment only supports global axis swap / flip plus side-specific horizontal mirroring.
+- Confirmed the current blocker: boundary agreement is already strong, but downstream sign remains wrong, so the next step has to be per-cell-type alignment rather than another global transform.
+
+3. What failed
+- No new alignment improvement has been implemented yet in this entry; this is the restart checkpoint before code changes.
+
+4. Evidence paths
+- `TASKS.md`
+- `PROGRESS_LOG.md`
+- `docs/visual_splice_strategy.md`
+- `docs/cold_start_visual_brain_plan.md`
+- `docs/splice_probe_results.md`
+- `src/brain/flywire_annotations.py`
+- `scripts/run_splice_probe.py`
+
+5. Next actions
+- Implement a per-cell-type spatial-alignment path beyond the shared coarse UV grid.
+- Re-run targeted body-free splice probes and compare them against the current best targeted `uv_grid` summary.
+
+## 2026-03-11 - T063 completed with per-cell-type UV-grid alignment
+
+1. What I attempted
+- Added a per-cell-type spatial-transform path on the whole-brain side so the `uv_grid` splice is no longer limited to one global transform plus optional right-side mirroring.
+- Added a dedicated body-free search script to greedily test per-cell-type `swap_uv` / `flip_u` / `flip_v` / `mirror_u_by_side` overrides against the grounded FlyVis teacher response.
+- Re-ran a canonical `run_splice_probe.py` body-free summary using the recommended per-cell-type transform file.
+
+2. What succeeded
+- Added per-cell-type transform support in:
+  - `src/brain/flywire_annotations.py`
+  - `src/bridge/visual_splice.py`
+  - `scripts/run_splice_probe.py`
+- Added the dedicated search harness:
+  - `scripts/run_celltype_uvgrid_alignment_search.py`
+- Added unit coverage for the new per-cell-type transform override path:
+  - `tests/test_flywire_annotations.py`
+- Host validation passed:
+  - `python -m pytest tests/test_flywire_annotations.py tests/test_visual_splice.py -q`
+  - result: `8 passed`
+- The body-free search found a sign-correct per-cell-type alignment starting from the old best global UV-grid transform:
+  - `outputs/metrics/splice_celltype_alignment_search.json`
+  - `outputs/metrics/splice_celltype_alignment_recommended.json`
+- Key search result:
+  - old best global UV-grid:
+    - left turn bias `-15`
+    - right turn bias `-5`
+    - `sign_match = false`
+  - new per-cell-type alignment search best:
+    - left turn bias `-50`
+    - right turn bias `+60`
+    - `sign_match = true`
+- A canonical re-run with the recommended transform file also preserved the correct downstream sign:
+  - `outputs/metrics/splice_probe_uvgrid_celltype_aligned_summary.json`
+  - left turn bias `-30`
+  - right turn bias `+45`
+
+3. What failed
+- The canonical re-run did not keep the exact same boundary-correlation numbers reported by the greedy search summary.
+- It still fixed the downstream sign cleanly, but the averaged voltage correlations in the canonical summary were slightly lower than the search-internal best score.
+- So `T063` is solved at the level it was asked:
+  - per-cell-type alignment can resolve the coarse downstream sign error
+- but the result still needs embodied validation and does not replace `T064`.
+
+4. Evidence paths
+- `src/brain/flywire_annotations.py`
+- `src/bridge/visual_splice.py`
+- `scripts/run_splice_probe.py`
+- `scripts/run_celltype_uvgrid_alignment_search.py`
+- `tests/test_flywire_annotations.py`
+- `tests/test_visual_splice.py`
+- `outputs/metrics/splice_celltype_alignment_search.json`
+- `outputs/metrics/splice_celltype_alignment_recommended.json`
+- `outputs/metrics/splice_probe_uvgrid_celltype_aligned_summary.json`
+- `outputs/metrics/splice_celltype_alignment_comparison.json`
+
+5. Next actions
+- Keep `T064` active: explain the `500 ms` recurrent sign collapse now that the coarse spatial sign error is no longer the main blocker.
+- Add an embodied follow-up using the new per-cell-type UV-grid transform file in the descending-only branch.
+
+## 2026-03-11 - T064 restart after the per-cell-type splice fix
+
+1. What I attempted
+- Re-opened the existing drift evidence after closing `T063`:
+  - `outputs/metrics/splice_relay_drift_comparison.json`
+  - `outputs/metrics/splice_relay_probe_summary.json`
+  - `outputs/metrics/splice_relay_probe_500ms_pulse25_summary.json`
+- Re-inspected the current body-free relay probe implementation in `scripts/run_splice_relay_probe.py`.
+- Re-checked the fixed motor readout definitions in `src/brain/public_ids.py` and the supplemental descending candidate file in `outputs/metrics/descending_readout_candidates_strict.json`.
+
+2. What succeeded
+- Confirmed the key structural gap in the old relay-drift probe:
+  - it only reports endpoint windows
+  - and it only watches the fixed tiny DN readout plus a small relay set
+- Confirmed that `T064` now needs time-resolved evidence, especially after `T063` proved the coarse input-side sign error is fixable.
+- Narrowed the mechanistic possibilities to:
+  - fixed DN readout collapse while deeper relay or supplemental descending groups remain sign-correct
+  - broader descending-path collapse
+  - or a true recurrent attractor that erases asymmetry across all monitored groups
+
+3. What failed
+- No mechanistic explanation is claimed yet in this entry; this is the restart checkpoint before the new audit script lands.
+
+4. Evidence paths
+- `outputs/metrics/splice_relay_drift_comparison.json`
+- `outputs/metrics/splice_relay_probe_summary.json`
+- `outputs/metrics/splice_relay_probe_500ms_pulse25_summary.json`
+- `outputs/metrics/splice_probe_uvgrid_celltype_aligned_summary.json`
+- `scripts/run_splice_relay_probe.py`
+- `src/brain/public_ids.py`
+- `outputs/metrics/descending_readout_candidates_strict.json`
+
+5. Next actions
+- Add a time-resolved body-free drift audit that monitors:
+  - relay groups
+  - fixed motor DN groups
+  - supplemental descending/efferent candidates
+- Run that audit on the new sign-correct per-cell-type splice and use it to explain whether the `500 ms` collapse is mainly a readout issue or a broader recurrent drift.
+
+## 2026-03-11 - T064 completed with a time-resolved body-free drift audit
+
+1. What I attempted
+- Added a new time-resolved body-free audit script:
+  - `scripts/run_splice_drift_audit.py`
+- Ran it in WSL on the sign-correct per-cell-type UV-grid splice:
+  - `outputs/metrics/splice_celltype_alignment_recommended.json`
+- Measured two schedules:
+  - sustained `hold`
+  - `pulse_25ms`
+- Monitored:
+  - relay groups from `outputs/metrics/splice_relay_candidates.json`
+  - the fixed tiny DN readout from `src/brain/public_ids.py`
+  - the broader strict descending/efferent groups from `outputs/metrics/descending_readout_candidates_strict.json`
+
+2. What succeeded
+- Generated the audit artifacts:
+  - `outputs/metrics/splice_drift_audit_summary.json`
+  - `outputs/metrics/splice_drift_audit_timeseries.csv`
+  - `outputs/metrics/splice_drift_audit_key_findings.json`
+  - `outputs/metrics/splice_drift_audit_key_findings.csv`
+- Added the write-up:
+  - `docs/splice_drift_audit.md`
+- The audit gives a stronger mechanistic answer than the old endpoint-only relay probe:
+  - under sustained input, relay asymmetry does **not** collapse by `500 ms`
+  - several broader descending groups also remain asymmetric by `500 ms`
+  - but the original tiny fixed DN turn readout equalizes to zero by `500 ms`
+- Key sustained-input numbers:
+  - fixed DN turn bias at `100 ms`:
+    - left `-40`
+    - right `+100`
+  - fixed DN turn bias at `500 ms`:
+    - left `0`
+    - right `0`
+- Key relay persistence examples under sustained input:
+  - `LC31a` contrastive right-minus-left:
+    - `100 ms`: `+14.53`
+    - `500 ms`: `+13.81`
+  - `LC31b`:
+    - `100 ms`: `+24.44`
+    - `500 ms`: `+22.63`
+  - `LCe04`:
+    - `100 ms`: `+5.88`
+    - `500 ms`: `+5.90`
+- Key pulse result:
+  - after a `25 ms` pulse, both relay and descending contrastive signals decay essentially to zero by `500 ms`
+  - so the current public dynamics do not maintain a strong self-sustaining visuomotor state after a brief launch pulse
+
+3. Honest conclusion
+- The old `500 ms` sign collapse was **not** a complete splice failure.
+- It is better explained by two effects:
+  1. the fixed tiny DN readout is too brittle and equalizes under sustained drive
+  2. the current public recurrent dynamics do not preserve the launched asymmetry once the external input is removed
+- So the remaining blocker is now narrower and more concrete:
+  - not "the whole network loses asymmetry by `500 ms`"
+  - but "the tiny DN readout is insufficient for long-window interpretation, and there is no strong self-sustaining state after a short pulse"
+
+4. Evidence paths
+- `scripts/run_splice_drift_audit.py`
+- `outputs/metrics/splice_drift_audit_summary.json`
+- `outputs/metrics/splice_drift_audit_timeseries.csv`
+- `outputs/metrics/splice_drift_audit_key_findings.json`
+- `docs/splice_drift_audit.md`
+
+5. Next actions
+- Test the new per-cell-type UV-grid splice directly in the embodied descending-only branch rather than through the old tiny DN set.
+- Keep long-window state-conditioning questions separate from output-readout questions in future embodiment claims.
+
+## 2026-03-11 - T083 started with matched embodied UV-grid descending configs
+
+1. What I attempted
+- Began the embodied follow-up after `T064`.
+- Created a matched config set that swaps the old axis1d splice for the new per-cell-type UV-grid splice while keeping the widened descending-only decoder path fixed.
+
+2. What succeeded
+- Added:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_no_target.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_zero_brain.yaml`
+- These configs use:
+  - `spatial_mode: uv_grid`
+  - `spatial_u_bins: 2`
+  - `spatial_v_bins: 2`
+  - `spatial_flip_v: true`
+  - `spatial_mirror_u_by_side: true`
+  - `spatial_cell_type_transforms_path: outputs/metrics/splice_celltype_alignment_recommended.json`
+- They keep the widened descending-only decoder unchanged so the embodied comparison isolates the input-splice change as cleanly as possible.
+
+3. What failed
+- No embodied run result yet in this entry; this is the configuration checkpoint before the matched WSL runs.
+
+4. Evidence paths
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_no_target.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_zero_brain.yaml`
+- `outputs/metrics/splice_celltype_alignment_recommended.json`
+
+5. Next actions
+- Run the matched real WSL target, no-target, and zero-brain embodied UV-grid descending tests sequentially.
+- Summarize them against the existing axis1d descending branch with the same visual-drive metrics.
+
+## 2026-03-11 - T082 and T083 completed with matched embodied UV-grid descending runs
+
+1. What I attempted
+- Ran the matched embodied comparison for the new per-cell-type UV-grid splice using the widened descending-only decoder:
+  - target + real brain
+  - no target + real brain
+  - target + zero brain
+- Then summarized those runs with the same visual-drive metrics used for the current axis1d descending baseline.
+
+2. What succeeded
+- Completed all three embodied WSL runs:
+  - `outputs/requested_2s_splice_uvgrid_descending_target/flygym-demo-20260311-062430/demo.mp4`
+  - `outputs/requested_2s_splice_uvgrid_descending_no_target/flygym-demo-20260311-063926/demo.mp4`
+  - `outputs/requested_2s_splice_uvgrid_descending_zero_brain/flygym-demo-20260311-065432/demo.mp4`
+- Generated matched summaries:
+  - `outputs/metrics/descending_uvgrid_visual_drive_validation.csv`
+  - `outputs/metrics/descending_uvgrid_visual_drive_validation.json`
+  - `outputs/metrics/descending_uvgrid_vs_axis1d_comparison.csv`
+  - `outputs/metrics/descending_uvgrid_vs_axis1d_comparison.json`
+- Wrote the embodied comparison doc:
+  - `docs/descending_uvgrid_visual_drive_validation.md`
+
+3. What failed
+- The per-cell-type UV-grid splice did not improve the embodied branch over the current axis1d descending baseline.
+- In the target condition, the UV-grid branch regressed on the most important embodied pursuit metrics:
+  - target-bearing steering correlation dropped from `0.7228` to `0.4590`
+  - steer-sign match dropped from `0.7477` to `0.6527`
+  - average forward speed dropped from `4.3263` to `3.6652`
+  - net displacement dropped from `4.9439` to `4.2834`
+- Within the UV-grid branch itself, the moving target no longer improves forward speed over the no-target condition:
+  - target `avg_forward_speed = 3.6652`
+  - no-target `avg_forward_speed = 3.6751`
+
+4. Evidence paths
+- `outputs/metrics/descending_uvgrid_visual_drive_validation.json`
+- `outputs/metrics/descending_uvgrid_vs_axis1d_comparison.json`
+- `docs/descending_uvgrid_visual_drive_validation.md`
+- `outputs/requested_2s_splice_uvgrid_descending_target/flygym-demo-20260311-062430/summary.json`
+- `outputs/requested_2s_splice_uvgrid_descending_no_target/flygym-demo-20260311-063926/summary.json`
+- `outputs/requested_2s_splice_uvgrid_descending_zero_brain/flygym-demo-20260311-065432/summary.json`
+
+5. Honest conclusion
+- The body-free per-cell-type UV-grid splice solved the sign problem at the splice boundary, but that improvement did not transfer into a stronger embodied descending-only controller.
+- The embodied UV-grid branch is still brain-driven, because the zero-brain control remains near-zero.
+- But the current best embodied production path is still the simpler axis1d descending splice, not the new per-cell-type UV-grid branch.
+
+6. Next actions
+- Keep the per-cell-type UV-grid splice as an experimental branch, not the default embodied path.
+- Focus the next iteration on why the body-free splice gain does not survive embodiment:
+  - likely downstream calibration, decoder weighting, or time-scale mismatch
+- Use the axis1d descending branch as the current embodied reference until the UV-grid branch exceeds it on target-bearing correlation and target-vs-no-target modulation.
+
+## 2026-03-11 - T084 started with UV-grid-specific decoder calibration
+
+1. What I attempted
+- Reopened the UV-grid embodied branch specifically at the decoder / downstream calibration layer instead of changing the splice again.
+- Compared the current UV-grid target log against the axis1d target log to identify which signal statistics actually regressed.
+
+2. What succeeded
+- Confirmed that the main UV-grid regression is not total brain silence:
+  - the branch still has `993` nonzero command cycles in the `2 s` target run
+- Confirmed that the UV-grid branch is under-driving and under-steering relative to axis1d:
+  - mean total drive dropped from about `0.4812` to about `0.4442`
+  - mean absolute drive difference dropped from about `0.1871` to about `0.1078`
+  - target-bearing correlation dropped from about `0.7228` to about `0.4590`
+- Ran an offline replay sweep over decoder-only parameters using the saved UV-grid target and no-target logs.
+- The first promising decoder candidate from that replay uses:
+  - lower smoothing (`alpha ≈ 0.06`)
+  - stronger output gains
+  - nonzero `forward_asymmetry_turn_gain`
+
+3. What failed
+- Nothing new is claimed yet at the embodied level in this entry.
+- This is the calibration setup checkpoint before the embodied rerun.
+
+4. Evidence paths
+- `outputs/requested_2s_splice_uvgrid_descending_target/flygym-demo-20260311-062430/run.jsonl`
+- `outputs/requested_2s_splice_uvgrid_descending_no_target/flygym-demo-20260311-063926/run.jsonl`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout.yaml`
+
+5. Next actions
+- Preserve the offline decoder sweep as a reproducible script and artifact.
+- Create a UV-grid-specific calibrated config.
+- Rerun the embodied UV-grid target branch first, then matched no-target / zero-brain if the target rerun improves materially.
+
+## 2026-03-11 - T084 completed with a calibrated UV-grid embodied branch
+
+1. What I attempted
+- Added a reproducible offline decoder replay sweep for the UV-grid target and no-target logs.
+- Used that sweep to pick a UV-grid-specific decoder candidate.
+- Ran matched embodied `target`, `no_target`, and `zero_brain` validations for the calibrated UV-grid branch.
+
+2. What succeeded
+- Added:
+  - `scripts/run_uvgrid_decoder_calibration.py`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_zero_brain.yaml`
+  - `docs/uvgrid_decoder_calibration.md`
+- Added a decoder unit test for forward-asymmetry steering:
+  - `tests/test_bridge_unit.py`
+- Offline sweep artifacts:
+  - `outputs/metrics/uvgrid_decoder_calibration.csv`
+  - `outputs/metrics/uvgrid_decoder_calibration.json`
+  - `outputs/metrics/uvgrid_decoder_calibration_best.json`
+- Matched embodied artifacts:
+  - `outputs/requested_2s_splice_uvgrid_descending_calibrated_target/flygym-demo-20260311-071452/demo.mp4`
+  - `outputs/requested_2s_splice_uvgrid_descending_calibrated_no_target/flygym-demo-20260311-073028/demo.mp4`
+  - `outputs/requested_2s_splice_uvgrid_descending_calibrated_zero_brain/flygym-demo-20260311-074301/demo.mp4`
+- Matched summaries:
+  - `outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.json`
+  - `outputs/metrics/descending_uvgrid_calibration_comparison.json`
+
+3. Key result
+- The calibrated UV-grid branch is now stronger than both:
+  - the old UV-grid branch
+  - the old axis1d descending branch
+
+Target-run gains versus the old UV-grid branch:
+- `avg_forward_speed`: `3.6652 -> 4.9241`
+- `net_displacement`: `4.2834 -> 5.7583`
+- `corr_drive_diff_vs_target_bearing`: `0.4590 -> 0.8810`
+- `steer_sign_match_rate`: `0.6527 -> 0.8878`
+
+Target-run gains versus the old axis1d branch:
+- `avg_forward_speed`: `4.3263 -> 4.9241`
+- `net_displacement`: `4.9439 -> 5.7583`
+- `corr_drive_diff_vs_target_bearing`: `0.7228 -> 0.8810`
+- `steer_sign_match_rate`: `0.7477 -> 0.8878`
+
+4. Control result
+- The calibrated `zero_brain` branch remains near-zero:
+  - `nonzero_command_cycles = 0`
+  - `net_displacement = 0.011823383234191902`
+
+5. Honest conclusion
+- The earlier embodied UV-grid failure was not inherent to the per-cell-type splice.
+- It was largely a decoder/downstream calibration mismatch.
+- After UV-grid-specific calibration, the per-cell-type UV-grid branch becomes the strongest embodied branch currently in the repo.
+
+6. Next actions
+- Update the public-facing docs so they no longer name the old axis1d branch as the current strongest result.
+- Keep the remaining biological caveats explicit:
+  - still a descending-population-to-two-drive abstraction
+  - still not pure target pursuit
+  - still not a VNC / muscle-level motor pathway
+
+## 2026-03-11 - T085 published the calibrated UV-grid branch to GitHub
+
+1. What I attempted
+- Prepared the repo for publish after the UV-grid calibration work.
+- Verified whether `README.md` needed another manual sync from `docs/openfly_whitepaper.md`.
+
+2. What succeeded
+- Verified that `README.md` already matched `docs/openfly_whitepaper.md` byte-for-byte.
+- Kept that synced state unchanged.
+- Committed the calibrated UV-grid branch updates, docs, configs, scripts, and artifacts.
+- Pushed the new state to `origin/main`.
+
+3. What failed
+- Nothing. The remote was already configured correctly and the push path was clean.
+
+4. Evidence paths
+- `README.md`
+- `docs/openfly_whitepaper.md`
+- `git remote -v`
+- `git log --oneline -1`
+
+5. Result
+- The GitHub repo now reflects the calibrated UV-grid branch as the current strongest embodied result.

@@ -194,6 +194,17 @@ def _mean_group_metric(values_by_id: dict[int, float], root_ids: tuple[int, ...]
     return float(np.mean(values)) if values else 0.0
 
 
+def _load_cell_type_transforms(path: str | None) -> dict[str, dict[str, object]] | None:
+    if path in (None, ""):
+        return None
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    if isinstance(payload, dict) and isinstance(payload.get("cell_types"), dict):
+        payload = payload["cell_types"]
+    if not isinstance(payload, dict):
+        raise ValueError("cell-type transform payload must be a mapping or contain a 'cell_types' mapping")
+    return {str(cell_type): dict(values) for cell_type, values in payload.items() if isinstance(values, dict)}
+
+
 def _aggregate_motor_rates(rates_by_id: dict[int, float]) -> dict[str, float]:
     return {
         group_name: _mean_group_rate(rates_by_id, tuple(neuron_ids))
@@ -223,6 +234,7 @@ def main() -> None:
     parser.add_argument("--spatial-flip-u", action="store_true")
     parser.add_argument("--spatial-flip-v", action="store_true")
     parser.add_argument("--spatial-mirror-u-by-side", action="store_true")
+    parser.add_argument("--cell-type-transform-json", default=None)
     parser.add_argument("--min-roots-per-side", type=int, default=50)
     parser.add_argument("--min-roots-per-bin", type=int, default=20)
     parser.add_argument("--baseline-value", type=float, default=1.0)
@@ -261,6 +273,7 @@ def main() -> None:
     annotation_table = load_flywire_annotation_table(args.annotation_path)
     overlap_types = find_exact_cell_type_overlap(layer_indices.keys(), annotation_table)
     if args.spatial_mode == "uv_grid" and (int(args.spatial_u_bins) > 1 or int(args.spatial_v_bins) > 1):
+        cell_type_transforms = _load_cell_type_transforms(args.cell_type_transform_json)
         overlap_groups = build_spatial_grid_overlap_groups(
             annotation_table,
             cell_types=overlap_types,
@@ -270,6 +283,7 @@ def main() -> None:
             flip_u=bool(args.spatial_flip_u),
             flip_v=bool(args.spatial_flip_v),
             mirror_u_by_side=bool(args.spatial_mirror_u_by_side),
+            cell_type_transforms=cell_type_transforms,
             min_roots_per_bin=args.min_roots_per_bin,
         )
         overlap_summary = {
@@ -642,6 +656,7 @@ def main() -> None:
         "spatial_flip_u": bool(args.spatial_flip_u),
         "spatial_flip_v": bool(args.spatial_flip_v),
         "spatial_mirror_u_by_side": bool(args.spatial_mirror_u_by_side),
+        "cell_type_transform_json": args.cell_type_transform_json,
         "num_overlap_cell_types": len(overlap_types),
         "overlap_summary": overlap_summary,
         "value_scale": value_scale,

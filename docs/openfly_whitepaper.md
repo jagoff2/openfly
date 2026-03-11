@@ -9,7 +9,7 @@ This whitepaper consolidates the engineering and scientific findings from `openf
 
 The current stack combines four public subsystems: a whole-brain recurrent model derived from the FlyWire connectome, the FlyGym and NeuroMechFly v2 embodied simulation stack, FlyGym realistic vision with FlyVis-derived neural activity, and new in-repo bridge code that maintains persistent closed-loop control online rather than as offline batch analyses. The main result is that a realistic-vision, real-body, real-whole-brain closed loop now runs locally and produces brain-driven, visually driven embodied locomotion under matched controls.
 
-The strongest current branch is `configs/flygym_realistic_vision_splice_axis1d_descending_readout.yaml`. In the current `2 s` logged-target validation run, this branch yields `avg_forward_speed = 4.3263`, `net_displacement = 4.9439`, `displacement_efficiency = 0.5719`, `corr(right_drive - left_drive, target_bearing) = 0.7228`, and `steer_sign_match_rate = 0.7477`, while the matched `zero_brain` control yields `nonzero_command_cycles = 0` and `net_displacement = 0.0118`. A no-target control still produces substantial locomotion, which means the branch is visually driven but not purely target-driven: optic flow and scene structure also contribute.
+The strongest current branch is `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml`. In the current `2 s` logged-target validation run, this branch yields `avg_forward_speed = 4.9241`, `net_displacement = 5.7583`, `displacement_efficiency = 0.5853`, `corr(right_drive - left_drive, target_bearing) = 0.8810`, and `steer_sign_match_rate = 0.8878`, while the matched `zero_brain` control still yields `nonzero_command_cycles = 0` and `net_displacement = 0.0118`. A no-target control still produces substantial locomotion, which means the branch is visually driven but not purely target-driven: optic flow and scene structure also contribute.
 
 The project also produced negative results that matter. A minimal public-anchor bridge built from bilateral `LC4` and `JON` pools plus a tiny descending-neuron bottleneck does not produce useful locomotion once decoder-side and body-side fallbacks are removed. That failure is not explained by a dead backend. Instead, body-free splice experiments showed that the original scalar bridge destroyed lateralized visual structure already present in FlyVis, and that the output bottleneck was also too narrow. A calibrated splice using exact shared FlyVis/FlyWire `cell_type + side + bin` groups can preserve grouped boundary activity strongly and launch the correct downstream turn sign at `100 ms`, but downstream sign drifts by `500 ms`, and exact column alignment remains unresolved.
 
@@ -254,16 +254,16 @@ The strongest current branch is now validated by matched controls with explicit 
 
 Target + real brain:
 
-- `avg_forward_speed = 4.3263`
-- `net_displacement = 4.9439`
-- `displacement_efficiency = 0.5719`
+- `avg_forward_speed = 4.9241`
+- `net_displacement = 5.7583`
+- `displacement_efficiency = 0.5853`
 - `nonzero_command_cycles = 993`
 
 No target + real brain:
 
-- `avg_forward_speed = 3.6971`
-- `net_displacement = 4.9384`
-- `displacement_efficiency = 0.6685`
+- `avg_forward_speed = 3.9070`
+- `net_displacement = 5.2903`
+- `displacement_efficiency = 0.6777`
 
 Target + zero brain:
 
@@ -279,19 +279,19 @@ Second, the branch is visually driven. It moves with the real brain and the real
 
 Third, the target modulates behavior specifically. Compared with the no-target run, the target run increases:
 
-- forward speed by about `17.0%`
-- mean total drive by about `10.3%`
-- mean steering asymmetry by about `48.1%`
+- forward speed by about `26.0%`
+- mean total drive by about `12.0%`
+- mean steering asymmetry by about `121.4%`
 
 In addition, steering tracks directly logged target bearing:
 
-- `corr(right_drive - left_drive, target_bearing) = 0.7228`
-- steer-sign match rate `= 0.7477`
+- `corr(right_drive - left_drive, target_bearing) = 0.8810`
+- steer-sign match rate `= 0.8878`
 
 and forward drive increases as the target becomes more frontal:
 
-- `corr(total_drive, target_frontalness) = 0.3309`
-- `corr(forward_speed, target_frontalness) = 0.2452`
+- `corr(total_drive, target_frontalness) = 0.4634`
+- `corr(forward_speed, target_frontalness) = 0.1298`
 
 ### 5.10 What remains unresolved in locomotion
 
@@ -413,12 +413,12 @@ The strongest current branch:
 - has a matched no-target control
 - logs target state directly from simulation
 - shows:
-  - `corr(right_drive - left_drive, target_bearing) = 0.7228`
+  - `corr(right_drive - left_drive, target_bearing) = 0.8810`
   - target-present runs increase drive and steering asymmetry relative to no-target runs
 
 Those results are documented in:
 
-- `docs/descending_visual_drive_validation.md`
+- `docs/uvgrid_decoder_calibration.md`
 
 By contrast, the Eon update explicitly says that their current visual input is not yet significantly influencing the embodied behavior.
 
@@ -467,16 +467,16 @@ Run these from WSL:
 
 ```bash
 export MUJOCO_GL=egl
-~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_axis1d_descending_readout.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_descending_logged_target --output-csv outputs/benchmarks/fullstack_splice_descending_logged_target_2s.csv
-~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_axis1d_descending_readout_no_target.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_descending_no_target --output-csv outputs/benchmarks/fullstack_splice_descending_no_target_2s.csv
-~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_axis1d_descending_readout_zero_brain.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_descending_zero_brain --output-csv outputs/benchmarks/fullstack_splice_descending_zero_brain_2s.csv
-python scripts/summarize_descending_visual_drive.py
+~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_uvgrid_descending_calibrated_target --output-csv outputs/benchmarks/fullstack_splice_uvgrid_descending_calibrated_target_2s.csv
+~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_uvgrid_descending_calibrated_no_target --output-csv outputs/benchmarks/fullstack_splice_uvgrid_descending_calibrated_no_target_2s.csv
+~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_zero_brain.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_uvgrid_descending_calibrated_zero_brain --output-csv outputs/benchmarks/fullstack_splice_uvgrid_descending_calibrated_zero_brain_2s.csv
+python scripts/summarize_descending_visual_drive.py --target-metrics outputs/requested_2s_splice_uvgrid_descending_calibrated_target/flygym-demo-20260311-071452/metrics.csv --target-log outputs/requested_2s_splice_uvgrid_descending_calibrated_target/flygym-demo-20260311-071452/run.jsonl --no-target-metrics outputs/requested_2s_splice_uvgrid_descending_calibrated_no_target/flygym-demo-20260311-073028/metrics.csv --no-target-log outputs/requested_2s_splice_uvgrid_descending_calibrated_no_target/flygym-demo-20260311-073028/run.jsonl --zero-brain-metrics outputs/requested_2s_splice_uvgrid_descending_calibrated_zero_brain/flygym-demo-20260311-074301/metrics.csv --zero-brain-log outputs/requested_2s_splice_uvgrid_descending_calibrated_zero_brain/flygym-demo-20260311-074301/run.jsonl --csv-output outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.csv --json-output outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.json
 ```
 
 Expected summary artifacts:
 
-- `outputs/metrics/descending_visual_drive_validation.json`
-- `docs/descending_visual_drive_validation.md`
+- `outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.json`
+- `docs/uvgrid_decoder_calibration.md`
 
 ### 9.3 Reproduce the body-free splice program
 

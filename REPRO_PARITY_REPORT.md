@@ -30,9 +30,9 @@ Evidence source for run-level metrics: `outputs/metrics/parity_runs.csv`
 | Persistent closed-loop runtime | yes | real bridge loop runs locally with `FlyGymRealisticVisionRuntime` and `WholeBrainTorchBackend` | pass |
 | Realistic vision enabled in production path | yes | validated through `outputs/benchmarks/vision_benchmarks.csv` and real FlyGym demos | pass |
 | Whole-brain backend integrated | yes | Torch backend participates in the real closed loop; secondary `Brian2` CPU benchmark also exists | pass |
-| Walking / locomotion artifact | yes | the descending-only embodied splice branch now produces meaningful traversal with `net_displacement = 4.9439` and `displacement_efficiency = 0.5719` in the logged-target `2 s` run, while the matched `zero_brain` control stays near zero | pass |
-| Turning / orientation artifact | yes | steering command tracks directly logged target bearing with correlation `0.7228`, but the short isolated left/right target conditions are still mixed rather than a clean mirrored reflex | partial |
-| Reaction to visual stimulus | yes | target-present runs show higher drive and steering asymmetry than no-target runs, and target-bearing alignment is now computed from directly logged target state | pass |
+| Walking / locomotion artifact | yes | the calibrated UV-grid descending branch now produces meaningful traversal with `net_displacement = 5.7583` and `displacement_efficiency = 0.5853` in the logged-target `2 s` run, while the matched `zero_brain` control stays near zero | pass |
+| Turning / orientation artifact | yes | steering command tracks directly logged target bearing with correlation `0.8810`, but the short isolated left/right target conditions are still mixed rather than a clean mirrored reflex | partial |
+| Reaction to visual stimulus | yes | calibrated target-present runs show higher drive and much higher steering asymmetry than calibrated no-target runs, and target-bearing alignment is computed from directly logged target state | pass |
 | Stable demo video capture | yes | real videos exist for short, medium, and longest-stable runs | pass |
 | Timing logs and metrics CSV | yes | JSONL logs and metrics CSVs exist for all real demo runs | pass |
 | Sim-speed vs wall-time benchmarks | yes | benchmark CSVs and plots exist for brain, body, vision, and full stack | pass |
@@ -76,22 +76,22 @@ Evidence source for run-level metrics: `outputs/metrics/parity_runs.csv`
 - motor-path audit JSON: `outputs/metrics/motor_path_audit.json`
 - motor-path audit sweep CSV: `outputs/metrics/motor_path_audit_sweeps.csv`
 
-### Current strongest descending-only embodied branch
+### Current strongest embodied branch
 
-- config: `configs/flygym_realistic_vision_splice_axis1d_descending_readout.yaml`
+- config: `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml`
 - target + real brain:
-  - video: `outputs/requested_2s_splice_descending_logged_target/flygym-demo-20260309-142600/demo.mp4`
-  - log: `outputs/requested_2s_splice_descending_logged_target/flygym-demo-20260309-142600/run.jsonl`
-  - metrics: `outputs/requested_2s_splice_descending_logged_target/flygym-demo-20260309-142600/metrics.csv`
+  - video: `outputs/requested_2s_splice_uvgrid_descending_calibrated_target/flygym-demo-20260311-071452/demo.mp4`
+  - log: `outputs/requested_2s_splice_uvgrid_descending_calibrated_target/flygym-demo-20260311-071452/run.jsonl`
+  - metrics: `outputs/requested_2s_splice_uvgrid_descending_calibrated_target/flygym-demo-20260311-071452/metrics.csv`
 - no target + real brain:
-  - video: `outputs/requested_2s_splice_descending_no_target/flygym-demo-20260309-122723/demo.mp4`
-  - metrics: `outputs/requested_2s_splice_descending_no_target/flygym-demo-20260309-122723/metrics.csv`
+  - video: `outputs/requested_2s_splice_uvgrid_descending_calibrated_no_target/flygym-demo-20260311-073028/demo.mp4`
+  - metrics: `outputs/requested_2s_splice_uvgrid_descending_calibrated_no_target/flygym-demo-20260311-073028/metrics.csv`
 - target + zero brain:
-  - video: `outputs/requested_2s_splice_descending_zero_brain/flygym-demo-20260309-122135/demo.mp4`
-  - metrics: `outputs/requested_2s_splice_descending_zero_brain/flygym-demo-20260309-122135/metrics.csv`
+  - video: `outputs/requested_2s_splice_uvgrid_descending_calibrated_zero_brain/flygym-demo-20260311-074301/demo.mp4`
+  - metrics: `outputs/requested_2s_splice_uvgrid_descending_calibrated_zero_brain/flygym-demo-20260311-074301/metrics.csv`
 - summary:
-  - `outputs/metrics/descending_visual_drive_validation.json`
-  - `docs/descending_visual_drive_validation.md`
+  - `outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.json`
+  - `docs/uvgrid_decoder_calibration.md`
 
 ### Public `P9` context experiment mode
 

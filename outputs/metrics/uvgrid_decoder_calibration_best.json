@@ -1,0 +1,26 @@
+{
+  "score": 1.001046102352641,
+  "signal_smoothing_alpha": 0.06,
+  "forward_gain": 1.2,
+  "turn_gain": 0.65,
+  "population_forward_weight": 1.0,
+  "population_turn_weight": 0.75,
+  "forward_asymmetry_turn_gain": 0.3,
+  "steer_bearing_corr": 0.5448456829768005,
+  "steer_sign_match_rate": 0.6793032786885246,
+  "forward_frontal_corr": 0.2836515815675761,
+  "mean_abs_drive_diff": 0.13523283218133111,
+  "mean_total_drive": 0.5295815157037028,
+  "no_target_mean_abs_drive_diff": 0.11668264208252795,
+  "no_target_mean_total_drive": 0.5103466395376522,
+  "delta_abs_drive_diff": 0.018550190098803168,
+  "delta_total_drive": 0.019234876166050574,
+  "base_decoder": {
+    "signal_smoothing_alpha": 0.12,
+    "forward_gain": 1.0,
+    "turn_gain": 0.45,
+    "population_forward_weight": 1.0,
+    "population_turn_weight": 0.75,
+    "forward_asymmetry_turn_gain": 0.0
+  }
+}

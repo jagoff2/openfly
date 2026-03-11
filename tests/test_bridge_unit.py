@@ -8,7 +8,21 @@ from bridge.brain_context import BrainContextConfig, BrainContextInjector
 from bridge.controller import ClosedLoopBridge
 from bridge.decoder import DecoderConfig, MotorDecoder
 from brain.mock_backend import MockWholeBrainBackend
-from brain.public_ids import collapse_sensor_pool_rates
+from brain.public_ids import (
+    DNA01_LEFT,
+    DNA01_RIGHT,
+    DNA02_LEFT,
+    DNA02_RIGHT,
+    MDN_1,
+    MDN_2,
+    MDN_3,
+    MDN_4,
+    P9_LEFT,
+    P9_ODN1_LEFT,
+    P9_ODN1_RIGHT,
+    P9_RIGHT,
+    collapse_sensor_pool_rates,
+)
 from vision.feature_extractor import VisionFeatures
 
 
@@ -235,4 +249,37 @@ def test_decoder_can_use_expanded_relay_readout_groups(tmp_path: Path) -> None:
     assert readout.neuron_rates["population_forward_left_hz"] == 80.0
     assert readout.neuron_rates["population_forward_right_hz"] == 100.0
     assert readout.command.left_drive > 0.0
+    assert readout.command.right_drive > readout.command.left_drive
+
+
+def test_decoder_can_steer_from_forward_asymmetry_without_turn_readout() -> None:
+    decoder = MotorDecoder(
+        DecoderConfig(
+            forward_gain=0.8,
+            turn_gain=0.6,
+            forward_scale_hz=100.0,
+            forward_asymmetry_scale_hz=50.0,
+            forward_asymmetry_turn_gain=0.5,
+            signal_smoothing_alpha=1.0,
+        )
+    )
+    rates = {
+        DNA01_LEFT: 0.0,
+        DNA02_LEFT: 0.0,
+        DNA01_RIGHT: 0.0,
+        DNA02_RIGHT: 0.0,
+        P9_LEFT: 0.0,
+        P9_RIGHT: 120.0,
+        P9_ODN1_LEFT: 0.0,
+        P9_ODN1_RIGHT: 120.0,
+        MDN_1: 0.0,
+        MDN_2: 0.0,
+        MDN_3: 0.0,
+        MDN_4: 0.0,
+    }
+
+    readout = decoder.decode(rates)
+
+    assert readout.neuron_rates["turn_left_hz"] == 0.0
+    assert readout.neuron_rates["turn_right_hz"] == 0.0
     assert readout.command.right_drive > readout.command.left_drive

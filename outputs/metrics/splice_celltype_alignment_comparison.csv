@@ -1,0 +1,4 @@
+variant,mean_voltage_group_corr,mean_voltage_side_corr,left_turn_bias,right_turn_bias,sign_match
+old_best_global_uvgrid,0.876434917715533,0.8467039781241985,-15.0,-5.0,False
+new_celltype_search_best,0.8765130738992976,0.8468029518854727,-50.0,60.0,True
+new_celltype_canonical_probe,0.8636736801226069,0.8271703279848202,-30.0,45.0,True

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -43,6 +44,7 @@ class VisualSpliceConfig:
     spatial_flip_u: bool = False
     spatial_flip_v: bool = False
     spatial_mirror_u_by_side: bool = False
+    spatial_cell_type_transforms_path: str | None = None
     min_roots_per_side: int = 50
     min_roots_per_bin: int = 20
     value_scale: float = 101.94613788960949
@@ -63,6 +65,11 @@ class VisualSpliceConfig:
             spatial_flip_u=bool(mapping.get("spatial_flip_u", False)),
             spatial_flip_v=bool(mapping.get("spatial_flip_v", False)),
             spatial_mirror_u_by_side=bool(mapping.get("spatial_mirror_u_by_side", False)),
+            spatial_cell_type_transforms_path=(
+                None
+                if mapping.get("spatial_cell_type_transforms_path") in (None, "")
+                else str(mapping.get("spatial_cell_type_transforms_path"))
+            ),
             min_roots_per_side=int(mapping.get("min_roots_per_side", 50)),
             min_roots_per_bin=int(mapping.get("min_roots_per_bin", 20)),
             value_scale=float(mapping.get("value_scale", 101.94613788960949)),
@@ -122,6 +129,17 @@ class VisualSpliceInjector:
                 bins[(cell_type, int(bin_index))] = chunk_arr
         return bins
 
+    def _load_cell_type_transforms(self) -> dict[str, dict[str, object]] | None:
+        path = self.config.spatial_cell_type_transforms_path
+        if not path:
+            return None
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        if isinstance(payload, dict) and isinstance(payload.get("cell_types"), dict):
+            payload = payload["cell_types"]
+        if not isinstance(payload, dict):
+            raise ValueError("visual splice cell-type transform payload must be a mapping")
+        return {str(cell_type): dict(values) for cell_type, values in payload.items() if isinstance(values, dict)}
+
     def _initialize(self, observation: BodyObservation) -> None:
         vision_cache = getattr(observation, "realistic_vision_splice_cache", None)
         if vision_cache is None:
@@ -129,6 +147,7 @@ class VisualSpliceInjector:
         annotation_table = load_flywire_annotation_table(Path(self.config.annotation_path))
         overlap_types = find_exact_cell_type_overlap(sorted(set(str(v) for v in vision_cache.node_types.tolist())), annotation_table)
         if self.config.spatial_mode == "uv_grid":
+            cell_type_transforms = self._load_cell_type_transforms()
             overlap_groups = build_spatial_grid_overlap_groups(
                 annotation_table,
                 cell_types=overlap_types,
@@ -138,6 +157,7 @@ class VisualSpliceInjector:
                 flip_u=bool(self.config.spatial_flip_u),
                 flip_v=bool(self.config.spatial_flip_v),
                 mirror_u_by_side=bool(self.config.spatial_mirror_u_by_side),
+                cell_type_transforms=cell_type_transforms,
                 min_roots_per_bin=int(self.config.min_roots_per_bin),
             )
         elif int(self.config.spatial_bins) > 1:
