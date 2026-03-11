@@ -2571,3 +2571,17 @@ Interpretation:
 - The comparison section does not claim the local repo exceeds Eon in every way.
 - It makes the narrower supported point:
   - the later Eon post largely confirms that the unresolved interface between vision, brain, and embodied control is the real bottleneck, and that the current disclosed embodiment remains controller-mediated rather than a fully solved biological motor stack.
+
+## 2026-03-10 - README synced again to the latest whitepaper
+
+1. What I attempted
+- Checked whether the repo-home `README.md` still matched `docs/openfly_whitepaper.md` after the Eon comparison section was added.
+- Found that `README.md` was stale relative to the updated whitepaper.
+- Re-synced the root README so the GitHub landing page reflects the latest whitepaper text.
+
+2. What succeeded
+- `README.md` now matches `docs/openfly_whitepaper.md`, including the Eon comparison section.
+
+3. Honest conclusion
+- This was a presentation-layer sync only.
+- No experimental claims or artifacts changed.
