@@ -1,0 +1,482 @@
+{
+  "motor_target_mode": "leg_subclass",
+  "thoracic_motor_pool_count": 516,
+  "thoracic_motor_pool_region_counts": {
+    "T1": 180,
+    "T2": 181,
+    "T3": 155
+  },
+  "thoracic_motor_pool_class_counts": {
+    "": 16,
+    "ad": 6,
+    "fl": 135,
+    "hl": 130,
+    "hm": 16,
+    "ml": 116,
+    "nm": 24,
+    "wm": 67,
+    "xm": 6
+  },
+  "thoracic_motor_pool_exit_nerve_counts": {
+    "ADMN": 30,
+    "AbN1": 30,
+    "AbN2": 2,
+    "CvN": 4,
+    "DMetaN": 6,
+    "DProN": 32,
+    "MesoAN": 19,
+    "MesoLN": 116,
+    "MetaLN": 122,
+    "PDMNa": 18,
+    "PDMNp": 6,
+    "ProAN": 24,
+    "ProLN": 81,
+    "TBD": 4,
+    "VProN": 22
+  },
+  "motor_target_count": 381,
+  "motor_target_region_counts": {
+    "T1": 135,
+    "T2": 116,
+    "T3": 130
+  },
+  "motor_target_class_counts": {
+    "fl": 135,
+    "hl": 130,
+    "ml": 116
+  },
+  "motor_target_exit_nerve_counts": {
+    "AbN1": 8,
+    "DProN": 8,
+    "MesoLN": 116,
+    "MetaLN": 122,
+    "ProAN": 24,
+    "ProLN": 81,
+    "VProN": 22
+  },
+  "leg_motor_subclasses": [
+    "fl",
+    "ml",
+    "hl"
+  ],
+  "motor_target_exit_nerves": [
+    "ProLN",
+    "MesoLN",
+    "MetaLN"
+  ],
+  "descending_seed_count": 1316,
+  "thoracic_motor_count": 381,
+  "premotor_candidate_count": 3607,
+  "selected_node_count": 5228,
+  "selected_edge_count": 140223,
+  "descending_to_premotor_edge_count": 74864,
+  "descending_to_motor_edge_count": 6613,
+  "premotor_to_motor_edge_count": 58746,
+  "premotor_region_counts": {
+    "T1": 1142,
+    "T2": 1292,
+    "T3": 1173
+  },
+  "top_premotor_candidates": [
+    {
+      "root_id": 800816,
+      "cell_type": "IN21A010",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 2636,
+      "motor_target_count": 38
+    },
+    {
+      "root_id": 904743,
+      "cell_type": "IN21A010",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 2446,
+      "motor_target_count": 29
+    },
+    {
+      "root_id": 800304,
+      "cell_type": "IN19A008",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 2400,
+      "motor_target_count": 23
+    },
+    {
+      "root_id": 801349,
+      "cell_type": "IN20A.22A001",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 2263,
+      "motor_target_count": 26
+    },
+    {
+      "root_id": 800837,
+      "cell_type": "IN19B012",
+      "region": "T2",
+      "cell_class": "BR|premotor_candidate",
+      "total_motor_weight": 2249,
+      "motor_target_count": 29
+    },
+    {
+      "root_id": 800583,
+      "cell_type": "IN19B012",
+      "region": "T2",
+      "cell_class": "BR|premotor_candidate",
+      "total_motor_weight": 2216,
+      "motor_target_count": 27
+    },
+    {
+      "root_id": 902427,
+      "cell_type": "IN19A013",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 2096,
+      "motor_target_count": 28
+    },
+    {
+      "root_id": 902667,
+      "cell_type": "IN16B016",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 2016,
+      "motor_target_count": 46
+    },
+    {
+      "root_id": 800622,
+      "cell_type": "IN19A003",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 2002,
+      "motor_target_count": 16
+    },
+    {
+      "root_id": 801747,
+      "cell_type": "IN19A013",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1993,
+      "motor_target_count": 23
+    },
+    {
+      "root_id": 800687,
+      "cell_type": "IN19A003",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1908,
+      "motor_target_count": 15
+    },
+    {
+      "root_id": 800596,
+      "cell_type": "IN19A003",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1877,
+      "motor_target_count": 25
+    },
+    {
+      "root_id": 801287,
+      "cell_type": "IN20A.22A001",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1873,
+      "motor_target_count": 26
+    },
+    {
+      "root_id": 801032,
+      "cell_type": "IN21A015",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1857,
+      "motor_target_count": 22
+    },
+    {
+      "root_id": 800613,
+      "cell_type": "IN21A001",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1844,
+      "motor_target_count": 18
+    },
+    {
+      "root_id": 800461,
+      "cell_type": "IN19A003",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1836,
+      "motor_target_count": 19
+    },
+    {
+      "root_id": 800147,
+      "cell_type": "IN12A001",
+      "region": "T1",
+      "cell_class": "BI|premotor_candidate",
+      "total_motor_weight": 1798,
+      "motor_target_count": 110
+    },
+    {
+      "root_id": 800236,
+      "cell_type": "IN19A008",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1790,
+      "motor_target_count": 23
+    },
+    {
+      "root_id": 804063,
+      "cell_type": "IN03A010",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1701,
+      "motor_target_count": 22
+    },
+    {
+      "root_id": 800073,
+      "cell_type": "IN12A001",
+      "region": "T1",
+      "cell_class": "BI|premotor_candidate",
+      "total_motor_weight": 1686,
+      "motor_target_count": 110
+    },
+    {
+      "root_id": 801296,
+      "cell_type": "IN16B016",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1648,
+      "motor_target_count": 43
+    },
+    {
+      "root_id": 800194,
+      "cell_type": "IN13A010",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1634,
+      "motor_target_count": 19
+    },
+    {
+      "root_id": 800211,
+      "cell_type": "INXXX464",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1631,
+      "motor_target_count": 29
+    },
+    {
+      "root_id": 800167,
+      "cell_type": "IN21A001",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1624,
+      "motor_target_count": 20
+    },
+    {
+      "root_id": 801787,
+      "cell_type": "IN19A016",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1607,
+      "motor_target_count": 23
+    },
+    {
+      "root_id": 800464,
+      "cell_type": "IN18B006",
+      "region": "T3",
+      "cell_class": "BR|premotor_candidate",
+      "total_motor_weight": 1597,
+      "motor_target_count": 41
+    },
+    {
+      "root_id": 800072,
+      "cell_type": "INXXX464",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1592,
+      "motor_target_count": 30
+    },
+    {
+      "root_id": 801495,
+      "cell_type": "IN21A015",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1570,
+      "motor_target_count": 20
+    },
+    {
+      "root_id": 902504,
+      "cell_type": "IN01A015",
+      "region": "T3",
+      "cell_class": "CR|premotor_candidate",
+      "total_motor_weight": 1565,
+      "motor_target_count": 24
+    },
+    {
+      "root_id": 805439,
+      "cell_type": "IN19A010",
+      "region": "T2",
+      "cell_class": "II|premotor_candidate",
+      "total_motor_weight": 1549,
+      "motor_target_count": 31
+    },
+    {
+      "root_id": 800452,
+      "cell_type": "IN19A016",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1547,
+      "motor_target_count": 29
+    },
+    {
+      "root_id": 800527,
+      "cell_type": "IN19A005",
+      "region": "T1",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1537,
+      "motor_target_count": 30
+    },
+    {
+      "root_id": 801873,
+      "cell_type": "IN19A016",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1506,
+      "motor_target_count": 22
+    },
+    {
+      "root_id": 801804,
+      "cell_type": "IN01A015",
+      "region": "T2",
+      "cell_class": "CR|premotor_candidate",
+      "total_motor_weight": 1496,
+      "motor_target_count": 22
+    },
+    {
+      "root_id": 801106,
+      "cell_type": "IN16B020",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1471,
+      "motor_target_count": 25
+    },
+    {
+      "root_id": 800332,
+      "cell_type": "IN13A010",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1469,
+      "motor_target_count": 21
+    },
+    {
+      "root_id": 800446,
+      "cell_type": "IN13A009",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1456,
+      "motor_target_count": 43
+    },
+    {
+      "root_id": 903903,
+      "cell_type": "IN16B020",
+      "region": "T3",
+      "cell_class": "BR|premotor_candidate",
+      "total_motor_weight": 1443,
+      "motor_target_count": 16
+    },
+    {
+      "root_id": 801526,
+      "cell_type": "IN19A022",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1433,
+      "motor_target_count": 20
+    },
+    {
+      "root_id": 800759,
+      "cell_type": "IN16B018",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1396,
+      "motor_target_count": 27
+    },
+    {
+      "root_id": 800133,
+      "cell_type": "IN17A017",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1391,
+      "motor_target_count": 20
+    },
+    {
+      "root_id": 903665,
+      "cell_type": "IN09A010",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1391,
+      "motor_target_count": 18
+    },
+    {
+      "root_id": 800383,
+      "cell_type": "IN12A001",
+      "region": "T2",
+      "cell_class": "BI|premotor_candidate",
+      "total_motor_weight": 1385,
+      "motor_target_count": 48
+    },
+    {
+      "root_id": 940467,
+      "cell_type": "IN19A016",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1379,
+      "motor_target_count": 21
+    },
+    {
+      "root_id": 800134,
+      "cell_type": "IN03A010",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1375,
+      "motor_target_count": 16
+    },
+    {
+      "root_id": 800347,
+      "cell_type": "IN21A001",
+      "region": "T1",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1354,
+      "motor_target_count": 19
+    },
+    {
+      "root_id": 802009,
+      "cell_type": "IN21A012",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1353,
+      "motor_target_count": 30
+    },
+    {
+      "root_id": 800149,
+      "cell_type": "IN07B006",
+      "region": "T1",
+      "cell_class": "BI|premotor_candidate",
+      "total_motor_weight": 1348,
+      "motor_target_count": 36
+    },
+    {
+      "root_id": 800650,
+      "cell_type": "IN21A001",
+      "region": "T2",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1344,
+      "motor_target_count": 22
+    },
+    {
+      "root_id": 800263,
+      "cell_type": "IN20A.22A001",
+      "region": "T3",
+      "cell_class": "IR|premotor_candidate",
+      "total_motor_weight": 1335,
+      "motor_target_count": 22
+    }
+  ]
+}

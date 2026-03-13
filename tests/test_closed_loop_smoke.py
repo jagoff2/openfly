@@ -6,7 +6,8 @@ from pathlib import Path
 from typing import Any
 
 from body.interfaces import BodyCommand, BodyObservation
-from runtime.closed_loop import load_config, run_closed_loop
+from bridge.decoder import DecoderConfig, MotorDecoder
+from runtime.closed_loop import build_body_runtime, load_config, run_closed_loop
 
 
 def test_closed_loop_smoke_generates_artifacts(tmp_path: Path) -> None:
@@ -77,6 +78,82 @@ def test_closed_loop_smoke_supports_zero_backend(tmp_path: Path) -> None:
 
     assert summary["metrics"]["device"] == "zero"
     assert summary["metrics"]["stable"] == 1.0
+
+
+def test_closed_loop_smoke_logs_hybrid_multidrive_fields(tmp_path: Path) -> None:
+    config = deepcopy(load_config("configs/mock_multidrive.yaml"))
+    summary = run_closed_loop(config, mode="mock", duration_s=0.2, output_root=tmp_path)
+    log_path = Path(summary["log_path"])
+    with log_path.open("r", encoding="utf-8") as handle:
+        first_record = json.loads(handle.readline())
+
+    assert "left_amp" in first_record
+    assert "right_amp" in first_record
+    assert "left_freq_scale" in first_record
+    assert "retraction_gain" in first_record
+    assert "stumbling_gain" in first_record
+
+
+def test_contextual_fitted_basis_config_wires_target_conditioned_groups() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert decoder.config.forward_context_cell_types == ("DNae002", "DNpe016")
+    assert decoder.config.turn_context_cell_types == ("DNpe040", "DNpe056")
+    assert decoder.config.forward_context_mode == "boost"
+    assert decoder.config.forward_context_boost == 0.35
+    assert decoder.config.forward_context_blend == 0.0
+    assert decoder.config.turn_context_mode == "aligned_asymmetry"
+    assert decoder.config.turn_context_boost == 0.35
+    assert decoder.config.latent_turn_priority_outer_amp_gain == 0.4
+    assert decoder.config.latent_turn_priority_inner_amp_gain == 0.2
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/descending_readout_candidates_strict.json"
+    assert "DNae002" in decoder.config.monitor_cell_types
+    assert "DNb01" in decoder.config.monitor_cell_types
+
+
+def test_closed_loop_smoke_logs_vnc_structural_decoder_fields(tmp_path: Path) -> None:
+    config = deepcopy(load_config("configs/mock_vnc_structural_spec_exit_nerve.yaml"))
+    config.setdefault("brain", {})["backend"] = "mock"
+    summary = run_closed_loop(config, mode="mock", duration_s=0.1, output_root=tmp_path)
+    log_path = Path(summary["log_path"])
+    with log_path.open("r", encoding="utf-8") as handle:
+        first_record = json.loads(handle.readline())
+
+    assert "weighted_left_motor_drive_hz" in first_record["motor_readout"]
+    assert "weighted_right_motor_drive_hz" in first_record["motor_readout"]
+    assert first_record["motor_readout"]["vnc_channel_count"] > 0.0
+
+
+def test_closed_loop_smoke_logs_flywire_semantic_vnc_monitor_fields(tmp_path: Path) -> None:
+    config = deepcopy(load_config("configs/mock_vnc_structural_spec_exit_nerve_flywire_semantic.yaml"))
+    config.setdefault("brain", {})["backend"] = "mock"
+    summary = run_closed_loop(config, mode="mock", duration_s=0.1, output_root=tmp_path)
+    log_path = Path(summary["log_path"])
+    with log_path.open("r", encoding="utf-8") as handle:
+        first_record = json.loads(handle.readline())
+
+    assert first_record["motor_readout"]["vnc_channel_count"] > 0.0
+    assert first_record["motor_readout"]["vnc_required_monitor_id_count"] > 600.0
+    assert "normalized_left_motor_rate_hz" in first_record["motor_readout"]
+    assert "normalized_right_motor_rate_hz" in first_record["motor_readout"]
+
+
+def test_build_body_runtime_passes_camera_mode_to_flygym_runtime(tmp_path: Path, monkeypatch) -> None:
+    import body.flygym_runtime as flygym_runtime_module
+
+    captured: dict[str, object] = {}
+
+    class FakeFlyGymRuntime:
+        def __init__(self, **kwargs) -> None:
+            captured.update(kwargs)
+
+    monkeypatch.setattr(flygym_runtime_module, "FlyGymRealisticVisionRuntime", FakeFlyGymRuntime)
+    config = deepcopy(load_config("configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve_flywire_semantic.yaml"))
+    runtime = build_body_runtime("flygym", config, tmp_path)
+
+    assert isinstance(runtime, FakeFlyGymRuntime)
+    assert captured["camera_mode"] == "follow_yaw"
 
 
 def test_closed_loop_smoke_writes_partial_metrics_on_runtime_failure(tmp_path: Path, monkeypatch) -> None:

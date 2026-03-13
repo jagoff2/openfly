@@ -1,0 +1,122 @@
+{
+  "baseline": {
+    "descending_channel_count": 1301,
+    "overlap_count": 30,
+    "overlap_by_cell_type": {
+      "DNa01": 2,
+      "DNa02": 2,
+      "DNg105": 2,
+      "DNg108": 2,
+      "DNg74_a": 2,
+      "DNg74_b": 2,
+      "DNg97": 2,
+      "DNp103": 2,
+      "DNp18": 2,
+      "DNp71": 2,
+      "DNpe016": 2,
+      "DNpe040": 2,
+      "DNpe056": 2,
+      "MDN": 4
+    }
+  },
+  "strict": {
+    "descending_channel_count": 1297,
+    "overlap_count": 30,
+    "overlap_by_cell_type": {
+      "DNa01": 2,
+      "DNa02": 2,
+      "DNg105": 2,
+      "DNg108": 2,
+      "DNg74_a": 2,
+      "DNg74_b": 2,
+      "DNg97": 2,
+      "DNp103": 2,
+      "DNp18": 2,
+      "DNp71": 2,
+      "DNpe016": 2,
+      "DNpe040": 2,
+      "DNpe056": 2,
+      "MDN": 4
+    }
+  },
+  "leg_subclass": {
+    "descending_channel_count": 1240,
+    "overlap_count": 30,
+    "overlap_by_cell_type": {
+      "DNa01": 2,
+      "DNa02": 2,
+      "DNg105": 2,
+      "DNg108": 2,
+      "DNg74_a": 2,
+      "DNg74_b": 2,
+      "DNg97": 2,
+      "DNp103": 2,
+      "DNp18": 2,
+      "DNp71": 2,
+      "DNpe016": 2,
+      "DNpe040": 2,
+      "DNpe056": 2,
+      "MDN": 4
+    }
+  },
+  "leg_subclass_strict": {
+    "descending_channel_count": 1168,
+    "overlap_count": 30,
+    "overlap_by_cell_type": {
+      "DNa01": 2,
+      "DNa02": 2,
+      "DNg105": 2,
+      "DNg108": 2,
+      "DNg74_a": 2,
+      "DNg74_b": 2,
+      "DNg97": 2,
+      "DNp103": 2,
+      "DNp18": 2,
+      "DNp71": 2,
+      "DNpe016": 2,
+      "DNpe040": 2,
+      "DNpe056": 2,
+      "MDN": 4
+    }
+  },
+  "exit_nerve": {
+    "descending_channel_count": 1232,
+    "overlap_count": 30,
+    "overlap_by_cell_type": {
+      "DNa01": 2,
+      "DNa02": 2,
+      "DNg105": 2,
+      "DNg108": 2,
+      "DNg74_a": 2,
+      "DNg74_b": 2,
+      "DNg97": 2,
+      "DNp103": 2,
+      "DNp18": 2,
+      "DNp71": 2,
+      "DNpe016": 2,
+      "DNpe040": 2,
+      "DNpe056": 2,
+      "MDN": 4
+    }
+  },
+  "exit_nerve_strict": {
+    "descending_channel_count": 1131,
+    "overlap_count": 29,
+    "overlap_by_cell_type": {
+      "DNa01": 2,
+      "DNa02": 2,
+      "DNg105": 2,
+      "DNg108": 2,
+      "DNg74_a": 2,
+      "DNg74_b": 2,
+      "DNg97": 2,
+      "DNp103": 2,
+      "DNp18": 2,
+      "DNp71": 2,
+      "DNpe016": 2,
+      "DNpe040": 1,
+      "DNpe056": 2,
+      "MDN": 4
+    }
+  }
+}

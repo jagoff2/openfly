@@ -251,3 +251,45 @@ So the current project understanding is:
   - keep the grounded splice
   - keep the descending-only expanded readout
   - validate it against matched ablations before making a stronger closed-loop claim
+
+## Update After The Neck-Output Atlas Phase
+
+The next phase after the validated grounded splice is now substantially more
+explicit.
+
+What has now been added:
+
+- broad descending/efferent monitoring in embodied runs
+- the first observational neck-output atlas
+- the first causal descending motor-response atlas
+
+Evidence:
+
+- `docs/descending_monitoring_atlas.md`
+- `docs/descending_motor_atlas.md`
+
+What this changes:
+
+- the main remaining uncertainty is no longer "is the visual splice alive?"
+- it is "how should the broader neck-output population be mapped into body
+  control?"
+
+Current strongest causal findings:
+
+- forward candidates:
+  - `DNp103`
+  - `DNp18`
+  - `DNg97`
+- turn candidates:
+  - `DNpe040`
+  - `DNpe056`
+- ambiguous current turn role:
+  - `DNp71`
+
+So the next correct cold-start plan step is no longer another prosthetic
+context mode.
+
+It is:
+
+- derive a fitted neck-output motor basis from the new observational + causal
+  atlas

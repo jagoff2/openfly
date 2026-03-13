@@ -9,7 +9,7 @@ from typing import Any
 
 import numpy as np
 
-from body.interfaces import BodyCommand, BodyObservation, EmbodiedRuntime
+from body.interfaces import BodyObservation, ControlCommand, EmbodiedRuntime
 
 @dataclass
 class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
@@ -24,6 +24,8 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
     camera_fps: int = 24
     force_cpu_vision: bool = False
     vision_payload_mode: str = "legacy"
+    control_mode: str = "legacy_2drive"
+    camera_mode: str = "fixed_birdeye"
 
     def __post_init__(self) -> None:
         self.output_dir = Path(self.output_dir)
@@ -41,16 +43,19 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
             # Hiding GPUs keeps the realistic-vision path on CPU for WSL runs
             # where the available PyTorch wheel does not support the local GPU.
             os.environ["CUDA_VISIBLE_DEVICES"] = ""
-        from flygym import Camera, SingleFlySimulation
+        from flygym import Camera, SingleFlySimulation, YawOnlyCamera
         from flygym.arena import FlatTerrain
         from flygym.examples.vision import MovingFlyArena
         from body.brain_only_realistic_vision_fly import BrainOnlyRealisticVisionFly
+        from body.connectome_turning_fly import ConnectomeTurningFly
         from body.fast_realistic_vision_fly import FastRealisticVisionFly
         self.Camera = Camera
         self.SingleFlySimulation = SingleFlySimulation
+        self.YawOnlyCamera = YawOnlyCamera
         self.FlatTerrain = FlatTerrain
         self.MovingFlyArena = MovingFlyArena
-        self.RealisticVisionFly = BrainOnlyRealisticVisionFly
+        self.LegacyRealisticVisionFly = BrainOnlyRealisticVisionFly
+        self.ConnectomeTurningFly = ConnectomeTurningFly
         self.FastRealisticVisionFly = FastRealisticVisionFly
 
     def _build_simulation(self) -> None:
@@ -70,10 +75,30 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
             radius = max(float(self.leading_fly_radius), 1e-9)
             direction = 1.0 if float(self.target_angular_direction) >= 0.0 else -1.0
             self._target_angular_speed = direction * abs(float(self.leading_fly_speed)) / radius
-        fly_cls = self.FastRealisticVisionFly if self.vision_payload_mode == "fast" else self.RealisticVisionFly
+        if self.control_mode == "hybrid_multidrive":
+            fly_cls = self.FastRealisticVisionFly if self.vision_payload_mode == "fast" else self.ConnectomeTurningFly
+        else:
+            fly_cls = self.FastRealisticVisionFly if self.vision_payload_mode == "fast" else self.LegacyRealisticVisionFly
         self.fly = fly_cls(contact_sensor_placements=contact_sensor_placements, enable_adhesion=True, vision_refresh_rate=500, neck_kp=500, spawn_pos=(0.0, 0.0, 0.3))
-        cam_params = {"mode": "fixed", "pos": (5, 0, 35), "euler": (0, 0, 0), "fovy": 45}
-        self.camera = self.Camera(attachment_point=self.arena.root_element.worldbody, camera_name="birdeye_cam", camera_parameters=cam_params, play_speed=0.2, window_size=(800, 608), fps=self.camera_fps)
+        if self.camera_mode == "follow_yaw":
+            self.camera = self.YawOnlyCamera(
+                attachment_point=self.fly.model.worldbody,
+                camera_name="camera_back_track",
+                targeted_fly_names=self.fly.name,
+                play_speed=0.2,
+                window_size=(800, 608),
+                fps=self.camera_fps,
+            )
+        else:
+            cam_params = {"mode": "fixed", "pos": (5, 0, 35), "euler": (0, 0, 0), "fovy": 45}
+            self.camera = self.Camera(
+                attachment_point=self.arena.root_element.worldbody,
+                camera_name="birdeye_cam",
+                camera_parameters=cam_params,
+                play_speed=0.2,
+                window_size=(800, 608),
+                fps=self.camera_fps,
+            )
         self.sim = self.SingleFlySimulation(fly=self.fly, cameras=[self.camera], arena=self.arena)
         if self.target_fly_enabled and hasattr(self.arena, "freejoint"):
             self.arena.step = types.MethodType(self._controlled_target_step, self.arena)
@@ -145,11 +170,12 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
         self._last_frame = self.sim.render()[0]
         return self._make_observation(obs, info, forward_speed=0.0, yaw_rate=0.0)
 
-    def step(self, command: BodyCommand, num_substeps: int) -> BodyObservation:
+    def step(self, command: ControlCommand, num_substeps: int) -> BodyObservation:
         latest_obs = None
         latest_info = None
+        action = np.asarray(command.to_action(), dtype=float)
         for _ in range(max(1, num_substeps)):
-            latest_obs, _, _, _, latest_info = self.sim.step(action=np.array([command.left_drive, command.right_drive], dtype=float))
+            latest_obs, _, _, _, latest_info = self.sim.step(action=action)
             self._time += self.timestep
             rendered = self.sim.render()[0]
             if rendered is not None:
@@ -165,7 +191,7 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
     def _make_observation(self, obs: dict[str, Any], info: dict[str, Any], forward_speed: float, yaw_rate: float) -> BodyObservation:
         realistic_vision = {}
         nn_activities = info.get("nn_activities") if info else None
-        if nn_activities is not None:
+        if hasattr(nn_activities, "keys"):
             for key in nn_activities.keys():
                 realistic_vision[key] = np.asarray(nn_activities[key])
         realistic_vision_array = obs.get("nn_activities_arr") if obs else None

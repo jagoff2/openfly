@@ -1,0 +1,38 @@
+brain:
+  backend: torch
+  completeness_path: external/fly-brain/data/2025_Completeness_783.csv
+  connectivity_path: external/fly-brain/data/2025_Connectivity_783.parquet
+  cache_dir: outputs/cache
+  device: cpu
+  dt_ms: 0.1
+body:
+  terrain_type: flat
+brain_context:
+  mode: none
+decoder:
+  command_mode: hybrid_multidrive
+  forward_gain: 1.0
+  turn_gain: 0.4
+  signal_smoothing_alpha: 1.0
+  latent_freq_bias: 0.9
+  latent_freq_gain: 0.5
+  latent_turn_amp_gain: 0.25
+  latent_turn_freq_gain: 0.15
+  latent_retraction_base: 1.0
+  latent_stumbling_base: 1.0
+  latent_retraction_turn_gain: 0.25
+  latent_stumbling_turn_gain: 0.35
+  latent_retraction_reverse_gain: 0.3
+  latent_stumbling_reverse_gain: 0.5
+runtime:
+  seed: 0
+  duration_s: 0.4
+  body_timestep_s: 0.01
+  control_interval_s: 0.02
+  initial_left_drive: 0.0
+  initial_right_drive: 0.0
+  force_cpu_vision: true
+  vision_payload_mode: fast
+  control_mode: hybrid_multidrive
+  video_stride: 1
+  video_fps: 24

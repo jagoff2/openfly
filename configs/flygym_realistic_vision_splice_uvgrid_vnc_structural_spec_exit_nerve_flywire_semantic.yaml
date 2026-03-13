@@ -1,0 +1,59 @@
+brain:
+  backend: torch
+  completeness_path: external/fly-brain/data/2025_Completeness_783.csv
+  connectivity_path: external/fly-brain/data/2025_Connectivity_783.parquet
+  cache_dir: outputs/cache
+  device: cpu
+  dt_ms: 0.1
+body:
+  terrain_type: flat
+  leading_fly_speed: 15.0
+  leading_fly_radius: 10.0
+brain_context:
+  mode: none
+visual_splice:
+  enabled: true
+  annotation_path: outputs/cache/flywire_annotation_supplement.tsv
+  spatial_mode: uv_grid
+  spatial_u_bins: 2
+  spatial_v_bins: 2
+  spatial_flip_v: true
+  spatial_mirror_u_by_side: true
+  spatial_cell_type_transforms_path: outputs/metrics/splice_celltype_alignment_recommended.json
+  min_roots_per_bin: 20
+  value_scale: 62.96215524698159
+  max_abs_current: 120.0
+  baseline_update_alpha: 0.0
+decoder:
+  type: vnc_structural_spec
+  spec_json: outputs/metrics/manc_thoracic_structural_spec_exit_nerve_flywire_semantic.json
+  command_mode: hybrid_multidrive
+  min_total_weight: 500.0
+  forward_scale_hz: 20.0
+  turn_scale_hz: 10.0
+  forward_gain: 0.75
+  turn_gain: 0.3
+  latent_freq_bias: 0.8
+  latent_freq_gain: 0.45
+  latent_turn_amp_gain: 0.15
+  latent_turn_freq_gain: 0.08
+  latent_retraction_base: 1.0
+  latent_stumbling_base: 1.0
+  latent_retraction_turn_gain: 0.2
+  latent_stumbling_turn_gain: 0.3
+  monitor_top_channels: 12
+  monitor_reduce: mean
+  weight_normalization_mode: by_side_total
+runtime:
+  seed: 0
+  duration_s: 0.2
+  body_timestep_s: 0.0001
+  control_interval_s: 0.002
+  initial_left_drive: 0.0
+  initial_right_drive: 0.0
+  force_cpu_vision: true
+  vision_payload_mode: fast
+  control_mode: hybrid_multidrive
+  camera_mode: follow_yaw
+  video_stride: 5
+  video_fps: 24

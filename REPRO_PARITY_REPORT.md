@@ -93,6 +93,31 @@ Evidence source for run-level metrics: `outputs/metrics/parity_runs.csv`
   - `outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.json`
   - `docs/uvgrid_decoder_calibration.md`
 
+### Frozen failed branch: semantic-VNC `exit_nerve` decoder
+
+- config:
+  - `configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve_flywire_semantic.yaml`
+- branch verdict:
+  - `fail`
+- decisive evidence:
+  - semantic bridge achieved full monitor alignment:
+    - `outputs/metrics/t112_decoder_id_alignment_comparison.json`
+    - bridged semantic decoder requested `685` IDs and matched `685`
+  - first short real bridged run was no longer silent, but saturated immediately:
+    - `outputs/metrics/t112_exit_nerve_flywire_semantic_summary.json`
+    - `max_left_drive = 1.2`
+    - `max_right_drive = 1.2`
+    - `max_forward_signal = 1.0`
+    - `max_turn_signal = 1.0`
+  - later decoder normalization and follow-camera fixes removed saturation and off-screen framing:
+    - `outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_target_0p1s.csv`
+    - `outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_follow_yaw_target_2s.csv`
+    - `outputs/requested_2s_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_follow_yaw_target/flygym-demo-20260312-184650/demo.mp4`
+  - even after those fixes, the branch still does not show credible target pursuit and is therefore not a parity candidate
+- frozen artifact manifest:
+  - `docs/semantic_vnc_failed_parity_branch.md`
+  - `outputs/locks/semantic_vnc_failed_parity_branch_manifest.md`
+
 ### Public `P9` context experiment mode
 
 - config: `configs/flygym_realistic_vision_public_p9_context.yaml`
@@ -207,6 +232,11 @@ Evidence source for run-level metrics: `outputs/metrics/parity_runs.csv`
   - the visual splice is still an inferred overlap splice, not a proven final endogenous interface
   - the motor decoder still compresses descending/efferent activity into `left_drive` / `right_drive`
   - the short isolated left/right target conditions are still mixed rather than a clean mirrored pursuit reflex
+- The semantic-VNC `exit_nerve_flywire_semantic` branch is now frozen as a failed parity branch:
+  - the semantic ID-space bridge works
+  - the corrected decoder no longer saturates immediately
+  - the corrected demo stays on screen
+  - but the branch still does not track the target and is not the parity reference path
 - The strict default path remains useful as a falsification diagnostic, but it is no longer the repo's strongest embodied result and should not be treated as the main parity reference.
 
 ## Final Verdict

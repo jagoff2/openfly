@@ -14,7 +14,7 @@ from body.interfaces import BodyCommand
 from body.mock_body import MockEmbodiedRuntime
 from bridge.brain_context import BrainContextConfig, BrainContextInjector
 from bridge.controller import ClosedLoopBridge
-from bridge.decoder import DecoderConfig, MotorDecoder
+from bridge.decoder_factory import build_motor_decoder
 from bridge.encoder import EncoderConfig, SensoryEncoder
 from bridge.visual_splice import VisualSpliceConfig, VisualSpliceInjector
 from brain.mock_backend import MockWholeBrainBackend
@@ -49,6 +49,8 @@ def build_body_runtime(mode: str, config: dict, run_dir: Path):
         camera_fps=int(config["runtime"].get("video_fps", 24)),
         force_cpu_vision=bool(config["runtime"].get("force_cpu_vision", False)),
         vision_payload_mode=str(vision_payload_mode),
+        control_mode=str(config["runtime"].get("control_mode", "legacy_2drive")),
+        camera_mode=str(config["runtime"].get("camera_mode", "fixed_birdeye")),
     )
 
 
@@ -66,11 +68,10 @@ def build_brain_backend(mode: str, config: dict):
 def build_bridge(config: dict, brain_backend) -> ClosedLoopBridge:
     brain_context_cfg = BrainContextConfig.from_mapping(config.get("brain_context"))
     encoder_cfg = EncoderConfig.from_mapping(config.get("encoder"))
-    decoder_cfg = DecoderConfig.from_mapping(config.get("decoder"))
     inferred_visual_cfg = config.get("inferred_visual") or {}
     visual_splice_cfg = VisualSpliceConfig.from_mapping(config.get("visual_splice"))
     vision_extractor = None
-    decoder = MotorDecoder(decoder_cfg)
+    decoder = build_motor_decoder(config.get("decoder"))
     if hasattr(brain_backend, "set_monitored_ids") and hasattr(decoder, "required_neuron_ids"):
         brain_backend.set_monitored_ids(decoder.required_neuron_ids())
     if bool(inferred_visual_cfg.get("enabled", False)):
@@ -89,6 +90,14 @@ def build_bridge(config: dict, brain_backend) -> ClosedLoopBridge:
         brain_context_injector=BrainContextInjector(brain_context_cfg),
         visual_splice_injector=VisualSpliceInjector(visual_splice_cfg),
     )
+
+
+def _legacy_drive_summary(command) -> tuple[float, float]:
+    if hasattr(command, "as_legacy_command"):
+        legacy_command = command.as_legacy_command()
+        return float(legacy_command.left_drive), float(legacy_command.right_drive)
+    log_dict = command.to_log_dict() if hasattr(command, "to_log_dict") else {}
+    return float(log_dict.get("left_drive", 0.0)), float(log_dict.get("right_drive", 0.0))
 
 
 def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, output_root: str | Path = "outputs") -> dict:
@@ -125,8 +134,9 @@ def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, ou
             if frame is not None and cycle % int(runtime_cfg.get("video_stride", 1)) == 0:
                 frames.append(frame)
             trajectory.append(np.array(observation.position_xy))
-            left_hist.append(command.left_drive)
-            right_hist.append(command.right_drive)
+            left_drive, right_drive = _legacy_drive_summary(command)
+            left_hist.append(left_drive)
+            right_hist.append(right_drive)
             logger.write(
                 {
                     "cycle": cycle,
@@ -135,8 +145,7 @@ def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, ou
                     "position_y": observation.position_xy[1],
                     "yaw": observation.yaw,
                     "bridge_wall_seconds": bridge_wall,
-                    "left_drive": command.left_drive,
-                    "right_drive": command.right_drive,
+                    **command.to_log_dict(),
                     "forward_speed": observation.forward_speed,
                     "yaw_rate": observation.yaw_rate,
                     "public_input_rates": collapse_sensor_pool_rates(bridge_info["sensor_pool_rates"]),

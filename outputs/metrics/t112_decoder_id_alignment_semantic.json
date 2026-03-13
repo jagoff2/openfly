@@ -1,0 +1,26 @@
+{
+  "flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve_flywire_semantic": {
+    "config": "configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve_flywire_semantic.yaml",
+    "decoder_type": "vnc_structural_spec",
+    "requested_id_count": 685,
+    "matched_id_count": 685,
+    "unmatched_id_count": 0,
+    "matched_fraction": 1.0,
+    "matched_id_samples": [
+      720575940603874784,
+      720575940604470956,
+      720575940604737708,
+      720575940604783136,
+      720575940604930481,
+      720575940604954289,
+      720575940605009097,
+      720575940605162924,
+      720575940605513649,
+      720575940605714878,
+      720575940605725873,
+      720575940605950496
+    ],
+    "unmatched_id_samples": [],
+    "completeness_path": "external/fly-brain/data/2025_Completeness_783.csv"
+  }
+}

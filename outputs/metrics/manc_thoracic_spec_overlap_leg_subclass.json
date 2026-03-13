@@ -1,0 +1,279 @@
+{
+  "variant": "leg_subclass",
+  "shortlist": [
+    "DNg97",
+    "DNp103",
+    "DNp18",
+    "DNp71",
+    "DNpe040",
+    "DNpe056",
+    "DNpe016",
+    "DNa01",
+    "DNa02",
+    "MDN",
+    "DNg74_a",
+    "DNg74_b",
+    "DNg105",
+    "DNg108"
+  ],
+  "descending_channel_count": 1240,
+  "overlap_count": 30,
+  "overlap_by_cell_type": {
+    "DNa01": 2,
+    "DNa02": 2,
+    "DNg105": 2,
+    "DNg108": 2,
+    "DNg74_a": 2,
+    "DNg74_b": 2,
+    "DNg97": 2,
+    "DNp103": 2,
+    "DNp18": 2,
+    "DNp71": 2,
+    "DNpe016": 2,
+    "DNpe040": 2,
+    "DNpe056": 2,
+    "MDN": 4
+  },
+  "overlap": [
+    {
+      "root_id": 10131,
+      "cell_type": "DNg74_a",
+      "side": "right",
+      "region": "MX",
+      "total_motor_weight": 58844,
+      "motor_target_count": 363
+    },
+    {
+      "root_id": 10247,
+      "cell_type": "DNg74_a",
+      "side": "left",
+      "region": "MX",
+      "total_motor_weight": 56488,
+      "motor_target_count": 369
+    },
+    {
+      "root_id": 10281,
+      "cell_type": "DNg108",
+      "side": "right",
+      "region": "GNG",
+      "total_motor_weight": 49705,
+      "motor_target_count": 355
+    },
+    {
+      "root_id": 10274,
+      "cell_type": "DNg108",
+      "side": "left",
+      "region": "GNG",
+      "total_motor_weight": 40852,
+      "motor_target_count": 358
+    },
+    {
+      "root_id": 525454,
+      "cell_type": "DNg74_b",
+      "side": "right",
+      "region": "MX",
+      "total_motor_weight": 32934,
+      "motor_target_count": 350
+    },
+    {
+      "root_id": 13130,
+      "cell_type": "DNg105",
+      "side": "right",
+      "region": "MX",
+      "total_motor_weight": 30601,
+      "motor_target_count": 352
+    },
+    {
+      "root_id": 10520,
+      "cell_type": "DNg74_b",
+      "side": "left",
+      "region": "MX",
+      "total_motor_weight": 28875,
+      "motor_target_count": 344
+    },
+    {
+      "root_id": 10124,
+      "cell_type": "DNg105",
+      "side": "left",
+      "region": "MX",
+      "total_motor_weight": 26469,
+      "motor_target_count": 340
+    },
+    {
+      "root_id": 230783,
+      "cell_type": "DNg97",
+      "side": "right",
+      "region": "MX",
+      "total_motor_weight": 24406,
+      "motor_target_count": 357
+    },
+    {
+      "root_id": 10760,
+      "cell_type": "DNa01",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 23924,
+      "motor_target_count": 342
+    },
+    {
+      "root_id": 10442,
+      "cell_type": "DNa01",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 23811,
+      "motor_target_count": 328
+    },
+    {
+      "root_id": 13805,
+      "cell_type": "DNg97",
+      "side": "left",
+      "region": "MX",
+      "total_motor_weight": 21036,
+      "motor_target_count": 349
+    },
+    {
+      "root_id": 10048,
+      "cell_type": "DNp18",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 20659,
+      "motor_target_count": 355
+    },
+    {
+      "root_id": 523769,
+      "cell_type": "DNa02",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 18933,
+      "motor_target_count": 306
+    },
+    {
+      "root_id": 10026,
+      "cell_type": "DNp18",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 17148,
+      "motor_target_count": 352
+    },
+    {
+      "root_id": 10360,
+      "cell_type": "DNa02",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 15941,
+      "motor_target_count": 298
+    },
+    {
+      "root_id": 11332,
+      "cell_type": "MDN",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 8222,
+      "motor_target_count": 295
+    },
+    {
+      "root_id": 11288,
+      "cell_type": "MDN",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 7998,
+      "motor_target_count": 283
+    },
+    {
+      "root_id": 12348,
+      "cell_type": "MDN",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 7685,
+      "motor_target_count": 284
+    },
+    {
+      "root_id": 10763,
+      "cell_type": "MDN",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 6812,
+      "motor_target_count": 297
+    },
+    {
+      "root_id": 519771,
+      "cell_type": "DNp71",
+      "side": "left",
+      "region": "PC",
+      "total_motor_weight": 6634,
+      "motor_target_count": 331
+    },
+    {
+      "root_id": 10223,
+      "cell_type": "DNpe056",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 5900,
+      "motor_target_count": 280
+    },
+    {
+      "root_id": 10732,
+      "cell_type": "DNpe056",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 5607,
+      "motor_target_count": 276
+    },
+    {
+      "root_id": 10417,
+      "cell_type": "DNp103",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 5593,
+      "motor_target_count": 317
+    },
+    {
+      "root_id": 10283,
+      "cell_type": "DNp103",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 5518,
+      "motor_target_count": 322
+    },
+    {
+      "root_id": 11159,
+      "cell_type": "DNp71",
+      "side": "right",
+      "region": "PC",
+      "total_motor_weight": 5508,
+      "motor_target_count": 327
+    },
+    {
+      "root_id": 802893,
+      "cell_type": "DNpe016",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 4612,
+      "motor_target_count": 254
+    },
+    {
+      "root_id": 520485,
+      "cell_type": "DNpe016",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 4350,
+      "motor_target_count": 289
+    },
+    {
+      "root_id": 14885,
+      "cell_type": "DNpe040",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 441,
+      "motor_target_count": 130
+    },
+    {
+      "root_id": 14328,
+      "cell_type": "DNpe040",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 171,
+      "motor_target_count": 80
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "baseline_json": "outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.json",
+  "multidrive_json": "outputs/metrics/descending_uvgrid_multidrive_visual_drive_validation.json",
+  "rows": [
+    {
+      "run": "target",
+      "metric": "avg_forward_speed",
+      "baseline_value": 4.924057440740504,
+      "multidrive_value": 4.415297537302404,
+      "delta": -0.5087599034380998
+    },
+    {
+      "run": "target",
+      "metric": "net_displacement",
+      "baseline_value": 5.758268822981613,
+      "multidrive_value": 5.546298802012086,
+      "delta": -0.21197002096952655
+    },
+    {
+      "run": "target",
+      "metric": "displacement_efficiency",
+      "baseline_value": 0.5852930154862924,
+      "multidrive_value": 0.6287062882807148,
+      "delta": 0.04341327279442242
+    },
+    {
+      "run": "target",
+      "metric": "mean_total_drive",
+      "baseline_value": 0.495721255471884,
+      "multidrive_value": 0.4707870808763767,
+      "delta": -0.024934174595507286
+    },
+    {
+      "run": "target",
+      "metric": "mean_abs_drive_diff",
+      "baseline_value": 0.23135474418690488,
+      "multidrive_value": 0.22459890649705896,
+      "delta": -0.006755837689845917
+    },
+    {
+      "run": "target",
+      "metric": "corr_drive_diff_vs_target_bearing",
+      "baseline_value": 0.8809889705757767,
+      "multidrive_value": 0.848057435148708,
+      "delta": -0.032931535427068725
+    },
+    {
+      "run": "target",
+      "metric": "steer_sign_match_rate",
+      "baseline_value": 0.8877551020408163,
+      "multidrive_value": 0.9031281533804238,
+      "delta": 0.015373051339607535
+    },
+    {
+      "run": "target",
+      "metric": "corr_total_drive_vs_target_frontalness",
+      "baseline_value": 0.46342475397781535,
+      "multidrive_value": 0.5212442764784544,
+      "delta": 0.05781952250063904
+    },
+    {
+      "run": "no_target",
+      "metric": "avg_forward_speed",
+      "baseline_value": 3.907028380353221,
+      "multidrive_value": 4.650604531957434,
+      "delta": 0.7435761516042132
+    },
+    {
+      "run": "no_target",
+      "metric": "net_displacement",
+      "baseline_value": 5.29025073410087,
+      "multidrive_value": 6.751026944282977,
+      "delta": 1.4607762101821065
+    },
+    {
+      "run": "no_target",
+      "metric": "displacement_efficiency",
+      "baseline_value": 0.6776948827669508,
+      "multidrive_value": 0.7265490628771702,
+      "delta": 0.04885418011021947
+    },
+    {
+      "run": "no_target",
+      "metric": "mean_total_drive",
+      "baseline_value": 0.4424820589556034,
+      "multidrive_value": 0.5247491414222913,
+      "delta": 0.08226708246668796
+    },
+    {
+      "run": "no_target",
+      "metric": "mean_abs_drive_diff",
+      "baseline_value": 0.10450359625365861,
+      "multidrive_value": 0.10165815759672568,
+      "delta": -0.0028454386569329304
+    },
+    {
+      "run": "zero_brain",
+      "metric": "avg_forward_speed",
+      "baseline_value": 0.18465096971869335,
+      "multidrive_value": 0.5930665447865197,
+      "delta": 0.40841557506782633
+    },
+    {
+      "run": "zero_brain",
+      "metric": "net_displacement",
+      "baseline_value": 0.011823383234191902,
+      "multidrive_value": 0.016680726595983866,
+      "delta": 0.0048573433617919645
+    },
+    {
+      "run": "zero_brain",
+      "metric": "displacement_efficiency",
+      "baseline_value": 0.0320475393946615,
+      "multidrive_value": 0.01407719265804673,
+      "delta": -0.017970346736614767
+    },
+    {
+      "run": "zero_brain",
+      "metric": "mean_total_drive",
+      "baseline_value": 0.0,
+      "multidrive_value": 0.0,
+      "delta": 0.0
+    },
+    {
+      "run": "zero_brain",
+      "metric": "mean_abs_drive_diff",
+      "baseline_value": 0.0,
+      "multidrive_value": 0.0,
+      "delta": 0.0
+    }
+  ]
+}

@@ -181,7 +181,7 @@ Ground truth source: `AGENTS.MD`
   - `brian2cuda==1.0a7` conflicted with `brian2==2.5.1`
   - newer `setuptools` in the env did not expose `pkg_resources`
   - the checked-out `external/fly-brain` Brian2 code needed a local patch for the current `CPPStandaloneDevice.run(...)` signature
-- I have not yet completed the “longest stable” real FlyGym parity run or updated the final parity report / README with these new measurements.
+- I have not yet completed the â€œlongest stableâ€ real FlyGym parity run or updated the final parity report / README with these new measurements.
 
 4. Evidence paths
 - `scripts/bootstrap_wsl.sh`
@@ -2879,7 +2879,7 @@ Interpretation:
   - target-bearing correlation dropped from about `0.7228` to about `0.4590`
 - Ran an offline replay sweep over decoder-only parameters using the saved UV-grid target and no-target logs.
 - The first promising decoder candidate from that replay uses:
-  - lower smoothing (`alpha ≈ 0.06`)
+  - lower smoothing (`alpha â‰ˆ 0.06`)
   - stronger output gains
   - nonzero `forward_asymmetry_turn_gain`
 
@@ -2982,3 +2982,1833 @@ Target-run gains versus the old axis1d branch:
 
 5. Result
 - The GitHub repo now reflects the calibrated UV-grid branch as the current strongest embodied result.
+
+## 2026-03-11 - T086 started on the motor-interface bottleneck
+
+1. What I attempted
+- Reopened the current strongest calibrated UV-grid branch specifically at the output side.
+- Reviewed:
+  - `src/bridge/decoder.py`
+  - `src/body/interfaces.py`
+  - `src/body/flygym_runtime.py`
+  - `src/body/brain_only_realistic_vision_fly.py`
+  - `docs/near_term_multidrive_plan.md`
+- Compared the current body interface against the original FlyGym `HybridTurningFly` controller semantics.
+
+2. What succeeded
+- Confirmed that the current strongest branch is still compressing all descending activity into only:
+  - `left_drive`
+  - `right_drive`
+- Confirmed that this remains the largest structural mismatch to fuller embodiment:
+  - the controller underneath already has richer internal state
+  - but the repo still addresses it through a two-scalar throttle-like interface
+- Confirmed that the most plausible near-term fix is still the one already outlined in:
+  - `docs/near_term_multidrive_plan.md`
+  - namely a hybrid motor-latent interface that modulates:
+    - left/right CPG amplitude
+    - left/right CPG frequency
+    - correction-rule gains
+    - reverse gating
+
+3. What failed
+- No new embodied claim is made in this checkpoint.
+- This entry is only the start of the motor-interface expansion.
+
+4. Evidence paths
+- `docs/near_term_multidrive_plan.md`
+- `src/bridge/decoder.py`
+- `src/body/interfaces.py`
+- `src/body/flygym_runtime.py`
+- `src/body/brain_only_realistic_vision_fly.py`
+
+5. Next actions
+- Implement a richer command dataclass and a FlyGym-side controller that accepts motor latents rather than only two descending drives.
+- Keep the visual splice fixed.
+- Revalidate against matched `target`, `no_target`, and `zero_brain` controls.
+
+## 2026-03-11 - T086 and T087 completed with the first hybrid motor-latent branch
+
+1. What I attempted
+- Implemented a richer controller-facing motor interface instead of the current two-drive bottleneck.
+- Added matched embodied `target`, `no_target`, and `zero_brain` runs for the new branch.
+- Compared the new branch directly against the current calibrated two-drive UV-grid baseline.
+
+2. What succeeded
+- Added:
+  - `src/body/connectome_turning_fly.py`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_no_target.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_zero_brain.yaml`
+  - `configs/mock_multidrive.yaml`
+  - `docs/multidrive_decoder_validation.md`
+- Updated:
+  - `src/body/interfaces.py`
+  - `src/bridge/decoder.py`
+  - `src/body/flygym_runtime.py`
+  - `src/body/fast_realistic_vision_fly.py`
+  - `src/runtime/closed_loop.py`
+  - `tests/test_bridge_unit.py`
+  - `tests/test_closed_loop_smoke.py`
+- Local validation passed:
+  - `python -m pytest tests/test_bridge_unit.py tests/test_closed_loop_smoke.py tests/test_realistic_vision_path.py -q`
+  - result: `22 passed`
+- Real embodied artifacts now exist for the new branch:
+  - target:
+    - `outputs/requested_2s_splice_uvgrid_multidrive_target/flygym-demo-20260311-115625/demo.mp4`
+  - no target:
+    - `outputs/requested_2s_splice_uvgrid_multidrive_no_target/flygym-demo-20260311-121158/demo.mp4`
+  - zero brain:
+    - `outputs/requested_2s_splice_uvgrid_multidrive_zero_brain/flygym-demo-20260311-122402/demo.mp4`
+- Summary artifacts:
+  - `outputs/metrics/descending_uvgrid_multidrive_visual_drive_validation.json`
+  - `outputs/metrics/descending_uvgrid_multidrive_comparison.json`
+
+3. Key result
+- The hybrid motor-latent branch is real and brain-driven:
+  - `zero_brain nonzero_command_cycles = 0`
+  - `zero_brain net_displacement = 0.016680726595983866`
+- But the first calibration does not beat the current calibrated two-drive UV-grid branch overall.
+
+Target-run comparison versus the current best two-drive branch:
+- `avg_forward_speed`: `4.9241 -> 4.4153`
+- `net_displacement`: `5.7583 -> 5.5463`
+- `corr_drive_diff_vs_target_bearing`: `0.8810 -> 0.8481`
+- `steer_sign_match_rate`: `0.8878 -> 0.9031`
+
+So the new branch slightly improves steering sign match, but regresses on the broader target-run metrics.
+
+4. Main failure mode
+- The first motor-latent calibration strengthens no-target locomotion too much:
+  - calibrated two-drive no-target `avg_forward_speed = 3.9070`
+  - hybrid motor-latent no-target `avg_forward_speed = 4.6506`
+- That means the richer controller is currently amplifying generic visually driven locomotion more than target-conditioned pursuit.
+
+5. Honest conclusion
+- The new branch is more plausible at the controller interface:
+  - it modulates CPG amplitude
+  - CPG frequency
+  - correction gains
+  - reverse gating
+- But it is not yet the strongest embodied branch.
+- The current production reference therefore stays:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml`
+- The new hybrid motor-latent branch stays experimental until it is calibrated to improve target-vs-no-target modulation.
+
+6. Next actions
+- Calibrate the hybrid motor-latent branch specifically for:
+  - stronger target-vs-no-target modulation
+  - lower generic no-target drive
+  - preserved or improved target-bearing steering correlation
+
+## 2026-03-11 - Follow-up artifact review refined the multidrive interpretation
+
+1. What I rechecked
+- Re-read the matched multidrive target and no-target logs after visual review of the videos:
+  - `outputs/requested_2s_splice_uvgrid_multidrive_target/flygym-demo-20260311-115625/run.jsonl`
+  - `outputs/requested_2s_splice_uvgrid_multidrive_no_target/flygym-demo-20260311-121158/run.jsonl`
+- Compared target-conditioned phases against no-target phases rather than relying only on whole-run averages.
+
+2. What I found
+- The user's qualitative read is supported by the logs.
+- In the target run, when the target is frontal:
+  - mean total drive is higher
+  - mean forward speed is much higher
+- When the target moves peripheral:
+  - mean total drive drops
+  - steering asymmetry rises
+  - forward speed falls
+- Concrete target-run conditioned numbers:
+  - `abs(target_bearing) < 0.5`:
+    - mean total drive `0.6257`
+    - mean abs drive diff `0.1366`
+    - mean forward speed `6.4098`
+  - `abs(target_bearing) >= 0.5`:
+    - mean total drive `0.4216`
+    - mean abs drive diff `0.2526`
+    - mean forward speed `3.7776`
+- The target run also approaches the target before losing it:
+  - start distance `9.99`
+  - minimum distance `6.31`
+  - end distance `11.50`
+
+3. Revised interpretation
+- The multidrive branch is likely doing something more specific than the previous aggregate metrics suggested:
+  - approach when the target is frontal
+  - then suppress forward progression and attempt to reorient when the target goes peripheral
+- The likely remaining failure is not "no pursuit-like behavior".
+- It is more specifically:
+  - insufficient turn authority
+  - or ineffective turn execution in the current controller/body mapping
+
+4. Consequence for next work
+- `T089` should now focus on:
+  - stronger turn execution
+  - less ineffective stop-turn behavior
+  - preserving the approach phase
+- Not on abandoning the multidrive path.
+
+## 2026-03-11 - T090 documented the neck-output mapping strategy and reset the next phase
+
+1. What I recorded
+- Added a new explicit strategy document:
+  - `docs/neck_output_mapping_strategy.md`
+- Updated:
+  - `TASKS.md`
+  - `PROGRESS_LOG.md`
+
+2. What that document preserves
+- The current strongest branch is still the calibrated UV-grid two-drive branch.
+- The first hybrid motor-latent branch is more plausible but not yet stronger overall.
+- The main remaining bottleneck is now the *output semantics*:
+  - broad descending / neck outputs
+  - into controller/body action
+- The correct near-term target is now an explicit **neck-output motor basis**.
+
+3. What the doc makes explicit
+- We should stop hand-authoring more and more tiny output subsets.
+- We should first monitor a broad public descending/efferent population during embodied runs.
+- Then build:
+  - an observational atlas
+  - a causal motor-response atlas
+  - a fitted motor basis
+- Only after that should we revisit calibrated body feedback into the brain.
+
+4. Why this matters
+- Conversation compaction is expected.
+- This repo now has an explicit record that the next phase is not:
+  - "just tune turn gain"
+- It is:
+  - "derive a broader, data-driven neck-output mapping layer"
+
+5. Next actions
+- `T091`: add monitoring-only support for a broad descending/efferent population
+- `T092`: summarize the first observational neck-output atlas
+- `T093`: build the first causal descending motor-response atlas
+
+## 2026-03-11 - T091 and T092 completed: broad descending monitoring and first observational atlas
+
+1. What I added
+- Monitoring-only support for a broad descending/efferent population in the
+  current strongest embodied branch:
+  - `src/bridge/decoder.py`
+- New monitored configs:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_monitored.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_monitored_no_target.yaml`
+- New summarizer:
+  - `scripts/summarize_descending_monitoring.py`
+- New docs:
+  - `docs/descending_monitoring_atlas.md`
+
+2. Validation
+- Ran:
+  - `python -m pytest tests/test_bridge_unit.py tests/test_closed_loop_smoke.py -q`
+  - `python -m py_compile src/bridge/decoder.py scripts/summarize_descending_monitoring.py`
+- Result:
+  - `18 passed`
+
+3. Embodied monitored runs
+- Target + monitored:
+  - `outputs/requested_2s_splice_uvgrid_calibrated_monitored_target/flygym-demo-20260311-134126/run.jsonl`
+- No target + monitored:
+  - `outputs/requested_2s_splice_uvgrid_calibrated_monitored_no_target/flygym-demo-20260311-135635/run.jsonl`
+
+4. Atlas outputs
+- `outputs/metrics/descending_monitor_neck_output_atlas.csv`
+- `outputs/metrics/descending_monitor_neck_output_atlas.json`
+
+5. Main findings
+- The current branch uses a distributed descending code, not one "pursuit neuron".
+- Strongest current forward/frontal candidates:
+  - `DNg97`
+  - `DNp103`
+  - `DNp18`
+- Strongest current turn-sensitive candidates:
+  - `DNp71`
+  - `DNpe040`
+  - `DNpe056`
+- Strongest current target-conditioned weak-gate candidates:
+  - `DNpe016`
+  - `DNae002`
+
+6. Consequence
+- `T091` and `T092` are complete.
+- The next correct step became `T093`: direct causal perturbation of those
+  descending groups in the embodied stack.
+
+## 2026-03-11 - T093 completed, then recovered after a local power outage
+
+1. What happened
+- I built and validated the first causal descending motor-response atlas tooling:
+  - `scripts/run_descending_motor_atlas.py`
+  - `tests/test_descending_motor_atlas.py`
+- I ran a local mock smoke atlas.
+- I then ran the real WSL embodied atlas and generated the first summary
+  artifacts.
+- After that, the local PC suffered a power outage and crashed.
+- On recovery, I checked the repo state, verified that the atlas artifacts were
+  still present on disk, and resumed from those surviving outputs instead of
+  rerunning blindly.
+
+2. Recovery evidence
+- Surviving raw atlas:
+  - `outputs/metrics/descending_motor_atlas.json`
+  - `outputs/metrics/descending_motor_atlas.csv`
+- Surviving summary:
+  - `outputs/metrics/descending_motor_atlas_summary.json`
+  - `outputs/metrics/descending_motor_atlas_summary.csv`
+
+3. What I changed after recovery
+- Expanded the atlas script so it now includes:
+  - a true no-stimulation baseline row
+  - the target-conditioned observational candidates:
+    - `DNpe016`
+    - `DNae002`
+    - `DNpe031`
+- Added:
+  - `scripts/summarize_descending_motor_atlas.py`
+  - `docs/descending_motor_atlas.md`
+- Updated:
+  - `docs/neck_output_mapping_strategy.md`
+  - `docs/descending_monitoring_atlas.md`
+  - `docs/visual_splice_strategy.md`
+  - `docs/cold_start_visual_brain_plan.md`
+
+4. Validation
+- Ran:
+  - `python -m pytest tests/test_descending_motor_atlas.py tests/test_bridge_unit.py -q`
+  - `python -m py_compile scripts/run_descending_motor_atlas.py scripts/summarize_descending_motor_atlas.py`
+- Result:
+  - `12 passed`
+
+5. Main causal findings
+- Baseline is not zero-motion:
+  - over `0.1 s`, the body still passively settles with
+    - `net_displacement = 0.0482`
+    - `avg_forward_speed = 1.8788`
+    - `mean_total_drive = 0.0`
+- Strongest bilateral forward drivers above baseline:
+  - `DNp103`
+    - `delta_net_displacement_vs_baseline = +0.2971`
+    - `delta_avg_forward_speed_vs_baseline = +3.9664`
+  - `DNp18`
+    - `+0.2844`
+    - `+3.7944`
+  - `DNg97`
+    - `+0.2820`
+    - `+3.7865`
+- Strongest mirrored turn driver:
+  - `DNpe040`
+    - left `delta_end_yaw_vs_baseline = -0.0254`
+    - right `delta_end_yaw_vs_baseline = +0.0122`
+- Secondary mirrored turn candidate:
+  - `DNpe056`
+    - left `-0.0099`
+    - right `+0.0033`
+- Ambiguous current role:
+  - `DNp71`
+    - large asymmetry, but left and right perturbations do not mirror in the
+      current end-yaw metric
+- No useful effect in the present stack:
+  - `DNpe031`
+  - `DNae002`
+- Weak bilateral gate-like effect:
+  - `DNpe016`
+
+6. Consequence
+- `T093` is now complete.
+- The next active task is now clearly `T094`:
+  - fit a neck-output motor basis from the observational + causal atlas
+  - then replace the current hand-authored multidrive mapping with that fitted
+    basis
+
+## 2026-03-11 - T094 started: first fitted neck-output motor basis and real pilot
+
+1. What I added
+- Basis fitter:
+  - `scripts/fit_neck_output_motor_basis.py`
+- Generated basis:
+  - `outputs/metrics/neck_output_motor_basis.json`
+- Decoder support for fitted basis files:
+  - `src/bridge/decoder.py`
+- New fitted-basis configs:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_no_target.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_zero_brain.yaml`
+- New doc:
+  - `docs/neck_output_motor_basis.md`
+
+2. Validation
+- Ran:
+  - `python -m pytest tests/test_descending_motor_atlas.py tests/test_bridge_unit.py -q`
+  - `python -m py_compile scripts/fit_neck_output_motor_basis.py`
+- Result:
+  - `13 passed`
+
+3. Fitted basis produced
+- Forward weights:
+  - `DNp103 = 1.0`
+  - `DNp18 = 0.9501`
+  - `DNg97 = 0.9483`
+  - `DNpe016 = 0.1553`
+- Turn weights:
+  - `DNpe040 = 1.0`
+  - `DNpe056 = 0.3910`
+- Explicit exclusions for now:
+  - ambiguous turn role:
+    - `DNp71`
+  - inactive in first causal pass:
+    - `DNpe031`
+    - `DNae002`
+
+4. Smoke and first real pilot
+- Local mock smoke completed:
+  - `outputs/requested_0p05s_multidrive_fitted_basis_mock/mock-demo-20260311-145811`
+- Real WSL `0.1 s` target pilot completed:
+  - `outputs/requested_0p1s_splice_uvgrid_multidrive_fitted_basis_target/demos/flygym-demo-20260311-145836.mp4`
+  - `outputs/requested_0p1s_splice_uvgrid_multidrive_fitted_basis_target/metrics/flygym-demo-20260311-145836.csv`
+  - `outputs/benchmarks/fullstack_splice_uvgrid_multidrive_fitted_basis_target_0p1s.csv`
+
+5. Preliminary result
+- Old hand-authored multidrive `0.1 s` target pilot:
+  - `net_displacement = 0.0584`
+  - `displacement_efficiency = 0.1919`
+  - `avg_forward_speed = 3.1059`
+- New fitted-basis multidrive `0.1 s` target pilot:
+  - `net_displacement = 0.0802`
+  - `displacement_efficiency = 0.3202`
+  - `avg_forward_speed = 2.5563`
+
+6. Interpretation
+- The fitted basis is changing the character of the motion in a plausible way:
+  - less raw forward speed
+  - more net displacement
+  - better displacement efficiency in the short pilot
+- That is not enough to declare it better yet.
+- The remaining gate for `T094` is still matched:
+  - longer-window `target`
+  - longer-window `no_target`
+  - longer-window `zero_brain`
+
+## 2026-03-11 - T094 extended to matched `0.1 s` fitted-basis pilots after recovery
+
+1. What I ran
+- Real WSL no-target pilot:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_no_target.yaml`
+- Real WSL zero-brain pilot:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_zero_brain.yaml`
+- New summary script:
+  - `scripts/summarize_fitted_basis_pilot.py`
+
+2. New artifacts
+- `outputs/benchmarks/fullstack_splice_uvgrid_multidrive_fitted_basis_no_target_0p1s.csv`
+- `outputs/benchmarks/fullstack_splice_uvgrid_multidrive_fitted_basis_zero_brain_0p1s.csv`
+- `outputs/requested_0p1s_splice_uvgrid_multidrive_fitted_basis_no_target/demos/flygym-demo-20260311-150139.mp4`
+- `outputs/requested_0p1s_splice_uvgrid_multidrive_fitted_basis_zero_brain/demos/flygym-demo-20260311-150253.mp4`
+- `outputs/metrics/neck_output_motor_basis_pilot_summary.json`
+
+3. Matched `0.1 s` result
+- target:
+  - `net_displacement = 0.0802`
+  - `avg_forward_speed = 2.5563`
+  - `displacement_efficiency = 0.3202`
+- no target:
+  - `net_displacement = 0.0770`
+  - `avg_forward_speed = 2.2348`
+  - `displacement_efficiency = 0.3518`
+- zero brain:
+  - `net_displacement = 0.0343`
+  - `avg_forward_speed = 1.8578`
+  - `displacement_efficiency = 0.1883`
+
+4. Interpretation
+- The fitted-basis branch is still brain-driven over the short pilot:
+  - target minus zero-brain net displacement `= +0.0459`
+  - target minus zero-brain forward speed `= +0.6985`
+- But target-vs-no-target separation is still weak at `0.1 s`:
+  - target minus no-target net displacement `= +0.0032`
+  - target minus no-target forward speed `= +0.3215`
+  - target minus no-target displacement efficiency `= -0.0316`
+
+5. Consequence
+- `T094` remains `doing`, not `done`.
+- The next clean step is longer-window matched validation for the fitted-basis
+  branch before replacing the current hand-authored multidrive path.
+
+## 2026-03-11 - Longer-window `1.0 s` fitted-basis validation completed
+
+1. What I ran
+- Real WSL fitted-basis `1.0 s` target run:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis.yaml`
+- Real WSL fitted-basis `1.0 s` no-target run:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_no_target.yaml`
+- Real WSL fitted-basis `1.0 s` zero-brain run:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_zero_brain.yaml`
+
+2. Main artifacts
+- target:
+  - `outputs/requested_1s_splice_uvgrid_multidrive_fitted_basis_target/demos/flygym-demo-20260311-150809.mp4`
+- no target:
+  - `outputs/requested_1s_splice_uvgrid_multidrive_fitted_basis_no_target/demos/flygym-demo-20260311-151736.mp4`
+- zero brain:
+  - `outputs/requested_1s_splice_uvgrid_multidrive_fitted_basis_zero_brain/demos/flygym-demo-20260311-152440.mp4`
+- summary:
+  - `outputs/metrics/neck_output_motor_basis_1s_summary.json`
+
+3. `1.0 s` result
+- target:
+  - `avg_forward_speed = 5.4864`
+  - `net_displacement = 3.8608`
+  - `displacement_efficiency = 0.7051`
+- no target:
+  - `avg_forward_speed = 6.5676`
+  - `net_displacement = 4.6747`
+  - `displacement_efficiency = 0.7132`
+- zero brain:
+  - `avg_forward_speed = 0.6968`
+  - `net_displacement = 0.0153`
+  - `displacement_efficiency = 0.0219`
+
+4. Interpretation
+- The fitted-basis branch is still clearly brain-driven over `1.0 s`:
+  - target minus zero-brain net displacement `= +3.8455`
+  - target minus zero-brain forward speed `= +4.7897`
+- But it is still not target-conditioned in the way we need:
+  - target minus no-target net displacement `= -0.8140`
+  - target minus no-target forward speed `= -1.0812`
+  - target minus no-target displacement efficiency `= -0.0081`
+
+5. Consequence
+- `T094` remains active but cannot be closed.
+- Added `T095` as the next output-side refinement task:
+  - use the new atlas evidence to improve target-conditioned behavior over
+    no-target locomotion
+  - likely by revisiting:
+    - `DNpe016`
+    - `DNp71`
+    - and the mapping from the fitted basis into the controller latents
+
+## 2026-03-11 - Target-tracking evaluation gap noted; rerunning a `2.0 s` fitted-basis target demo
+
+1. Correction
+- The user pointed out a real evaluation gap:
+  - aggregate locomotion metrics alone are not sufficient
+  - they can miss pursuit-like structure such as:
+    - approach while the target is frontal
+    - slowing or stopping while attempting to reacquire the target
+    - partial turn attempts that look meaningful in the video but weak in scalar summaries
+
+2. Consequence
+- Added `T096` so the repo explicitly tracks this as an evaluation requirement.
+- This means the fitted-basis branch should not be judged only by:
+  - net displacement
+  - average forward speed
+  - displacement efficiency
+- It also needs explicit target-tracking review.
+
+3. Immediate action
+- Rerun the fitted-basis target demo at `2.0 s`:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis.yaml`
+- Save the video/log/metrics artifacts for scene-level review before making the next decoder/basis change.
+
+4. Result
+- The `2.0 s` fitted-basis target rerun completed successfully and produced:
+  - video:
+    - `outputs/requested_2s_splice_uvgrid_multidrive_fitted_basis_target/demos/flygym-demo-20260311-153237.mp4`
+  - log:
+    - `outputs/requested_2s_splice_uvgrid_multidrive_fitted_basis_target/logs/flygym-demo-20260311-153237.jsonl`
+  - metrics:
+    - `outputs/requested_2s_splice_uvgrid_multidrive_fitted_basis_target/metrics/flygym-demo-20260311-153237.csv`
+  - benchmark row:
+    - `outputs/benchmarks/fullstack_splice_uvgrid_multidrive_fitted_basis_target_2s.csv`
+
+5. Headline numbers
+- `sim_seconds = 2.0`
+- `avg_forward_speed = 4.8866`
+- `net_displacement = 6.1516`
+- `displacement_efficiency = 0.6301`
+- `real_time_factor = 0.002286`
+
+6. Next use
+- This rerun exists primarily for explicit scene-level target-tracking review, not
+  only scalar comparison.
+
+## 2026-03-11 - Started longer-window fitted-basis validation after the recovered `0.1 s` pilots
+
+1. Why this next step is necessary
+- The recovered matched `0.1 s` pilots established that the fitted-basis branch
+  is still brain-driven.
+- They did **not** establish strong target-vs-no-target separation.
+- So the correct next gate is a longer-window matched run, not another decoder
+  rewrite yet.
+
+2. Active plan
+- Run the fitted-basis branch sequentially in real WSL for:
+  - `target`
+  - `no_target`
+  - `zero_brain`
+- Use `1.0 s` simulated duration as the first longer-window checkpoint.
+
+3. Why `1.0 s`
+- It is materially longer than the current `0.1 s` pilots.
+- It is still short enough to complete on this machine without turning into a
+  many-hour branch sweep.
+- It should be long enough for target-conditioned approach vs reorientation
+  structure to separate more clearly if the fitted basis is actually helping.
+
+## 2026-03-11 - Wrote a cold-start context handoff for clean-session recovery
+
+1. What I attempted
+- Wrote a repo-root `context.md` intended for a fresh Codex session with no
+  prior chat history.
+- The goal was to preserve the current understanding of the repo, the public
+  science basis, the neuron-mapping boundary, the current best production
+  branch, and the active unresolved gaps.
+
+2. What succeeded
+- Added `context.md` with an explicit cold-start reading order.
+- Captured the project mission, upstream repos, paper context, architecture,
+  public neuron anchors, visual splice evolution, descending readout findings,
+  current best calibrated UV-grid branch, performance reality, active tracker
+  state, and recommended future sub-agent decomposition.
+- Logged the handoff in `TASKS.md` as `T097`.
+
+3. What failed
+- Nothing substantive failed. The only practical issue was that the initial
+  attempt was too large for a single patch, so the document was added in smaller
+  sections instead.
+
+4. Evidence paths
+- `context.md`
+- `TASKS.md`
+- `PROGRESS_LOG.md`
+
+5. Why this matters
+- The repo has accumulated enough architectural and scientific state that a
+  clean session would otherwise waste time reconstructing known facts.
+- This handoff should let the next session start from the current real
+  bottlenecks: visual splice semantics and output decoding quality.
+
+## 2026-03-12 - Started contextual fitted-basis refinement for target-conditioned gating and stronger peripheral reorientation
+
+1. What I attempted
+- Continued `T095` and `T096` from the current fitted-basis branch instead of reopening install or splice work.
+- Used bounded parallel analysis only on docs, logs, and metrics to confirm the current failure shape before editing code.
+- Implemented a new experimental contextual decoder path that uses:
+  - `DNpe016` as a forward-context gate
+  - `DNp71` as a turn-context boost
+  - new turn-priority latent asymmetry gains for low-forward, high-turn states
+- Created a separate config family rather than mutating the current fitted-basis baseline.
+
+2. What succeeded
+- Confirmed the current qualitative failure mode from the existing evidence:
+  - the branch can approach while the target is frontal
+  - when the target goes peripheral, total drive falls and turn asymmetry rises
+  - but the resulting turn execution is still too weak to recover the target cleanly
+- Added decoder support for turn-priority motor-latent asymmetry gains in `src/bridge/decoder.py`.
+- Preserved and used the existing context hooks (`forward_context_*`, `turn_context_*`) for the first explicit contextual fitted-basis refinement.
+- Added unit coverage for:
+  - forward gating from context populations
+  - stronger hybrid turn execution from the new turn-priority path
+- Added new experimental configs:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_no_target.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_zero_brain.yaml`
+  - `configs/mock_multidrive_fitted_basis_contextual.yaml`
+- Validation passed:
+  - `python -m py_compile src/bridge/decoder.py`
+  - `python -m pytest tests/test_bridge_unit.py tests/test_closed_loop_smoke.py -q`
+  - result: `24 passed`
+- The dedicated mock smoke run completed and produced artifacts:
+  - `outputs/requested_0p2s_mock_multidrive_fitted_basis_contextual/mock-demo-20260312-004708/demo.mp4`
+  - `outputs/requested_0p2s_mock_multidrive_fitted_basis_contextual/mock-demo-20260312-004708/run.jsonl`
+  - `outputs/requested_0p2s_mock_multidrive_fitted_basis_contextual/mock-demo-20260312-004708/metrics.csv`
+
+3. What failed
+- The production FlyGym contextual config does not boot under `mode = mock` with the UV-grid splice still enabled, because the mock body does not expose `realistic_vision_splice_cache`.
+- That was handled by creating a dedicated mock smoke config instead of pretending the production embodied config should run on the mock body.
+- `pytest` still emits the known Windows temp-directory cleanup warning on exit, but the actual test run passes.
+
+4. Evidence paths
+- `src/bridge/decoder.py`
+- `tests/test_bridge_unit.py`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_no_target.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_zero_brain.yaml`
+- `configs/mock_multidrive_fitted_basis_contextual.yaml`
+- `outputs/requested_0p2s_mock_multidrive_fitted_basis_contextual/mock-demo-20260312-004708/run.jsonl`
+- `outputs/requested_0p2s_mock_multidrive_fitted_basis_contextual/mock-demo-20260312-004708/metrics.csv`
+
+5. Next actions
+- Run the new contextual fitted-basis branch in real WSL for matched:
+  - `target`
+  - `no_target`
+  - `zero_brain`
+- Keep those embodied runs serialized so local compute paths do not contend.
+- Judge the new branch on both:
+  - scalar metrics
+  - explicit scene-level target-tracking review
+- If the contextual branch still fails, the next output-side lever remains the same family:
+  - stronger target-conditioned gating
+  - stronger effective turn execution
+  - not a return to prosthetic brain-context hacks.
+## 2026-03-12 - Contextual fitted-basis validation deferred to preserve serialized heavy runtime use
+
+1. What I attempted
+- Reviewed the active embodied output bottleneck with local code/artifact reads and independent read-only Codex sub-agents.
+- Confirmed that the current repo already has a contextual fitted-basis refinement branch under the `contextual` config family.
+- Verified that the contextual branch is wired through the decoder and covered by a mock-path smoke config and unit tests.
+
+2. What succeeded
+- Re-aligned this session to the repo's current output-side refinement branch instead of creating a parallel duplicate.
+- Added a clean regression check in `tests/test_closed_loop_smoke.py` that asserts the contextual fitted-basis config really wires `DNpe016`, `DNp71`, and the turn-priority latent gains into the decoder.
+- Re-ran focused validation:
+  - `python -m pytest tests/test_bridge_unit.py tests/test_closed_loop_smoke.py -q`
+  - result: `22 passed`
+
+3. What failed or was blocked
+- A separate long embodied WSL benchmark was already active on the machine when this session reached the next real validation step.
+- To obey the serialized-heavy-compute rule, I did not continue with an overlapping contextual WSL pilot.
+
+4. Evidence paths
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_no_target.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_zero_brain.yaml`
+- `configs/mock_multidrive_fitted_basis_contextual.yaml`
+- `tests/test_closed_loop_smoke.py`
+- `docs/neck_output_motor_basis.md`
+
+5. Next actions
+- Wait for the currently running background WSL embodied job to clear.
+- Then run serialized matched contextual pilots for:
+  - `target`
+  - `no_target`
+  - `zero_brain`
+- Judge the contextual branch using both scalar metrics and explicit scene-level target-tracking review before deciding whether it beats the current fitted-basis branch.
+
+## 2026-03-12 - Validated the contextual fitted-basis branch locally and kept WSL heavy runs serialized
+
+1. What I attempted
+- Re-read the live decoder/runtime/test state and confirmed that the repo already contains a contextual fitted-basis branch using:
+  - `DNpe016` as a forward context gate
+  - `DNp71` as a turn-context boost
+  - turn-priority latent asymmetry gains in the hybrid multidrive decoder
+- Validated that branch locally with targeted compile/test checks.
+- Ran a dedicated local mock smoke run for the contextual config.
+- Verified the WSL `flysim-full` micromamba env and the core embodied imports.
+- Tried to start a short real WSL contextual target pilot, then stopped treating it as the active next step after discovering an already-running heavy contextual `no_target` WSL job.
+
+2. What succeeded
+- Local validation passed:
+  - `python -m py_compile src/bridge/decoder.py scripts/fit_neck_output_motor_basis.py src/runtime/closed_loop.py src/body/flygym_runtime.py`
+  - `python -m pytest tests/test_bridge_unit.py tests/test_closed_loop_smoke.py -q`
+  - result: `24 passed`
+- The contextual mock smoke run completed and wrote artifacts:
+  - `outputs/requested_0p2s_multidrive_fitted_basis_contextual_smoke/mock-demo-20260312-004945/demo.mp4`
+  - `outputs/requested_0p2s_multidrive_fitted_basis_contextual_smoke/mock-demo-20260312-004945/run.jsonl`
+  - `outputs/requested_0p2s_multidrive_fitted_basis_contextual_smoke/mock-demo-20260312-004945/metrics.csv`
+- The WSL full-stack env exists and imports cleanly:
+  - `wsl --cd /mnt/g/flysim /root/.local/bin/micromamba run -n flysim-full python -c "import numpy"`
+  - `wsl --cd /mnt/g/flysim /root/.local/bin/micromamba run -n flysim-full python -c "import sys; sys.path.append('src'); from body.flygym_runtime import FlyGymRealisticVisionRuntime"`
+
+3. What failed or was intentionally stopped
+- A short real WSL contextual target pilot was started under:
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_target/flygym-demo-20260312-005136/run.jsonl`
+- That pilot was not allowed to continue as the active heavy task because `wsl pgrep -af` showed an already-running contextual `no_target` FlyGym job on this machine:
+  - config: `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_context_gate_no_target.yaml`
+  - output root: `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_context_gate_no_target`
+- To respect the explicit no-concurrent-heavy-runs requirement, the newly launched target pilot was terminated after its first logged rows rather than competing with the existing WSL run.
+
+4. Evidence paths
+- `src/bridge/decoder.py`
+- `tests/test_bridge_unit.py`
+- `tests/test_closed_loop_smoke.py`
+- `configs/mock_multidrive_fitted_basis_contextual.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual.yaml`
+- `outputs/requested_0p2s_multidrive_fitted_basis_contextual_smoke/mock-demo-20260312-004945/run.jsonl`
+- `outputs/requested_0p2s_multidrive_fitted_basis_contextual_smoke/mock-demo-20260312-004945/metrics.csv`
+- `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_target/flygym-demo-20260312-005136/run.jsonl`
+- `TASKS.md`
+
+5. Next actions
+- Do not launch another heavy WSL embodied run until the existing contextual `no_target` job has finished or been explicitly triaged.
+- Inspect that active `no_target` artifact first.
+- Then run the contextual `target` and `zero_brain` pilots strictly one-at-a-time.
+- Keep judging the branch on both:
+  - scalar metrics
+  - explicit scene-level target-tracking review
+
+## 2026-03-12 - Ran the first serialized real `0.2 s` context-gate pilots and revalidated the merged output branch
+
+1. What I attempted
+- Kept the heavy embodied work strictly serialized.
+- Ran two real WSL `0.2 s` FlyGym pilots for the simpler context-gate scaffold:
+  - `target`
+  - `no_target`
+- Re-ran the local decoder/runtime smoke suite after the sub-agent edits landed so the merged worktree had a fresh validation result.
+
+2. What succeeded
+- The merged local validation now passes:
+  - `python -m pytest tests/test_bridge_unit.py tests/test_closed_loop_smoke.py -q`
+  - result: `24 passed`
+- Syntax checks passed:
+  - `python -m py_compile src/bridge/decoder.py src/runtime/closed_loop.py src/body/flygym_runtime.py scripts/fit_neck_output_motor_basis.py`
+- The serialized real WSL `target` pilot completed:
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_context_gate_target/flygym-demo-20260312-004336/run.jsonl`
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_context_gate_target/flygym-demo-20260312-004336/metrics.csv`
+- The serialized real WSL `no_target` pilot completed:
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_context_gate_no_target/flygym-demo-20260312-004902/run.jsonl`
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_context_gate_no_target/flygym-demo-20260312-004902/metrics.csv`
+
+3. Preliminary result
+- `target`:
+  - `avg_forward_speed = 1.8433`
+  - `net_displacement = 0.0964`
+  - `displacement_efficiency = 0.2643`
+- `no_target`:
+  - `avg_forward_speed = 1.8681`
+  - `net_displacement = 0.0912`
+  - `displacement_efficiency = 0.2467`
+
+Interpretation:
+
+- the simpler context-gate scaffold does not yet create strong target-vs-no-target separation,
+- but it does show a small target advantage on net displacement and displacement efficiency,
+- so the output-side context idea remains plausible rather than being immediately falsified.
+
+4. What failed or remains open
+- The result is still too weak to promote.
+- These pilots were run on the simpler `context_gate` scaffold, not the fuller `contextual` branch with turn-priority latent gains.
+- So the actual next gate remains the matched real WSL validation of:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_no_target.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_zero_brain.yaml`
+
+5. Notes
+- The pytest run still emitted the same Windows temp-cleanup `PermissionError` on exit, but the actual test run succeeded.
+- No overlapping heavy WSL jobs were run during this pass.
+
+6. Next actions
+- Use the `contextual` branch, not the simpler `context_gate` scaffold, for the next serialized real WSL trio.
+- Run `target`, `no_target`, and `zero_brain` one-at-a-time.
+- After those finish, compare:
+  - scalar metrics
+  - scene-level target-tracking behavior
+  - and whether the contextual branch now beats the plain fitted-basis branch on target-vs-no-target separation.
+
+## 2026-03-12 - Reassigned the contextual decoder using completed atlases plus primary descending-control literature
+
+1. What I attempted
+- Re-check the contextual branch against the completed monitored embodied atlas and the short causal descending motor atlas instead of relying on aborted contextual partial runs.
+- Dispatch a literature-focused sub-agent and independently review primary sources on descending steering, locomotor modulation, and walking-linked versus flight-linked descending neurons.
+- Convert that evidence into a decoder/config refinement before launching another serialized WSL embodied run.
+
+2. What succeeded
+- The literature review converged on a strong constraint: keep direct steering on canonical lateralized descending neurons such as `DNa01` / `DNa02`, and treat other candidate descending groups as gain/modulatory channels unless they have stronger walking-steering support.
+- The local atlas evidence and literature together supported this new split:
+  - `DNae002` plus `DNpe016` as target-conditioned forward/context gates,
+  - `DNpe040` plus `DNpe056` as exploratory turn-support context channels,
+  - `DNa01` / `DNa02` retained as the direct steering core.
+- Implemented a new decoder option `turn_context_mode = aligned_asymmetry` in `src/bridge/decoder.py`.
+- Rewired the contextual configs so turn support now boosts only when the contextual left-right asymmetry agrees with the turn direction already selected by the canonical steering readout.
+- Updated local coverage:
+  - `tests/test_bridge_unit.py`
+  - `tests/test_closed_loop_smoke.py`
+- Updated the current branch rationale in `docs/neck_output_motor_basis.md`.
+
+3. What failed
+- The earlier contextual partial WSL logs were not reliable evidence for decoder-observable activity because they ended before the relevant outputs were emitted.
+- No real WSL embodied validation was launched in this step, by design, to avoid overlapping heavy tasks before the refined branch was ready.
+
+4. Evidence
+- Empirical repo evidence:
+  - `outputs/metrics/descending_early_activity.csv`
+  - `outputs/metrics/descending_monitor_neck_output_atlas.csv`
+  - `outputs/metrics/descending_motor_atlas_summary.json`
+  - `outputs/metrics/neck_output_motor_basis.json`
+- Primary sources:
+  - Rayshubskiy et al., eLife 2025, steering DNs: `https://elifesciences.org/articles/102230`
+  - Braun et al., Cell 2024, fine-grained walking steering: `https://pmc.ncbi.nlm.nih.gov/articles/PMC12778575/`
+  - Westeinde et al., Nature 2024, steering command vs gain control: `https://www.nature.com/articles/s41586-024-07039-2`
+  - Schlegel et al., Nature 2024, descending networks and population motor control: `https://www.nature.com/articles/s41586-024-07523-9`
+  - Lappalainen et al., Nature 2024, walking-linked `oDN1` / `DNg97`: `https://www.nature.com/articles/s41586-024-07939-3`
+  - Ache et al., Nature 2019, visually elicited flight turns and `DNb01`: `https://www.nature.com/articles/s41586-019-1677-2`
+
+5. Files changed
+- `src/bridge/decoder.py`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_no_target.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_zero_brain.yaml`
+- `configs/mock_multidrive_fitted_basis_contextual.yaml`
+- `tests/test_bridge_unit.py`
+- `tests/test_closed_loop_smoke.py`
+- `docs/neck_output_motor_basis.md`
+- `TASKS.md`
+
+6. Next actions
+- Run local validation on the updated decoder/config branch.
+- If local validation passes, start the real WSL contextual `target` pilot first and keep the `no_target` and `zero_brain` pilots strictly serialized after it.
+- Compare the refined contextual branch against the current fitted-basis and calibrated two-drive baselines on both scalar metrics and scene-level target-tracking.
+
+## 2026-03-12 - Replaced the suppressive forward gate with an additive context boost and reran serialized embodied pilots
+
+1. What I attempted
+- Validate the first literature-informed contextual patch locally.
+- Run a short real WSL `target` pilot on that patch.
+- After observing locomotor suppression, change the forward context mechanism from multiplicative gate to additive boost and rerun serialized `target` / `no_target` pilots.
+
+2. What succeeded
+- Local validation passed twice as the branch evolved:
+  - first after the asymmetry-aligned context patch: `25 passed`
+  - then after adding the forward-context boost path: `26 passed`
+- The first contextual `target` / `no_target` pair on the multiplicative forward gate showed a clear failure mode:
+  - target: `avg_forward_speed 1.5598`, `net_displacement 0.0572`, `displacement_efficiency 0.1852`
+  - no_target: `avg_forward_speed 1.7889`, `net_displacement 0.0988`, `displacement_efficiency 0.2791`
+- Diagnosis from the logs showed the target-biased context signal existed but the multiplicative gate was suppressing both conditions too strongly relative to the modest target-vs-no-target separation.
+- I then added `forward_context_mode = boost` plus `forward_context_boost` in `src/bridge/decoder.py`, rewired the contextual configs, and added unit coverage.
+- The boosted target rerun recovered motion substantially:
+  - boosted target: `avg_forward_speed 2.7756`, `net_displacement 0.1621`, `displacement_efficiency 0.2950`
+- I then ran the matched boosted `no_target` pilot, still strictly serialized:
+  - boosted no_target: `avg_forward_speed 2.9413`, `net_displacement 0.1811`, `displacement_efficiency 0.3109`
+
+3. What failed
+- The additive boost fixed the locomotor-collapse problem but did not fix target selectivity.
+- In the live boosted pair, the supposedly target-conditioned forward context family was not actually target-selective:
+  - `DNae002` bilateral mean was higher in boosted `no_target` than in boosted `target`
+  - `DNpe016` remained silent in both boosted runs
+- Because the branch is still not beating matched `no_target`, I did not spend another heavy pass on `zero_brain` for this specific refinement.
+
+4. Evidence
+- Multiplicative-gate pilots:
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_target_refined/metrics/flygym-demo-20260312-112938.csv`
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_no_target_refined/metrics/flygym-demo-20260312-113221.csv`
+- Additive-boost pilots:
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_target_boosted/metrics/flygym-demo-20260312-113644.csv`
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_no_target_boosted/metrics/flygym-demo-20260312-113859.csv`
+- Log-level diagnosis:
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_target_boosted/logs/flygym-demo-20260312-113644.jsonl`
+  - `outputs/requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_no_target_boosted/logs/flygym-demo-20260312-113859.jsonl`
+
+5. Files changed
+- `src/bridge/decoder.py`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_no_target.yaml`
+- `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_multidrive_fitted_basis_contextual_zero_brain.yaml`
+- `configs/mock_multidrive_fitted_basis_contextual.yaml`
+- `tests/test_bridge_unit.py`
+- `tests/test_closed_loop_smoke.py`
+- `docs/neck_output_motor_basis.md`
+- `TASKS.md`
+
+6. Next actions
+- Stop assuming `DNae002` is a reliable target-conditioned forward control signal in the live embodied branch.
+- Identify a genuinely target-selective signal family for the next refinement, or shift the refinement back upstream into the visual-to-steering interface rather than continuing to retune the current decoder alone.
+- Keep future embodied runs serialized and evidence-first, because the current failure mode is now specific enough to avoid blind parameter sweeps.
+
+## 2026-03-12 - Started the explicit VNC-wide workstream with public-source registry, typed graph ingest, and first pathway scaffolding
+
+1. What I attempted
+- Start the VNC-wide plan as a real repo workstream instead of leaving it as a conceptual response.
+- Reuse sub-agents extensively for three parallel tracks:
+  - public VNC literature/data availability
+  - codebase integration seams
+  - experimental design / milestone discipline
+- Add actual code under `src/vnc/` for source metadata, annotation-atlas building, typed node/edge ingest, and first pathway extraction.
+
+2. What succeeded
+- Added the first VNC package and docs:
+  - `src/vnc/data_sources.py`
+  - `src/vnc/annotation_atlas.py`
+  - `src/vnc/ingest.py`
+  - `src/vnc/pathways.py`
+  - `scripts/build_vnc_annotation_atlas.py`
+  - `scripts/build_vnc_pathway_inventory.py`
+  - `docs/vnc_data_sources.md`
+  - `docs/vnc_workstream_plan.md`
+  - `docs/vnc_graph_model.md`
+- Added local coverage:
+  - `tests/test_vnc_annotation_atlas.py`
+  - `tests/test_vnc_pathways.py`
+- Validation passed:
+  - `python -m pytest tests/test_vnc_annotation_atlas.py tests/test_vnc_pathways.py -q` -> `4 passed`
+  - `python -m py_compile src/vnc/annotation_atlas.py src/vnc/ingest.py src/vnc/pathways.py scripts/build_vnc_annotation_atlas.py scripts/build_vnc_pathway_inventory.py` -> passed
+- Produced first executable VNC artifacts:
+  - `outputs/metrics/vnc_annotation_atlas_mock.json`
+  - `outputs/metrics/vnc_annotation_atlas_mock.csv`
+  - `outputs/metrics/vnc_pathway_inventory_mock.json`
+- Hardened the CSV readers against UTF-8 BOM headers after the first CLI run exposed that common export problem.
+
+3. What the sub-agents concluded
+- Experimental-design scout:
+  - do not jump straight to a full muscle-level or whole-VNC dynamical reconstruction
+  - keep the current best production branch as the control
+  - expand via observational atlas -> causal atlas -> fitted VNC basis
+- Codebase-integration scout:
+  - keep VNC work in a dedicated `src/vnc/` package rather than growing `src/brain` or `bridge.decoder`
+  - the long-term seam should be `brain readout -> vnc emulator -> body command`
+  - the body/runtime interfaces will need richer command and state channels before a true VNC emulator can sit in the loop cleanly
+- The literature/data scout is still pending, but the official-source review already anchored the first public registry around:
+  - MANC
+  - FANC
+  - BANC
+
+4. Official-source grounding used in this step
+- MANC:
+  - `https://www.janelia.org/project-team/flyem/manc-connectome`
+  - `https://www.janelia.org/news/janelia-scientists-and-collaborators-unveil-fruit-fly-nerve-cord-connectome`
+- FANC:
+  - `https://connectomics.hms.harvard.edu/adult-drosophila-vnc-tem-dataset-female-adult-nerve-cord-fanc`
+  - `https://flyconnectome.github.io/fancr/`
+- BANC:
+  - `https://flyconnectome.github.io/bancr/`
+
+5. What failed or remains open
+- No real MANC / FANC / BANC annotation export has been ingested yet; the first CLI artifacts are intentionally mock fixtures proving the toolchain shape.
+- The literature/data scout did not finish in time for this turn, so the first real export target is still being finalized under `T104`.
+- None of this yet replaces the live sparse decoder. It creates the tested scaffolding required to do that honestly.
+
+6. Next actions
+- Finalize the first real public export target under `T104`, with preference for a public MANC annotation/metadata export or a BANC Codex annotation export.
+- Add `src/vnc/emulator.py` design scaffolding only after the real graph ingest target is settled.
+- Keep the current embodied decoder branch and the VNC workstream separate until the VNC pathway inventory is operating on real public data instead of fixtures.
+
+## 2026-03-12 - Added the first structural VNC spec compiler, a pluggable VNC decoder path, and a more generic runtime seam
+
+1. What I attempted
+- Reuse sub-agents again, this time for:
+  - exact first public ingest targets
+  - the cleanest runtime insertion seam
+  - the next highest-value low-compute implementation slice
+- Convert the VNC workstream from:
+  - source registry
+  - annotation atlas
+  - pathway inventory
+  into:
+  - a graph-derived structural spec
+  - a pluggable decoder candidate
+  - a more command-agnostic closed-loop seam
+
+2. What succeeded
+- The literature/data scout came back with concrete first-ingest targets:
+  - `MANC body-annotations-male-cns-v0.9-minconf-0.5.feather`
+  - then `MANC body-neurotransmitters-male-cns-v0.9.feather`
+  - then `MANC connectome-weights-male-cns-v0.9-minconf-0.5.feather`
+  - BANC supplementary tables and Dataverse exports after that
+  - FANC public SWC reconstructions as the non-gated female comparison path
+- I folded those findings into:
+  - `src/vnc/data_sources.py`
+  - `docs/vnc_data_sources.md`
+- Added a structural spec compiler:
+  - `src/vnc/spec_builder.py`
+  - `scripts/build_vnc_structural_spec.py`
+- Added a first pluggable broad decoder candidate:
+  - `src/vnc/spec_decoder.py`
+  - `src/bridge/decoder_factory.py`
+- Updated the runtime/body seam so future decoders are not forced to pretend they are just legacy left/right scalars:
+  - `src/body/interfaces.py`
+  - `src/body/mock_body.py`
+  - `src/body/flygym_runtime.py`
+  - `src/runtime/closed_loop.py`
+- Produced the first structural-spec artifacts:
+  - `outputs/metrics/vnc_structural_spec_mock.json`
+  - `outputs/metrics/vnc_structural_spec_mock.csv`
+- Validation passed:
+  - `python -m pytest tests/test_vnc_annotation_atlas.py tests/test_vnc_pathways.py tests/test_vnc_spec_decoder.py tests/test_closed_loop_smoke.py -q` -> `16 passed`
+  - `python -m py_compile src/vnc/data_sources.py src/body/interfaces.py src/body/mock_body.py src/body/flygym_runtime.py src/bridge/controller.py src/runtime/closed_loop.py src/vnc/spec_builder.py src/vnc/spec_decoder.py src/bridge/decoder_factory.py scripts/build_vnc_structural_spec.py` -> passed
+
+3. What the sub-agents concluded
+- Literature/data scout:
+  - the first ungated real ingest target should be the public MANC annotation feather, not a neuPrint query path
+  - BANC paper supplement / Dataverse exports are the best ungated brain+VNC follow-up
+  - FANC is still valuable, but the first non-gated path is published reconstructions rather than the latest protected segmentation tooling
+- Runtime seam scout:
+  - the cleanest long-term seam is still `brain readout -> VNC stage -> body command`
+  - the immediate blocker was not the loop itself, but command and logging assumptions that still treated everything as legacy `left_drive/right_drive`
+- Experimental-design scout:
+  - the right next code slice was a deterministic structural spec compiler and a testable decoder candidate, not a new embodied sweep or a new pile of heuristics in `bridge.decoder`
+
+4. What failed or remains open
+- No real public VNC export has been ingested yet; the new spec artifacts are still fixture-backed.
+- The new `VNCSpecDecoder` is structural, not dynamical. It broadens the output hypothesis, but it does not yet model local VNC recurrence, motor neurons, or muscles.
+- I did not launch any new heavy WSL embodied runs in this slice. That was intentional to avoid mixing architectural work with expensive evaluation before a real public graph export exists.
+
+5. Evidence
+- New code:
+  - `src/vnc/spec_builder.py`
+  - `src/vnc/spec_decoder.py`
+  - `src/bridge/decoder_factory.py`
+  - `scripts/build_vnc_structural_spec.py`
+- Updated seam:
+  - `src/body/interfaces.py`
+  - `src/body/mock_body.py`
+  - `src/body/flygym_runtime.py`
+  - `src/runtime/closed_loop.py`
+- New docs:
+  - `docs/vnc_spec_decoder.md`
+  - `docs/vnc_data_sources.md`
+  - `docs/vnc_workstream_plan.md`
+- New artifacts:
+  - `outputs/metrics/vnc_structural_spec_mock.json`
+  - `outputs/metrics/vnc_structural_spec_mock.csv`
+
+6. Next actions
+- Implement `T108`: fetch or otherwise ingest the first real public MANC annotation export locally and normalize it through the existing atlas / graph / spec toolchain.
+- Only after the first real public export is in hand, compare the structural VNC decoder candidate against the current sampled/fitted output path on cheap local diagnostics.
+- Keep heavy embodied WSL work serialized and deferred until the real-data ingest step is complete.
+
+## 2026-03-12 - Added Feather support so the VNC toolchain can ingest real MANC annotation exports
+
+1. What I attempted
+- Remove the format mismatch between the real first public ingest target and the repo's current VNC tooling.
+- The concrete issue was simple: the first MANC annotation target is a `.feather` file, while the VNC loaders only supported CSV / TSV / JSON.
+
+2. What succeeded
+- Added `.feather` support to:
+  - `src/vnc/annotation_atlas.py`
+  - `src/vnc/ingest.py`
+- Added local coverage for Feather-backed atlas and graph ingest:
+  - `tests/test_vnc_annotation_atlas.py`
+  - `tests/test_vnc_pathways.py`
+- Validation passed:
+  - `python -m pytest tests/test_vnc_annotation_atlas.py tests/test_vnc_pathways.py tests/test_vnc_spec_decoder.py tests/test_closed_loop_smoke.py -q` -> `18 passed`
+  - `python -m py_compile src/vnc/annotation_atlas.py src/vnc/ingest.py tests/test_vnc_annotation_atlas.py tests/test_vnc_pathways.py` -> passed
+
+3. What failed or remains open
+- This still does not fetch the real MANC file. It only removes the parser blocker.
+- The remaining open step is now explicit: acquire the real public export locally and run it through the atlas / graph / structural-spec pipeline.
+
+4. Evidence
+- Loader updates:
+  - `src/vnc/annotation_atlas.py`
+  - `src/vnc/ingest.py`
+- Coverage:
+  - `tests/test_vnc_annotation_atlas.py`
+  - `tests/test_vnc_pathways.py`
+
+5. Next actions
+- Keep `T108` focused on the real public annotation ingest itself rather than adding more mock-format support.
+
+## 2026-03-12 - Downloaded and normalized the first real public MANC annotation export
+
+1. What I attempted
+- Use the official Janelia MANC download page to fetch the first real public VNC annotation export locally.
+- Run the existing repo atlas/node tooling on that real file instead of on fixtures.
+- Fix the schema mismatch exposed by the real data.
+
+2. What succeeded
+- Downloaded:
+  - `external/vnc/manc/body-annotations-male-cns-v0.9-minconf-0.5.feather`
+- Confirmed the real MANC file schema includes fields such as:
+  - `bodyId`
+  - `superclass`
+  - `type`
+  - `class`
+  - `rootSide`
+  - `somaSide`
+  - `somaNeuromere`
+- Added a shared schema-normalization layer:
+  - `src/vnc/schema.py`
+- Updated:
+  - `src/vnc/annotation_atlas.py`
+  - `src/vnc/ingest.py`
+  so the repo now understands MANC-native fields and not only generic mock columns.
+- Produced real public-data artifacts:
+  - `outputs/metrics/vnc_annotation_atlas_manc_v0p9.json`
+  - `outputs/metrics/vnc_annotation_atlas_manc_v0p9.csv`
+  - `outputs/metrics/vnc_manc_annotation_node_summary.json`
+- Added a dedicated evidence doc:
+  - `docs/manc_annotation_ingest.md`
+- Local validation still passed:
+  - `python -m pytest tests/test_vnc_annotation_atlas.py tests/test_vnc_pathways.py tests/test_vnc_spec_decoder.py tests/test_closed_loop_smoke.py -q` -> `18 passed`
+
+3. What the real data showed
+- The first real public annotation file is large enough to matter:
+  - `211743` rows
+- After canonical normalization, the top super-classes were:
+  - `interneuron` `134722`
+  - `sensory` `27153`
+  - `ascending` `2392`
+  - `descending` `1332`
+  - `motor` `933`
+- The top flow categories were:
+  - `intrinsic` `134884`
+  - `afferent` `29545`
+  - `efferent` `2265`
+- A large `<missing>` bucket remains. That is real and should stay visible rather than being hidden by over-aggressive normalization.
+
+4. What failed or remains open
+- This is still annotation-only. There is no real public edge file in the pipeline yet.
+- The real public pathway inventory and real public structural spec are therefore still blocked on edge ingest.
+- I did not attempt the full `connectome-weights` file in this slice because the right first step was to make the annotation ingest correct and explicit first.
+
+5. Evidence
+- Real source file:
+  - `external/vnc/manc/body-annotations-male-cns-v0.9-minconf-0.5.feather`
+- Real artifacts:
+  - `outputs/metrics/vnc_annotation_atlas_manc_v0p9.json`
+  - `outputs/metrics/vnc_annotation_atlas_manc_v0p9.csv`
+  - `outputs/metrics/vnc_manc_annotation_node_summary.json`
+- New normalization layer:
+  - `src/vnc/schema.py`
+
+6. Next actions
+- Start `T109`: acquire the first real public edge export and replace the fixture-backed pathway/spec artifacts with real public graph evidence.
+- Keep heavy embodied WSL work deferred until the real graph side exists.
+
+## 2026-03-12 - Completed the first real public MANC edge slice and real-data pathway/spec pipeline
+
+1. What I attempted
+- Continue `T109` with sub-agents and move from real annotations to the real public MANC edge file.
+- Download the official `connectome-weights` feather.
+- Avoid pushing the full `151,871,794`-row graph directly through the small in-memory pathway code.
+- Build a filtered first-pass real locomotor slice instead.
+
+2. What succeeded
+- Downloaded the real public edge file:
+  - `external/vnc/manc/connectome-weights-male-cns-v0.9-minconf-0.5.feather`
+- Confirmed the real public schema is exactly:
+  - `body_pre`
+  - `body_post`
+  - `weight`
+- Added edge aliases and a filtered feather edge loader in:
+  - `src/vnc/schema.py`
+  - `src/vnc/ingest.py`
+- Added a real MANC thoracic locomotor slice builder in:
+  - `src/vnc/manc_slice.py`
+- Added a real artifact CLI in:
+  - `scripts/build_manc_thoracic_vnc_artifacts.py`
+- Added local coverage:
+  - `tests/test_vnc_manc_slice.py`
+- Real artifact build succeeded and produced:
+  - `outputs/metrics/manc_thoracic_slice_summary.json`
+  - `outputs/metrics/manc_thoracic_pathway_inventory.json`
+  - `outputs/metrics/manc_thoracic_structural_spec.json`
+  - `outputs/metrics/manc_thoracic_slice_nodes.csv`
+  - `outputs/metrics/manc_thoracic_slice_edges.csv`
+  - `outputs/metrics/manc_thoracic_spec_overlap.json`
+- Local validation passed:
+  - `python -m pytest tests/test_vnc_annotation_atlas.py tests/test_vnc_pathways.py tests/test_vnc_spec_decoder.py tests/test_vnc_manc_slice.py tests/test_closed_loop_smoke.py -q` -> `20 passed`
+
+3. What the sub-agents concluded
+- The data scout confirmed the official real public edge path is the bulk MANC `connectome-weights` feather and that MANC does not publish an explicit compact edge-column schema beyond the actual file contents and related docs.
+- The codebase scout confirmed the correct move was to filter early in `src/vnc/ingest.py` and keep `pathways.py` and `spec_builder.py` largely unchanged.
+- The experimental-design scout confirmed the first real slice should be thoracic locomotor, not full-graph and not another tiny DN subset.
+
+4. What the real data produced
+- First real thoracic slice summary:
+  - descending seeds: `1316`
+  - thoracic motors: `516`
+  - promoted premotor candidates: `5474`
+  - selected nodes: `7291`
+  - selected edges: `228061`
+  - `descending -> premotor` edges: `124181`
+  - `premotor -> motor` edges: `90463`
+  - `descending -> motor` edges: `13417`
+  - two-step paths: `2440537`
+- First real structural spec:
+  - `1301` descending channels
+- The real overlap artifact shows that many current repo locomotor names are present in the public MANC slice with thoracic motor reachability, including:
+  - `DNg97`
+  - `DNp103`
+  - `DNp18`
+  - `DNpe056`
+  - `DNpe016`
+  - `DNpe040`
+  - `DNp71`
+  - `DNa01`
+  - `DNa02`
+  - `MDN`
+
+5. What failed or remains open
+- MANC still does not hand us an explicit public `premotor` label in the annotation feather, so the first real slice promotes premotor candidates by structural rule.
+- I did not run embodied WSL evaluation with this real spec yet. The next honest step is slice refinement and comparison, not immediate promotion into the production embodied branch.
+
+6. Evidence
+- Real edge source:
+  - `external/vnc/manc/connectome-weights-male-cns-v0.9-minconf-0.5.feather`
+- New code:
+  - `src/vnc/manc_slice.py`
+  - `scripts/build_manc_thoracic_vnc_artifacts.py`
+- New docs:
+  - `docs/manc_edge_slice.md`
+- New real public artifacts:
+  - `outputs/metrics/manc_thoracic_slice_summary.json`
+  - `outputs/metrics/manc_thoracic_pathway_inventory.json`
+  - `outputs/metrics/manc_thoracic_structural_spec.json`
+  - `outputs/metrics/manc_thoracic_spec_overlap.json`
+
+7. Next actions
+- Start `T110`: compare stricter thoracic slice variants before using this real spec as a production decoder candidate.
+- Keep heavy embodied WSL runs serialized and deferred until the real slice rules are judged stable enough to justify them.
+
+## 2026-03-12 - Ran the first stricter real MANC slice comparison
+
+1. What I attempted
+- Take the first real thoracic locomotor slice and check whether it survives a stricter premotor-candidate rule.
+- I reused the same real-data CLI and only tightened:
+  - `min_premotor_total_weight`
+  - `min_premotor_motor_targets`
+
+2. What succeeded
+- Built a stricter real slice with:
+  - `min_premotor_total_weight = 200`
+  - `min_premotor_motor_targets = 10`
+- Produced:
+  - `outputs/metrics/manc_thoracic_slice_summary_strict.json`
+  - `outputs/metrics/manc_thoracic_pathway_inventory_strict.json`
+  - `outputs/metrics/manc_thoracic_structural_spec_strict.json`
+  - `outputs/metrics/manc_thoracic_slice_nodes_strict.csv`
+  - `outputs/metrics/manc_thoracic_slice_edges_strict.csv`
+  - `outputs/metrics/manc_thoracic_slice_comparison.json`
+
+3. What the comparison showed
+- Baseline:
+  - premotor candidates: `5474`
+  - selected nodes: `7291`
+  - selected edges: `228061`
+  - descending structural channels: `1301`
+- Stricter slice:
+  - premotor candidates: `2164`
+  - selected nodes: `3977`
+  - selected edges: `121268`
+  - descending structural channels: `1297`
+
+4. Interpretation
+- The premotor pool shrank a lot.
+- The descending structural channel count barely moved.
+- That is a good sign for the first real MANC structural spec: it suggests the broad descending coverage is not collapsing under a tighter premotor rule.
+
+5. Next actions
+- Move the next refinement toward biological selectivity, not just numeric thresholding.
+- The best next comparison is likely a leg-biased or nerve-filtered thoracic motor slice before any embodied decoder benchmark is attempted.
+
+## 2026-03-12 - Completed `T110` with leg-subclass and exit-nerve real MANC slice variants
+
+1. What I attempted
+- Finish the real-data refinement loop for `T110` instead of stopping at a
+  looser-vs-stricter threshold comparison.
+- Use sub-agents for three separate inputs:
+  - local annotation / literature review for biologically selective leg-motor
+    endpoints
+  - code-shape review for the smallest safe extension point
+  - test / docs / tracker expectations for a completed selective-slice pass
+- Add selective motor-target modes to the real MANC slicer, regenerate the real
+  artifacts, and compare the variants quantitatively.
+
+2. What succeeded
+- Added explicit `entry_nerve` / `exit_nerve` preservation to the normalized
+  VNC node model in:
+  - `src/vnc/schema.py`
+  - `src/vnc/ingest.py`
+- Extended the real MANC slicer in `src/vnc/manc_slice.py` with two explicit
+  selective motor-target modes:
+  - `leg_subclass`
+  - `exit_nerve`
+- Extended the real artifact CLI in
+  `scripts/build_manc_thoracic_vnc_artifacts.py` so the selective modes are
+  configurable and the node CSV now writes `entry_nerve` / `exit_nerve`.
+- Added local coverage:
+  - `tests/test_vnc_manc_slice.py`
+  - `tests/test_vnc_pathways.py`
+- Local validation passed:
+  - `python -m pytest tests/test_vnc_manc_slice.py tests/test_vnc_pathways.py tests/test_vnc_spec_decoder.py tests/test_closed_loop_smoke.py -q` -> `18 passed`
+  - `python -m py_compile src/vnc/schema.py src/vnc/ingest.py src/vnc/manc_slice.py scripts/build_manc_thoracic_vnc_artifacts.py tests/test_vnc_manc_slice.py tests/test_vnc_pathways.py`
+
+3. What the sub-agents concluded
+- The literature/data scout recommended a core leg-motor endpoint keyed to the
+  thoracic leg exit nerves `ProLN`, `MesoLN`, and `MetaLN`, with ambiguous T1
+  branch nerves treated as an optional expansion rather than the default.
+- The code-shape scout confirmed that a true nerve-filtered slice needed the
+  normalized node model to preserve `exitNerve` explicitly instead of trying to
+  smuggle it through the overloaded `region` field.
+- The testing/docs scout confirmed that `T110` should not be treated as
+  complete unless the selective rules, artifacts, and comparison outputs are
+  explicit and auditable.
+
+4. What the real selective comparison produced
+- Broad leg-subclass slice:
+  - motor targets: `381`
+  - premotor candidates: `3607`
+  - selected edges: `140223`
+  - two-step paths: `1460577`
+  - descending structural channels: `1240`
+- Strict leg-subclass slice:
+  - motor targets: `381`
+  - premotor candidates: `1304`
+  - selected edges: `68222`
+  - two-step paths: `848280`
+  - descending structural channels: `1168`
+- Core exit-nerve slice:
+  - motor targets: `319`
+  - premotor candidates: `2850`
+  - selected edges: `106154`
+  - two-step paths: `1028420`
+  - descending structural channels: `1232`
+- Strict exit-nerve slice:
+  - motor targets: `319`
+  - premotor candidates: `910`
+  - selected edges: `46554`
+  - two-step paths: `550740`
+  - descending structural channels: `1131`
+
+5. Interpretation
+- The exit-nerve slice is the strongest next candidate.
+- It removes the ambiguous T1 branch outputs that survive the broad
+  `leg_subclass` filter and keeps only:
+  - `ProLN`
+  - `MesoLN`
+  - `MetaLN`
+- The non-strict exit-nerve slice still preserves the full live locomotor
+  shortlist overlap used in this repo:
+  - overlap count `30`, same as baseline and broad subclass slice
+- The strict exit-nerve slice is probably too aggressive for the default next
+  benchmark because it drops one `DNpe040` overlap channel.
+- The broad subclass slice remains useful as a reference, but it still admits
+  non-core branch outputs:
+  - `DProN`
+  - `VProN`
+  - `ProAN`
+  - `AbN1`
+
+6. Evidence
+- New real selective comparison artifacts:
+  - `outputs/metrics/manc_thoracic_variant_comparison.json`
+  - `outputs/metrics/manc_thoracic_variant_overlap_comparison.json`
+- New selective slice summaries:
+  - `outputs/metrics/manc_thoracic_slice_summary_leg_subclass.json`
+  - `outputs/metrics/manc_thoracic_slice_summary_leg_subclass_strict.json`
+  - `outputs/metrics/manc_thoracic_slice_summary_exit_nerve.json`
+  - `outputs/metrics/manc_thoracic_slice_summary_exit_nerve_strict.json`
+- New selective structural specs:
+  - `outputs/metrics/manc_thoracic_structural_spec_leg_subclass.json`
+  - `outputs/metrics/manc_thoracic_structural_spec_leg_subclass_strict.json`
+  - `outputs/metrics/manc_thoracic_structural_spec_exit_nerve.json`
+  - `outputs/metrics/manc_thoracic_structural_spec_exit_nerve_strict.json`
+- Overlap artifacts:
+  - `outputs/metrics/manc_thoracic_spec_overlap_leg_subclass.json`
+  - `outputs/metrics/manc_thoracic_spec_overlap_leg_subclass_strict.json`
+  - `outputs/metrics/manc_thoracic_spec_overlap_exit_nerve.json`
+  - `outputs/metrics/manc_thoracic_spec_overlap_exit_nerve_strict.json`
+- Updated docs:
+  - `docs/manc_edge_slice.md`
+  - `docs/vnc_workstream_plan.md`
+
+7. What remains open
+- `T110` is now done as a real-slice comparison task, but it is still not an
+  embodied performance claim.
+- No heavy WSL embodied decoder benchmark was launched in this loop.
+- The next honest step is `T111`: load the non-strict `exit_nerve` structural
+  spec as the first real production `vnc_structural_spec` candidate and smoke
+  it in the closed loop before attempting broader comparisons.
+
+## 2026-03-12 - Completed `T111` and exposed the real MANC-to-FlyWire ID blocker
+
+1. What I attempted
+- Take the preferred non-strict `exit_nerve` structural spec from `T110` and
+  benchmark it as the first production `vnc_structural_spec` decoder candidate.
+- Keep the ladder honest:
+  - config and decoder load test
+  - runtime smoke for the VNC decoder seam
+  - host mock-body benchmark with the real torch brain backend
+  - short real WSL FlyGym benchmark
+  - explicit ID-space audit instead of guessing about the zero-output failure
+
+2. What succeeded
+- Added reproducible configs:
+  - `configs/mock_multidrive_torch.yaml`
+  - `configs/mock_vnc_structural_spec_exit_nerve.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve.yaml`
+- Added a cheap alignment audit:
+  - `scripts/audit_decoder_id_alignment.py`
+- Added coverage:
+  - `tests/test_vnc_spec_decoder.py`
+  - `tests/test_closed_loop_smoke.py`
+- Local validation passed:
+  - `python -m pytest tests/test_vnc_spec_decoder.py tests/test_closed_loop_smoke.py -q` -> `14 passed`
+  - `python -m py_compile src/vnc/spec_decoder.py src/bridge/decoder_factory.py src/runtime/closed_loop.py tests/test_vnc_spec_decoder.py scripts/audit_decoder_id_alignment.py`
+- Host mock benchmarks completed:
+  - `outputs/benchmarks/fullstack_mock_multidrive_torch_0p4s.csv`
+  - `outputs/benchmarks/fullstack_mock_vnc_structural_spec_exit_nerve_0p4s.csv`
+- Short real WSL realistic-vision benchmarks completed:
+  - `outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_target_0p1s.csv`
+  - `outputs/benchmarks/fullstack_splice_uvgrid_descending_calibrated_target_t111_0p1s.csv`
+- Wrote the machine-readable T111 summary:
+  - `outputs/metrics/t111_exit_nerve_decoder_summary.json`
+- Wrote the explicit ID-alignment audit:
+  - `outputs/metrics/t111_decoder_id_alignment_comparison.json`
+- Wrote the bench note:
+  - `docs/vnc_exit_nerve_decoder_validation.md`
+
+3. What the sub-agents concluded
+- The right comparison ladder was mock-body seam validation first, then one
+  short real FlyGym run, not a large sweep.
+- The structural decoder config seam was already present; the key missing work
+  was not more decoder math but real config files and a clear runtime audit.
+- The real risk was not only saturation. It was that the MANC structural spec
+  and the FlyWire brain backend might live in different ID spaces.
+
+4. What the benchmarks showed
+- Host mock path:
+  - both the sampled decoder and the structural decoder stayed at zero command
+  - that is consistent with the earlier public-input motor-path weakness
+- Short real WSL target run with the new structural decoder:
+  - completed `50` cycles at `0.1 s`
+  - real-time factor: `0.00237`
+  - nonzero command cycles: `0`
+- Matched short real WSL target run with the current calibrated sampled decoder:
+  - completed `50` cycles at `0.1 s`
+  - real-time factor: `0.00244`
+  - nonzero command cycles: `43`
+
+5. Decisive blocker
+- The explicit alignment audit showed:
+  - real exit-nerve structural decoder requested IDs: `736`
+  - FlyWire backend matched IDs: `0`
+  - current sampled decoder requested IDs: `42`
+  - FlyWire backend matched IDs: `42`
+- That means the real MANC structural decoder is currently a silent no-op
+  against the FlyWire whole-brain backend.
+- This is not primarily a gain-tuning problem.
+- It is an ID-space mismatch between:
+  - real MANC body IDs
+  - the FlyWire IDs used by the current brain backend
+
+6. Interpretation
+- `T111` is complete as a benchmark and diagnosis task.
+- The runtime seam for `vnc_structural_spec` works.
+- The real config path works.
+- The real short benchmark works.
+- But the candidate is not promotable because it cannot currently read
+  meaningful brain activity from the present FlyWire backend.
+
+7. Next actions
+- Start `T112`: resolve the MANC-to-FlyWire ID-space blocker.
+- Do not waste time tuning `forward_scale_hz`, `turn_scale_hz`, or channel
+  thresholds further until the decoder can actually monitor a matching ID space.
+
+## 2026-03-12 - T112 public ID-bridge review
+
+1. What I attempted
+- Reviewed the local `T111` decoder-alignment evidence and the bundled MANC
+  annotation export to determine whether the current blocker is a missing
+  public cross-dataset neuron-ID bridge.
+- Reviewed public primary/public resources for MANC/FlyWire/BANC cross-dataset
+  matching, with emphasis on official annotation tooling and the neck-connective
+  comparative connectomics work.
+
+2. What succeeded
+- Confirmed locally that the runtime blocker is an ID-space mismatch, not a
+  gain-tuning issue: the real MANC exit-nerve decoder requested `736` IDs and
+  matched `0` against the present FlyWire backend, while the sampled
+  FlyWire-native decoder matched `42/42`.
+- Confirmed locally that the public MANC annotation export already carries
+  annotation-level bridge fields including `mancType`, `flywireType`, and
+  `hemibrainType`, which is consistent with a public homolog/type bridge rather
+  than an exact raw-ID crosswalk.
+- Confirmed from public sources that the strongest published cross-dataset
+  bridge is at the matched type/group/homolog level, especially for
+  neck-connective DNs and ANs spanning FAFB-FlyWire, FANC, and MANC.
+
+3. What failed
+- Did not find a general public exact `MANC bodyid -> FlyWire root_id`
+  crosswalk that would let the current real MANC structural decoder monitor
+  arbitrary FlyWire neurons by direct ID substitution.
+- Did not find evidence that BANC publishes a general exact `MANC <-> FlyWire`
+  per-neuron raw-ID bridge either; the public bridge appears to remain
+  type/group-level.
+
+4. Evidence
+- Local: `outputs/metrics/t111_decoder_id_alignment_comparison.json`
+- Local: `external/vnc/manc/body-annotations-male-cns-v0.9-minconf-0.5.feather`
+- Public: `https://www.nature.com/articles/s41586-025-08925-z`
+- Public: `https://github.com/flyconnectome/2023neckconnective`
+- Public: `https://natverse.org/malecns/`
+- Public: `https://www.nature.com/articles/s41586-024-07686-5`
+- Public: `https://www.janelia.org/project-team/flyem/manc-connectome`
+
+5. Next actions
+- Treat exact MANC-to-FlyWire neuron-ID substitution as unavailable in the
+  public stack unless a narrower curated subset proves otherwise.
+- Design the next decoder bridge around public `cell_type` / homolog-group /
+  `side` metadata, prioritizing neck-connective DN classes where the
+  comparative literature is strongest.
+
+## 2026-03-12 - T112 completed with a FlyWire semantic monitor-space bridge
+
+1. What I attempted
+- Continue `T112` past the literature review and replace the zero-overlap
+  decoder path with an explicit bridge from the real MANC `exit_nerve`
+  structural spec into the FlyWire monitor space used by the current
+  whole-brain backend.
+- Use sub-agents for three parallel checks:
+  - local seam review for the minimal honest implementation
+  - public literature review on whether an exact raw-ID crosswalk exists
+  - local annotation overlap review for exact shared `cell_type + side`
+    coverage
+- Keep heavy compute serialized and only run one short real WSL benchmark after
+  the bridge and tests were in place.
+
+2. What succeeded
+- Implemented the semantic bridge tooling in:
+  - `src/vnc/flywire_bridge.py`
+  - `scripts/build_vnc_flywire_semantic_spec.py`
+- Extended the decoder in:
+  - `src/vnc/spec_decoder.py`
+  so `vnc_structural_spec` channels can now monitor grouped FlyWire roots via
+  `monitor_ids` and pool them with `monitor_reduce = mean`.
+- Added real bridge configs:
+  - `configs/mock_vnc_structural_spec_exit_nerve_flywire_semantic.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve_flywire_semantic.yaml`
+- Added validation coverage:
+  - `tests/test_vnc_flywire_bridge.py`
+  - `tests/test_vnc_spec_decoder.py`
+  - `tests/test_closed_loop_smoke.py`
+- Materialized the bridged real-data artifact:
+  - `outputs/metrics/manc_thoracic_structural_spec_exit_nerve_flywire_semantic.json`
+- Bridge summary from that artifact:
+  - source channels: `1232`
+  - source semantic keys: `926`
+  - bridged semantic channels: `847`
+  - matched source channels: `1095`
+  - unmatched source channels: `137`
+  - FlyWire monitor IDs after completeness filtering: `1145`
+  - match counts:
+    - exact `cell_type`: `770`
+    - `hemibrain_type` fallback: `77`
+- Cleared the runtime ID blocker:
+  - raw real MANC spec config requested `736` IDs and matched `0`
+  - bridged semantic config requested `685` IDs and matched `685`
+- Ran a short serialized real WSL benchmark with the bridged config:
+  - `outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_flywire_semantic_target_0p1s.csv`
+  - `outputs/requested_0p1s_vnc_structural_spec_exit_nerve_flywire_semantic_target/*`
+  - `outputs/metrics/t112_exit_nerve_flywire_semantic_summary.json`
+- That real run is no longer silent:
+  - completed `50` cycles at `0.1 s`
+  - real-time factor: `0.00232`
+  - nonzero command cycles: `43`
+  - max forward / turn signals both reached `1.0`
+  - both left and right drives clipped at `1.2`
+
+3. What failed
+- The first bridged run is not behaviorally calibrated yet.
+- The bridge solves monitor-space compatibility, but the decoder is currently
+  saturating under the first semantic-weight scaling choice.
+- No public general exact `MANC bodyid -> FlyWire root_id` crosswalk emerged;
+  the bridge remains annotation-level rather than exact neuron identity.
+
+4. Evidence
+- Code:
+  - `src/vnc/flywire_bridge.py`
+  - `src/vnc/spec_decoder.py`
+  - `scripts/build_vnc_flywire_semantic_spec.py`
+- Configs:
+  - `configs/mock_vnc_structural_spec_exit_nerve_flywire_semantic.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve_flywire_semantic.yaml`
+- Tests:
+  - `tests/test_vnc_flywire_bridge.py`
+  - `tests/test_vnc_spec_decoder.py`
+  - `tests/test_closed_loop_smoke.py`
+- Artifacts:
+  - `outputs/metrics/manc_thoracic_structural_spec_exit_nerve_flywire_semantic.json`
+  - `outputs/metrics/t112_decoder_id_alignment_comparison.json`
+  - `outputs/metrics/t112_decoder_id_alignment_semantic.json`
+  - `outputs/metrics/t112_exit_nerve_flywire_semantic_summary.json`
+  - `outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_flywire_semantic_target_0p1s.csv`
+- Docs:
+  - `docs/vnc_flywire_semantic_bridge.md`
+  - `docs/vnc_spec_decoder.md`
+  - `docs/vnc_workstream_plan.md`
+  - `docs/vnc_exit_nerve_decoder_validation.md`
+
+5. Validation
+- `python -m pytest tests/test_flywire_annotations.py tests/test_vnc_flywire_bridge.py tests/test_vnc_spec_decoder.py tests/test_closed_loop_smoke.py -q` -> `25 passed`
+- `python -m py_compile src/brain/flywire_annotations.py src/vnc/flywire_bridge.py src/vnc/spec_decoder.py scripts/build_vnc_flywire_semantic_spec.py tests/test_vnc_flywire_bridge.py tests/test_vnc_spec_decoder.py` -> passed
+
+6. Next actions
+- Mark `T112` done.
+- Start `T113`: calibrate the FlyWire-semantic VNC structural decoder so the
+  bridged path stops saturating and can be judged on real behavior rather than
+  only on ID-space validity.
+
+## 2026-03-12 - Started `T113` with decoder normalization and tracked-camera reruns
+
+1. What I attempted
+- Investigate the user's report that the `T112` semantic-VNC demo looked bad
+  because the fly ran off screen.
+- Separate the problem into:
+  - camera framing
+  - decoder saturation
+- Fix the decoder math first instead of only moving the camera.
+
+2. What succeeded
+- Confirmed from the `2.0 s` semantic-VNC run log that the fly really was
+  leaving the frame under the old branch:
+  - `992 / 1000` nonzero command cycles
+  - drives repeatedly clipping at `1.2`
+  - final position about `x = 40.69`
+- Confirmed the video framing issue was real and mechanical:
+  - `src/body/flygym_runtime.py` used a fixed world-mounted bird's-eye camera
+    at `pos = (5, 0, 35)`
+- Patched the runtime so the semantic-VNC branch can use a tracked FlyGym
+  camera:
+  - `src/body/flygym_runtime.py`
+  - `src/runtime/closed_loop.py`
+  - `configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve_flywire_semantic.yaml`
+- Patched the decoder math in `src/vnc/spec_decoder.py`:
+  - old path: summed `rate * structural_weight` directly into forward/turn
+  - new path: divides weighted left/right totals by the total left/right
+    structural weight mass of the loaded channels, then computes forward/turn
+    from those normalized weighted mean rates
+- Updated semantic-VNC config scales/gains to match the normalized decoder:
+  - `forward_scale_hz: 20.0`
+  - `turn_scale_hz: 10.0`
+  - `forward_gain: 0.75`
+  - `turn_gain: 0.3`
+- Added/updated tests:
+  - `tests/test_vnc_spec_decoder.py`
+  - `tests/test_closed_loop_smoke.py`
+- Short real rerun after decoder fix:
+  - `outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_target_0p1s.csv`
+  - result:
+    - `45 / 50` nonzero command cycles
+    - `max_left_drive = 0.529`
+    - `max_right_drive = 0.932`
+    - `max_forward_signal = 0.858`
+    - `max_turn_signal = 0.963`
+- Full `2.0 s` corrected rerun:
+  - `outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_follow_yaw_target_2s.csv`
+  - `outputs/requested_2s_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_follow_yaw_target/flygym-demo-20260312-184650/demo.mp4`
+  - result:
+    - `1000 / 1000` cycles completed
+    - `995 / 1000` cycles nonzero
+    - `max_left_drive = 0.867`
+    - `max_right_drive = 0.957`
+    - final position about `x = 7.02`, `y = 1.00`
+    - stable final frame remained on screen under the follow camera
+- Final corrected `2.0 s` metrics:
+  - `avg_forward_speed = 4.7635`
+  - `net_displacement = 7.0699`
+  - `displacement_efficiency = 0.7428`
+  - `real_time_factor = 0.00244`
+
+3. What failed
+- This is not yet a biologically tuned semantic-VNC controller.
+- The corrected branch is much better behaved than the first `T112` demo, but
+  it still needs behavioral tuning and scene-level review, not just scalar
+  command checks.
+
+4. Evidence
+- Code:
+  - `src/vnc/spec_decoder.py`
+  - `src/body/flygym_runtime.py`
+  - `src/runtime/closed_loop.py`
+- Tests:
+  - `tests/test_vnc_spec_decoder.py`
+  - `tests/test_closed_loop_smoke.py`
+- Artifacts:
+  - `outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_target_0p1s.csv`
+  - `outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_follow_yaw_target_2s.csv`
+  - `outputs/requested_0p1s_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_target/*`
+  - `outputs/requested_2s_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_follow_yaw_target/flygym-demo-20260312-184650/demo.mp4`
+  - `outputs/screenshots/demo.png`
+
+5. Validation
+- `python -m pytest tests/test_vnc_spec_decoder.py tests/test_closed_loop_smoke.py -q` -> `18 passed`
+- `python -m py_compile src/vnc/spec_decoder.py src/body/flygym_runtime.py src/runtime/closed_loop.py tests/test_vnc_spec_decoder.py tests/test_closed_loop_smoke.py` -> passed
+
+6. Next actions
+- Continue `T113` with scene-level review of the corrected `2.0 s` semantic-VNC
+  demo.
+- If the motion still looks implausible, tune channel filtering and gains from
+  the normalized decoder rather than reverting to raw weight-mass sums.
+
+## 2026-03-12 - Semantic-VNC branch frozen as failed parity branch
+
+1. What I attempted
+- Wrote the semantic-VNC branch up explicitly as a failed parity branch instead of leaving it in a vague "needs more tuning" state.
+- Added a dedicated freeze note and artifact-lock manifest.
+- Closed `T113` with a final branch verdict.
+
+2. What succeeded
+- Added the freeze writeup:
+  - `docs/semantic_vnc_failed_parity_branch.md`
+- Updated the main parity and gap reports so the semantic-VNC branch is not treated as a live parity candidate:
+  - `REPRO_PARITY_REPORT.md`
+  - `ASSUMPTIONS_AND_GAPS.md`
+- Updated the task tracker to close `T113` with a failed-parity outcome:
+  - `TASKS.md`
+- Added the locked-artifact manifest:
+  - `outputs/locks/semantic_vnc_failed_parity_branch_manifest.md`
+
+3. What failed
+- No new technical failure occurred in this slice.
+- The branch failure itself is now the recorded result:
+  - semantic ID alignment works
+  - decoder saturation was fixed
+  - framing was fixed
+  - target tracking still fails
+
+4. Evidence paths
+- `docs/semantic_vnc_failed_parity_branch.md`
+- `outputs/locks/semantic_vnc_failed_parity_branch_manifest.md`
+- `outputs/metrics/t112_decoder_id_alignment_comparison.json`
+- `outputs/metrics/t112_exit_nerve_flywire_semantic_summary.json`
+- `outputs/requested_2s_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_follow_yaw_target/flygym-demo-20260312-184650/demo.mp4`
+- `outputs/requested_2s_vnc_structural_spec_exit_nerve_flywire_semantic_decoder_fixed_follow_yaw_target/flygym-demo-20260312-184650/metrics.csv`
+
+5. Next actions
+- None in this turn.
+- The semantic-VNC branch is frozen and should not be mutated in place.
+
+## 2026-03-12 - Current best branch activation visualization
+
+1. What I attempted
+- Built a dedicated capture/render pipeline for a synchronized activation view
+  of the current best embodied branch.
+- Kept the expensive work serialized in one WSL FlyGym run.
+- Used the monitored-only extension of the calibrated branch so the artifact
+  could show broad descending/efferent activity without changing the underlying
+  splice branch.
+
+2. What succeeded
+- Added the visualization module and CLI:
+  - `src/visualization/activation_viz.py`
+  - `src/visualization/__init__.py`
+  - `scripts/build_best_branch_activation_visualization.py`
+- Added a renderer smoke test:
+  - `tests/test_activation_viz.py`
+- Host validation passed:
+  - `python -m pytest tests/test_activation_viz.py -q` -> `1 passed`
+  - `python -m py_compile src/visualization/activation_viz.py src/visualization/__init__.py scripts/build_best_branch_activation_visualization.py tests/test_activation_viz.py` -> passed
+- Completed the real WSL artifact build:
+  - `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/activation_side_by_side.mp4`
+  - `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/overview.png`
+  - `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/capture_data.npz`
+  - `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/source_demo.mp4`
+  - `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/summary.json`
+- Captured scope from `summary.json`:
+  - `frame_count = 200`
+  - `brain_neuron_count = 138639`
+  - `flyvis_neuron_count = 45669`
+  - `monitor_label_count = 16`
+  - `controller_label_count = 8`
+
+3. What failed
+- The first real smoke attempt on host Python failed because the new script
+  did not add `src` to `sys.path`.
+- The first real FlyGym smoke attempt also failed on host because `flygym` is
+  only validated in the WSL `flysim-full` environment.
+- Both were corrected before the full run:
+  - script import shim added
+  - real run moved to WSL `micromamba run -n flysim-full`
+
+4. Evidence paths
+- `docs/current_best_branch_activation_visualization.md`
+- `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/activation_side_by_side.mp4`
+- `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/overview.png`
+- `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/capture_data.npz`
+- `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/run.jsonl`
+- `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/metrics.csv`
+
+5. Next actions
+- None in this turn.
+- The requested activation visualization artifact now exists and is documented.

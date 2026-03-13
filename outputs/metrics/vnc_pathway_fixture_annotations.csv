@@ -1,0 +1,5 @@
+﻿pt_root_id,region,flow,super_class,cell_class,cell_type,side
+1,brain,efferent,descending,motor,DNa02,L
+2,ventral_nerve_cord,intrinsic,interneuron,premotor,PMN01,L
+3,ventral_nerve_cord,efferent,motor,motor,MN-leg-01,L
+4,ventral_nerve_cord,efferent,motor,motor,MN-leg-02,L

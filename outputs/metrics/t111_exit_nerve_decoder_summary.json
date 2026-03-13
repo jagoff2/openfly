@@ -1,0 +1,74 @@
+{
+  "vnc": {
+    "benchmark_csv": "outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_target_0p1s.csv",
+    "wall_seconds": 42.115888385999995,
+    "sim_seconds": 0.10000000000000184,
+    "real_time_factor": 0.002374400821929319,
+    "avg_forward_speed": 2.9577852222453367,
+    "net_displacement": 0.10043451371598569,
+    "displacement_efficiency": 0.346489653469749,
+    "completed_cycles": 50,
+    "nonzero_command_cycles": 0
+  },
+  "baseline": {
+    "benchmark_csv": "outputs/benchmarks/fullstack_splice_uvgrid_descending_calibrated_target_t111_0p1s.csv",
+    "wall_seconds": 40.975592831,
+    "sim_seconds": 0.10000000000000184,
+    "real_time_factor": 0.0024404771985226054,
+    "avg_forward_speed": 2.9743889464707207,
+    "net_displacement": 0.12875433119252058,
+    "displacement_efficiency": 0.44171079495338006,
+    "completed_cycles": 50,
+    "nonzero_command_cycles": 43
+  },
+  "alignment": {
+    "flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve": {
+      "config": "configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve.yaml",
+      "decoder_type": "vnc_structural_spec",
+      "requested_id_count": 736,
+      "matched_id_count": 0,
+      "unmatched_id_count": 736,
+      "matched_fraction": 0.0,
+      "matched_id_samples": [],
+      "unmatched_id_samples": [
+        10001,
+        10010,
+        10026,
+        10030,
+        10033,
+        10038,
+        10045,
+        10048,
+        10054,
+        10056,
+        10063,
+        10065
+      ],
+      "completeness_path": "external/fly-brain/data/2025_Completeness_783.csv"
+    },
+    "flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated": {
+      "config": "configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml",
+      "decoder_type": "sampled_descending",
+      "requested_id_count": 42,
+      "matched_id_count": 42,
+      "unmatched_id_count": 0,
+      "matched_fraction": 1.0,
+      "matched_id_samples": [
+        720575940604737708,
+        720575940605702944,
+        720575940610236514,
+        720575940610505006,
+        720575940611644529,
+        720575940614236200,
+        720575940616026939,
+        720575940616826380,
+        720575940617809181,
+        720575940618440000,
+        720575940620300308,
+        720575940620380449
+      ],
+      "unmatched_id_samples": [],
+      "completeness_path": "external/fly-brain/data/2025_Completeness_783.csv"
+    }
+  }
+}

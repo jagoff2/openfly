@@ -1,0 +1,100 @@
+{
+  "source_path": "outputs\\metrics\\vnc_annotation_fixture.csv",
+  "row_count": 5,
+  "column_names": [
+    "region",
+    "flow",
+    "super_class",
+    "cell_class",
+    "cell_type",
+    "side"
+  ],
+  "top_region_counts": [
+    {
+      "label": "ventral_nerve_cord",
+      "count": 4
+    },
+    {
+      "label": "brain",
+      "count": 1
+    }
+  ],
+  "top_flow_counts": [
+    {
+      "label": "efferent",
+      "count": 2
+    },
+    {
+      "label": "intrinsic",
+      "count": 2
+    },
+    {
+      "label": "afferent",
+      "count": 1
+    }
+  ],
+  "top_super_class_counts": [
+    {
+      "label": "descending",
+      "count": 2
+    },
+    {
+      "label": "motor",
+      "count": 2
+    },
+    {
+      "label": "sensory",
+      "count": 1
+    }
+  ],
+  "top_cell_class_counts": [
+    {
+      "label": "motor",
+      "count": 2
+    },
+    {
+      "label": "premotor",
+      "count": 2
+    },
+    {
+      "label": "visual",
+      "count": 1
+    }
+  ],
+  "top_cell_type_counts": [
+    {
+      "label": "DNx01",
+      "count": 2
+    },
+    {
+      "label": "PMN01",
+      "count": 2
+    },
+    {
+      "label": "LC4",
+      "count": 1
+    }
+  ],
+  "paired_cell_types": [
+    {
+      "cell_type": "DNx01",
+      "sides": [
+        "L",
+        "R"
+      ]
+    },
+    {
+      "cell_type": "PMN01",
+      "sides": [
+        "L",
+        "R"
+      ]
+    }
+  ],
+  "declared_source_key": "manc",
+  "known_sources": [
+    "manc",
+    "fanc",
+    "banc"
+  ]
+}

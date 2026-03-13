@@ -1,0 +1,27 @@
+{
+  "run_dir": "outputs/requested_2s_vnc_structural_spec_exit_nerve_flywire_semantic_target/flygym-demo-20260312-151525",
+  "metrics_path": "outputs/requested_2s_vnc_structural_spec_exit_nerve_flywire_semantic_target/flygym-demo-20260312-151525/metrics.csv",
+  "video_path": "outputs/requested_2s_vnc_structural_spec_exit_nerve_flywire_semantic_target/flygym-demo-20260312-151525/demo.mp4",
+  "log_path": "outputs/requested_2s_vnc_structural_spec_exit_nerve_flywire_semantic_target/flygym-demo-20260312-151525/run.jsonl",
+  "metrics": {
+    "sim_seconds": 1.9999999999997962,
+    "avg_forward_speed": 27.685304990250707,
+    "trajectory_smoothness": 0.15131823791061896,
+    "path_length": 55.31523937052092,
+    "net_displacement": 40.674719644888384,
+    "displacement_efficiency": 0.7353257458118334,
+    "bbox_width": 40.69922386109829,
+    "bbox_height": 1.698040661169216,
+    "bbox_area": 69.10893699417328,
+    "stable": 1.0,
+    "wall_seconds": 779.343262541,
+    "real_time_factor": 0.0025662632836253967,
+    "device": "cpu",
+    "mode": "flygym",
+    "completed_cycles": 1000,
+    "target_duration_s": 2.0,
+    "completed_full_duration": 1.0,
+    "failure_type": "",
+    "failure_message": ""
+  }
+}

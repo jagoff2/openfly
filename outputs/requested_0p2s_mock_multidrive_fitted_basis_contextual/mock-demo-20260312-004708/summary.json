@@ -1,0 +1,27 @@
+{
+  "run_dir": "outputs\\requested_0p2s_mock_multidrive_fitted_basis_contextual\\mock-demo-20260312-004708",
+  "metrics_path": "outputs\\requested_0p2s_mock_multidrive_fitted_basis_contextual\\mock-demo-20260312-004708\\metrics.csv",
+  "video_path": "outputs\\requested_0p2s_mock_multidrive_fitted_basis_contextual\\mock-demo-20260312-004708\\demo.mp4",
+  "log_path": "outputs\\requested_0p2s_mock_multidrive_fitted_basis_contextual\\mock-demo-20260312-004708\\run.jsonl",
+  "metrics": {
+    "sim_seconds": 0.20000000000000004,
+    "avg_forward_speed": 0.04308200194367706,
+    "trajectory_smoothness": 0.9943884759847732,
+    "path_length": 0.0077547603498618715,
+    "net_displacement": 0.007754760214611847,
+    "displacement_efficiency": 0.9999999825590968,
+    "bbox_width": 0.007754759978821882,
+    "bbox_height": 1.9123256044243864e-06,
+    "bbox_area": 1.4829626063666597e-08,
+    "stable": 1.0,
+    "wall_seconds": 0.00856490000296617,
+    "real_time_factor": 23.3511190942961,
+    "device": "mock",
+    "mode": "mock",
+    "completed_cycles": 10,
+    "target_duration_s": 0.2,
+    "completed_full_duration": 1.0,
+    "failure_type": "",
+    "failure_message": ""
+  }
+}

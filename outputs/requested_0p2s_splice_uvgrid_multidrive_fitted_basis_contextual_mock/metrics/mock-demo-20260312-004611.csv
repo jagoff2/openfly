@@ -1,0 +1,2 @@
+sim_seconds,avg_forward_speed,trajectory_smoothness,path_length,net_displacement,displacement_efficiency,bbox_width,bbox_height,bbox_area,stable,wall_seconds,real_time_factor,device,mode,completed_cycles,target_duration_s,completed_full_duration,failure_type,failure_message
+0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.00034869999944930896,0.0,cpu,mock,0,0.2,0.0,ValueError,visual splice requires observation.realistic_vision_splice_cache; use fast vision payload mode

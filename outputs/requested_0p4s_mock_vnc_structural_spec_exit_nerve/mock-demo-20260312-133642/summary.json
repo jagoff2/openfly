@@ -1,0 +1,27 @@
+{
+  "run_dir": "outputs\\requested_0p4s_mock_vnc_structural_spec_exit_nerve\\mock-demo-20260312-133642",
+  "metrics_path": "outputs\\requested_0p4s_mock_vnc_structural_spec_exit_nerve\\mock-demo-20260312-133642\\metrics.csv",
+  "video_path": "outputs\\requested_0p4s_mock_vnc_structural_spec_exit_nerve\\mock-demo-20260312-133642\\demo.mp4",
+  "log_path": "outputs\\requested_0p4s_mock_vnc_structural_spec_exit_nerve\\mock-demo-20260312-133642\\run.jsonl",
+  "metrics": {
+    "sim_seconds": 0.4000000000000002,
+    "avg_forward_speed": 0.0,
+    "trajectory_smoothness": 1.0,
+    "path_length": 0.0,
+    "net_displacement": 0.0,
+    "displacement_efficiency": 0.0,
+    "bbox_width": 0.0,
+    "bbox_height": 0.0,
+    "bbox_area": 0.0,
+    "stable": 1.0,
+    "wall_seconds": 32.52115240000421,
+    "real_time_factor": 0.012299687141466377,
+    "device": "cpu",
+    "mode": "mock",
+    "completed_cycles": 20,
+    "target_duration_s": 0.4,
+    "completed_full_duration": 1.0,
+    "failure_type": "",
+    "failure_message": ""
+  }
+}

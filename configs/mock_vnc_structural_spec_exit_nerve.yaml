@@ -1,0 +1,41 @@
+brain:
+  backend: torch
+  completeness_path: external/fly-brain/data/2025_Completeness_783.csv
+  connectivity_path: external/fly-brain/data/2025_Connectivity_783.parquet
+  cache_dir: outputs/cache
+  device: cpu
+  dt_ms: 0.1
+body:
+  terrain_type: flat
+brain_context:
+  mode: none
+decoder:
+  type: vnc_structural_spec
+  spec_json: outputs/metrics/manc_thoracic_structural_spec_exit_nerve.json
+  command_mode: hybrid_multidrive
+  min_total_weight: 500.0
+  forward_scale_hz: 500000.0
+  turn_scale_hz: 150000.0
+  forward_gain: 1.0
+  turn_gain: 0.6
+  latent_freq_bias: 0.85
+  latent_freq_gain: 0.7
+  latent_turn_amp_gain: 0.25
+  latent_turn_freq_gain: 0.12
+  latent_retraction_base: 1.0
+  latent_stumbling_base: 1.0
+  latent_retraction_turn_gain: 0.3
+  latent_stumbling_turn_gain: 0.45
+  monitor_top_channels: 12
+runtime:
+  seed: 0
+  duration_s: 0.4
+  body_timestep_s: 0.01
+  control_interval_s: 0.02
+  initial_left_drive: 0.0
+  initial_right_drive: 0.0
+  force_cpu_vision: true
+  vision_payload_mode: fast
+  control_mode: hybrid_multidrive
+  video_stride: 1
+  video_fps: 24

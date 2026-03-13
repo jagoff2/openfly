@@ -1,0 +1,6 @@
+﻿region,flow,super_class,cell_class,cell_type,side
+ventral_nerve_cord,efferent,descending,motor,DNx01,L
+ventral_nerve_cord,efferent,descending,motor,DNx01,R
+ventral_nerve_cord,intrinsic,motor,premotor,PMN01,L
+ventral_nerve_cord,intrinsic,motor,premotor,PMN01,R
+brain,afferent,sensory,visual,LC4,L

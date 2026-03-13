@@ -1,0 +1,32 @@
+{
+  "config_path": "configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_monitored.yaml",
+  "run_dir": "outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618",
+  "metrics": {
+    "sim_seconds": 1.9999999999997962,
+    "avg_forward_speed": 4.834789752960205,
+    "trajectory_smoothness": 0.42517805099487305,
+    "path_length": 9.659911155700684,
+    "net_displacement": 6.219974994659424,
+    "displacement_efficiency": 0.6438956729937189,
+    "bbox_width": 6.206660747528076,
+    "bbox_height": 1.0288469791412354,
+    "bbox_area": 6.385704160648743,
+    "stable": 1.0,
+    "wall_seconds": 797.0861241050001,
+    "real_time_factor": 0.002509139150108121,
+    "completed_cycles": 1000,
+    "target_duration_s": 2.0,
+    "completed_full_duration": 1.0,
+    "failure_type": "",
+    "failure_message": ""
+  },
+  "source_demo_path": "outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/source_demo.mp4",
+  "composite_video_path": "outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/activation_side_by_side.mp4",
+  "overview_path": "outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/overview.png",
+  "capture_path": "outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/capture_data.npz",
+  "frame_count": 200,
+  "brain_neuron_count": 138639,
+  "flyvis_neuron_count": 45669,
+  "monitor_label_count": 16,
+  "controller_label_count": 8
+}

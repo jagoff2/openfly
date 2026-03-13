@@ -1,0 +1,50 @@
+{
+  "flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve": {
+    "config": "configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve.yaml",
+    "decoder_type": "vnc_structural_spec",
+    "requested_id_count": 736,
+    "matched_id_count": 0,
+    "unmatched_id_count": 736,
+    "matched_fraction": 0.0,
+    "matched_id_samples": [],
+    "unmatched_id_samples": [
+      10001,
+      10010,
+      10026,
+      10030,
+      10033,
+      10038,
+      10045,
+      10048,
+      10054,
+      10056,
+      10063,
+      10065
+    ],
+    "completeness_path": "external/fly-brain/data/2025_Completeness_783.csv"
+  },
+  "flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated": {
+    "config": "configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml",
+    "decoder_type": "sampled_descending",
+    "requested_id_count": 42,
+    "matched_id_count": 42,
+    "unmatched_id_count": 0,
+    "matched_fraction": 1.0,
+    "matched_id_samples": [
+      720575940604737708,
+      720575940605702944,
+      720575940610236514,
+      720575940610505006,
+      720575940611644529,
+      720575940614236200,
+      720575940616026939,
+      720575940616826380,
+      720575940617809181,
+      720575940618440000,
+      720575940620300308,
+      720575940620380449
+    ],
+    "unmatched_id_samples": [],
+    "completeness_path": "external/fly-brain/data/2025_Completeness_783.csv"
+  }
+}

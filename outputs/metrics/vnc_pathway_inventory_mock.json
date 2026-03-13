@@ -1,0 +1,65 @@
+{
+  "node_count": 4,
+  "edge_count": 4,
+  "descending_node_count": 1,
+  "premotor_node_count": 1,
+  "motor_node_count": 2,
+  "descending_to_premotor_edges": [
+    {
+      "pre_root_id": 1,
+      "pre_cell_type": "DNa02",
+      "post_root_id": 2,
+      "post_cell_type": "PMN01",
+      "weight": 12
+    }
+  ],
+  "premotor_to_motor_edges": [
+    {
+      "pre_root_id": 2,
+      "pre_cell_type": "PMN01",
+      "post_root_id": 3,
+      "post_cell_type": "MN-leg-01",
+      "weight": 8
+    },
+    {
+      "pre_root_id": 2,
+      "pre_cell_type": "PMN01",
+      "post_root_id": 4,
+      "post_cell_type": "MN-leg-02",
+      "weight": 3
+    }
+  ],
+  "descending_to_motor_edges": [
+    {
+      "pre_root_id": 1,
+      "pre_cell_type": "DNa02",
+      "post_root_id": 3,
+      "post_cell_type": "MN-leg-01",
+      "weight": 2
+    }
+  ],
+  "descending_premotor_motor_paths": [
+    {
+      "descending_root_id": 1,
+      "descending_cell_type": "DNa02",
+      "premotor_root_id": 2,
+      "premotor_cell_type": "PMN01",
+      "motor_root_id": 3,
+      "motor_cell_type": "MN-leg-01",
+      "first_edge_weight": 12,
+      "second_edge_weight": 8,
+      "path_weight_min": 8
+    },
+    {
+      "descending_root_id": 1,
+      "descending_cell_type": "DNa02",
+      "premotor_root_id": 2,
+      "premotor_cell_type": "PMN01",
+      "motor_root_id": 4,
+      "motor_cell_type": "MN-leg-02",
+      "first_edge_weight": 12,
+      "second_edge_weight": 3,
+      "path_weight_min": 3
+    }
+  ]
+}

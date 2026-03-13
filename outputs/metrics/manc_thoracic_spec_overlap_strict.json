@@ -1,0 +1,279 @@
+{
+  "variant": "strict",
+  "shortlist": [
+    "DNg97",
+    "DNp103",
+    "DNp18",
+    "DNp71",
+    "DNpe040",
+    "DNpe056",
+    "DNpe016",
+    "DNa01",
+    "DNa02",
+    "MDN",
+    "DNg74_a",
+    "DNg74_b",
+    "DNg105",
+    "DNg108"
+  ],
+  "descending_channel_count": 1297,
+  "overlap_count": 30,
+  "overlap_by_cell_type": {
+    "DNa01": 2,
+    "DNa02": 2,
+    "DNg105": 2,
+    "DNg108": 2,
+    "DNg74_a": 2,
+    "DNg74_b": 2,
+    "DNg97": 2,
+    "DNp103": 2,
+    "DNp18": 2,
+    "DNp71": 2,
+    "DNpe016": 2,
+    "DNpe040": 2,
+    "DNpe056": 2,
+    "MDN": 4
+  },
+  "overlap": [
+    {
+      "root_id": 10131,
+      "cell_type": "DNg74_a",
+      "side": "right",
+      "region": "MX",
+      "total_motor_weight": 52256,
+      "motor_target_count": 472
+    },
+    {
+      "root_id": 10247,
+      "cell_type": "DNg74_a",
+      "side": "left",
+      "region": "MX",
+      "total_motor_weight": 49384,
+      "motor_target_count": 484
+    },
+    {
+      "root_id": 10281,
+      "cell_type": "DNg108",
+      "side": "right",
+      "region": "GNG",
+      "total_motor_weight": 47486,
+      "motor_target_count": 460
+    },
+    {
+      "root_id": 10274,
+      "cell_type": "DNg108",
+      "side": "left",
+      "region": "GNG",
+      "total_motor_weight": 43691,
+      "motor_target_count": 473
+    },
+    {
+      "root_id": 525454,
+      "cell_type": "DNg74_b",
+      "side": "right",
+      "region": "MX",
+      "total_motor_weight": 32143,
+      "motor_target_count": 465
+    },
+    {
+      "root_id": 13130,
+      "cell_type": "DNg105",
+      "side": "right",
+      "region": "MX",
+      "total_motor_weight": 28686,
+      "motor_target_count": 456
+    },
+    {
+      "root_id": 10520,
+      "cell_type": "DNg74_b",
+      "side": "left",
+      "region": "MX",
+      "total_motor_weight": 28055,
+      "motor_target_count": 439
+    },
+    {
+      "root_id": 10124,
+      "cell_type": "DNg105",
+      "side": "left",
+      "region": "MX",
+      "total_motor_weight": 25209,
+      "motor_target_count": 442
+    },
+    {
+      "root_id": 10048,
+      "cell_type": "DNp18",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 22572,
+      "motor_target_count": 464
+    },
+    {
+      "root_id": 10760,
+      "cell_type": "DNa01",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 18869,
+      "motor_target_count": 411
+    },
+    {
+      "root_id": 10026,
+      "cell_type": "DNp18",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 18848,
+      "motor_target_count": 465
+    },
+    {
+      "root_id": 10442,
+      "cell_type": "DNa01",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 17979,
+      "motor_target_count": 405
+    },
+    {
+      "root_id": 230783,
+      "cell_type": "DNg97",
+      "side": "right",
+      "region": "MX",
+      "total_motor_weight": 17070,
+      "motor_target_count": 436
+    },
+    {
+      "root_id": 523769,
+      "cell_type": "DNa02",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 16088,
+      "motor_target_count": 411
+    },
+    {
+      "root_id": 13805,
+      "cell_type": "DNg97",
+      "side": "left",
+      "region": "MX",
+      "total_motor_weight": 15461,
+      "motor_target_count": 417
+    },
+    {
+      "root_id": 10360,
+      "cell_type": "DNa02",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 13924,
+      "motor_target_count": 376
+    },
+    {
+      "root_id": 10283,
+      "cell_type": "DNp103",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 9072,
+      "motor_target_count": 414
+    },
+    {
+      "root_id": 10417,
+      "cell_type": "DNp103",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 9052,
+      "motor_target_count": 408
+    },
+    {
+      "root_id": 10223,
+      "cell_type": "DNpe056",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 7090,
+      "motor_target_count": 330
+    },
+    {
+      "root_id": 11332,
+      "cell_type": "MDN",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 5880,
+      "motor_target_count": 318
+    },
+    {
+      "root_id": 11288,
+      "cell_type": "MDN",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 5785,
+      "motor_target_count": 325
+    },
+    {
+      "root_id": 12348,
+      "cell_type": "MDN",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 5696,
+      "motor_target_count": 277
+    },
+    {
+      "root_id": 10732,
+      "cell_type": "DNpe056",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 5524,
+      "motor_target_count": 342
+    },
+    {
+      "root_id": 10763,
+      "cell_type": "MDN",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 4909,
+      "motor_target_count": 313
+    },
+    {
+      "root_id": 520485,
+      "cell_type": "DNpe016",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 4414,
+      "motor_target_count": 368
+    },
+    {
+      "root_id": 519771,
+      "cell_type": "DNp71",
+      "side": "left",
+      "region": "PC",
+      "total_motor_weight": 4367,
+      "motor_target_count": 382
+    },
+    {
+      "root_id": 802893,
+      "cell_type": "DNpe016",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 3971,
+      "motor_target_count": 330
+    },
+    {
+      "root_id": 11159,
+      "cell_type": "DNp71",
+      "side": "right",
+      "region": "PC",
+      "total_motor_weight": 3293,
+      "motor_target_count": 365
+    },
+    {
+      "root_id": 14885,
+      "cell_type": "DNpe040",
+      "side": "right",
+      "region": "",
+      "total_motor_weight": 1201,
+      "motor_target_count": 109
+    },
+    {
+      "root_id": 14328,
+      "cell_type": "DNpe040",
+      "side": "left",
+      "region": "",
+      "total_motor_weight": 805,
+      "motor_target_count": 79
+    }
+  ]
+}

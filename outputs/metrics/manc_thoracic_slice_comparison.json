@@ -1,0 +1,18 @@
+{
+  "base": {
+    "premotor_candidate_count": 5474,
+    "selected_node_count": 7291,
+    "selected_edge_count": 228061,
+    "path_d2p_edges": 124181,
+    "path_p2m_edges": 90463,
+    "descending_channel_count": 1301
+  },
+  "strict": {
+    "premotor_candidate_count": 2164,
+    "selected_node_count": 3977,
+    "selected_edge_count": 121268,
+    "path_d2p_edges": 58391,
+    "path_p2m_edges": 49460,
+    "descending_channel_count": 1297
+  }
+}

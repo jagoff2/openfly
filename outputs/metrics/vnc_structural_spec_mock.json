@@ -1,0 +1,23 @@
+{
+  "node_count": 4,
+  "edge_count": 4,
+  "descending_channel_count": 1,
+  "left_motor_total_weight": 13,
+  "right_motor_total_weight": 0,
+  "channels": [
+    {
+      "root_id": 1,
+      "cell_type": "DNa02",
+      "side": "left",
+      "region": "brain",
+      "left_direct_weight": 2,
+      "right_direct_weight": 0,
+      "left_premotor_path_weight": 11,
+      "right_premotor_path_weight": 0,
+      "left_total_weight": 13,
+      "right_total_weight": 0,
+      "total_motor_weight": 13,
+      "motor_target_count": 2
+    }
+  ]
+}

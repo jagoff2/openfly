@@ -1,0 +1,36 @@
+{
+  "benchmark_csv": "outputs/benchmarks/fullstack_vnc_structural_spec_exit_nerve_flywire_semantic_target_0p1s.csv",
+  "run_log": "outputs/requested_0p1s_vnc_structural_spec_exit_nerve_flywire_semantic_target/flygym-demo-20260312-145326/run.jsonl",
+  "metrics_csv": "outputs/requested_0p1s_vnc_structural_spec_exit_nerve_flywire_semantic_target/flygym-demo-20260312-145326/metrics.csv",
+  "nonzero_command_cycles": 43,
+  "max_left_drive": 1.2,
+  "max_right_drive": 1.2,
+  "max_forward_signal": 1.0,
+  "max_turn_signal": 1.0,
+  "max_weighted_left_motor_drive_hz": 34533497.89224243,
+  "max_weighted_right_motor_drive_hz": 58504996.42913818,
+  "alignment": {
+    "config": "configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve_flywire_semantic.yaml",
+    "decoder_type": "vnc_structural_spec",
+    "requested_id_count": 685,
+    "matched_id_count": 685,
+    "unmatched_id_count": 0,
+    "matched_fraction": 1.0,
+    "matched_id_samples": [
+      720575940603874784,
+      720575940604470956,
+      720575940604737708,
+      720575940604783136,
+      720575940604930481,
+      720575940604954289,
+      720575940605009097,
+      720575940605162924,
+      720575940605513649,
+      720575940605714878,
+      720575940605725873,
+      720575940605950496
+    ],
+    "unmatched_id_samples": [],
+    "completeness_path": "external/fly-brain/data/2025_Completeness_783.csv"
+  }
+}

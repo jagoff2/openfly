@@ -1,0 +1,2854 @@
+root_id,region,entry_nerve,exit_nerve,flow,super_class,cell_class,cell_type,side
+10001,,,,efferent,descending,lt,DNp01,R
+10010,,,,efferent,descending,lt,DNp01,L
+10026,,,,efferent,descending,xn,DNp18,R
+10030,,,,efferent,descending,xl,pIP1,L
+10033,LB,,,efferent,descending,xn,DNg56,R
+10038,,,,efferent,descending,xl,pIP1,R
+10045,,,,efferent,descending,xl,DNg100,L
+10048,,,,efferent,descending,xn,DNp18,L
+10054,,,,efferent,descending,xn,DNpe013,R
+10056,,,,efferent,descending,xl,DNg100,R
+10063,,,,efferent,descending,xn,DNp27,R
+10065,,,,efferent,descending,xn,DNb05,R
+10068,,,,efferent,descending,xn,DNp30,R
+10090,,,,efferent,descending,xn,aSP22,L
+10091,,,,efferent,descending,lt,DNpe042,L
+10104,,,,efferent,descending,xn,aSP22,R
+10106,,,,efferent,descending,xn,DNp11,R
+10117,PC,,,efferent,descending,lt,DNp02,R
+10118,,,,efferent,descending,xn,DNb05,L
+10123,,,,efferent,descending,xn,DNg30,L
+10124,MX,,,efferent,descending,xl,DNg105,L
+10131,MX,,,efferent,descending,xl,DNg74_a,R
+10141,,,,efferent,descending,xn,DNg15,L
+10143,,,,efferent,descending,xn,DNp30,L
+10151,LB,,,efferent,descending,xl,DNge103,R
+10160,MX,,,efferent,descending,xl,DNg90,L
+10162,,,,efferent,descending,xn,DNp20,L
+10163,,,,efferent,descending,fl,DNge036,L
+10177,LB,,,efferent,descending,xl,DNg16,L
+10192,,,,efferent,descending,xl,DNg75,L
+10195,,,,efferent,descending,xn,DNp29,R
+10197,PC,,,efferent,descending,lt,DNp02,L
+10213,,,,efferent,descending,xl,DNge083,R
+10216,LB,,,efferent,descending,xl,DNge037,R
+10218,,,,efferent,descending,xl,DNg35,R
+10221,LB,,,efferent,descending,xl,DNge037,L
+10223,,,,efferent,descending,xn,DNpe056,L
+10228,PC,,,efferent,descending,lt,DNp06,L
+10234,PC,,,efferent,descending,xn,DNp35,L
+10236,MD,,,efferent,descending,xn,DNg99,R
+10237,,,,efferent,descending,xn,DNg30,R
+10244,,,,efferent,descending,xn,DNp55,L
+10245,,,,efferent,descending,xn,DNp36,R
+10247,MX,,,efferent,descending,xl,DNg74_a,L
+10249,CB,,,efferent,descending,ut,DNp31,L
+10259,,,,efferent,descending,xn,DNp11,L
+10264,CB,,,efferent,descending,ut,DNp31,R
+10274,GNG,,,efferent,descending,xl,DNg108,L
+10280,,,,efferent,descending,xn,DNp47,R
+10281,GNG,,,efferent,descending,xl,DNg108,R
+10283,,,,efferent,descending,lt,DNp103,R
+10295,TR,,,efferent,descending,xl,DNg34,L
+10296,,,,efferent,descending,xl,DNge054,R
+10301,,,,efferent,descending,xl,DNge050,L
+10304,LB,,,efferent,descending,xl,DNge041,R
+10341,,,,efferent,descending,xn,DNp19,L
+10342,,,,efferent,descending,xn,DNc02,R
+10354,,,,efferent,descending,xn,DNp73,R
+10360,,,,efferent,descending,xl,DNa02,R
+10361,MX,,,efferent,descending,lt,DNg40,L
+10366,,,,efferent,descending,lt,DNp59,R
+10377,,,,efferent,descending,xl,DNge054,L
+10379,,,,efferent,descending,xn,DNa10,R
+10384,PC,,,efferent,descending,xn,DNp63,R
+10388,,,,efferent,descending,xn,DNp13,R
+10394,MX,,,efferent,descending,xn,DNg98,L
+10411,,,,efferent,descending,xn,DNb09,R
+10416,,,,efferent,descending,xl,DNde002,L
+10417,,,,efferent,descending,lt,DNp103,L
+10425,PC,,,efferent,descending,xl,DNp10,L
+10433,PC,,,efferent,descending,xl,DNp10,R
+10440,LB,,,efferent,descending,xl,DNg16,R
+10442,,,,efferent,descending,xl,DNa01,L
+10444,,,,efferent,descending,xl,DNge035,L
+10446,,,,efferent,descending,xn,DNp73,L
+10449,,,,efferent,descending,xl,DNpe025,L
+10458,,,,efferent,descending,xn,DNp13,L
+10460,,,,efferent,descending,xn,DNa09,R
+10464,,,,efferent,descending,xn,DNp08,R
+10469,,,,efferent,descending,ut,DNbe001,L
+10482,,,,efferent,descending,xl,DNg35,L
+10499,,,,efferent,descending,fl,DNge039,R
+10504,,,,efferent,descending,xn,DNp62,R
+10506,,,,efferent,descending,xl,DNg37,R
+10520,MX,,,efferent,descending,xl,DNg74_b,L
+10527,,,,efferent,descending,xn,DNpe017,L
+10535,,,,efferent,descending,xl,DNg37,L
+10536,MX,,,efferent,descending,xn,DNg29,L
+10543,,,,efferent,descending,ut,DNa16,R
+10544,LB,,,efferent,descending,xl,DNg88,R
+10548,LB,,,efferent,descending,xn,DNg80,R
+10558,PC,,,efferent,descending,xn,DNp35,R
+10562,CB,,,efferent,descending,xn,DNp26,L
+10575,,,,efferent,descending,xl,DNde002,R
+10577,MX,,,efferent,descending,xl,DNg96,R
+10580,PC,,,efferent,descending,xn,DNp70,L
+10581,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN06B012,L
+10582,MD,,,efferent,descending,xl,DNge040,L
+10584,PC,,,efferent,descending,lt,DNp06,R
+10587,,,,efferent,descending,fl,DNge011,L
+10589,,,,efferent,descending,xl,DNp43,L
+10590,PC,,,efferent,descending,xl,DNpe052,L
+10601,,,,efferent,descending,xl,DNpe025,R
+10643,,,,efferent,descending,xl,DNge059,R
+10649,,,,efferent,descending,xn,DNp38,L
+10654,,,,efferent,descending,xn,DNb01,L
+10662,,,,efferent,descending,xl,DNge003,L
+10664,,,,efferent,descending,ut,DNp33,R
+10668,LB,,,efferent,descending,xn,DNge006,R
+10672,,,,efferent,descending,xn,DNae009,R
+10674,,,,efferent,descending,lt,DNp59,L
+10676,GNG,,,efferent,descending,nt,DNg49,L
+10686,LB,,,efferent,descending,xn,DNge132,L
+10700,,,,efferent,descending,xn,DNpe001,L
+10703,,,,efferent,descending,fl,DNge036,R
+10705,,,,efferent,descending,xn,DNc02,L
+10706,NA,AN,,efferent,descending,unknown_sensory,DNx01,L
+10710,,,,efferent,descending,xn,DNg102,R
+10711,,,,efferent,descending,xn,DNb07,L
+10712,,,,efferent,descending,xn,DNp36,L
+10713,,,,efferent,descending,xn,DNp42,L
+10717,,,,efferent,descending,xl,DNg93,R
+10724,,,,efferent,descending,xn,DNp62,L
+10727,,,,efferent,descending,xl,DNpe002,L
+10732,,,,efferent,descending,xn,DNpe056,R
+10734,,,,efferent,descending,xl,DNg93,L
+10739,MD,,,efferent,descending,xn,DNg24,L
+10740,GNG,,,efferent,descending,nt,DNge143,L
+10752,,,,efferent,descending,ut,DNp03,L
+10759,,,,efferent,descending,xn,DNb01,R
+10760,,,,efferent,descending,xl,DNa01,R
+10763,,,,efferent,descending,xn,MDN,R
+10765,,,,efferent,descending,xn,pMP2,R
+10770,PC,,,efferent,descending,xn,DNp23,L
+10783,PC,,,efferent,descending,xl,DNp09,L
+10800,,,,efferent,descending,xl,DNbe007,L
+10805,,,,efferent,descending,ut,DNb02,R
+10810,,,,efferent,descending,xn,DNp66,L
+10813,,,,efferent,descending,xl,DNp43,R
+10822,,,,efferent,descending,xn,DNge047,R
+10833,,,,efferent,descending,xl,DNge062,R
+10834,,,,efferent,descending,xn,DNpe013,L
+10837,,,,efferent,descending,ut,DNa15,R
+10838,,,,efferent,descending,xl,DNde005,R
+10844,,,,efferent,descending,xn,DNge053,L
+10846,MD,,,efferent,descending,xn,DNge107,R
+10853,,,,efferent,descending,xl,DNge049,L
+10856,MD,,,efferent,descending,xl,DNge129,R
+10873,LB,,,efferent,descending,xl,DNg39,R
+10884,,,,efferent,descending,ut,DNa15,L
+10885,LB,,,efferent,descending,xl,DNg88,L
+10888,,,,efferent,descending,xl,DNb06,L
+10895,MX,,,efferent,descending,xl,DNg90,R
+10923,MX,,,efferent,descending,lt,DNg40,R
+10924,,,,efferent,descending,ut,DNa04,R
+10930,,,,efferent,descending,xn,pMP2,L
+10931,PC,,,efferent,descending,xn,DNpe045,L
+10952,MD,,,efferent,descending,xn,DNge107,L
+10957,PC,,,efferent,descending,xn,DNp69,R
+10959,MX,,,efferent,descending,xn,DNg98,R
+10967,MX,,,efferent,descending,xn,DNg70,R
+10968,,,,efferent,descending,xl,DNp34,L
+10971,,,,efferent,descending,xl,DNa11,L
+10975,,,,efferent,descending,it,DNa03,R
+10976,,,,efferent,descending,fl,DNge146,R
+10979,LB,,,efferent,descending,xl,DNge103,L
+10985,,,,efferent,descending,xn,DNbe004,R
+10989,,,,efferent,descending,ut,DNp03,R
+11002,,,,efferent,descending,ut,DNae002,L
+11006,MD,,,efferent,descending,xl,DNge129,L
+11020,CB,,,efferent,descending,xn,DNp05,R
+11028,,,,efferent,descending,xn,DNb09,L
+11036,LB,,,efferent,descending,xn,DNg80,L
+11048,,,,efferent,descending,fl,DNge068,R
+11057,,,,efferent,descending,xn,DNbe004,L
+11063,MD,,,efferent,descending,xl,DNge032,L
+11065,,,,efferent,descending,xn,DNp14,R
+11066,,,,efferent,descending,xl,DNa13,R
+11067,,,,efferent,descending,xl,DNb06,R
+11072,,,,efferent,descending,xn,DNp12,L
+11074,,,,efferent,descending,xl,DNg13,L
+11075,MD,,,efferent,descending,xn,DNg99,L
+11078,MX,,,efferent,descending,xl,DNg96,L
+11088,,,,efferent,descending,xn,DNp55,R
+11097,,,,efferent,descending,xl,DNge067,L
+11098,,,,efferent,descending,xn,DNg78,L
+11103,MX,,,efferent,descending,xn,DNge141,R
+11111,,,,efferent,descending,xl,DNbe003,L
+11116,,,,efferent,descending,xn,pIP10,R
+11127,,,,efferent,descending,xl,DNge059,L
+11131,MX,,,efferent,descending,xn,DNg70,L
+11133,PC,,,efferent,descending,xn,DNp70,R
+11137,PC,,,efferent,descending,lt,DNp04,R
+11158,,,,efferent,descending,xn,DNge026,R
+11159,PC,,,efferent,descending,xl,DNp71,R
+11160,,,,efferent,descending,xl,DNd02,L
+11172,MX,,,efferent,descending,ut,DNg32,R
+11177,PC,,,efferent,descending,xl,DNp09,R
+11179,,,,efferent,descending,fl,DNge051,R
+11182,,,,efferent,descending,xn,DNp101,R
+11198,,,,efferent,descending,xl,DNg19,R
+11201,PC,,,efferent,descending,xl,DNpe007,L
+11204,,,,efferent,descending,xn,DNp49,L
+11215,,,,efferent,descending,ut,DNp15,R
+11222,,,,efferent,descending,xn,DNg111,L
+11223,MD,,,efferent,descending,xn,DNg79,L
+11232,,,,efferent,descending,xl,DNde003,L
+11233,,,,efferent,descending,xl,DNa11,R
+11239,NA,AN,,efferent,descending,unknown_sensory,DNx01,R
+11241,GNG,,,efferent,descending,nt,DNge143,R
+11246,,,,efferent,descending,xn,DNbe006,L
+11251,PC,,,efferent,descending,xn,DNpe043,L
+11256,MD,,,efferent,descending,xl,DNge040,R
+11257,,,,efferent,descending,xn,DNp45,R
+11258,,,,efferent,descending,xl,DNd05,L
+11259,PC,,,efferent,descending,xn,DNp68,R
+11261,,,,efferent,descending,xn,DNp54,L
+11270,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN01A020,L
+11288,,,,efferent,descending,xn,MDN,L
+11290,,,,efferent,descending,xn,DNp66,R
+11297,,,,efferent,descending,xl,DNbe003,R
+11298,,,,efferent,descending,xn,DNp49,R
+11302,,,,efferent,descending,xn,DNg104,R
+11304,,,,efferent,descending,xl,DNge042,L
+11310,,,,efferent,descending,xl,DNge048,R
+11314,,,,efferent,descending,xn,DNae003,R
+11332,,,,efferent,descending,xn,MDN,R
+11334,PC,,,efferent,descending,xn,DNpe045,R
+11352,,,,efferent,descending,fl,DNge027,L
+11365,,,,efferent,descending,xl,DNbe007,R
+11369,,,,efferent,descending,xn,DNc01,L
+11373,,,,efferent,descending,xn,DNp102,R
+11374,MD,,,efferent,descending,xn,DNg60,L
+11380,,,,efferent,descending,xn,DNp14,L
+11392,,,,efferent,descending,wt,DNa08,R
+11410,,,,efferent,descending,it,DNpe023,L
+11411,MD,,,efferent,descending,xl,DNg31,R
+11420,MX,,,efferent,descending,xn,DNge141,L
+11421,,,,efferent,descending,xl,DNge048,L
+11424,,,,efferent,descending,xn,DNge026,L
+11425,,,,efferent,descending,xn,CB0429,R
+11427,MD,,,efferent,descending,xl,DNge101,R
+11438,,,,efferent,descending,ut,DNp33,L
+11458,LB,,,efferent,descending,xl,DNge043,L
+11459,,,,efferent,descending,xl,DNpe006,L
+11475,,,,efferent,descending,ut,DNg27,L
+11479,,,,efferent,descending,xn,DNb04,R
+11482,,,,efferent,descending,fl,DNge065,R
+11486,,,,efferent,descending,xn,DNd03,L
+11491,,,,efferent,descending,xl,DNde005,L
+11500,LB,,,efferent,descending,xl,DNge043,R
+11502,LB,,,efferent,descending,xn,DNge132,R
+11505,,,,efferent,descending,xn,DNp54,R
+11513,CB,,,efferent,descending,xn,DNp07,R
+11527,,,,efferent,descending,xl,DNg101,L
+11554,PC,,,efferent,descending,xn,DNp63,L
+11563,,,,efferent,descending,xl,DNae001,R
+11573,PC,,,efferent,descending,xn,DNpe021,L
+11575,,,,efferent,descending,xl,DNge049,R
+11596,,,,efferent,descending,xl,DNpe022,R
+11598,MD,,,efferent,descending,xl,DNg31,L
+11600,LB,,,efferent,descending,xn,DNge084,R
+11610,,,,efferent,descending,xn,DNae007,R
+11613,,,,efferent,descending,xn,DNp45,L
+11614,,,,efferent,descending,xn,DNpe032,L
+11625,,,,efferent,descending,xl,DNae005,R
+11632,PC,,,efferent,descending,xl,DNpe052,R
+11647,,,,efferent,descending,xl,DNpe006,R
+11653,,,,efferent,descending,ut,DNg27,R
+11657,,,,efferent,descending,xn,DNpe005,L
+11674,PC,,,efferent,descending,xn,DNp68,L
+11676,MX,,,efferent,descending,xn,DNg26,L
+11687,,,,efferent,descending,xn,DNpe031,R
+11693,,,,efferent,descending,xn,DNd03,R
+11704,CB,,,efferent,descending,xn,DNp07,L
+11706,,,,efferent,descending,xn,DNg111,R
+11713,,,,efferent,descending,xl,DNg101,R
+11724,PC,,,efferent,descending,xn,DNp64,R
+11737,LB,,,efferent,descending,xl,DNge073,R
+11739,,,,efferent,descending,xl,DNde007,R
+11742,,,,efferent,descending,xn,DNp104,L
+11765,MD,,,efferent,descending,xl,DNge142,R
+11770,,,,efferent,descending,xn,DNae010,R
+11797,LB,,,efferent,descending,xl,DNge041,L
+11814,,,,efferent,descending,ut,DNa04,L
+11820,,,,efferent,descending,fl,DNge123,L
+11821,,,,efferent,descending,xl,DNge075,R
+11830,,,,efferent,descending,ut,DNa05,R
+11846,,,,efferent,descending,xn,DNp102,L
+11859,,,,efferent,descending,xn,DNpe050,L
+11872,,,,efferent,descending,ut,DNp22,R
+11876,,,,efferent,descending,xn,DNae003,L
+11881,LB,,,efferent,descending,xl,DNge023,R
+11889,,,,efferent,descending,fl,DNge065,L
+11916,,,,efferent,descending,xn,DNbe005,R
+11931,,,,efferent,descending,xl,DNd04,R
+11944,,,,efferent,descending,xn,DNpe026,L
+11948,MD,,,efferent,descending,xl,DNge142,L
+11951,,,,efferent,descending,xl,DNg38,R
+11955,,,,efferent,descending,xn,DNae010,L
+11961,,,,efferent,descending,xn,DNp57,L
+11965,,,,efferent,descending,xn,DNge053,R
+11970,,,,efferent,descending,xl,DNge042,R
+11986,LB,,,efferent,descending,nt,DNge018,L
+12000,MX,,,efferent,descending,xn,DNge099,L
+12027,,,,efferent,descending,xn,DNp101,L
+12030,LB,,,efferent,descending,ut,DNg91,R
+12038,,,,efferent,descending,xl,DNg38,L
+12039,MD,,,efferent,descending,xn,DNge135,R
+12043,,,,efferent,descending,xn,DNg102,R
+12044,,,,efferent,descending,xl,DNb08,R
+12069,,,,efferent,descending,ut,DNp15,L
+12075,,,,efferent,descending,xl,DNb08,R
+12085,MX,,,efferent,descending,xn,DNge136,L
+12089,,,,efferent,descending,xn,DNde006,R
+12092,,,,efferent,descending,fl,DNge027,R
+12102,,,,efferent,descending,xn,DNp38,R
+12133,,,,efferent,descending,xn,DNbe005,L
+12134,PC,,,efferent,descending,ad,DNp58,R
+12136,,,,efferent,descending,xn,DNg102,L
+12169,LB,,,efferent,descending,xl,DNg87,L
+12170,,,,efferent,descending,fl,DNge044,R
+12175,MX,,,efferent,descending,xn,DNge099,R
+12177,,,,efferent,descending,xn,DNpe050,R
+12179,,,,efferent,descending,xn,DNpe031,R
+12188,LB,,,efferent,descending,xn,DNg84,R
+12189,,,,efferent,descending,xl,DNb08,L
+12210,,,,efferent,descending,xn,DNg68,R
+12214,LB,,,efferent,descending,xl,DNg109,R
+12218,,,,efferent,descending,xn,DNpe031,L
+12219,,,,efferent,descending,fl,DNg48,L
+12222,,,,efferent,descending,xn,DNpe031,L
+12223,,,,efferent,descending,xn,DNpe027,R
+12224,,,,efferent,descending,hl,DNg14,R
+12238,MX,,,efferent,descending,ut,DNg32,L
+12239,,,,efferent,descending,xl,DNbe002,R
+12249,,,,efferent,descending,xn,DNg104,L
+12256,,,,efferent,descending,fl,DNge056,R
+12266,MX,,,efferent,descending,xl,DNg43,R
+12299,,,,efferent,descending,xn,DNg68,L
+12306,,,,efferent,descending,ut,DNp22,L
+12307,MD,,,efferent,descending,xn,DNg59,R
+12325,PC,,,efferent,descending,xl,DNp67,L
+12348,,,,efferent,descending,xn,MDN,L
+12362,,,,efferent,descending,xn,DNpe055,R
+12364,,,,efferent,descending,xl,DNge080,R
+12374,MX,,,efferent,descending,xn,DNge140,R
+12378,LB,,,efferent,descending,xl,DNge007,R
+12386,LB,,,efferent,descending,xn,DNg84,L
+12389,PC,,,efferent,descending,xn,DNp60,L
+12393,MX,,,efferent,descending,fl,DNge001,L
+12394,,,,efferent,descending,xn,DNge148,R
+12407,MX,,,efferent,descending,xn,DNge136,R
+12421,,,,efferent,descending,xn,DNpe055,L
+12422,LB,,,efferent,descending,fl,DNge100,L
+12435,PC,,,efferent,descending,xl,DNp67,R
+12443,,,,efferent,descending,xl,DNbe002,L
+12447,LB,,,efferent,descending,xl,DNge124,R
+12451,,,,efferent,descending,xl,DNge128,R
+12453,LB,,,efferent,descending,xn,DNg50,R
+12465,,,,efferent,descending,fl,DNg48,R
+12470,,,,efferent,descending,fl,DNge056,L
+12480,MX,,,efferent,descending,xn,DNg26,R
+12484,,,,efferent,descending,xl,DNge067,R
+12485,LB,,,efferent,descending,nt,DNge125,R
+12490,,,,efferent,descending,xl,DNd04,L
+12492,,,,efferent,descending,xn,DNg78,R
+12493,,,,efferent,descending,xl,DNge060,R
+12512,LB,,,efferent,descending,ml,DNge010,R
+12516,,,,efferent,descending,xn,DNge047,L
+12520,MX,,,efferent,descending,fl,DNge028,R
+12550,,,,efferent,descending,xl,DNb08,L
+12581,,,,efferent,descending,xl,DNge069,L
+12583,LB,,,efferent,descending,xl,DNg87,R
+12587,,,,efferent,descending,ut,DNge004,R
+12601,MX,,,efferent,descending,xn,DNge122,R
+12610,,,,efferent,descending,xn,DNg102,L
+12619,LB,,,efferent,descending,xl,DNge007,L
+12620,,,,efferent,descending,xn,DNp44,L
+12621,LB,,,efferent,descending,xn,DNg56,L
+12622,,,,efferent,descending,fl,DNge022,R
+12628,,,,efferent,descending,lt,DNpe042,R
+12635,,,,efferent,descending,xl,DNg19,L
+12647,LB,,,efferent,descending,nt,DNge125,L
+12665,MX,,,efferent,descending,xn,DNg26,L
+12670,MD,,,efferent,descending,xn,DNg71,R
+12687,LB,,,efferent,descending,nt,DNge113,R
+12705,,,,efferent,descending,fl,DNge123,R
+12707,PC,,,efferent,descending,xn,DNpe043,R
+12714,,,,efferent,descending,xn,DNb07,R
+12743,MD,,,efferent,descending,xl,DNge101,L
+12750,MX,,,efferent,descending,xn,DNge136,R
+12752,,,,efferent,descending,xl,DNge080,L
+12753,,,,efferent,descending,xl,DNpe003,R
+12762,,,,efferent,descending,xn,DNp41,L
+12767,,,,efferent,descending,ut,DNb02,L
+12771,MD,,,efferent,descending,xn,DNge135,L
+12775,MX,,,efferent,descending,xn,DNg26,R
+12781,MX,,,efferent,descending,xl,DNge104,R
+12787,LB,,,efferent,descending,nt,DNge033,R
+12788,,,,efferent,descending,ut,DNae004,R
+12794,,,,efferent,descending,xl,DNg44,R
+12801,,,,efferent,descending,ut,DNa05,L
+12818,,,,efferent,descending,nt,DNge002,R
+12821,LB,,,efferent,descending,xl,DNg54,R
+12831,CB,,,efferent,descending,xn,DNpe030,L
+12843,CB,,,efferent,descending,xl,DNpe049,R
+12850,LB,,,efferent,descending,nt,DNge070,L
+12860,,,,efferent,descending,xl,DNg44,L
+12869,MD,,,efferent,descending,fl,DNge098,L
+12874,,,,efferent,descending,xl,DNde001,L
+12886,LB,,,efferent,descending,xl,DNg54,L
+12894,,,,efferent,descending,fl,DNge011,R
+12941,MX,,,efferent,descending,xn,DNge137,R
+12944,,,,efferent,descending,xn,DNpe001,R
+12982,LB,,,efferent,descending,ut,DNg91,L
+12995,,,,efferent,descending,xl,DNde003,R
+13006,,,,efferent,descending,fl,DNge076,L
+13008,MX,,,efferent,descending,xn,DNge140,L
+13022,MX,,,efferent,descending,xn,DNge139,R
+13030,LB,,,efferent,descending,xn,DNge006,L
+13034,MX,,,efferent,descending,xl,DNg95,R
+13045,LB,,,efferent,descending,nt,DNge086,R
+13047,LB,,,efferent,descending,xn,DNge133,L
+13065,LB,,,efferent,descending,xn,DNge084,L
+13092,PC,,,efferent,descending,xn,DNp60,R
+13096,LB,,,efferent,descending,nt,DNge018,R
+13104,CB,,,efferent,descending,xn,DNpe030,R
+13130,MX,,,efferent,descending,xl,DNg105,R
+13133,MX,,,efferent,descending,ut,DNge088,L
+13135,MX,,,efferent,descending,xn,DNge122,L
+13176,LB,,,efferent,descending,fl,DNg85,R
+13178,,,,efferent,descending,fl,DNge039,L
+13186,MX,,,efferent,descending,fl,DNge028,L
+13188,GNG,,,efferent,descending,xn,DNg81,R
+13212,,,,efferent,descending,xn,DNp53,L
+13218,MX,,,efferent,descending,xl,DNg95,L
+13229,,,,efferent,descending,ut,DNg41,R
+13245,PC,,,efferent,descending,xn,DNp46,R
+13249,PC,,,efferent,descending,ad,DNpe034,L
+13254,,,,efferent,descending,xn,"DNp51,DNpe019",L
+13268,MX,,,efferent,descending,xl,DNg52,R
+13278,,,,efferent,descending,fl,DNge076,R
+13295,LB,,,efferent,descending,nt,DNge033,L
+13317,,,,efferent,descending,xn,DNg33,L
+13348,MX,,,efferent,descending,xn,DNg20,R
+13364,,,,efferent,descending,fl,DNge022,L
+13366,,,,efferent,descending,xl,DNde001,R
+13403,,,,efferent,descending,xn,DNp21,L
+13410,,,,efferent,descending,xl,DNa14,R
+13442,,,,efferent,descending,xn,DNg33,R
+13443,MD,,,efferent,descending,it,DNge096,L
+13444,LB,,,efferent,descending,xn,DNg51,L
+13445,LB,,,efferent,descending,fl,DNge046,L
+13492,MX,,,efferent,descending,fl,DNge019,L
+13499,MX,,,efferent,descending,xl,DNge106,R
+13507,LB,,,efferent,descending,xn,DNg51,R
+13508,,,,efferent,descending,xn,DNg17,R
+13509,,,,efferent,descending,wt,DNa08,L
+13514,,,,efferent,descending,xl,DNae008,R
+13525,MD,,,efferent,descending,it,DNge096,R
+13568,,,,efferent,descending,ut,DNg41,L
+13570,GNG,,,efferent,descending,xl,DNge063,L
+13585,TR,,,efferent,descending,xl,DNg34,R
+13586,CB,,,efferent,descending,xl,DNpe049,L
+13615,,,,efferent,descending,xn,DNbe006,R
+13622,,,,efferent,descending,nt,DNg73,L
+13624,,,,efferent,descending,fl,DNg62,L
+13625,MX,,,efferent,descending,xn,DNge137,R
+13627,LB,,,efferent,descending,xl,DNge082,R
+13633,MX,,,efferent,descending,xl,DNg43,L
+13638,,,,efferent,descending,nt,DNge002,L
+13649,MD,,,efferent,descending,xn,DNg79,R
+13652,LB,,,efferent,descending,xl,DNge038,R
+13685,LB,,,efferent,descending,xn,DNge008,R
+13700,LB,,,efferent,descending,xn,DNg51,L
+13743,LB,,,efferent,descending,xn,DNg51,R
+13759,LB,,,efferent,descending,ml,DNge010,L
+13795,LB,,,efferent,descending,fl,DNge100,R
+13803,,,,efferent,descending,fl,DNg61,L
+13805,MX,,,efferent,descending,xl,DNg97,L
+13815,,,,efferent,descending,xn,DNpe026,R
+13826,MX,,,efferent,descending,xn,DNge137,L
+13852,,,,efferent,descending,xl,DNge069,R
+13854,LB,,,efferent,descending,xn,DNg89,L
+13857,MX,,,efferent,descending,xn,DNge139,L
+13873,,,,efferent,descending,xl,DNa14,L
+13888,LB,,,efferent,descending,ad,DNge172,R
+13891,MX,,,efferent,descending,lt,DNg106,R
+13922,,,,efferent,descending,ut,DNb02,R
+13952,,,,efferent,descending,xl,DNg63,L
+13978,MD,,,efferent,descending,xn,DNg79,R
+13994,MX,,,efferent,descending,ad,DNge172,R
+13996,MX,,,efferent,descending,xl,DNge131,L
+14046,MX,,,efferent,descending,xn,DNg42,L
+14048,MD,,,efferent,descending,xl,DNg52,L
+14067,,,,efferent,descending,xl,DNpe003,L
+14096,,,,efferent,descending,xl,DNpe003,R
+14098,,,,efferent,descending,fl,DNge044,L
+14114,LB,,,efferent,descending,xl,DNg69,R
+14141,MX,,,efferent,descending,xn,DNg42,R
+14152,,,,efferent,descending,xl,DNpe041,R
+14154,LB,,,efferent,descending,xn,DNg76,R
+14157,,,,efferent,descending,fl,DNge173,R
+14213,,,,efferent,descending,xl,DNge060,L
+14214,MX,,,efferent,descending,lt,DNg106,L
+14234,MD,,,efferent,descending,xl,DNg64,L
+14239,,,,efferent,descending,ut,DNae004,L
+14247,MD,,,efferent,descending,xl,DNge127,R
+14249,,,,efferent,descending,fl,DNge077,L
+14264,,,,efferent,descending,xl,DNde003,R
+14265,LB,,,efferent,descending,xn,DNge133,R
+14271,,,,efferent,descending,xn,DNae006,L
+14278,,,,efferent,descending,nt,DNg73,R
+14306,LB,,,efferent,descending,xn,DNg89,R
+14328,,,,efferent,descending,xn,DNpe040,L
+14332,,,,efferent,descending,xn,DNae006,R
+14357,LB,,,efferent,descending,ut,DNg05_a,R
+14375,,,,efferent,descending,xl,DNpe003,L
+14399,,,,efferent,descending,xn,DNpe028,R
+14421,MX,,,efferent,descending,xl,DNge131,R
+14432,LB,,,efferent,descending,nt,DNge113,R
+14446,,,,efferent,descending,xn,DNpe014,R
+14501,,,,efferent,descending,xn,DNp28,R
+14537,,,,efferent,descending,fl,DNge078,L
+14554,MX,,,efferent,descending,xl,DNg72,L
+14569,LB,,,efferent,descending,ut,DNg04,R
+14686,LB,,,efferent,descending,xn,DNg11,L
+14707,ON,ON,,efferent,descending,unknown_sensory,DNx02,R
+14793,LB,,,efferent,descending,xl,DNge121,R
+14801,LB,,,efferent,descending,xn,DNge111,L
+14804,,,,efferent,descending,xl,DNg63,R
+14832,,,,efferent,descending,xn,"DNp51,DNpe019",R
+14842,LB,,,efferent,descending,xn,DNge184,L
+14846,,,,efferent,descending,xn,DNp39,R
+14854,MX,,,efferent,descending,xl,DNg72,R
+14885,,,,efferent,descending,xn,DNpe040,R
+14936,LB,,,efferent,descending,xl,DNge052,R
+14952,LB,,,efferent,descending,nt,DNg09_b,L
+14964,LB,,,efferent,descending,nt,DNge113,L
+14970,LB,,,efferent,descending,xl,DNge052,L
+14989,MD,,,efferent,descending,xl,DNge127,L
+15014,LB,,,efferent,descending,xl,DNge121,L
+15024,,,,efferent,descending,xn,DNp21,R
+15028,,,,efferent,descending,xn,DNp41,R
+15047,LB,,,efferent,descending,xn,DNge184,R
+15063,LB,,,efferent,descending,xn,DNg50,L
+15064,LB,,,efferent,descending,ut,DNg05_a,L
+15065,LB,,,efferent,descending,ut,DNge016,R
+15072,,,,efferent,descending,ut,DNpe004,L
+15148,,,,efferent,descending,fl,DNg62,R
+15156,MX,,,efferent,descending,fl,DNge147,R
+15201,MX,,,efferent,descending,xl,DNg72,R
+15254,,,,efferent,descending,fl,DNge057,R
+15286,,,,efferent,descending,fl,DNg47,R
+15303,ON,ON,,efferent,descending,unknown_sensory,DNx02,R
+15326,LB,,,efferent,descending,xl,DNg109,L
+15347,LB,,,efferent,descending,xl,DNge082,L
+15394,MX,,,efferent,descending,fl,DNge147,L
+15430,ON,ON,,efferent,descending,unknown_sensory,DNx02,L
+15442,MX,,,efferent,descending,xn,DNg46,L
+15448,MD,,,efferent,descending,ut,DNge097,L
+15450,,,,efferent,descending,fl,DNge057,L
+15454,,,,efferent,descending,xn,DNg58,R
+15457,,,,efferent,descending,ut,DNpe004,R
+15483,LB,,,efferent,descending,ut,DNge175,R
+15485,LB,,,efferent,descending,xn,DNge145,L
+15491,,,,efferent,descending,xn,DNpe028,L
+15502,,,,efferent,descending,xn,DNp41,L
+15503,MX,,,efferent,descending,fl,DNge019,L
+15509,LB,,,efferent,descending,ut,DNge091,R
+15569,ON,ON,,efferent,descending,unknown_sensory,DNx02,L
+15575,LB,,,efferent,descending,ut,DNge030,L
+15653,,,,efferent,descending,fl,DNge012,L
+15673,MX,,,efferent,descending,xn,DNg20,L
+15681,LB,,,efferent,descending,nt,DNge113,L
+15705,,,,efferent,descending,xl,DNge081,L
+15720,LB,,,efferent,descending,xl,DNge124,L
+15760,MX,,,efferent,descending,xl,DNg72,L
+15796,MX,,,efferent,descending,lt,DNg106,R
+15800,LB,,,efferent,descending,nt,DNge072,L
+15811,LB,,,efferent,descending,xl,DNg45,R
+15821,,,,efferent,descending,xl,DNge081,R
+15825,,,,efferent,descending,xl,DNg21,R
+15847,,,,efferent,descending,xl,DNg107,R
+15857,,,,efferent,descending,xl,DNge058,R
+15939,,,,efferent,descending,xn,DNp41,R
+15988,,,,efferent,descending,xl,DNge064,R
+15995,LB,,,efferent,descending,xn,DNge013,L
+16078,LB,,,efferent,descending,ut,DNge181,R
+16079,,,,efferent,descending,fl,DNge068,L
+16098,LB,,,efferent,descending,fl,DNge029,R
+16118,LB,,,efferent,descending,xn,DNge145,R
+16119,,,,efferent,descending,xn,DNpe014,L
+16130,LB,,,efferent,descending,xl,DNge034,L
+16191,,,,efferent,descending,ut,DNb03,L
+16221,,,,efferent,descending,xl,DNg21,L
+16257,LB,,,efferent,descending,ut,DNge091,R
+16307,MX,,,efferent,descending,fl,DNge001,R
+16369,LB,,,efferent,descending,ut,DNg01_b,R
+16471,MX,,,efferent,descending,it,DNg106,L
+16536,,,,efferent,descending,xl,DNge075,L
+16623,LB,,,efferent,descending,xl,DNge034,R
+16712,,,,efferent,descending,ut,DNb03,R
+16731,,,,efferent,descending,xn,DNg94,R
+16741,MX,,,efferent,descending,fl,DNge019,R
+16746,,,,efferent,descending,xl,DNge064,L
+16829,,,,efferent,descending,ut,DNb03,R
+16856,,,,efferent,descending,xn,DNge134,R
+16864,MD,,,efferent,descending,xn,DNg59,L
+16878,MX,,,efferent,descending,fl,DNge019,R
+16935,MD,,,efferent,descending,ut,DNge097,R
+16942,MD,,,efferent,descending,fl,DNge098,R
+16994,,,,efferent,descending,xn,DNg17,L
+17019,,,,efferent,descending,ut,DNpe004,R
+17093,LB,,,efferent,descending,xl,DNg45,L
+17101,MX,,,efferent,descending,it,DNg106,L
+17120,LB,,,efferent,descending,ut,DNg82,R
+17179,,,,efferent,descending,ut,DNa07,R
+17198,,,,efferent,descending,xl,DNge035,R
+17199,LB,,,efferent,descending,ut,DNg82,L
+17211,,,,efferent,descending,fl,DNge174,R
+17331,LB,,,efferent,descending,ut,DNg02_d,R
+17333,MX,,,efferent,descending,it,DNg106,R
+17373,,,,efferent,descending,xn,DNg58,L
+17386,MX,,,efferent,descending,nt,DNg12_d,R
+17471,LB,,,efferent,descending,nt,DNg09_b,R
+17555,GNG,,,efferent,descending,xl,DNxl114,L
+17727,LB,,,efferent,descending,xn,DNg09_a,L
+17739,MX,,,efferent,descending,fl,DNge105,L
+17967,,,,efferent,descending,xn,DNde006,L
+18072,,,,efferent,descending,ut,DNp16_a,R
+18110,LB,,,efferent,descending,xn,DNge145,L
+18159,,,,efferent,descending,fl,DNge174,L
+18183,LB,,,efferent,descending,ut,DNg02_f,R
+18229,MX,,,efferent,descending,fl,DNge021,R
+18265,MX,,,efferent,descending,fl,DNge019,L
+18532,LB,,,efferent,descending,xn,DNg09_a,R
+18556,LB,,,efferent,descending,ut,DNg03,R
+19030,LB,,,efferent,descending,ut,DNge091,L
+19038,MX,,,efferent,descending,lt,DNg106,L
+19084,LB,,,efferent,descending,xl,DNge029,L
+19214,MX,,,efferent,descending,fl,DNge019,L
+19247,MX,,,efferent,descending,lt,DNg106,L
+19268,MX,,,efferent,descending,nt,DNge177,R
+19428,,,,efferent,descending,xl,DNge144,R
+19441,MX,,,efferent,descending,nt,DNg12_a,L
+19450,LB,,,efferent,descending,ut,DNge091,L
+19455,MX,,,efferent,descending,nt,DNg12_h,L
+19489,,,,efferent,descending,ut,DNpe010,R
+19573,MX,,,efferent,descending,ut,DNg08,L
+19664,MX,,,efferent,descending,fl,DNge019,R
+19691,LB,,,efferent,descending,ut,DNge110,R
+19749,LB,,,efferent,descending,ut,DNge091,L
+19773,LB,,,efferent,descending,ut,DNg02_g,L
+19871,LB,,,efferent,descending,xn,DNg06,L
+19960,,,,efferent,descending,ut,DNa07,L
+19962,LB,,,efferent,descending,ut,DNge181,L
+19994,LB,,,efferent,descending,ut,DNge091,R
+20051,LB,,,efferent,descending,ut,DNge183,L
+20054,LB,,,efferent,descending,ut,DNge091,L
+20102,MX,,,efferent,descending,fl,DNge178,L
+20129,MX,,,efferent,descending,fl,DNg12_e,R
+20131,,,,efferent,descending,ut,DNpe004,L
+20185,LB,,,efferent,descending,ut,DNg36_a,R
+20234,LB,,,efferent,descending,ut,DNge175,L
+20288,MX,,,efferent,descending,nt,DNge177,L
+20289,LB,,,efferent,descending,ut,DNg02_g,R
+20354,LB,,,efferent,descending,xn,DNg57,L
+20408,MX,,,efferent,descending,fl,DNge021,L
+20414,,,,efferent,descending,ut,DNp16_a,L
+20515,MX,,,efferent,descending,ut,DNg08,R
+20531,LB,,,efferent,descending,xn,DNg09_a,L
+20643,LB,,,efferent,descending,xn,DNg57,R
+20743,MX,,,efferent,descending,fl,DNge019,R
+20745,,,,efferent,descending,nt,DNpe009,L
+20753,,,,efferent,descending,ut,DNp16_b,R
+20774,LB,,,efferent,descending,ut,DNg36_a,R
+20788,MX,,,efferent,descending,nt,DNg12_c,R
+20821,MX,,,efferent,descending,ut,DNg08,R
+20849,LB,,,efferent,descending,ut,DNg02_b,L
+20886,MX,,,efferent,descending,fl,DNge025,R
+20923,LB,,,efferent,descending,ut,DNg110,R
+20962,LB,,,efferent,descending,ut,DNg02_f,L
+21027,,,,efferent,descending,ut,DNp17,L
+21031,,,,efferent,descending,ut,DNp72,R
+21122,LB,,,efferent,descending,ut,DNg02_a,L
+21146,LB,,,efferent,descending,ut,DNge091,L
+21149,,,,efferent,descending,xl,DNg107,L
+21155,MX,,,efferent,descending,it,DNg106,R
+21278,MX,,,efferent,descending,it,DNg106,L
+21403,LB,,,efferent,descending,ut,DNge183,R
+21428,LB,,,efferent,descending,ut,DNge091,R
+21578,MX,,,efferent,descending,it,DNg106,L
+21581,MX,,,efferent,descending,fl,DNge178,R
+21589,LB,,,efferent,descending,xn,DNge111,R
+21624,MX,,,efferent,descending,nt,DNg12_a,L
+21668,MX,,,efferent,descending,fl,DNge019,R
+21712,,,,efferent,descending,ut,DNp16_b,L
+21863,MX,,,efferent,descending,lt,DNg106,L
+22012,GNG,,,efferent,descending,xl,DNxl114,R
+22024,LB,,,efferent,descending,ut,DNge181,R
+22033,MX,,,efferent,descending,nt,DNg12_c,L
+22080,MX,,,efferent,descending,nt,DNg12_g,R
+22087,MX,,,efferent,descending,fl,DNg83,L
+22128,MX,,,efferent,descending,nt,DNg12_g,L
+22190,MX,,,efferent,descending,fl,DNg12_e,L
+22390,LB,,,efferent,descending,xn,DNge008,L
+22393,LB,,,efferent,descending,ut,DNg02_a,R
+22404,LB,,,efferent,descending,ut,DNg02_a,L
+22462,LB,,,efferent,descending,ut,DNg02_g,R
+22474,MX,,,efferent,descending,fl,DNg12_e,R
+22564,MX,,,efferent,descending,fl,DNg12_e,R
+22596,MX,,,efferent,descending,fl,DNg12_e,L
+22627,LB,,,efferent,descending,ut,DNge095,R
+22692,LB,,,efferent,descending,ut,DNg110,R
+22757,MX,,,efferent,descending,fl,DNge019,L
+22758,,,,efferent,descending,xl,DNg67,R
+23178,LB,,,efferent,descending,xn,DNge111,L
+23220,LB,,,efferent,descending,xn,DNge111,R
+23341,LB,,,efferent,descending,ut,DNg110,L
+23411,LB,,,efferent,descending,ut,DNg02_a,R
+23412,LB,,,efferent,descending,ut,DNge181,L
+23628,MX,,,efferent,descending,nt,DNg12_a,R
+23715,LB,,,efferent,descending,ut,DNge093,L
+23819,LB,,,efferent,descending,xn,DNge111,R
+23882,LB,,,efferent,descending,ut,DNge015,R
+23891,MX,,,efferent,descending,xl,DNge120,L
+23892,LB,,,efferent,descending,ut,DNge095,L
+23953,LB,,,efferent,descending,ut,DNge091,R
+23960,MX,,,efferent,descending,nt,DNg12_c,L
+24038,MX,,,efferent,descending,ut,DNg08,L
+24043,LB,,,efferent,descending,ut,DNge090,L
+24058,LB,,,efferent,descending,ut,DNge014,L
+24184,LB,,,efferent,descending,ut,DNg110,L
+24232,LB,,,efferent,descending,ut,DNg36_a,L
+24354,LB,,,efferent,descending,ut,DNge090,R
+24374,MX,,,efferent,descending,ut,DNg08,L
+24517,LB,,,efferent,descending,nt,DNg53,L
+24540,MX,,,efferent,descending,fl,DNge025,L
+24619,MX,,,efferent,descending,nt,DNg12_c,L
+24657,LB,,,efferent,descending,ut,DNge091,L
+24666,LB,,,efferent,descending,nt,DNge117,R
+24752,,,,efferent,descending,ut,DNp72,L
+25180,MX,,,efferent,descending,nt,DNg12_a,L
+25188,MX,,,efferent,descending,ut,DNg08,L
+25205,LB,,,efferent,descending,ut,DNg92_b,L
+25283,MX,,,efferent,descending,ut,DNg08,R
+25357,LB,,,efferent,descending,ut,DNg02_d,L
+25461,MX,,,efferent,descending,ut,DNg08,R
+25465,LB,,,efferent,descending,ut,DNg07,R
+25504,LB,,,efferent,descending,xn,DNge092,R
+25535,,,,efferent,descending,ut,DNp17,R
+25802,LB,,,efferent,descending,xn,DNge092,R
+25844,,,,efferent,descending,xl,DNge058,L
+25848,MX,,,efferent,descending,ut,DNg08,R
+25852,LB,,,efferent,descending,ut,DNg02_a,L
+25861,LB,,,efferent,descending,xl,DNge038,L
+25876,LB,,,efferent,descending,ut,DNge108,L
+25983,,,,efferent,descending,nt,DNpe009,L
+25985,GNG,,,efferent,descending,xl,DNge074,L
+26049,LB,,,efferent,descending,ut,DNg02_a,R
+26079,LB,,,efferent,descending,ut,DNg02_b,R
+26182,MX,,,efferent,descending,ut,DNg08,L
+26232,MX,,,efferent,descending,ut,DNg08,L
+26441,MX,,,efferent,descending,xn,DNg12_f,R
+26587,MX,,,efferent,descending,ut,DNg08,R
+26636,PC,,,efferent,descending,ad,DNp58,L
+26644,LB,,,efferent,descending,xn,DNge094,R
+26652,LB,,,efferent,descending,xn,DNge094,L
+26672,,,,efferent,descending,xn,DNpe012_b,L
+26743,LB,,,efferent,descending,xn,DNge094,L
+26824,MX,,,efferent,descending,ut,DNg08,R
+26984,LB,,,efferent,descending,xn,DNge115,L
+27041,MX,,,efferent,descending,ut,DNg08,L
+27113,LB,,,efferent,descending,xn,DNge180,R
+27118,MX,,,efferent,descending,ut,DNg08,L
+27135,LB,,,efferent,descending,ut,DNge015,R
+27144,LB,,,efferent,descending,xn,DNge092,L
+27170,LB,,,efferent,descending,ut,DNge017,L
+27254,LB,,,efferent,descending,lt,DNg01_c,R
+27437,LB,,,efferent,descending,ut,DNg07,R
+27490,LB,,,efferent,descending,ut,DNge015,L
+27525,LB,,,efferent,descending,xn,DNge094,L
+27598,,,,efferent,descending,ut,DNp17,L
+27607,LB,,,efferent,descending,ut,DNge017,R
+27615,LB,,,efferent,descending,xn,DNge115,R
+27626,LB,,,efferent,descending,ut,DNge093,R
+27715,MX,,,efferent,descending,ut,DNg08,R
+27735,LB,,,efferent,descending,ut,DNge110,L
+27792,LB,,,efferent,descending,ut,DNge093,L
+27800,,,,efferent,descending,xn,DNpe012_a,L
+28152,LB,,,efferent,descending,xn,DNge180,L
+28414,LB,,,efferent,descending,xn,DNge116,L
+28450,GNG,,,efferent,descending,xl,DNge153,R
+28519,MX,,,efferent,descending,ut,DNg08,L
+28579,LB,,,efferent,descending,ut,DNg01_a,L
+28602,LB,,,efferent,descending,ut,DNg01_b,L
+28678,LB,,,efferent,descending,ut,DNg110,R
+28687,LB,,,efferent,descending,xn,DNge115,L
+28756,MX,,,efferent,descending,ut,DNg08,L
+28905,LB,,,efferent,descending,ut,DNg02_a,L
+28940,,,,efferent,descending,xn,DNg94,L
+28949,LB,,,efferent,descending,ut,DNg07,R
+28961,LB,,,efferent,descending,xn,DNge116,R
+29059,LB,,,efferent,descending,xn,DNge115,L
+29086,LB,,,efferent,descending,xl,DNge023,L
+29188,LB,,,efferent,descending,ut,DNge108,R
+29242,GNG,,,efferent,descending,xl,DNge153,L
+29310,LB,,,efferent,descending,xn,DNg06,L
+29594,MX,,,efferent,descending,ut,DNg08,R
+29609,MX,,,efferent,descending,ut,DNg08,R
+29685,,,,efferent,descending,ut,DNp17,L
+29854,,,,efferent,descending,ut,DNpe015,R
+29934,,,,efferent,descending,xn,DNpe012_a,L
+30161,LB,,,efferent,descending,ut,DNg36_b,L
+30228,LB,,,efferent,descending,ut,DNg02_a,R
+30465,,,,efferent,descending,xn,DNge134,L
+30503,,,,efferent,descending,ut,DNpe015,R
+30827,LB,,,efferent,descending,ut,DNg36_b,L
+30929,LB,,,efferent,descending,nt,DNge117,L
+30957,,,,efferent,descending,ut,DNpe015,R
+31059,,,,efferent,descending,ht,DNpe054,R
+31264,,,,efferent,descending,nt,DNpe009,L
+31298,MX,,,efferent,descending,fl,DNge024,R
+31327,LB,,,efferent,descending,ut,DNge108,L
+31338,LB,,,efferent,descending,ut,DNge108,R
+31381,MX,,,efferent,descending,ut,DNg08,L
+31421,LB,,,efferent,descending,ut,DNg07,L
+31609,LB,,,efferent,descending,ut,DNge114,L
+31641,LB,,,efferent,descending,ut,DNg02_a,R
+31769,LB,,,efferent,descending,xn,DNge115,R
+31790,LB,,,efferent,descending,xn,DNg18_b,L
+31825,MX,,,efferent,descending,fl,DNge024,R
+31932,MX,,,efferent,descending,fl,DNge009,L
+32166,,,,efferent,descending,xn,DNpe012_a,R
+32263,,,,efferent,descending,ht,DNpe008,R
+32288,,,,efferent,descending,ut,DNpe015,L
+32413,MX,,,efferent,descending,xn,DNg12_f,L
+32832,LB,,,efferent,descending,ut,DNg05_c,L
+33007,,,,efferent,descending,ut,DNp17,L
+33037,PC,,,efferent,descending,xn,DNp69,L
+33116,LB,,,efferent,descending,xn,DNge089,L
+33333,LB,,,efferent,descending,ut,DNg02_g,L
+33335,,,,efferent,descending,xn,DNpe024,L
+33424,LB,,,efferent,descending,ut,DNg02_b,L
+33829,MX,,,efferent,descending,fl,DNg83,R
+33851,LB,,,efferent,descending,ut,DNg05_c,R
+34023,,,,efferent,descending,ut,DNp17,R
+34031,LB,,,efferent,descending,ut,DNge114,L
+34162,LB,,,efferent,descending,ut,DNge114,R
+34468,,,,efferent,descending,ut,DNpe015,L
+34474,LB,,,efferent,descending,xn,DNge089,R
+34569,,,,efferent,descending,ht,DNpe008,R
+34590,,,,efferent,descending,xn,DNge182,R
+34664,LB,,,efferent,descending,ut,DNge154,R
+34887,,,,efferent,descending,ut,DNpe015,L
+35233,LB,,,efferent,descending,nt,DNg53,R
+35345,MX,,,efferent,descending,fl,DNge024,R
+35398,,,,efferent,descending,ut,DNp17,L
+35469,MX,,,efferent,descending,fl,DNge009,R
+35519,,,,efferent,descending,ut,DNpe015,L
+35630,,,,efferent,descending,ut,DNp17,L
+35988,LB,,,efferent,descending,ut,DNg02_a,L
+36102,MX,,,efferent,descending,xn,DNge136,L
+36172,LB,,,efferent,descending,ut,DNg06,R
+36260,LB,,,efferent,descending,xn,DNg18_b,R
+36263,LB,,,efferent,descending,xn,DNge116,R
+36541,,,,efferent,descending,fl,DNge078,R
+36631,LB,,,efferent,descending,ut,DNg05_b,R
+37025,LB,,,efferent,descending,ut,DNg03,R
+37135,LB,,,efferent,descending,ut,DNg02_b,L
+37310,,,,efferent,descending,xl,DNpe041,L
+37406,MX,,,efferent,descending,fl,DNge024,L
+37683,LB,,,efferent,descending,ut,DNge109,L
+37686,MX,,,efferent,descending,xn,DNg12_b,R
+38064,LB,,,efferent,descending,ut,DNg07,R
+38465,LB,,,efferent,descending,xn,DNge089,L
+38757,,,,efferent,descending,ht,DNpe008,R
+38781,CB,,,efferent,descending,xl,DNpe029,R
+38796,LB,,,efferent,descending,ut,DNg92_b,L
+38848,LB,,,efferent,descending,xn,DNge089,R
+39130,LB,,,efferent,descending,nt,DNge071,R
+39248,LB,,,efferent,descending,ut,DNg03,L
+39283,LB,,,efferent,descending,ut,DNge114,L
+39558,,,,efferent,descending,nt,DNpe057,L
+39565,CB,,,efferent,descending,xl,DNpe029,L
+39735,LB,,,efferent,descending,ut,DNg03,R
+39774,,,,efferent,descending,ht,DNpe008,R
+39852,MX,,,efferent,descending,fl,DNge020,R
+40001,,,,efferent,descending,xn,DNge119,L
+40157,LB,,,efferent,descending,ut,DNg03,L
+40248,,,,efferent,descending,ht,DNpe008,R
+40361,MX,,,efferent,descending,fl,DNge024,L
+40447,MD,,,efferent,descending,xn,DNg79,L
+40549,LB,,,efferent,descending,ut,DNg03,R
+40623,LB,,,efferent,descending,xn,DNg18_b,R
+40683,,,,efferent,descending,xl,DNge102,R
+40701,MX,,,efferent,descending,nt,DNg12_b,L
+40743,MxLbN,MxLbN,,efferent,descending,unknown_sensory,LN-DN1,L
+40959,LB,,,efferent,descending,xn,DNge089,L
+41346,LB,,,efferent,descending,xn,DNge094,R
+42002,LB,,,efferent,descending,ut,DNge176,R
+42102,LB,,,efferent,descending,ut,DNge108,L
+42125,,,,efferent,descending,ht,DNpe008,R
+42178,LB,,,efferent,descending,ut,DNg110,L
+42465,LB,,,efferent,descending,xn,DNg06,R
+42780,,,,efferent,descending,ht,DNpe054,R
+43730,LB,,,efferent,descending,nt,DNg10,L
+44502,LB,,,efferent,descending,nt,DNge071,L
+44659,LB,,,efferent,descending,nt,DNg10,R
+44826,LB,,,efferent,descending,nt,DNg10,L
+44836,MX,,,efferent,descending,xn,DNg12_b,R
+44952,LB,,,efferent,descending,nt,DNge071,R
+44980,LB,,,efferent,descending,ut,DNg03,R
+45757,LB,,,efferent,descending,ut,DNg92_b,R
+45906,LB,,,efferent,descending,xn,DNg18_b,R
+45915,LB,,,efferent,descending,nt,DNg10,R
+46011,MX,,,efferent,descending,fl,DNge020,R
+46228,LB,,,efferent,descending,nt,DNg10,L
+46380,MX,,,efferent,descending,fl,DNge024,L
+46578,LB,,,efferent,descending,nt,DNg10,R
+47102,MX,,,efferent,descending,xn,DNg12_b,L
+47285,MX,,,efferent,descending,nt,DNg12_b,R
+47383,LB,,,efferent,descending,ut,DNg18_a,L
+47402,LB,,,efferent,descending,nt,DNg10,L
+48163,MxLbN,MxLbN,,efferent,descending,unknown_sensory,LN-DN1,R
+48408,MX,,,efferent,descending,xn,DNg12_b,L
+48535,LB,,,efferent,descending,nt,DNge071,R
+48565,LB,,,efferent,descending,nt,DNge071,L
+48618,,,,efferent,descending,ut,DNp17,R
+48924,LB,,,efferent,descending,nt,DNg10,R
+49210,,,,efferent,descending,xn,DNpe011,R
+49310,MX,,,efferent,descending,fl,DNge009,R
+49624,LB,,,efferent,descending,ut,DNg03,L
+50664,LB,,,efferent,descending,nt,DNge071,R
+51024,LB,,,efferent,descending,ut,DNg03,L
+51188,LB,,,efferent,descending,ut,DNg18_a,R
+52770,MX,,,efferent,descending,fl,DNge020,L
+53514,,,,efferent,descending,ht,DNpe008,R
+53821,MX,,,efferent,descending,fl,DNge020,L
+54021,,,,efferent,descending,ht,DNpe054,R
+54278,LB,,,efferent,descending,ut,DNg03,L
+55021,MX,,,efferent,descending,fl,DNg12_e,L
+55370,LB,,,efferent,descending,ut,DNge045,L
+55546,LB,,,efferent,descending,lt,DNg01_c,L
+55763,,,,efferent,descending,xn,DNpe011,L
+56057,,,,efferent,descending,xn,DNpe011,L
+56214,LB,,,efferent,descending,ut,DNg03,R
+57776,MX,,,efferent,descending,fl,DNge020,L
+58581,,,,efferent,descending,ut,DNpe015,R
+62405,LB,,,efferent,descending,xl,DNg39,L
+63701,,,,efferent,descending,xl,DNd02,R
+66284,,,,efferent,descending,fl,DNg47,L
+67107,LB,,,efferent,descending,xn,DNg18_b,L
+67982,LB,,,efferent,descending,xn,DNge013,R
+68005,LB,,,efferent,descending,ut,DNg82,L
+69173,,,,efferent,descending,xn,DNpe018,L
+71633,,,,efferent,descending,ut,DNpe015,L
+71953,LB,,,efferent,descending,ut,DNg06,L
+78641,,,,efferent,descending,nt,DNpe057,L
+83661,LB,,,efferent,descending,fl,DNge046,R
+90235,,,,efferent,descending,ut,DNp17,R
+91201,LB,,,efferent,descending,nt,DNge071,R
+92936,,,,efferent,descending,xl,DNge083,L
+94838,LB,,,efferent,descending,ut,DNg03,L
+96106,,,,efferent,descending,xl,DNbe002,R
+97614,,,,efferent,descending,ut,DNp17,R
+97980,CB,,,efferent,descending,xl,DNpe029,R
+98227,,,,efferent,descending,nt,DNpe009,R
+99955,,,,efferent,descending,xn,DNpe011,R
+101889,MX,,,efferent,descending,fl,DNge025,L
+113166,,,,efferent,descending,xn,DNpe018,R
+127742,LB,,,efferent,descending,nt,DNge179,R
+144505,MX,,,efferent,descending,xl,DNg65,L
+149920,MX,,,efferent,descending,lt,DNg106,R
+151406,LB,,,efferent,descending,nt,DNge117,R
+152243,,,,efferent,descending,nt,DNpe057,R
+153028,GNG,,,efferent,descending,xl,DNge074,R
+161406,,,,efferent,descending,xn,"DNp51,DNpe019",L
+165031,,,,efferent,descending,xn,DNpe018,L
+170107,,,,efferent,descending,xn,DNge182,L
+173593,,,,efferent,descending,ht,DNpe008,R
+177685,LB,,,efferent,descending,ut,DNg02_e,L
+178516,CB,,,efferent,descending,xl,DNpe029,L
+185977,,,,efferent,descending,xl,DNge102,L
+186380,,,,efferent,descending,xl,DNge144,L
+188933,LB,,,efferent,descending,ut,DNg92_a,L
+188947,MD,,,efferent,descending,xn,DNg60,R
+197252,LB,,,efferent,descending,ut,DNg92_a,R
+203146,LB,,,efferent,descending,xn,DNg06,R
+209655,LB,,,efferent,descending,ut,DNg06,L
+217430,LB,,,efferent,descending,xn,DNg06,L
+220203,LB,,,efferent,descending,fl,DNge061,L
+223170,LB,,,efferent,descending,xn,DNge145,R
+225466,LB,,,efferent,descending,ut,DNg02_c,R
+226016,MX,,,efferent,descending,fl,DNge024,L
+226164,MxLbN,MxLbN,,efferent,descending,unknown_sensory,LN-DN2,R
+228714,LB,,,efferent,descending,fl,DNge061,R
+230783,MX,,,efferent,descending,xl,DNg97,R
+233071,LB,,,efferent,descending,ut,DNg04,L
+237936,LB,,,efferent,descending,xn,DNg09_a,R
+238699,LB,,,efferent,descending,ut,DNg07,R
+240034,LB,,,efferent,descending,lt,DNg01_d,L
+242405,LB,,,efferent,descending,fl,DNge046,R
+244400,MX,,,efferent,descending,fl,DNge020,R
+248583,MX,,,efferent,descending,fl,DNge009,L
+256420,,,,efferent,descending,xl,DNge050,R
+258513,LB,,,efferent,descending,ut,DNge093,R
+259442,,,,efferent,descending,ut,DNpe015,R
+262979,LB,,,efferent,descending,ut,DNg02_b,R
+267327,LB,,,efferent,descending,xn,DNge089,R
+268258,,,,efferent,descending,fl,DNge173,L
+274021,LB,,,efferent,descending,ut,DNg01_a,R
+293452,LB,,,efferent,descending,nt,DNg10,L
+295340,LB,,,efferent,descending,ut,DNg02_c,R
+302599,LB,,,efferent,descending,ut,DNg02_c,L
+309831,LB,,,efferent,descending,lt,DNg01_unclear,L
+312712,,,,efferent,descending,xl,DNde003,L
+322714,MX,,,efferent,descending,xn,DNg12_b,L
+351504,LB,,,efferent,descending,xn,DNge094,R
+411306,MX,,,efferent,descending,ut,DNg08,L
+482128,MX,,,efferent,descending,xn,DNg12_b,R
+506334,,,,efferent,descending,xn,DNp42,R
+512006,,,,efferent,descending,xl,DNg13,R
+512037,,,,efferent,descending,nt,DNpe009,R
+512048,LB,,,efferent,descending,fl,DNge061,R
+512071,,,,efferent,descending,xl,DNae001,L
+512245,,,,efferent,descending,xn,DNc01,R
+512461,MX,,,efferent,descending,ad,DNge172,R
+512614,,,,efferent,descending,xl,DNge055,L
+512720,LB,,,efferent,descending,ut,DNge016,L
+512751,MX,,,efferent,descending,fl,DNge105,R
+512938,,,,efferent,descending,xl,DNd05,R
+513052,,,,efferent,descending,xn,DNg15,R
+513056,LB,,,efferent,descending,nt,DNge086,L
+513057,LB,,,efferent,descending,fl,DNge046,L
+513079,,,,efferent,descending,xn,DNp44,R
+513296,,,,efferent,descending,ut,DNb03,L
+513643,PC,,,efferent,descending,xn,DNpe039,R
+513711,,,,efferent,descending,xn,DNa09,L
+513783,LB,,,efferent,descending,lt,DNg01_d,R
+513875,,,,efferent,descending,xl,DNge003,R
+514021,LB,,,efferent,descending,ut,DNg04,R
+514025,MX,,,efferent,descending,lt,DNg106,R
+514197,MD,,,efferent,descending,xl,DNge032,R
+514333,,,,efferent,descending,fl,DNg61,R
+514485,MX,,,efferent,descending,lt,DNg106,R
+514489,GNG,,,efferent,descending,nt,DNg49,R
+515029,,,,efferent,descending,xn,DNpe027,L
+515575,CB,,,efferent,descending,xn,DNp26,R
+515785,LB,,,efferent,descending,xn,DNg76,L
+515978,MX,,,efferent,descending,ut,DNg08,R
+516170,,,,efferent,descending,xl,DNa13,R
+516215,,,,efferent,descending,xl,DNg67,L
+516667,LB,,,efferent,descending,ut,DNg02_e,R
+516680,MD,,,efferent,descending,xl,DNg64,R
+516821,LB,,,efferent,descending,xn,DNge094,R
+516904,,,,efferent,descending,xl,DNde007,L
+516930,GNG,,,efferent,descending,xn,DNg81,L
+516956,LB,,,efferent,descending,nt,DNge071,L
+517830,LB,,,efferent,descending,ut,DNge030,R
+518177,,,,efferent,descending,xn,DNp08,L
+518309,PC,,,efferent,descending,xl,DNpe007,R
+518563,LB,,,efferent,descending,fl,DNg85,L
+519206,,,,efferent,descending,ut,DNp17,R
+519228,,,,efferent,descending,xl,DNae005,L
+519268,,,,efferent,descending,xn,DNp28,L
+519337,MX,,,efferent,descending,xl,DNge120,R
+519400,LB,,,efferent,descending,ut,DNg04,L
+519410,,,,efferent,descending,xl,DNp34,R
+519460,,,,efferent,descending,ut,DNa16,L
+519570,LB,,,efferent,descending,ut,DNg82,R
+519624,,,,efferent,descending,it,DNa03,L
+519715,,,,efferent,descending,xl,DNbe002,L
+519771,PC,,,efferent,descending,xl,DNp71,L
+519773,,,,efferent,descending,xn,DNge119,R
+519839,,,,efferent,descending,xl,DNge062,L
+519872,LB,,,efferent,descending,xn,DNg09_a,L
+519896,,,,efferent,descending,xn,DNa06,L
+520118,,,,efferent,descending,xn,DNge148,L
+520300,,,,efferent,descending,xl,DNg75,R
+520485,,,,efferent,descending,xn,DNpe016,R
+520643,PC,,,efferent,descending,xn,DNp46,L
+520898,,,,efferent,descending,xn,DNb04,L
+521190,,,,efferent,descending,xn,DNae007,L
+521197,,,,efferent,descending,fl,DNp56,R
+521262,,,,efferent,descending,ut,DNae002,R
+521298,LB,,,efferent,descending,xn,DNge130,R
+521377,,,,efferent,descending,xn,DNpe024,R
+521445,GNG,,,efferent,descending,xl,DNge063,R
+521624,,,,efferent,descending,it,DNpe023,R
+522345,,,,efferent,descending,xn,DNpe037,L
+522432,,,,efferent,descending,fl,DNp56,L
+522961,,,,efferent,descending,xn,DNp47,L
+522969,,,,efferent,descending,xn,DNp53,R
+523039,,,,efferent,descending,xl,DNge055,R
+523329,,,,efferent,descending,xn,DNa10,L
+523378,,,,efferent,descending,xl,DNae008,L
+523435,LB,,,efferent,descending,xn,DNg09_a,R
+523679,,,,efferent,descending,fl,DNge051,L
+523769,,,,efferent,descending,xl,DNa02,L
+523771,MX,,,efferent,descending,fl,DNge001,R
+523773,MX,,,efferent,descending,xl,DNg52,L
+523998,,,,efferent,descending,xn,pIP10,L
+524001,CB,,,efferent,descending,xn,DNp05,L
+524141,LB,,,efferent,descending,ut,DNge091,R
+524146,,,,efferent,descending,xn,"DNp51,DNpe019",R
+524190,,,,efferent,descending,fl,DNge012,R
+524225,,,,efferent,descending,hl,DNg14,L
+524412,,,,efferent,descending,xn,DNa06,R
+524429,MX,,,efferent,descending,xl,DNg65,R
+524470,,,,efferent,descending,ut,DNbe001,R
+524968,PC,,,efferent,descending,xl,DNp32,R
+525126,LB,,,efferent,descending,ut,DNg02_c,L
+525407,,,,efferent,descending,xl,DNge128,L
+525454,MX,,,efferent,descending,xl,DNg74_b,R
+525595,MD,,,efferent,descending,xl,DNg52,R
+525812,LB,,,efferent,descending,ut,DNge091,R
+525960,,,,efferent,descending,xl,DNa13,L
+529488,,,,efferent,descending,ut,DNb02,L
+529568,,,,efferent,descending,xn,DNp39,L
+531132,LB,,,efferent,descending,xl,DNge073,L
+531434,MX,,,efferent,descending,nt,DNg12_a,R
+531859,,,,efferent,descending,xl,DNpe022,L
+531898,PC,,,efferent,descending,lt,DNp04,L
+532050,PC,,,efferent,descending,xn,DNp23,R
+532787,LB,,,efferent,descending,ut,DNg92_b,R
+535963,LB,,,efferent,descending,ut,DNge014,R
+536048,,,,efferent,descending,xn,DNp27,L
+539234,,,,efferent,descending,ut,DNge004,L
+540462,LB,,,efferent,descending,ut,DNge154,L
+544361,MX,,,efferent,descending,nt,DNg12_d,L
+550221,LB,,,efferent,descending,xl,DNg69,L
+552858,LB,,,efferent,descending,xn,DNg06,R
+555293,,,,efferent,descending,fl,DNge146,L
+555457,,,,efferent,descending,xl,DNge079,R
+555472,,,,efferent,descending,xn,DNae009,L
+555500,MX,,,efferent,descending,xn,DNg29,R
+555726,,,,efferent,descending,xl,DNa13,L
+555795,MX,,,efferent,descending,ad,DNge172,L
+555850,,,,efferent,descending,fl,DNge077,R
+555871,,,,efferent,descending,xn,DNpe017,R
+556286,PC,,,efferent,descending,xl,DNp32,L
+556329,MX,,,efferent,descending,xl,DNge104,L
+556450,LB,,,efferent,descending,ut,DNge045,R
+556793,LB,,,efferent,descending,xn,DNge111,L
+564864,,,,efferent,descending,xn,DNp19,R
+564865,LB,,,efferent,descending,nt,DNge070,R
+565022,,,,efferent,descending,ht,DNpe054,R
+574147,LB,,,efferent,descending,ut,DNg36_a,L
+575082,PC,,,efferent,descending,xn,DNpe021,R
+575669,MD,,,efferent,descending,xn,DNg71,L
+800001,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN07B016,L
+800002,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN07B010,L
+800018,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN01A008,R
+800021,T3,,,intrinsic,interneuron,II|premotor_candidate,IN03A003,L
+800022,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN19B110,L
+800032,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A001,L
+800053,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN07B001,R
+800059,T3,,,intrinsic,interneuron,II|premotor_candidate,IN09A004,L
+800061,T1,,DProN,efferent,motor,fl,Tergopleural/Pleural promotor MN,L
+800069,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A007,R
+800072,T2,,,intrinsic,interneuron,IR|premotor_candidate,INXXX464,L
+800073,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN12A001,R
+800075,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN19B003,R
+800077,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN12B002,L
+800081,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A002,L
+800082,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A011,L
+800085,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN07B002,L
+800089,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN19B012,R
+800093,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03B035,R
+800095,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A001,L
+800099,,,,efferent,descending,xl,DNge079,L
+800101,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN01A012,R
+800102,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A004,L
+800103,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A007,R
+800106,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B020,R
+800111,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A001,L
+800116,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A001,L
+800117,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A015,L
+800118,T1,,,intrinsic,interneuron,BI|premotor_candidate,INXXX089,R
+800119,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A007,R
+800121,T1,,,intrinsic,interneuron,BR|premotor_candidate,INXXX036,R
+800125,T3,,,intrinsic,interneuron,II|premotor_candidate,IN04B001,L
+800127,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A008,R
+800133,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN17A017,R
+800134,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A010,L
+800135,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN08B001,L
+800136,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN06B035,R
+800140,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN19B003,L
+800141,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A002,L
+800142,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN19B108,L
+800147,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN12A001,L
+800149,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN07B006,R
+800155,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A004,L
+800156,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B011,R
+800158,T3,,MetaLN,efferent,motor,hl,Ti extensor MN,R
+800159,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN19B003,R
+800162,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A015,L
+800167,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A001,R
+800171,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN07B002,L
+800175,T3,,MetaLN,efferent,motor,hl,Pleural remotor/abductor MN,L
+800182,T3,,,intrinsic,interneuron,BI|premotor_candidate,INXXX022,R
+800188,T2,,,intrinsic,interneuron,II|premotor_candidate,IN19A010,L
+800194,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A010,R
+800207,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A015,R
+800211,T2,,,intrinsic,interneuron,IR|premotor_candidate,INXXX464,R
+800215,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN01A034,R
+800216,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN19B012,R
+800221,T3,,,intrinsic,interneuron,II|premotor_candidate,IN04B001,R
+800224,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A001,R
+800228,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A005,L
+800230,T2,,MesoLN,efferent,motor,ml,MNml82,R
+800233,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A007,L
+800234,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN14B005,L
+800236,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A008,L
+800239,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A007,L
+800240,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B007,R
+800246,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN12B002,L
+800247,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN07B002,R
+800256,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A002,L
+800259,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A005,L
+800263,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A001,L
+800264,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B007,L
+800270,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A002,L
+800277,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B015,L
+800279,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A071,L
+800283,T2,,,intrinsic,interneuron,II|premotor_candidate,IN17A007,L
+800286,T1,,,intrinsic,interneuron,IR|premotor_candidate,INXXX464,L
+800290,T3,,MetaLN,efferent,motor,hl,Pleural remotor/abductor MN,R
+800291,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A001,R
+800296,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN09A002,L
+800304,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A008,R
+800316,T3,,MetaLN,efferent,motor,hl,Sternal anterior rotator MN,R
+800317,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A008,R
+800318,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A002,R
+800332,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A010,L
+800333,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN04B008,R
+800334,T2,,,intrinsic,interneuron,II|premotor_candidate,IN17A007,R
+800335,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A004,R
+800338,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A006,L
+800340,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A002,R
+800344,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A004,L
+800345,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN16B016,R
+800347,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A001,R
+800353,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A002,R
+800354,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN07B002,L
+800358,T3,,MetaLN,efferent,motor,hl,MNhl64,R
+800369,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A011,R
+800371,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A002,R
+800373,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN23B001,L
+800374,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A007,L
+800375,T1,,,intrinsic,interneuron,IR|premotor_candidate,INXXX464,R
+800383,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN12A001,L
+800387,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN16B020,L
+800389,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A001,R
+800392,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A004,R
+800396,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A023,L
+800398,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN07B002,R
+800403,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A006,R
+800405,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B005,R
+800407,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B016,L
+800416,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A026_b,L
+800420,T1,,,intrinsic,interneuron,II|premotor_candidate,IN03B021,L
+800428,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A002,L
+800430,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A005,L
+800432,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN01A008,L
+800434,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN09A002,L
+800442,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A061,L
+800446,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A009,R
+800452,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,R
+800459,T2,,,intrinsic,interneuron,II|premotor_candidate,IN03A001,L
+800461,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A003,L
+800464,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN18B006,R
+800465,T3,,,intrinsic,interneuron,premotor_candidate,IN17A016,L
+800466,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A001,R
+800468,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN08A003,R
+800471,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A002,R
+800473,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN06B012,R
+800480,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A014,L
+800483,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A007,L
+800490,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A008,L
+800492,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A004,L
+800497,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A005,R
+800501,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A005,R
+800503,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN08B004,L
+800504,T3,,MetaLN,efferent,motor,hl,Sternotrochanter MN,L
+800511,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A006,L
+800526,T1,,,intrinsic,interneuron,II|premotor_candidate,IN19A017,R
+800527,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A005,L
+800530,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B010,L
+800541,T2,,MesoLN,efferent,motor,ml,Pleural remotor/abductor MN,L
+800544,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN01A034,L
+800546,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A009,R
+800549,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A004,R
+800551,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A015,R
+800553,T3,,MetaLN,efferent,motor,hl,Pleural remotor/abductor MN,R
+800561,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A006,L
+800562,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN07B001,L
+800565,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B008,R
+800567,T1,,,intrinsic,interneuron,BR|premotor_candidate,INXXX036,L
+800576,T3,,,intrinsic,interneuron,II|premotor_candidate,IN03A001,L
+800578,T3,,MetaLN,efferent,motor,hl,Fe reductor MN,L
+800580,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN01A012,L
+800583,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN19B012,L
+800585,T3,,,intrinsic,interneuron,premotor_candidate,IN04B068,R
+800589,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,L
+800596,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A003,R
+800597,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN13A011,L
+800599,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN16B022,L
+800605,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A016,R
+800613,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A001,L
+800621,T3,,MetaLN,efferent,motor,hl,Ti extensor MN,L
+800622,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A003,L
+800624,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B010,L
+800631,T1,,,intrinsic,interneuron,II|premotor_candidate,IN12A003,L
+800636,T1,,ProLN,efferent,motor,fl,Ti extensor MN,L
+800638,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A015,R
+800640,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A008,L
+800642,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A006,L
+800643,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN17A016,L
+800650,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A001,R
+800656,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A020,R
+800670,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A008,R
+800675,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A003,L
+800677,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A003,R
+800685,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN09A002,L
+800687,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A003,R
+800691,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A005,R
+800692,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN14A008,L
+800699,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A005,L
+800705,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A010,L
+800707,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A005,L
+800716,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN09A002,R
+800722,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A006,R
+800731,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN19B004,R
+800736,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A010,R
+800747,T1,,,intrinsic,interneuron,II|premotor_candidate,IN19A012,L
+800749,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A006,R
+800750,T1,,,intrinsic,interneuron,II|premotor_candidate,IN19A032,L
+800756,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A001,L
+800759,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B018,L
+800769,T1,,,intrinsic,interneuron,II|premotor_candidate,IN19A017,L
+800772,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A005,R
+800776,T2,,MesoLN,efferent,motor,ml,Pleural remotor/abductor MN,R
+800782,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A008,R
+800783,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A005,L
+800787,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A010,R
+800793,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A004,R
+800796,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN19B011,L
+800802,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A004,L
+800805,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B005,L
+800807,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN19B011,R
+800816,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A010,L
+800829,T1,,,intrinsic,interneuron,BI|premotor_candidate,INXXX029,L
+800832,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A003,L
+800833,T2,,,intrinsic,interneuron,II|premotor_candidate,IN09A004,R
+800837,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN19B012,R
+800838,T2,,,intrinsic,interneuron,II|premotor_candidate,IN19A012,L
+800844,T3,,,intrinsic,interneuron,II|premotor_candidate,IN02A003,L
+800845,,,,efferent,descending,xn,DNp12,R
+800846,T1,,,intrinsic,interneuron,II|premotor_candidate,IN12A003,R
+800851,T3,,MetaLN,efferent,motor,hl,Sternotrochanter MN,L
+800856,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A006,L
+800857,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A002,R
+800860,T1,,,intrinsic,interneuron,II|premotor_candidate,IN19A010,L
+800863,T1,,,intrinsic,interneuron,IR|premotor_candidate,INXXX466,L
+800868,,,,efferent,descending,xl,DNpe002,R
+800879,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN19B012,L
+800896,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN09A002,R
+800898,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN12B018,R
+800902,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN09A003,L
+800903,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A005,L
+800904,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN01A016,R
+800905,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN14A004,L
+800907,T3,,,intrinsic,interneuron,II|premotor_candidate,IN19A014,R
+800910,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN18B006,L
+800911,T2,,MesoLN,efferent,motor,ml,Ti extensor MN,L
+800921,T1,,,intrinsic,interneuron,II|premotor_candidate,IN19A009,R
+800922,T2,,,intrinsic,interneuron,II|premotor_candidate,IN09A004,L
+800931,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A009,L
+800953,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B075,L
+800955,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,R
+800956,T1,,,intrinsic,interneuron,BI|premotor_candidate,INXXX029,R
+800962,T2,,MesoLN,efferent,motor,ml,Sternal posterior rotator MN,R
+800976,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A002,R
+800977,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN16B016,L
+800987,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN14A008,R
+800991,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B022,R
+800996,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN19B027,R
+801002,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A010,R
+801004,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A026_d,L
+801006,T1,,,intrinsic,interneuron,II|premotor_candidate,IN19A010,R
+801017,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A002,L
+801026,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A012,L
+801027,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A003,R
+801032,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A015,R
+801036,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A030,L
+801040,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN14A004,R
+801050,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B006,R
+801054,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A004,L
+801055,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN16B014,R
+801057,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,R
+801058,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,R
+801059,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN17A016,L
+801061,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN19B012,L
+801067,T1,,,intrinsic,interneuron,CI|premotor_candidate,IN01A009,R
+801074,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A007,L
+801075,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B011,R
+801079,T1,,VProN,efferent,motor,fl,Sternotrochanter MN,R
+801082,T2,,,intrinsic,interneuron,premotor_candidate,IN17A052,R
+801084,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A023,R
+801087,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A017,L
+801090,T3,,MetaLN,efferent,motor,hl,Sternotrochanter MN,R
+801091,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A002,L
+801094,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B018,R
+801097,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A003,R
+801101,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN01A012,R
+801106,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B020,L
+801111,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A010,L
+801115,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A005,R
+801116,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN14B001,R
+801129,T3,,,intrinsic,interneuron,II|premotor_candidate,IN09A004,R
+801133,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN17A017,L
+801136,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A006,R
+801146,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A001,L
+801147,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B007,L
+801148,T3,,MetaLN,efferent,motor,hl,Sternotrochanter MN,R
+801149,T3,,,intrinsic,interneuron,IR|premotor_candidate,INXXX466,L
+801156,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN19B027,L
+801159,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN18B011,L
+801164,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A016,R
+801167,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A022,R
+801171,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN14B001,L
+801173,T1,,DProN,efferent,motor,fl,Tergopleural/Pleural promotor MN,L
+801188,T2,,,intrinsic,interneuron,CI|premotor_candidate,IN01A007,R
+801193,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A016,L
+801195,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN21A020,L
+801209,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,R
+801210,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A016,L
+801214,T3,,,intrinsic,interneuron,BR|premotor_candidate,LBL40,R
+801233,T1,,,intrinsic,interneuron,II|premotor_candidate,IN03B021,R
+801234,T2,,MesoLN,efferent,motor,ml,Ti extensor MN,L
+801235,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN01A015,R
+801239,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A006,L
+801246,T3,,,intrinsic,interneuron,BR|premotor_candidate,LBL40,L
+801254,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN13B011,R
+801258,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B012,L
+801262,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN18B011,R
+801263,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN17A041,R
+801267,T3,,AbN1,efferent,motor,hl,MNhl02,R
+801270,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN14A004,L
+801278,T2,,,intrinsic,interneuron,II|premotor_candidate,IN19A027,L
+801283,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B020,R
+801286,T2,,,intrinsic,interneuron,CI|premotor_candidate,IN01A007,L
+801287,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A001,R
+801290,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A006,R
+801296,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B016,R
+801309,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN17A016,R
+801312,T1,,,intrinsic,interneuron,CI|premotor_candidate,IN01A011,L
+801316,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A001,L
+801320,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN07B022,L
+801335,T3,,MetaLN,efferent,motor,hl,MNhl59,R
+801342,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN17A017,R
+801349,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A001,R
+801355,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A004,R
+801357,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A013,R
+801366,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03B021,L
+801371,T2,,,intrinsic,interneuron,IR|premotor_candidate,INXXX471,R
+801375,T3,,MetaLN,efferent,motor,hl,Sternotrochanter MN,R
+801378,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B011,R
+801380,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A009,R
+801382,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN09A002,R
+801385,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN18B005,R
+801386,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A003,R
+801412,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A014,L
+801421,T3,,,intrinsic,interneuron,II|premotor_candidate,IN03A001,R
+801422,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A008,L
+801426,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B011,L
+801429,T3,,,intrinsic,interneuron,IR|premotor_candidate,INXXX466,R
+801431,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN14B003,R
+801432,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN12B005,L
+801435,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN19A024,L
+801437,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A006,R
+801453,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A010,L
+801467,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A015,R
+801469,T1,,VProN,efferent,motor,fl,Sternal anterior rotator MN,R
+801471,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A053,R
+801477,T2,,MesoLN,efferent,motor,ml,MNml81,R
+801478,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN12B005,R
+801487,T2,,,intrinsic,interneuron,II|premotor_candidate,IN03B028,L
+801492,T3,,MetaLN,efferent,motor,hl,Sternal posterior rotator MN,L
+801493,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A014,L
+801494,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B012,R
+801495,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A015,L
+801497,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A016,R
+801503,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN16B024,R
+801509,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN09A010,R
+801526,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A022,L
+801542,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B011,L
+801548,T3,,MetaLN,efferent,motor,hl,Sternal anterior rotator MN,L
+801552,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,R
+801554,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B022,L
+801562,MX,,,efferent,descending,ut,DNge088,R
+801564,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A014,R
+801565,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A006,R
+801569,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B101,L
+801574,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B013,L
+801575,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN16B018,R
+801576,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN07B012,R
+801579,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,R
+801582,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03B042,R
+801584,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A008,R
+801593,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B008,L
+801598,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN03B019,L
+801609,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A009,L
+801610,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A006,R
+801626,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,R
+801630,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN04B008,L
+801637,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,R
+801638,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A007,R
+801650,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A007,R
+801652,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B068,L
+801663,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN09A010,L
+801665,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A004,R
+801676,T3,,,intrinsic,interneuron,BI|premotor_candidate,INXXX066,R
+801677,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN07B022,R
+801682,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A013,R
+801685,T1,,VProN,efferent,motor,fl,Sternotrochanter MN,L
+801693,T3,,MetaLN,efferent,motor,hl,Fe reductor MN,R
+801698,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN19A024,R
+801699,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B016,R
+801713,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03B035,L
+801715,T3,,MetaLN,efferent,motor,hl,Sternal posterior rotator MN,L
+801718,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN13B012,R
+801721,T3,,MetaLN,efferent,motor,hl,Tr flexor MN,R
+801728,T2,,,intrinsic,interneuron,IR|premotor_candidate,INXXX466,L
+801736,T3,,AbN1,efferent,motor,hl,MNhl62,L
+801747,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A013,R
+801752,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN03B019,R
+801761,T2,,MesoLN,efferent,motor,ml,Sternal posterior rotator MN,R
+801763,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B020,L
+801768,T2,,MesoLN,efferent,motor,ml,Sternal posterior rotator MN,L
+801773,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN16B014,L
+801781,T2,,,intrinsic,interneuron,II|premotor_candidate,IN12A011,L
+801785,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A005,L
+801787,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,L
+801791,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN14A009,R
+801794,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B012,L
+801797,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A014,L
+801804,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN01A015,R
+801813,T2,,MesoLN,efferent,motor,ml,Sternal anterior rotator MN,R
+801819,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A031,L
+801822,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A010,L
+801823,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A028,L
+801824,T1,,DProN,efferent,motor,fl,Tergopleural/Pleural promotor MN,R
+801827,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,R
+801838,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B022,R
+801843,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A012,R
+801860,T2,,,intrinsic,interneuron,IR|premotor_candidate,INXXX471,L
+801873,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,L
+801876,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN14A009,L
+801882,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN01A015,L
+801894,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A010,R
+801901,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A010,L
+801909,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN03A045,L
+801910,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A015,R
+801915,T1,,ProAN,efferent,motor,fl,Sternal posterior rotator MN,L
+801918,T1,,VProN,efferent,motor,fl,Sternal anterior rotator MN,R
+801924,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN14A008,R
+801930,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,L
+801932,T3,,MetaLN,efferent,motor,hl,,R
+801946,T2,,MesoLN,efferent,motor,ml,Sternal anterior rotator MN,R
+801973,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A022,R
+801975,T2,,,intrinsic,interneuron,premotor_candidate,IN17A052,R
+801976,,,,efferent,descending,xn,DNpe032,R
+801988,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A054,R
+802001,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN12B012,R
+802009,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A012,L
+802012,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B011,L
+802013,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,L
+802016,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN19B033,L
+802017,T1,,,intrinsic,interneuron,II|premotor_candidate,IN07B014,L
+802020,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B013,R
+802025,T2,,,intrinsic,interneuron,IR|premotor_candidate,INXXX466,R
+802041,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN14A004,R
+802044,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A033,L
+802046,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B006,L
+802053,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN06B035,L
+802060,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A008,L
+802072,T1,,DProN,efferent,motor,fl,Tergopleural/Pleural promotor MN,R
+802085,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A015,R
+802101,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN01A016,L
+802106,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A015,L
+802112,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN21A020,R
+802118,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03B021,R
+802132,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A037,L
+802134,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN14B003,L
+802135,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A006,R
+802143,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,L
+802148,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A021,R
+802167,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN13B011,L
+802169,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A009,R
+802173,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B012,L
+802175,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A013,L
+802178,T1,,,intrinsic,interneuron,II|premotor_candidate,IN19A032,R
+802180,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A028,R
+802189,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,R
+802192,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN07B033,L
+802197,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN21A020,L
+802205,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN17A065,R
+802215,T3,,MetaLN,efferent,motor,hl,Sternal anterior rotator MN,L
+802226,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A018,R
+802232,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,L
+802239,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN21A020,L
+802241,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A037,L
+802246,T2,,,intrinsic,interneuron,premotor_candidate,IN03A033,R
+802248,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A027,L
+802257,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN20A.22A001,L
+802272,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03B031,R
+802276,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03B042,R
+802279,T1,,,intrinsic,interneuron,premotor_candidate,IN03A069,L
+802295,T2,,MesoLN,efferent,motor,ml,Ti flexor MN,L
+802306,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN14A008,R
+802307,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A004,R
+802310,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B038,R
+802319,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A061,R
+802324,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B006,L
+802330,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A017,R
+802335,T2,,,intrinsic,interneuron,BI|premotor_candidate,GFC2,L
+802337,T3,,,intrinsic,interneuron,BI|premotor_candidate,INXXX022,L
+802341,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,R
+802361,T1,,VProN,efferent,motor,fl,Sternotrochanter MN,L
+802377,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A028,L
+802382,T1,,,intrinsic,interneuron,premotor_candidate,IN04B013,L
+802383,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A003,L
+802386,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A037,L
+802407,T2,,MesoLN,efferent,motor,ml,Sternotrochanter MN,L
+802416,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A013,L
+802443,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN19B003,L
+802460,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B034,L
+802465,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B039,L
+802471,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN18B031,R
+802481,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A008,R
+802483,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN01A023,R
+802490,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B015,R
+802494,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A022,L
+802498,T2,,,intrinsic,interneuron,II|premotor_candidate,IN21A013,L
+802509,T1,,ProAN,efferent,motor,fl,Pleural remotor/abductor MN,L
+802521,T2,,MesoLN,efferent,motor,ml,Sternal posterior rotator MN,R
+802546,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A014,L
+802548,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A058,L
+802552,T1,,VProN,efferent,motor,fl,Tergotr. MN,L
+802553,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN21A021,L
+802555,T2,,,intrinsic,interneuron,premotor_candidate,IN17A052,L
+802562,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,R
+802563,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN14A013,L
+802567,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN12A027,R
+802594,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A013,L
+802605,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A005,R
+802609,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A017,L
+802619,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A022,R
+802625,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,R
+802634,T2,,,intrinsic,interneuron,premotor_candidate,IN04B027,R
+802637,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A061,L
+802638,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,L
+802640,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A013,L
+802643,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A012,R
+802663,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN14B006,L
+802668,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN06B033,R
+802677,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A011,L
+802684,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A017,L
+802695,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A031,R
+802705,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03B042,L
+802706,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A015,L
+802725,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B018,L
+802729,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B061,R
+802731,T3,,MetaLN,efferent,motor,hl,MNhl59,L
+802732,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN06B028,L
+802743,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN01A015,R
+802747,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A009,L
+802750,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A015,R
+802751,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN12B018,R
+802779,T1,,,intrinsic,interneuron,II|premotor_candidate,IN07B014,R
+802780,T2,,,intrinsic,interneuron,premotor_candidate,IN17A052,L
+802784,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN06B033,L
+802792,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A012,R
+802810,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN14A008,L
+802811,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A008,R
+802818,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A031,R
+802829,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A004,L
+802842,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03B042,L
+802843,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN12B018,L
+802845,T3,,,intrinsic,interneuron,CI|premotor_candidate,IN01A029,R
+802854,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A033,R
+802864,T2,,MesoLN,efferent,motor,ml,Sternotrochanter MN,R
+802869,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B017,R
+802880,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A022,R
+802893,,,,efferent,descending,xn,DNpe016,L
+802895,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A013,R
+802896,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A022,L
+802901,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN17A058,L
+802929,T3,,,intrinsic,interneuron,premotor_candidate,IN17A052,R
+802932,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A038,R
+802944,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN12B018,R
+802951,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN07B010,R
+802964,T3,,MetaLN,efferent,motor,hl,Sternal posterior rotator MN,L
+802968,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B017,L
+802975,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN01A018,R
+802976,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B054_c,R
+802985,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A022,R
+802990,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A014,R
+802991,T2,,,intrinsic,interneuron,II|premotor_candidate,IN03B028,R
+802998,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A060,R
+803001,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN01A025,R
+803027,T1,,,intrinsic,interneuron,IR|premotor_candidate,INXXX194,L
+803035,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A003,L
+803039,T1,,,intrinsic,interneuron,IR|premotor_candidate,INXXX471,L
+803053,T1,,,intrinsic,interneuron,CI|premotor_candidate,IN01A007,L
+803058,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B080,R
+803072,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,R
+803075,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A058,R
+803077,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A004,L
+803086,T2,,MesoLN,efferent,motor,ml,MNml29,L
+803087,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B011,R
+803093,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A037,L
+803106,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN04B036,R
+803108,T3,,,intrinsic,interneuron,premotor_candidate,IN03A026_c,L
+803111,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B018,R
+803132,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN11A048,R
+803146,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN18B045_a,R
+803147,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,L
+803158,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A017,L
+803169,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN11A046,R
+803177,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B061,L
+803182,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A009,R
+803184,T2,,,intrinsic,interneuron,BR|premotor_candidate,INXXX083,L
+803187,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A015,L
+803196,T3,,,intrinsic,interneuron,premotor_candidate,IN17A052,L
+803198,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A013,R
+803210,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN07B002,R
+803219,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A005,R
+803223,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN01A023,L
+803226,T2,,MesoLN,efferent,motor,ml,Sternal posterior rotator MN,L
+803228,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A003,R
+803233,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A057,L
+803234,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN12A021_b,R
+803237,T1,,VProN,efferent,motor,fl,Tergotr. MN,L
+803238,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A049,L
+803255,T3,,,intrinsic,interneuron,CI|premotor_candidate,IN01A029,L
+803256,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A025,L
+803258,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A005,R
+803278,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A004,R
+803280,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A021,L
+803311,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A008,R
+803314,T1,,ProAN,efferent,motor,fl,Pleural remotor/abductor MN,R
+803322,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN12A021_b,L
+803366,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A060,L
+803370,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B080,L
+803384,T1,,,intrinsic,interneuron,premotor_candidate,IN17A052,R
+803391,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN03A018,L
+803412,T1,,ProAN,efferent,motor,fl,Tr extensor MN,L
+803427,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN01A025,L
+803428,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B044,L
+803433,,,,efferent,descending,xn,DNp57,R
+803439,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B014,L
+803441,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A048,R
+803442,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B009,L
+803458,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A026_d,R
+803480,T2,,MesoLN,efferent,motor,ml,MNml82,L
+803483,T2,,,intrinsic,interneuron,II|premotor_candidate,IN04B058,L
+803485,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B038,L
+803499,T2,,MesoLN,efferent,motor,ml,Pleural remotor/abductor MN,R
+803501,T3,,,intrinsic,interneuron,II|premotor_candidate,IN19A014,L
+803514,T2,,,intrinsic,interneuron,II|premotor_candidate,IN19A032,L
+803518,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B034,R
+803523,T2,,MesoLN,efferent,motor,ml,ltm1-tibia MN,R
+803533,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03B042,R
+803540,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A024,L
+803554,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A044,L
+803587,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN01A015,L
+803588,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B038,L
+803598,T2,,,intrinsic,interneuron,II|premotor_candidate,IN03A045,L
+803600,T3,,,intrinsic,interneuron,premotor_candidate,IN03A055,L
+803601,T2,,,intrinsic,interneuron,BI|premotor_candidate,GFC2,R
+803611,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B034,L
+803623,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A009,R
+803632,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A021,R
+803642,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A018,L
+803659,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN16B041,R
+803661,T1,,,intrinsic,interneuron,premotor_candidate,IN03A069,L
+803685,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN17A041,L
+803698,T1,,VProN,efferent,motor,fl,Sternotrochanter MN,R
+803703,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN17A060,R
+803704,T2,,MesoLN,efferent,motor,ml,Sternal posterior rotator MN,L
+803719,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B014,R
+803721,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN16B041,L
+803731,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A036,R
+803746,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A012,L
+803750,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A010,L
+803754,T2,,,intrinsic,interneuron,premotor_candidate,IN07B073_a,R
+803779,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A040,R
+803791,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A030,L
+803799,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A017,R
+803802,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A026_a,R
+803803,T1,,ProAN,efferent,motor,fl,Pleural remotor/abductor MN,L
+803806,T2,,,intrinsic,interneuron,II|premotor_candidate,IN04B055,L
+803807,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN13A011,R
+803815,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B009,L
+803817,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A010,R
+803828,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,R
+803829,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,L
+803830,T1,,ProLN,efferent,motor,fl,Fe reductor MN,R
+803841,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B038,R
+803852,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A026_a,L
+803859,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A042,R
+803863,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A061,R
+803868,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,L
+803899,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A057,R
+803901,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A022,L
+803933,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A045,L
+803947,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A036,L
+803959,T3,,,intrinsic,interneuron,premotor_candidate,IN17A052,R
+803971,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B038,L
+803991,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A037,R
+804017,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A020,L
+804025,T2,,MesoLN,efferent,motor,ml,Fe reductor MN,L
+804026,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A031,L
+804036,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B044,R
+804053,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A009,L
+804063,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A010,R
+804067,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A036,R
+804070,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A018,L
+804077,T3,,,intrinsic,interneuron,premotor_candidate,IN04B043_b,R
+804078,T3,,MetaLN,efferent,motor,hl,MNhl29,L
+804098,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03B042,L
+804106,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN01A022,L
+804110,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B017,R
+804136,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A061,R
+804146,T2,,,intrinsic,interneuron,premotor_candidate,IN03A032,L
+804158,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B024_a,R
+804163,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A071,R
+804167,T3,,,intrinsic,interneuron,premotor_candidate,IN13A028,R
+804200,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B075,R
+804236,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A039,R
+804253,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B038,L
+804257,T1,,ProLN,efferent,motor,fl,Ti extensor MN,R
+804269,T2,,,intrinsic,interneuron,premotor_candidate,IN04B012,L
+804307,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A020,L
+804311,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN02A015,R
+804338,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A039,L
+804374,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A020,R
+804402,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN11A046,L
+804405,T2,,MesoLN,efferent,motor,ml,Ti flexor MN,R
+804406,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A075,R
+804422,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A039,L
+804433,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN17A041,L
+804435,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B024_b,R
+804455,T3,,,intrinsic,interneuron,premotor_candidate,IN08A037,L
+804465,T1,,VProN,efferent,motor,fl,Tergotr. MN,L
+804468,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A017,R
+804472,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN14A008,L
+804475,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A037,L
+804480,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A036,L
+804507,T2,,,intrinsic,interneuron,II|premotor_candidate,IN04B058,R
+804511,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A044,L
+804514,T3,,AbN1,efferent,motor,hl,Tergotr. MN,L
+804529,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,R
+804550,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A024,L
+804551,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN01A025,R
+804557,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A042,L
+804581,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN16B039,R
+804582,T2,,,intrinsic,interneuron,premotor_candidate,IN04B017,R
+804589,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN11A047,L
+804592,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A031,R
+804628,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B038,R
+804632,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN16B040,R
+804640,T2,,,intrinsic,interneuron,premotor_candidate,IN03A033,L
+804647,T1,,,intrinsic,interneuron,premotor_candidate,IN17A052,L
+804657,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN12B023,R
+804663,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B024_a,L
+804665,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A033,L
+804678,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B047,R
+804681,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B070,L
+804687,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN08B045,R
+804697,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A028,R
+804698,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A041,R
+804708,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A010,R
+804724,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A036,L
+804725,T2,,,intrinsic,interneuron,premotor_candidate,IN03A033,R
+804727,T3,,,intrinsic,interneuron,premotor_candidate,IN03A048,L
+804729,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A038,R
+804735,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A038,L
+804741,T3,,MetaLN,efferent,motor,hl,ltm1-tibia MN,R
+804749,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A051,R
+804751,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A010,L
+804759,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B032,R
+804760,T1,,,intrinsic,interneuron,premotor_candidate,IN17A052,R
+804764,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,L
+804784,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B022,R
+804790,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN02A015,R
+804803,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN01A034,R
+804808,T2,,,intrinsic,interneuron,premotor_candidate,IN03A033,L
+804830,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A041,R
+804845,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,L
+804847,T3,,MetaLN,efferent,motor,hl,MNhl88,L
+804851,T1,,ProAN,efferent,motor,fl,Sternal posterior rotator MN,L
+804854,T3,,,intrinsic,interneuron,premotor_candidate,IN04B074,L
+804859,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A036,R
+804866,T1,,VProN,efferent,motor,fl,Tergotr. MN,R
+804872,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,L
+804873,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A009,L
+804875,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN01A030,L
+804876,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A031,L
+804880,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,L
+804897,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B080,R
+804914,T2,,,intrinsic,interneuron,II|premotor_candidate,IN19A012,R
+804919,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,L
+804920,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B049_a,L
+804922,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN04B012,R
+804933,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A044,R
+804935,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A009,L
+804941,T1,,ProLN,efferent,motor,fl,Fe reductor MN,L
+804943,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,R
+804968,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN11A049,R
+804972,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B038,L
+805010,T2,,MesoLN,efferent,motor,ml,Ti flexor MN,R
+805014,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A060,L
+805016,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A010,R
+805018,T1,,,intrinsic,interneuron,premotor_candidate,IN04B013,L
+805034,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B015,R
+805041,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN02A015,R
+805047,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN12A027,L
+805049,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN17A061,L
+805054,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A024,R
+805061,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN01A030,R
+805066,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A009,L
+805074,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B054_c,R
+805087,T1,,,intrinsic,interneuron,premotor_candidate,IN12A027,L
+805124,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B009,L
+805128,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B068,R
+805143,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,R
+805154,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A026,R
+805159,T3,,,intrinsic,interneuron,premotor_candidate,IN08B065,R
+805169,T3,,,intrinsic,interneuron,II|premotor_candidate,IN02A003,R
+805190,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A035,L
+805191,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN08B004,L
+805201,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN11A047,R
+805212,T3,,,intrinsic,interneuron,premotor_candidate,IN04B074,L
+805218,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B054_c,L
+805226,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A026_b,R
+805233,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,R
+805265,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A075,L
+805270,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN04B036,L
+805272,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN03A028,L
+805286,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B024_c,L
+805300,T2,,,intrinsic,interneuron,premotor_candidate,IN03A032,L
+805309,T1,,ProLN,efferent,motor,fl,ltm2-femur MN,L
+805313,T1,,ProAN,efferent,motor,fl,Pleural remotor/abductor MN,R
+805332,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A023,L
+805341,T3,,,intrinsic,interneuron,premotor_candidate,IN03A064,L
+805351,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B034,L
+805352,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,R
+805360,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B085,L
+805373,T2,,,intrinsic,interneuron,premotor_candidate,IN04B046,L
+805386,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN04B035,L
+805410,T1,,ProAN,efferent,motor,fl,Sternal posterior rotator MN,R
+805425,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A026,L
+805431,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B032,L
+805433,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B032,L
+805439,T2,,,intrinsic,interneuron,II|premotor_candidate,IN19A010,R
+805474,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A060,L
+805477,T2,,MesoLN,efferent,motor,ml,Tr extensor MN,L
+805501,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN03A045,R
+805502,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B081,R
+805506,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B032,L
+805528,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B024_b,L
+805543,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,R
+805547,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A021,R
+805550,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN13B017,R
+805551,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A033,R
+805568,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,R
+805575,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B100,R
+805596,T3,,,intrinsic,interneuron,premotor_candidate,IN04B107,R
+805598,T1,,ProLN,efferent,motor,fl,Fe reductor MN,L
+805626,T2,,,intrinsic,interneuron,II|premotor_candidate,IN19A009,R
+805627,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN08B072,L
+805644,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A047,L
+805674,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A010,R
+805688,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B032,R
+805699,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A036,R
+805703,T2,,,intrinsic,interneuron,II|premotor_candidate,IN19A027,R
+805710,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN12A027,L
+805727,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A045,R
+805734,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A071,L
+805741,T1,,VProN,efferent,motor,fl,Tergotr. MN,L
+805745,T1,,DProN,efferent,motor,fl,Tergopleural/Pleural promotor MN,R
+805795,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A026_c,L
+805798,T3,,,intrinsic,interneuron,premotor_candidate,IN04B074,R
+805823,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A040,R
+805826,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN16B075,L
+805831,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN04B036,L
+805832,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN11A048,L
+805836,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN02A015,L
+805847,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B037,R
+805852,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A075,L
+805855,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A020,R
+805856,T3,,,intrinsic,interneuron,premotor_candidate,IN08B065,L
+805867,T1,,,intrinsic,interneuron,premotor_candidate,IN08A021,R
+805880,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A047,L
+805889,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A051,R
+805893,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A040,L
+805896,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A038,L
+805897,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A030,R
+805905,T3,,,intrinsic,interneuron,premotor_candidate,IN03A064,L
+805918,T3,,,intrinsic,interneuron,premotor_candidate,IN03A048,R
+805925,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B023,R
+805927,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A044,R
+805968,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B032,R
+805971,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A036,R
+805997,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A053,L
+806029,T3,,,intrinsic,interneuron,premotor_candidate,IN03A064,R
+806054,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN03A068,R
+806154,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B094,L
+806162,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN04B032,R
+806174,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,L
+806179,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A051,L
+806204,T2,,MesoLN,efferent,motor,ml,Tergotr. MN,R
+806209,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A023,R
+806219,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B031,L
+806220,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B085,R
+806241,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B069,L
+806255,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B081,L
+806304,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B081,R
+806368,T1,,,intrinsic,interneuron,premotor_candidate,IN04B031,L
+806370,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,L
+806382,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A040,R
+806387,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B040,R
+806392,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN03A058,L
+806406,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A060,R
+806411,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B100,R
+806417,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B062,R
+806424,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A040,R
+806425,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A045,L
+806445,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B048,L
+806523,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A071,L
+806580,T3,,,intrinsic,interneuron,premotor_candidate,IN13A053,L
+806599,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,L
+806605,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B061,L
+806608,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A058,L
+806631,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A058,L
+806639,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A009,R
+806650,T3,,,intrinsic,interneuron,premotor_candidate,IN08A047,L
+806657,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A052,L
+806677,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A046,L
+806727,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A037,R
+806748,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN08B076,R
+806763,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A078,L
+806781,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B086,L
+806785,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A054,L
+806820,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A049,L
+806849,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN16B038,R
+806874,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A051,R
+806884,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,R
+806887,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A042,L
+806894,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A051,L
+806898,T1,,ProLN,efferent,motor,fl,Fe reductor MN,R
+806922,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN03A058,R
+806923,T1,,VProN,efferent,motor,fl,Sternal anterior rotator MN,L
+806950,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A037,R
+806964,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A093,L
+807009,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A026_c,R
+807027,T3,,,intrinsic,interneuron,premotor_candidate,IN03A081,L
+807050,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A045,L
+807092,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B062,L
+807133,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,L
+807137,T2,,,intrinsic,interneuron,premotor_candidate,IN21A037,L
+807160,T3,,AbN1,efferent,motor,hl,MNhl01,L
+807162,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B015,L
+807165,T1,,ProLN,efferent,motor,fl,Ti flexor MN,L
+807180,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A078,R
+807209,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A037,R
+807213,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A022,L
+807226,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A047,R
+807278,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,R
+807281,T1,,DProN,efferent,motor,fl,Tergopleural/Pleural promotor MN,L
+807302,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A037,R
+807331,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A053,L
+807349,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A031,L
+807353,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B023,L
+807355,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A030,L
+807395,T2,,MesoLN,efferent,motor,ml,MNml29,R
+807405,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A037,R
+807434,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A047,R
+807476,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,L
+807503,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A027,R
+807508,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A054,L
+807520,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A030,R
+807535,T3,,,intrinsic,interneuron,premotor_candidate,"IN03A087, IN03A092",R
+807556,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A049,R
+807591,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A038,L
+807593,T2,,,intrinsic,interneuron,premotor_candidate,IN13A062,L
+807640,T3,,MetaLN,efferent,motor,hl,Tr flexor MN,R
+807655,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A018,L
+807662,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A033,L
+807674,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A051,R
+807685,T2,,,intrinsic,interneuron,premotor_candidate,IN08A032,L
+807686,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A040,L
+807738,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A071,L
+807774,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A042,R
+807788,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A045,R
+807807,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A090,L
+807826,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A041,L
+807833,T2,,,intrinsic,interneuron,premotor_candidate,GFC3,R
+807848,T3,,,intrinsic,interneuron,premotor_candidate,IN08A047,R
+807852,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A051,R
+807854,T3,,MetaLN,efferent,motor,hl,Sternal adductor MN,R
+807857,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A071,L
+807861,T1,,,intrinsic,interneuron,premotor_candidate,IN08A021,L
+807865,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A043,L
+807873,T1,,ProAN,efferent,motor,fl,Acc. tr flexor MN,R
+807892,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A037,L
+807895,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A045,R
+807906,T1,,ProLN,efferent,motor,fl,Tr extensor MN,L
+807909,T3,,,intrinsic,interneuron,premotor_candidate,IN08A037,L
+807928,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A071,R
+807957,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B092,L
+807972,T2,,MesoLN,efferent,motor,ml,ltm2-femur MN,L
+807977,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A031,R
+807994,T2,,,intrinsic,interneuron,premotor_candidate,IN08A032,L
+808005,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A043,L
+808011,T1,,ProAN,efferent,motor,fl,Sternal posterior rotator MN,R
+808025,T3,,,intrinsic,interneuron,premotor_candidate,IN03A064,R
+808117,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A042,R
+808124,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A043,R
+808154,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A038,L
+808202,T3,,,intrinsic,interneuron,premotor_candidate,IN08A043,L
+808219,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B083,L
+808274,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A090,R
+808289,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A023,L
+808293,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B074,R
+808294,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A030,R
+808308,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A074,L
+808311,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A026,R
+808342,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A031,L
+808352,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A026,L
+808387,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,L
+808423,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A093,R
+808453,T3,,MetaLN,efferent,motor,hl,Tr extensor MN,R
+808511,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B015,L
+808515,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A043,L
+808526,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A060,R
+808539,T1,,,intrinsic,interneuron,premotor_candidate,IN13A051,R
+808540,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B071,R
+808640,T1,,ProAN,efferent,motor,fl,Sternal posterior rotator MN,L
+808642,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A061,R
+808650,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A043,R
+808685,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,R
+808690,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A046,R
+808692,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A093,R
+808698,T2,,,intrinsic,interneuron,premotor_candidate,IN08A032,L
+808706,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A060,R
+808723,T2,,,intrinsic,interneuron,premotor_candidate,IN08A032,R
+808749,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A048,R
+808789,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B071,R
+808857,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A027,R
+808900,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,L
+808930,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B083,L
+808947,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A042,L
+808985,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A031,R
+809016,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,R
+809049,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B083,R
+809055,T3,,MetaLN,efferent,motor,hl,MNhl88,R
+809066,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A042,L
+809067,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,R
+809122,T3,,,intrinsic,interneuron,premotor_candidate,IN04B110,R
+809152,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,L
+809153,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B061,L
+809234,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A047,L
+809323,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A044,L
+809371,T2,,,intrinsic,interneuron,premotor_candidate,IN03A091,R
+809393,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A068,R
+809395,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A042,L
+809427,T2,,,intrinsic,interneuron,premotor_candidate,IN08A032,R
+809440,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,L
+809452,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN01A063_a,R
+809471,T3,,,intrinsic,interneuron,premotor_candidate,IN16B105,R
+809559,T1,,,intrinsic,interneuron,premotor_candidate,,R
+809563,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A043,R
+809596,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A042,R
+809598,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,R
+809604,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,L
+809618,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A060,R
+809640,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B095,L
+809670,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,L
+809701,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,R
+809714,T3,,,intrinsic,interneuron,premotor_candidate,"IN04B113, IN04B114",R
+809747,T3,,,intrinsic,interneuron,premotor_candidate,IN04B074,R
+809751,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B074,L
+809788,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A043,L
+809809,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B061,R
+809826,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A030,R
+809847,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A064,L
+809850,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B083,R
+809875,T2,,,intrinsic,interneuron,II|premotor_candidate,IN12A011,R
+809912,T1,,ProLN,efferent,motor,fl,Ti flexor MN,L
+809923,T3,,,intrinsic,interneuron,premotor_candidate,IN04B110,L
+809935,T3,,MetaLN,efferent,motor,hl,Ti extensor MN,R
+809946,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A061,R
+810034,T2,,,intrinsic,interneuron,premotor_candidate,IN08A032,R
+810098,T1,,ProLN,efferent,motor,fl,Ti flexor MN,R
+810101,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,R
+810158,T3,,,intrinsic,interneuron,premotor_candidate,IN04B110,L
+810221,T3,,,intrinsic,interneuron,premotor_candidate,IN03A064,R
+810337,T2,,,intrinsic,interneuron,premotor_candidate,"IN08A026,IN08A033",L
+810340,T3,,,intrinsic,interneuron,premotor_candidate,"IN04B113, IN04B114",R
+810379,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A062,L
+810459,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B092,R
+810465,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A051,R
+810473,T1,,,intrinsic,interneuron,premotor_candidate,IN13A051,L
+810535,T1,,DProN,efferent,motor,fl,Tergopleural/Pleural promotor MN,R
+810541,T1,,ProLN,efferent,motor,fl,Ta levator MN,L
+810639,T1,,VProN,efferent,motor,fl,Tr flexor MN,L
+810658,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A028,R
+810668,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN16B094,R
+810720,T2,,MesoLN,efferent,motor,ml,Acc. tr flexor MN,R
+810749,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A051,R
+810753,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A063,R
+810755,T1,,,intrinsic,interneuron,CI|premotor_candidate,IN01A007,R
+810761,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A068,R
+810786,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A028,R
+810838,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN12B040,L
+810861,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A045,L
+810883,T1,,,intrinsic,interneuron,premotor_candidate,IN04B015,R
+810937,MX,,,efferent,descending,xn,DNg46,R
+810953,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A043,L
+810999,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A039,L
+811021,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A060,R
+811028,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A048,L
+811088,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN06B028,L
+811097,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A045,L
+811137,T3,,MetaLN,efferent,motor,hl,MNhl87,L
+811226,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,R
+811256,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B092,R
+811455,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A028,R
+811534,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A051,R
+811544,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B104,R
+811652,T1,,ProLN,efferent,motor,fl,Fe reductor MN,R
+811669,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN08B076,L
+811726,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,L
+811751,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A041,L
+811839,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A026,L
+811903,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A041,L
+812004,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN03A051,R
+812066,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A060,R
+812084,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN06B028,R
+812111,T1,,ProLN,efferent,motor,fl,Fe reductor MN,L
+812198,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A062,L
+812241,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B061,R
+812330,T2,,,intrinsic,interneuron,II|premotor_candidate,IN19A032,R
+812511,MX,,,efferent,descending,fl,DNge019,L
+812531,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,R
+812585,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A048,R
+812611,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A043,R
+812616,T2,,,intrinsic,interneuron,premotor_candidate,IN13A062,L
+812753,T2,,,intrinsic,interneuron,premotor_candidate,IN08A043,L
+812872,T2,,MesoLN,efferent,motor,ml,ltm MN,R
+812899,T3,,MetaLN,efferent,motor,hl,MNhl87,R
+812945,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B061,L
+812953,T3,,MetaLN,efferent,motor,hl,Ti extensor MN,L
+812968,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A043,R
+813080,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A044,R
+813087,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,R
+813199,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A026,R
+813342,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A030,R
+813440,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A036,L
+813442,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A036,L
+813443,MX,,,efferent,descending,lt,DNg106,L
+813466,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A047,R
+813480,T1,,ProAN,efferent,motor,fl,Sternal adductor MN,L
+813566,T1,,ProLN,efferent,motor,fl,Fe reductor MN,R
+813603,T2,,MesoLN,efferent,motor,ml,ltm MN,L
+813629,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,R
+813755,T2,,MesoLN,efferent,motor,ml,Tergotr. MN,L
+813866,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A036,L
+813931,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN03A051,L
+814043,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A043,L
+814073,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A028,R
+814163,T1,,ProLN,efferent,motor,fl,Fe reductor MN,L
+814356,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN06B028,R
+814411,T1,,,intrinsic,interneuron,premotor_candidate,IN08A026,L
+814489,T1,,ProAN,efferent,motor,fl,Tr flexor MN,L
+814555,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A073,L
+814616,T3,,,intrinsic,interneuron,premotor_candidate,IN08A047,R
+814625,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A005,R
+814784,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,L
+814942,T2,,MesoLN,efferent,motor,ml,Tr extensor MN,R
+814983,T2,,MesoLN,efferent,motor,ml,MNml78,R
+815097,T3,,MetaLN,efferent,motor,hl,ltm MN,R
+815246,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,L
+815344,T1,,ProLN,efferent,motor,fl,Ti extensor MN,L
+815498,T3,,MetaLN,efferent,motor,hl,ltm2-femur MN,L
+815678,T1,,ProLN,efferent,motor,fl,Ti extensor MN,R
+815696,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A060,R
+815854,T1,,ProAN,efferent,motor,fl,Sternal adductor MN,R
+815958,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,R
+816018,T2,,MesoLN,efferent,motor,ml,Sternal adductor MN,L
+816022,T3,,MetaLN,efferent,motor,hl,MNhl29,R
+816119,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B061,R
+816201,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,R
+816215,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,L
+816222,T2,,MesoLN,efferent,motor,ml,Ti flexor MN,R
+816375,T2,,,intrinsic,interneuron,premotor_candidate,IN08A026,R
+816404,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,L
+816501,T3,,AbN1,efferent,motor,hl,MNhl02,L
+816648,T1,,ProAN,efferent,motor,fl,Tr flexor MN,R
+817210,T1,,ProLN,efferent,motor,fl,Ta levator MN,R
+817283,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,L
+817347,T1,,VProN,efferent,motor,fl,Tergotr. MN,R
+817374,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,L
+817509,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,R
+817595,T1,,VProN,efferent,motor,fl,Fe reductor MN,R
+817640,T1,,ProAN,efferent,motor,fl,Tr flexor MN,R
+817655,T1,,ProLN,efferent,motor,fl,Ta depressor MN,L
+817681,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,R
+817769,T1,,,intrinsic,interneuron,premotor_candidate,IN13A045,L
+817990,T2,,MesoLN,efferent,motor,ml,MNml78,R
+818057,T1,,ProLN,efferent,motor,fl,Ti flexor MN,L
+818217,T1,,,intrinsic,interneuron,premotor_candidate,IN08A036,L
+818295,T2,,MesoLN,efferent,motor,ml,Ti flexor MN,L
+818389,T1,,ProAN,efferent,motor,fl,Tr flexor MN,L
+818399,T3,,MetaLN,efferent,motor,hl,Sternal posterior rotator MN,L
+818434,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A077,R
+818553,T1,,ProLN,efferent,motor,fl,ltm1-tibia MN,L
+818690,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A005,L
+818719,T1,,ProAN,efferent,motor,fl,Tr flexor MN,R
+818789,MX,,,efferent,descending,xn,DNg12_f,L
+818842,T1,,ProLN,efferent,motor,fl,Tr extensor MN,R
+818902,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A046,R
+818996,T2,,MesoLN,efferent,motor,ml,Sternal posterior rotator MN,R
+819112,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,L
+819203,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,R
+819278,T1,,ProLN,efferent,motor,fl,Ta depressor MN,L
+819384,T1,,ProLN,efferent,motor,fl,Ti flexor MN,L
+819674,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,L
+819869,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,L
+819918,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN16B094,L
+820110,T1,,ProLN,efferent,motor,fl,Ta levator MN,R
+820130,T1,,ProAN,efferent,motor,fl,Tr flexor MN,R
+820350,T3,,MetaLN,efferent,motor,hl,Fe reductor MN,L
+820574,T2,,MesoLN,efferent,motor,ml,MNml83,R
+820632,T2,,MesoLN,efferent,motor,ml,MNml80,L
+820668,T1,,VProN,efferent,motor,fl,Tr flexor MN,R
+820764,T2,,MesoLN,efferent,motor,ml,Fe reductor MN,L
+820881,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A004,L
+820896,T1,,ProLN,efferent,motor,fl,Ta levator MN,R
+821154,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,L
+821291,T1,,ProLN,efferent,motor,fl,Acc. tr flexor MN,L
+821375,T2,,MesoLN,efferent,motor,ml,Acc. tr flexor MN,L
+821449,T3,,MetaLN,efferent,motor,hl,ltm2-femur MN,R
+821494,T2,,MesoLN,efferent,motor,ml,MNml79,L
+821635,T1,,ProLN,efferent,motor,fl,Ti flexor MN,R
+821769,T2,,MesoLN,efferent,motor,ml,Fe reductor MN,R
+822013,T2,,MesoLN,efferent,motor,ml,Ti flexor MN,R
+822047,T1,,ProLN,efferent,motor,fl,ltm1-tibia MN,L
+822092,T1,,ProLN,efferent,motor,fl,ltm MN,L
+822185,T2,,MesoLN,efferent,motor,ml,MNml77,L
+822252,T3,,MetaLN,efferent,motor,hl,MNhl64,L
+822274,T1,,ProLN,efferent,motor,fl,ltm MN,L
+822437,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A048,R
+822742,T2,,MesoLN,efferent,motor,ml,MNml80,L
+822945,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,L
+823132,T2,,MesoLN,efferent,motor,ml,Fe reductor MN,R
+823168,T1,,VProN,efferent,motor,fl,Tr flexor MN,L
+823180,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A064,L
+823281,T1,,VProN,efferent,motor,fl,Tr flexor MN,L
+823405,T3,,MetaLN,efferent,motor,hl,ltm MN,L
+823665,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,R
+823739,T2,,MesoLN,efferent,motor,ml,Ti flexor MN,L
+824041,T2,,MesoLN,efferent,motor,ml,Ti flexor MN,L
+824104,T3,,MetaLN,efferent,motor,hl,ltm MN,L
+824315,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,R
+824689,T2,,MesoLN,efferent,motor,ml,ltm MN,L
+824997,T2,,MesoLN,efferent,motor,ml,ltm MN,R
+825485,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,L
+825516,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,L
+825681,T2,,MesoLN,efferent,motor,ml,ltm MN,L
+825721,T1,,ProLN,efferent,motor,fl,Ta depressor MN,R
+826996,T2,,MesoLN,efferent,motor,ml,ltm2-femur MN,L
+827188,T1,,ProLN,efferent,motor,fl,Ti flexor MN,R
+827968,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,R
+828238,T3,,MetaLN,efferent,motor,hl,,R
+828939,T1,,ProLN,efferent,motor,fl,Tr flexor MN,L
+828978,T3,,MetaLN,efferent,motor,hl,Sternotrochanter MN,L
+829873,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,L
+830039,T1,,ProLN,efferent,motor,fl,ltm2-femur MN,R
+830480,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,L
+830514,T2,,MesoLN,efferent,motor,ml,Ti extensor MN,R
+832490,T2,,MesoLN,efferent,motor,ml,Sternal anterior rotator MN,L
+833140,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,R
+835074,T1,,VProN,efferent,motor,fl,Fe reductor MN,R
+837745,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,R
+838321,T1,,ProAN,efferent,motor,fl,Tr extensor MN,R
+840530,T2,,MesoLN,efferent,motor,ml,Tr extensor MN,R
+840740,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,R
+840981,T3,,MetaLN,efferent,motor,hl,Tr extensor MN,L
+843389,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,L
+852673,T2,,MesoLN,efferent,motor,ml,ltm2-femur MN,R
+852881,T3,,MetaLN,efferent,motor,hl,,R
+856359,T2,,MesoLN,efferent,motor,ml,Sternotrochanter MN,R
+857751,T3,,MetaLN,efferent,motor,hl,ltm2-femur MN,L
+858248,T3,,MetaLN,efferent,motor,hl,ltm1-tibia MN,L
+860084,T1,,ProLN,efferent,motor,fl,ltm MN,R
+867630,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,L
+867926,T2,,MesoLN,efferent,motor,ml,Acc. tr flexor MN,R
+869369,T3,,MetaLN,efferent,motor,hl,MNhl65,R
+876504,T3,,MetaLN,efferent,motor,hl,,L
+890541,T3,,MetaLN,efferent,motor,hl,ltm MN,L
+895449,T2,,MesoLN,efferent,motor,ml,MNml78,L
+896719,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,L
+902276,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A017,L
+902278,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN09A010,L
+902310,T3,,MetaLN,efferent,motor,hl,Pleural remotor/abductor MN,L
+902313,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A014,R
+902423,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A025,R
+902427,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A013,L
+902439,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A007,R
+902459,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A037,L
+902476,T2,,,intrinsic,interneuron,BI|premotor_candidate,INXXX023,R
+902480,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A008,L
+902483,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN09A003,L
+902492,T2,,MesoLN,efferent,motor,ml,Pleural remotor/abductor MN,L
+902500,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A022,R
+902504,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN01A015,L
+902515,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A021,L
+902520,T3,,,intrinsic,interneuron,IR|premotor_candidate,INXXX464,R
+902532,T2,,,intrinsic,interneuron,premotor_candidate,IN03A091,L
+902551,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A004,R
+902614,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN21A005,R
+902617,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B012,R
+902619,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN01A025,L
+902663,T2,,,intrinsic,interneuron,II|premotor_candidate,IN03A001,R
+902667,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B016,L
+902668,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B011,L
+902672,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A051,L
+902679,T1,,,intrinsic,interneuron,II|premotor_candidate,IN17A007,L
+902706,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN13B018,L
+902719,T2,,MesoLN,efferent,motor,ml,Pleural remotor/abductor MN,R
+902722,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A017,R
+902736,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A037,L
+902758,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03B031,L
+902796,T3,,,intrinsic,interneuron,BI|premotor_candidate,INXXX066,L
+902825,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A022,L
+902859,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN16B038,L
+902860,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A027,L
+902894,T2,,,intrinsic,interneuron,premotor_candidate,IN03A091,L
+902943,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN14A004,R
+902962,T3,,MetaLN,efferent,motor,hl,Fe reductor MN,R
+902963,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A026_c,R
+903010,T1,,ProAN,efferent,motor,fl,Tr flexor MN,R
+903022,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A060,L
+903023,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B062,L
+903054,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A053,R
+903073,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A014,L
+903075,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B081,R
+903090,T3,,AbN1,efferent,motor,hl,MNhl62,R
+903091,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A037,R
+903106,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A020,L
+903109,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN02A015,L
+903116,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN09A006,L
+903125,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,L
+903158,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,L
+903159,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,L
+903182,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A004,R
+903189,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B010,R
+903216,T1,,,intrinsic,interneuron,IR|premotor_candidate,INXXX466,R
+903238,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A033,L
+903264,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN12B012,L
+903273,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A010,R
+903280,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN09A003,R
+903284,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B015,L
+903285,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A007,R
+903298,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,L
+903300,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN19B108,R
+903363,T2,,MesoLN,efferent,motor,ml,Ti flexor MN,R
+903366,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN16B016,L
+903429,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN12A001,R
+903442,T1,,,intrinsic,interneuron,premotor_candidate,,L
+903459,T2,,,intrinsic,interneuron,premotor_candidate,IN03A033,L
+903463,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A017,L
+903487,T1,,,intrinsic,interneuron,CI|premotor_candidate,IN01A009,L
+903497,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A008,L
+903500,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN20A.22A001,R
+903508,T2,,MesoLN,efferent,motor,ml,MNml81,L
+903510,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A030,L
+903513,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B100,L
+903519,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A018,R
+903520,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A017,R
+903523,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN21A005,L
+903524,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN08B065,L
+903536,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN03A068,L
+903545,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN16B016,R
+903551,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B047,L
+903570,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN09A010,L
+903572,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN19B003,L
+903573,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A006,R
+903574,T1,,,intrinsic,interneuron,II|premotor_candidate,IN19A012,R
+903579,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,L
+903602,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A003,L
+903604,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A002,L
+903613,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A011,R
+903642,T3,,MetaLN,efferent,motor,hl,Sternal posterior rotator MN,R
+903643,T3,,MetaLN,efferent,motor,hl,Sternal posterior rotator MN,R
+903653,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN19B003,R
+903665,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN09A010,R
+903689,T2,,MesoLN,efferent,motor,ml,Sternal anterior rotator MN,L
+903699,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A051,R
+903700,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A005,R
+903801,T2,,,intrinsic,interneuron,BR|premotor_candidate,INXXX083,R
+903819,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN08B001,R
+903833,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B019,L
+903840,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B037,L
+903844,T2,,MesoLN,efferent,motor,ml,MNml80,R
+903855,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN08B004,R
+903903,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN16B020,R
+904022,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN19B110,R
+904034,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B101,L
+904036,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN12B018,L
+904044,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A056,L
+904107,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B088,L
+904118,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN01A042,L
+904129,T1,,,intrinsic,interneuron,premotor_candidate,,L
+904164,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A074,R
+904184,T3,,MetaLN,efferent,motor,hl,Sternal adductor MN,L
+904212,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A028,L
+904236,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A018,L
+904245,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN07B016,R
+904247,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A033,R
+904262,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A018,R
+904271,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN12B012,R
+904280,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B020,L
+904322,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A071,L
+904363,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN17A058,R
+904366,T3,,,intrinsic,interneuron,premotor_candidate,"IN03A087, IN03A092",R
+904395,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN01A022,R
+904427,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B041,L
+904525,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN09A010,R
+904587,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN07B001,R
+904589,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A005,R
+904640,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN17A007,R
+904656,T3,,,intrinsic,interneuron,CI|premotor_candidate,IN01A031,R
+904657,T2,,MesoLN,efferent,motor,ml,Sternotrochanter MN,L
+904673,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,L
+904675,T1,,,intrinsic,interneuron,BI|premotor_candidate,INXXX089,L
+904685,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A001,L
+904707,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A006,L
+904720,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A060,R
+904736,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A009,L
+904743,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A010,R
+904764,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A044,R
+904800,T2,,,intrinsic,interneuron,BI|premotor_candidate,INXXX023,L
+904826,T1,,,intrinsic,interneuron,premotor_candidate,IN17A052,L
+904827,T1,,,intrinsic,interneuron,premotor_candidate,IN13A045,L
+904831,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN01A030,R
+904838,T1,,,intrinsic,interneuron,premotor_candidate,IN13A035,L
+904844,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN18B005,L
+904900,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A044,R
+904928,T3,,,intrinsic,interneuron,premotor_candidate,IN03A081,R
+904979,T3,,,intrinsic,interneuron,premotor_candidate,IN04B068,L
+904989,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN08A003,L
+905000,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A007,L
+905010,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A047,R
+905025,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN19B004,L
+905049,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A039,L
+905058,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A075,R
+905062,T1,,,intrinsic,interneuron,premotor_candidate,,L
+905078,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A012,L
+905079,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A028,L
+905088,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A028,R
+905119,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B094,L
+905123,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B091,L
+905139,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN18B031,L
+905145,T2,,MesoLN,efferent,motor,ml,Fe reductor MN,R
+905159,T1,,,intrinsic,interneuron,IR|premotor_candidate,INXXX194,R
+905164,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A014,R
+905167,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A005,L
+905168,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN21A020,R
+905217,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B011,L
+905223,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A042,L
+905232,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A071,R
+905235,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,R
+905236,T2,,MesoLN,efferent,motor,ml,MNml80,R
+905262,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A030,R
+905282,T1,,,intrinsic,interneuron,premotor_candidate,IN13A035,R
+905299,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A044,L
+905329,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A051,R
+905385,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B042,R
+905387,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A009,L
+905415,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN07B006,L
+905421,T2,,MesoLN,efferent,motor,ml,Pleural remotor/abductor MN,L
+905463,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A021,L
+905487,T2,,MesoLN,efferent,motor,ml,ltm MN,R
+905496,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A006,L
+905500,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A036,R
+905501,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN17A044,R
+905514,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN14B006,R
+905531,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A018,R
+905550,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN03A028,L
+905559,T2,,MesoLN,efferent,motor,ml,MNml79,R
+905586,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,R
+905610,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN12B040,L
+905618,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN21A021,R
+905658,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,R
+905661,T3,,MetaLN,efferent,motor,hl,Tr extensor MN,R
+905728,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A028,L
+905729,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A013,R
+905792,T3,,AbN1,efferent,motor,hl,MNhl01,R
+905812,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN12B024_a,L
+905843,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A051,L
+905849,T3,,AbN1,efferent,motor,hl,Tergotr. MN,R
+905887,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,L
+905910,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A013,L
+905928,T3,,MetaLN,efferent,motor,hl,Tr flexor MN,R
+905938,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN17A041,L
+905943,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN03A018,R
+905977,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A042,R
+906187,T2,,,intrinsic,interneuron,BR|premotor_candidate,IN01A038,L
+906235,T3,,MetaLN,efferent,motor,hl,Sternal anterior rotator MN,R
+906275,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A063,L
+906354,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN16B061,L
+906407,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A003,R
+906414,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A070,R
+906451,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A021,R
+906624,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A037,R
+906684,T3,,,intrinsic,interneuron,BR|premotor_candidate,IN02A015,L
+906687,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN20A.22A001,L
+906750,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A004,L
+906999,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN18B046,R
+907016,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A018,R
+907028,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,L
+907256,T3,,MetaLN,efferent,motor,hl,Sternal posterior rotator MN,R
+907257,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A015,R
+907315,T1,,,intrinsic,interneuron,premotor_candidate,IN13A035,L
+907380,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A054,R
+907387,T2,,MesoLN,efferent,motor,ml,MNml77,R
+907422,T2,,MesoLN,efferent,motor,ml,MNml78,L
+907443,T2,,MesoLN,efferent,motor,ml,ltm1-tibia MN,L
+907479,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A015,L
+907487,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A044,R
+907557,T1,,,intrinsic,interneuron,premotor_candidate,IN04B031,R
+907662,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A028,L
+907750,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A018,L
+907751,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN20A.22A001,R
+907820,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A028,L
+907848,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,R
+908011,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A043,L
+908018,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN03A024,R
+908021,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A018,R
+908023,T2,,,intrinsic,interneuron,premotor_candidate,IN03A032,R
+908029,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A093,R
+908094,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,L
+908269,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A008,L
+908323,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A010,L
+908343,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A071,R
+908380,T1,,,intrinsic,interneuron,premotor_candidate,IN13A035,L
+908389,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A004,R
+908440,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A039,R
+908466,T2,,,intrinsic,interneuron,BI|premotor_candidate,GFC1,L
+908594,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN17A061,R
+908597,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A053,R
+908602,T1,,,intrinsic,interneuron,premotor_candidate,IN08A036,R
+908604,T2,,,intrinsic,interneuron,premotor_candidate,IN13A062,R
+908657,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B027,L
+908673,T2,,MesoLN,efferent,motor,ml,ltm2-femur MN,R
+908687,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A036,L
+908689,T2,,,intrinsic,interneuron,premotor_candidate,IN03A091,L
+908694,T2,,,intrinsic,interneuron,premotor_candidate,IN20A.22A046,R
+908717,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN12B092,R
+908754,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A018,L
+908762,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,L
+908786,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A039,R
+908872,T3,,,intrinsic,interneuron,premotor_candidate,IN20A.22A028,L
+909056,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B031,L
+909058,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN08A012,R
+909078,T2,,MesoLN,efferent,motor,ml,Tr extensor MN,L
+909186,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A037,R
+909214,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B071,L
+909255,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,R
+909310,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN16B074,R
+909371,T2,,MesoLN,efferent,motor,ml,Sternal adductor MN,R
+909402,T3,,,intrinsic,interneuron,premotor_candidate,"IN04B113, IN04B114",L
+909521,T1,,VProN,efferent,motor,fl,Tergotr. MN,R
+909526,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A034,R
+909558,LB,,,efferent,descending,fl,DNge061,L
+909618,T1,,ProLN,efferent,motor,fl,Acc. tr flexor MN,L
+909662,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A081,R
+909713,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,R
+909831,T1,,ProLN,efferent,motor,fl,Ti flexor MN,L
+909833,T1,,,intrinsic,interneuron,premotor_candidate,,R
+909901,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A053,R
+910018,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN04B019,R
+910022,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN04B015,R
+910095,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,R
+910148,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A081,L
+910178,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,R
+910196,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN04B074,R
+910296,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,R
+910334,T1,,ProLN,efferent,motor,fl,ltm MN,L
+910443,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A036,R
+910451,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A028,R
+910550,T3,,,intrinsic,interneuron,premotor_candidate,IN03A064,R
+910719,T2,,,intrinsic,interneuron,CR|premotor_candidate,IN13B018,L
+911134,T1,,ProLN,efferent,motor,fl,Acc. tr flexor MN,L
+911453,T1,,ProLN,efferent,motor,fl,ltm MN,L
+911554,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A038,L
+911592,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A062,R
+911639,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A002,L
+911683,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A051,L
+911878,T1,,,intrinsic,interneuron,premotor_candidate,IN20A.22A018,R
+911987,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN13A040,R
+912063,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN12B012,L
+912085,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN21A006,L
+912122,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B006,R
+912337,T1,,,intrinsic,interneuron,BR|premotor_candidate,IN13A060,L
+912554,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A020,R
+912694,T3,,MetaLN,efferent,motor,hl,ltm1-tibia MN,L
+912966,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN08A007,R
+913724,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A006,R
+914655,T1,,ProLN,efferent,motor,fl,Tr flexor MN,R
+914837,T3,,MetaLN,efferent,motor,hl,ltm1-tibia MN,R
+914852,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,R
+919509,T1,,VProN,efferent,motor,fl,Sternal anterior rotator MN,L
+923203,,,,efferent,descending,xn,DNpe005,R
+923228,T2,,,intrinsic,interneuron,BI|premotor_candidate,IN01A020,R
+924142,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,R
+924189,T1,,ProLN,efferent,motor,fl,ltm MN,R
+924571,PC,,,efferent,descending,xn,DNp64,L
+924716,T1,,VProN,efferent,motor,fl,Tergotr. MN,R
+924718,LB,,,efferent,descending,ut,DNge095,R
+925306,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A058,R
+926154,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A011,R
+926839,T1,,,intrinsic,interneuron,BI|premotor_candidate,IN12A027,R
+927808,T2,,MesoLN,efferent,motor,ml,Ti flexor MN,L
+927828,T2,,MesoLN,efferent,motor,ml,Acc. tr flexor MN,L
+928579,T2,,MesoLN,efferent,motor,ml,Ti extensor MN,R
+928813,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN03A047,L
+929268,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A006,L
+929376,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,L
+929469,T3,,,intrinsic,interneuron,premotor_candidate,IN03A068,R
+929612,T3,,,intrinsic,interneuron,IR|premotor_candidate,INXXX464,L
+930012,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A003,L
+931203,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN08A007,L
+932581,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN17A017,L
+933090,T1,,,intrinsic,interneuron,CR|premotor_candidate,IN13B018,R
+933157,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN16B024,L
+933241,T3,,,intrinsic,interneuron,CI|premotor_candidate,IN01A031,L
+933307,T1,,,intrinsic,interneuron,premotor_candidate,IN12A027,R
+933395,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A001,R
+934091,T1,,DProN,efferent,motor,fl,Tergopleural/Pleural promotor MN,L
+934092,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,L
+934519,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,L
+934752,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN21A007,L
+935927,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN19A020,L
+936035,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A005,L
+936215,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN13A023,R
+936696,T3,,MetaLN,efferent,motor,hl,MNhl65,L
+936795,T3,,,intrinsic,interneuron,CR|premotor_candidate,IN13B064,L
+939950,T3,,MetaLN,efferent,motor,hl,MNhl60,R
+940007,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN13A051,L
+940081,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A006,L
+940435,T1,,,intrinsic,interneuron,premotor_candidate,,L
+940467,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN19A016,L
+940699,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN04B011,R
+940769,T3,,,intrinsic,interneuron,IR|premotor_candidate,IN03A037,L
+941298,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN21A016,L
+942770,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,L
+944269,T1,,,intrinsic,interneuron,premotor_candidate,IN04B100,L
+946718,MX,,,efferent,descending,xl,DNge106,L
+142338522,PC,,,efferent,descending,xn,DNpe039,L
+1050003192,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,L
+1050005026,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,R
+1050013311,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,R
+1050013851,T1,,ProLN,efferent,motor,fl,ltm MN,R
+1050015101,T1,,ProLN,efferent,motor,fl,ltm MN,R
+1050031705,T1,,ProLN,efferent,motor,fl,Ti flexor MN,R
+1050032839,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,R
+1050038433,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,L
+1050046221,T2,,MesoLN,efferent,motor,ml,MNml80,L
+1050080384,T3,,MetaLN,efferent,motor,hl,ltm MN,L
+1050088257,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,L
+1050091102,T3,,MetaLN,efferent,motor,hl,ltm MN,R
+1050091581,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,R
+1050098047,T3,,MetaLN,efferent,motor,hl,Tr flexor MN,R
+1050100010,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,L
+1050102118,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,R
+1050111955,T1,,ProLN,efferent,motor,fl,Ta levator MN,L
+1050115387,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,L
+1050119039,T2,,MesoLN,efferent,motor,ml,MNml78,L
+1050123559,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,L
+1050126678,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,R
+1050139141,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,L
+1050151215,T2,,MesoLN,efferent,motor,ml,MNml78,L
+1050156705,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,R
+1050160514,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,R
+1050160593,T2,,MesoLN,efferent,motor,ml,MNml76,R
+1050166426,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,L
+1050174251,T3,,MetaLN,efferent,motor,hl,ltm2-femur MN,R
+1050189039,T1,,ProLN,efferent,motor,fl,Ti flexor MN,R
+1050194310,T3,,MetaLN,efferent,motor,hl,Tr flexor MN,L
+1050202259,T3,,MetaLN,efferent,motor,hl,MNhl65,L
+1050202461,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,R
+1050203465,T3,,MetaLN,efferent,motor,hl,ltm MN,R
+1050233038,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,L
+1050239701,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,L
+1050248133,T1,,ProLN,efferent,motor,fl,Ta depressor MN,R
+1050251718,T1,,ProLN,efferent,motor,fl,ltm2-femur MN,R
+1050263576,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,L
+1050268065,T1,,ProLN,efferent,motor,fl,Acc. ti flexor MN,R
+1050272154,T3,,MetaLN,efferent,motor,hl,,L
+1050274189,T3,,MetaLN,efferent,motor,hl,MNhl60,L
+1050303231,T3,,MetaLN,efferent,motor,hl,Ti flexor MN,R
+1050306082,T1,,ProLN,efferent,motor,fl,Acc. tr flexor MN,R
+1050335829,T1,,ProAN,efferent,motor,fl,Sternal posterior rotator MN,L
+1050340850,T1,,ProLN,efferent,motor,fl,,R
+1050349786,T1,,ProLN,efferent,motor,fl,Acc. tr flexor MN,R
+1050380236,T1,,ProLN,efferent,motor,fl,Ta depressor MN,R
+1050403926,T1,,ProLN,efferent,motor,fl,Ta depressor MN,L
+1050441863,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A005,R
+1050460102,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,R
+1050493413,T3,,MetaLN,efferent,motor,hl,Sternal posterior rotator MN,R
+1050591428,T1,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A007,R
+1050607195,T2,,MesoLN,efferent,motor,ml,Fe reductor MN,L
+1050615112,T1,,ProLN,efferent,motor,fl,ltm2-femur MN,L
+1050660827,T1,,ProLN,efferent,motor,fl,Ta depressor MN,L
+1050669248,T2,,MesoLN,efferent,motor,ml,Tr flexor MN,L
+1050673969,T2,,MesoLN,efferent,motor,ml,MNml80,R
+1050730563,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,L
+1050815462,T1,,ProLN,efferent,motor,fl,Ta depressor MN,R
+1050938258,T3,,MetaLN,efferent,motor,hl,Tr flexor MN,R
+1051054875,T2,,MesoLN,efferent,motor,ml,Sternal posterior rotator MN,L
+1051062549,T1,,ProLN,efferent,motor,fl,Ta depressor MN,L
+1051236875,T3,,MetaLN,efferent,motor,hl,Acc. tr flexor MN,L
+1051356801,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,L
+1051367796,T1,,ProAN,efferent,motor,fl,Tr flexor MN,L
+1051670893,T1,,ProAN,efferent,motor,fl,Tr flexor MN,L
+1051680335,T3,,MetaLN,efferent,motor,hl,,L
+1052407897,T1,,ProLN,efferent,motor,fl,,R
+1052521030,T2,,MesoLN,efferent,motor,ml,Acc. ti flexor MN,R
+1053002338,T2,,,intrinsic,interneuron,IR|premotor_candidate,IN20A.22A043,L
+1057471940,T1,,ProLN,efferent,motor,fl,ltm1-tibia MN,R
+1059707690,T3,,MetaLN,efferent,motor,hl,Acc. ti flexor MN,R
+1068560359,T3,,,intrinsic,interneuron,BI|premotor_candidate,IN19A019,R

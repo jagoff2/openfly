@@ -1,0 +1,2 @@
+sim_seconds,avg_forward_speed,trajectory_smoothness,path_length,net_displacement,displacement_efficiency,bbox_width,bbox_height,bbox_area,stable,wall_seconds,real_time_factor,device,mode,completed_cycles,target_duration_s,completed_full_duration,failure_type,failure_message
+1.9999999999997962,27.685304990250707,0.15131823791061896,55.31523937052092,40.674719644888384,0.7353257458118334,40.69922386109829,1.698040661169216,69.10893699417328,1.0,779.343262541,0.0025662632836253967,cpu,flygym,1000,2.0,1.0,,

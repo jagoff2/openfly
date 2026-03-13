@@ -118,6 +118,13 @@
   - `docs/brain_control_validation.md`
   - `outputs/metrics/compare_5s_strict_vs_zero.csv`
 - This validates that the strict-default motion is brain-driven rather than coming from hidden body fallback, but it does not by itself prove final parity or final biological correctness of the bridge.
+- The semantic-VNC `exit_nerve_flywire_semantic` branch is now frozen as a failed parity branch:
+  - semantic monitor-space alignment is real
+  - decoder saturation and camera framing were fixed
+  - the corrected embodied run is stable
+  - but the branch still does not track the target
+  - current conclusion:
+    - structural semantic VNC mapping alone is not enough to recover target-directed behavior in this repo
 
 ## Engineering Substitutes Used
 

@@ -1,0 +1,27 @@
+{
+  "run_dir": "outputs/requested_0p1s_splice_uvgrid_multidrive_fitted_basis_target/flygym-demo-20260311-145836",
+  "metrics_path": "outputs/requested_0p1s_splice_uvgrid_multidrive_fitted_basis_target/flygym-demo-20260311-145836/metrics.csv",
+  "video_path": "outputs/requested_0p1s_splice_uvgrid_multidrive_fitted_basis_target/flygym-demo-20260311-145836/demo.mp4",
+  "log_path": "outputs/requested_0p1s_splice_uvgrid_multidrive_fitted_basis_target/flygym-demo-20260311-145836/run.jsonl",
+  "metrics": {
+    "sim_seconds": 0.10000000000000184,
+    "avg_forward_speed": 2.5563466282495866,
+    "trajectory_smoothness": 0.39502788972372754,
+    "path_length": 0.25052196956845946,
+    "net_displacement": 0.08021675343388461,
+    "displacement_efficiency": 0.32019847828940207,
+    "bbox_width": 0.08278980478644371,
+    "bbox_height": 0.027037386782467365,
+    "bbox_area": 0.0022384199736560466,
+    "stable": 1.0,
+    "wall_seconds": 47.77263752500001,
+    "real_time_factor": 0.002093248461479034,
+    "device": "cpu",
+    "mode": "flygym",
+    "completed_cycles": 50,
+    "target_duration_s": 0.1,
+    "completed_full_duration": 1.0,
+    "failure_type": "",
+    "failure_message": ""
+  }
+}

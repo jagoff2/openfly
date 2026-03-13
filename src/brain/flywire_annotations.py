@@ -101,6 +101,7 @@ def load_flywire_annotation_table(path: str | Path) -> pd.DataFrame:
     keep_columns = [
         "root_id",
         "cell_type",
+        "hemibrain_type",
         "side",
         "pos_x",
         "pos_y",
@@ -111,9 +112,17 @@ def load_flywire_annotation_table(path: str | Path) -> pd.DataFrame:
     ]
     available = [column for column in keep_columns if column in df.columns]
     df = df[available].copy()
-    df = df.dropna(subset=["root_id", "cell_type", "side"])
+    df = df.dropna(subset=["root_id", "side"])
+    if "hemibrain_type" in df.columns:
+        keep_mask = df["cell_type"].notna() | df["hemibrain_type"].notna()
+        df = df.loc[keep_mask].copy()
+    else:
+        df = df.dropna(subset=["cell_type"])
     df["root_id"] = df["root_id"].astype("int64")
-    df["cell_type"] = df["cell_type"].astype(str)
+    if "cell_type" in df.columns:
+        df["cell_type"] = df["cell_type"].fillna("").astype(str)
+    if "hemibrain_type" in df.columns:
+        df["hemibrain_type"] = df["hemibrain_type"].fillna("").astype(str)
     df["side"] = df["side"].astype(str).str.lower()
     return df
 

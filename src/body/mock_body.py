@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from body.interfaces import BodyCommand, BodyObservation, EmbodiedRuntime
+from body.interfaces import BodyObservation, ControlCommand, EmbodiedRuntime
 from vision.feature_extractor import RealisticVisionFeatureExtractor
 
 @dataclass
@@ -35,10 +35,13 @@ class MockEmbodiedRuntime(EmbodiedRuntime):
     def _target_position(self) -> np.ndarray:
         return np.array([6.0 + 2.0 * math.cos(self.target_phase), 4.0 * math.sin(self.target_phase * 0.5)])
 
-    def step(self, command: BodyCommand, num_substeps: int) -> BodyObservation:
+    def step(self, command: ControlCommand, num_substeps: int) -> BodyObservation:
         for _ in range(max(1, num_substeps)):
-            mean_drive = 0.5 * (command.left_drive + command.right_drive)
-            turn_drive = command.right_drive - command.left_drive
+            log_dict = command.to_log_dict()
+            left_drive = float(log_dict.get("left_drive", 0.0))
+            right_drive = float(log_dict.get("right_drive", 0.0))
+            mean_drive = 0.5 * (left_drive + right_drive)
+            turn_drive = right_drive - left_drive
             self.forward_speed = float(np.clip(mean_drive, -1.2, 1.2))
             self.yaw_rate = float(np.clip(turn_drive, -1.5, 1.5))
             self.yaw += self.yaw_rate * self.timestep

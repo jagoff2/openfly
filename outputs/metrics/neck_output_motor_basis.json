@@ -1,0 +1,73 @@
+{
+  "source_observational_json": "outputs/metrics/descending_monitor_neck_output_atlas.json",
+  "source_causal_json": "outputs/metrics/descending_motor_atlas_summary.json",
+  "forward_group_weights": {
+    "DNp103": 1.0,
+    "DNp18": 0.9500812267179984,
+    "DNg97": 0.9483380045577727,
+    "DNpe016": 0.15533972813608254
+  },
+  "turn_group_weights": {
+    "DNpe040": 1.0,
+    "DNpe056": 0.3909825751137355
+  },
+  "excluded_or_ambiguous_labels": {
+    "turn_ambiguous": [
+      "DNp71"
+    ],
+    "inactive_in_first_causal_pass": [
+      "DNpe031",
+      "DNae002"
+    ],
+    "weak_gate_like": [
+      "DNpe016"
+    ]
+  },
+  "seed_forward_labels": [
+    "DNp103",
+    "DNp18",
+    "DNg97",
+    "DNpe016"
+  ],
+  "seed_turn_labels": [
+    "DNpe040",
+    "DNpe056"
+  ],
+  "observational_context": {
+    "top_target_conditioned_labels": [
+      "DNpe016",
+      "DNae002",
+      "DNp71",
+      "DNpe040",
+      "DNpe056",
+      "DNg97",
+      "DNb01",
+      "DNp09"
+    ],
+    "top_bearing_locked_labels": [
+      "DNp71",
+      "DNpe040",
+      "DNpe056",
+      "DNg97",
+      "DNpe031",
+      "DNp43",
+      "DNp09",
+      "DNae002"
+    ],
+    "top_forward_locked_labels": [
+      "DNg97",
+      "DNp103",
+      "DNp18",
+      "DNp43",
+      "DNpe016",
+      "DNp71",
+      "DNp09",
+      "DNp06"
+    ]
+  },
+  "notes": [
+    "This is a first fitted motor basis from the current public-equivalent stack, not a final biological VNC/muscle mapping.",
+    "Forward weights are derived from bilateral causal drive + displacement above the no-stimulation baseline.",
+    "Turn weights are derived only from causal pairs that produce mirrored left/right yaw sign."
+  ]
+}

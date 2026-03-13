@@ -1,0 +1,2 @@
+root_id,cell_type,side,region,left_direct_weight,right_direct_weight,left_premotor_path_weight,right_premotor_path_weight,left_total_weight,right_total_weight,total_motor_weight,motor_target_count
+1,DNa02,left,brain,2,0,11,0,13,0,13,2

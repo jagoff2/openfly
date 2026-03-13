@@ -1,13 +1,60 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Any, Mapping
+from dataclasses import asdict, dataclass, field
+from typing import Any, Mapping, Protocol
+
+
+class ControlCommand(Protocol):
+    def to_action(self) -> tuple[float, ...]:
+        ...
+
+    def to_log_dict(self) -> dict[str, float]:
+        ...
 
 @dataclass
 class BodyCommand:
     left_drive: float
     right_drive: float
+
+    def to_action(self) -> tuple[float, float]:
+        return (float(self.left_drive), float(self.right_drive))
+
+    def to_log_dict(self) -> dict[str, float]:
+        return {
+            "left_drive": float(self.left_drive),
+            "right_drive": float(self.right_drive),
+        }
+
+
+@dataclass
+class HybridDriveCommand:
+    left_drive: float
+    right_drive: float
+    left_amp: float
+    right_amp: float
+    left_freq_scale: float
+    right_freq_scale: float
+    retraction_gain: float
+    stumbling_gain: float
+    reverse_gate: float
+
+    def to_action(self) -> tuple[float, ...]:
+        return (
+            float(self.left_amp),
+            float(self.right_amp),
+            float(self.left_freq_scale),
+            float(self.right_freq_scale),
+            float(self.retraction_gain),
+            float(self.stumbling_gain),
+            float(self.reverse_gate),
+        )
+
+    def to_log_dict(self) -> dict[str, float]:
+        return {key: float(value) for key, value in asdict(self).items()}
+
+    def as_legacy_command(self) -> BodyCommand:
+        return BodyCommand(left_drive=float(self.left_drive), right_drive=float(self.right_drive))
 
 @dataclass
 class BodyObservation:
@@ -34,7 +81,7 @@ class EmbodiedRuntime(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def step(self, command: BodyCommand, num_substeps: int) -> BodyObservation:
+    def step(self, command: ControlCommand, num_substeps: int) -> BodyObservation:
         raise NotImplementedError
 
     def render_frame(self) -> Any:

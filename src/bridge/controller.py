@@ -10,7 +10,7 @@ from bridge.visual_splice import VisualSpliceInjector
 from vision.feature_extractor import RealisticVisionFeatureExtractor
 
 class ClosedLoopBridge:
-    def __init__(self, brain_backend: Any, encoder: SensoryEncoder | None = None, decoder: MotorDecoder | None = None, vision_extractor: RealisticVisionFeatureExtractor | None = None, brain_context_injector: BrainContextInjector | None = None, visual_splice_injector: VisualSpliceInjector | None = None) -> None:
+    def __init__(self, brain_backend: Any, encoder: SensoryEncoder | None = None, decoder: Any | None = None, vision_extractor: RealisticVisionFeatureExtractor | None = None, brain_context_injector: BrainContextInjector | None = None, visual_splice_injector: VisualSpliceInjector | None = None) -> None:
         self.brain_backend = brain_backend
         self.encoder = encoder or SensoryEncoder()
         self.decoder = decoder or MotorDecoder()

@@ -444,3 +444,40 @@ This narrows the long-window problem further:
 
 - one part is a brittle fixed-readout problem
 - the other part is missing persistent internal state after brief input
+
+Further update after the first neck-output atlas phase:
+
+- the repo now has both:
+  - a broad observational descending/efferent atlas
+  - a first causal descending motor-response atlas
+
+Evidence:
+
+- `docs/descending_monitoring_atlas.md`
+- `docs/descending_motor_atlas.md`
+- `outputs/metrics/descending_motor_atlas_summary.json`
+
+Why this matters for splice interpretation:
+
+- the grounded visual splice is no longer being evaluated only through the
+  original tiny DN readout
+- we now know that the embodied stack can translate selected descending groups
+  into distinct body/controller effects
+
+Current causal summary:
+
+- strongest bilateral forward effects:
+  - `DNp103`
+  - `DNp18`
+  - `DNg97`
+- strongest mirrored turn effect:
+  - `DNpe040`
+- secondary mirrored turn effect:
+  - `DNpe056`
+- unresolved sign/body-mapping ambiguity:
+  - `DNp71`
+
+So the next bottleneck after the visual splice is now even clearer:
+
+- fit a broader neck-output motor basis from the causal atlas
+- then re-evaluate the embodied branch

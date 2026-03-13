@@ -1,0 +1,2 @@
+benchmark_name,backend,device,wall_seconds,sim_seconds,real_time_factor,config,commit_hash,status
+fullstack_mock_fast_0.4s,torch_fast,cpu,32.581034600007115,0.4000000000000002,0.012277080973969833,configs/mock_multidrive_torch.yaml,not_a_git_repo,success

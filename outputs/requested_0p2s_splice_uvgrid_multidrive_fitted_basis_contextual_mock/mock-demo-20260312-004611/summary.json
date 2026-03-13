@@ -1,0 +1,27 @@
+{
+  "run_dir": "outputs\\requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_mock\\mock-demo-20260312-004611",
+  "metrics_path": "outputs\\requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_mock\\mock-demo-20260312-004611\\metrics.csv",
+  "video_path": null,
+  "log_path": "outputs\\requested_0p2s_splice_uvgrid_multidrive_fitted_basis_contextual_mock\\mock-demo-20260312-004611\\run.jsonl",
+  "metrics": {
+    "sim_seconds": 0.0,
+    "avg_forward_speed": 0.0,
+    "trajectory_smoothness": 0.0,
+    "path_length": 0.0,
+    "net_displacement": 0.0,
+    "displacement_efficiency": 0.0,
+    "bbox_width": 0.0,
+    "bbox_height": 0.0,
+    "bbox_area": 0.0,
+    "stable": 0.0,
+    "wall_seconds": 0.00034869999944930896,
+    "real_time_factor": 0.0,
+    "device": "cpu",
+    "mode": "mock",
+    "completed_cycles": 0,
+    "target_duration_s": 0.2,
+    "completed_full_duration": 0.0,
+    "failure_type": "ValueError",
+    "failure_message": "visual splice requires observation.realistic_vision_splice_cache; use fast vision payload mode"
+  }
+}
