@@ -1,7 +1,7 @@
 # OpenFly: Reconstructing a Public-Equivalent Embodied Drosophila Brain-Body Stack from Open Artifacts
 
 Author: Codex
-Date: 2026-03-10
+Date: 2026-03-12
 
 ## Abstract
 
@@ -11,9 +11,9 @@ The current stack combines four public subsystems: a whole-brain recurrent model
 
 The strongest current branch is `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml`. In the current `2 s` logged-target validation run, this branch yields `avg_forward_speed = 4.9241`, `net_displacement = 5.7583`, `displacement_efficiency = 0.5853`, `corr(right_drive - left_drive, target_bearing) = 0.8810`, and `steer_sign_match_rate = 0.8878`, while the matched `zero_brain` control still yields `nonzero_command_cycles = 0` and `net_displacement = 0.0118`. A no-target control still produces substantial locomotion, which means the branch is visually driven but not purely target-driven: optic flow and scene structure also contribute.
 
-The project also produced negative results that matter. A minimal public-anchor bridge built from bilateral `LC4` and `JON` pools plus a tiny descending-neuron bottleneck does not produce useful locomotion once decoder-side and body-side fallbacks are removed. That failure is not explained by a dead backend. Instead, body-free splice experiments showed that the original scalar bridge destroyed lateralized visual structure already present in FlyVis, and that the output bottleneck was also too narrow. A calibrated splice using exact shared FlyVis/FlyWire `cell_type + side + bin` groups can preserve grouped boundary activity strongly and launch the correct downstream turn sign at `100 ms`, but downstream sign drifts by `500 ms`, and exact column alignment remains unresolved.
+The project also produced negative results that matter. A minimal public-anchor bridge built from bilateral `LC4` and `JON` pools plus a tiny descending-neuron bottleneck does not produce useful locomotion once decoder-side and body-side fallbacks are removed. That failure is not explained by a dead backend. Instead, body-free splice experiments showed that the original scalar bridge destroyed lateralized visual structure already present in FlyVis, and that the output bottleneck was also too narrow. A calibrated splice using exact shared FlyVis/FlyWire `cell_type + side + bin` groups can preserve grouped boundary activity strongly and launch the correct downstream turn sign at `100 ms`, but downstream sign drifts by `500 ms`, and exact column alignment remains unresolved. A later semantic-VNC branch built from real MANC `exit_nerve` structure and a FlyWire semantic bridge proved that monitor-space alignment can be solved, but it still failed target-tracking parity and is now frozen as a negative result rather than promoted.
 
-In addition to locomotion, the repo now includes grounded brain-only reproductions of the feeding and grooming tasks from Shiu et al. Feeding probes recover clear `MN9` responses to unilateral sugar GRN input, and grooming probes recover `aBN1` responses in short windows and weaker `aDN1_right` responses in longer windows. These tasks are now ready for later embodiment work. The repo therefore meets the public-equivalent acceptance gate in `AGENTS.MD`, but final parity remains partial because the exact private Eon glue is unavailable, GPU FlyVis remains blocked in WSL by public `sm_120` wheel support, and the current motor interface is still a descending-population-to-two-drive abstraction rather than a full biological motor pathway.
+In addition to locomotion, the repo now includes grounded brain-only reproductions of the feeding and grooming tasks from Shiu et al. Feeding probes recover clear `MN9` responses to unilateral sugar GRN input, and grooming probes recover `aBN1` responses in short windows and weaker `aDN1_right` responses in longer windows. These tasks are now ready for later embodiment work. The repo also now includes a synchronized activation visualization of the best embodied branch, showing the embodied run, whole-brain point cloud, FlyVis nodes, monitored decoder populations, and controller channels side by side. The repo therefore meets the public-equivalent acceptance gate in `AGENTS.MD`, but final parity remains partial because the exact private Eon glue is unavailable, GPU FlyVis remains blocked in WSL by public `sm_120` wheel support, and the current motor interface is still a descending-population-to-two-drive abstraction rather than a full biological motor pathway.
 
 ## 1. Introduction
 
@@ -319,6 +319,51 @@ Grooming, `500 ms` sweep:
 
 These are biologically cleaner than the earlier locomotion prosthetic experiments because they use published sensory and output neuron groups from the public task notebooks. They are not yet embodied.
 
+### 5.12 A real semantic-VNC structural decoder was built, but it failed as a parity branch
+
+The repo did not stop at small sampled descending populations. It also compiled a real MANC-derived `exit_nerve` structural spec, resolved the raw ID-space mismatch with a FlyWire semantic bridge, and ran that path through the embodied closed loop.
+
+This branch proved several things:
+
+- the raw MANC-versus-FlyWire ID mismatch was a real blocker
+- the semantic bridge solved monitor-space alignment rather than hiding it
+- the first bridged decoder was not silent
+- the first bridged decoder also had a real saturation bug
+
+After the semantic bridge, the real decoder requested `685` IDs and matched `685`. The first short bridged embodied run was therefore no longer silent, but it saturated immediately. Later normalization in `src/vnc/spec_decoder.py` removed that obvious decoder failure, and later follow-camera support removed the separate framing problem.
+
+The corrected `2.0 s` semantic-VNC rerun reached:
+
+- `avg_forward_speed = 4.7635`
+- `net_displacement = 7.0699`
+- `displacement_efficiency = 0.7428`
+- `stable = 1.0`
+
+Those numbers matter because they show the branch was no longer failing for trivial reasons such as dead monitor alignment, raw drive clipping, or a broken camera. Even so, scene-level review showed that the branch still did not track the target credibly enough to count as parity.
+
+The honest conclusion is therefore negative: structural semantic reachability was enough to build a working locomotor branch, but not enough to recover target-directed behavior. The semantic-VNC branch is now frozen as a failed parity branch rather than left in an ambiguous "needs tuning" state.
+
+### 5.13 The current best branch now has a synchronized activation visualization
+
+The repo now includes a dedicated visualization artifact for the monitored-only extension of the strongest current embodied branch. This artifact is not a new parity claim. It is a visibility artifact that shows, in one synchronized view, what the current best branch is doing at the embodied, whole-brain, FlyVis, decoder, and controller layers.
+
+The captured run records:
+
+- `200` synchronized frames
+- `138,639` local FlyWire brain points
+- `45,669` FlyVis nodes
+- `16` monitored decoder labels
+- `8` controller channels
+
+and the monitored visualization run itself remained behaviorally consistent with the best branch:
+
+- `avg_forward_speed = 4.8348`
+- `net_displacement = 6.2200`
+- `displacement_efficiency = 0.6439`
+- `stable = 1.0`
+
+This matters for two reasons. First, it gives the repo a direct inspection tool for activation flow rather than relying only on scalar summaries. Second, it makes the current state of the system legible: where visual activity lives, how monitored descending groups evolve across time, and what the controller channels are doing on the same cycles as the body and target.
+
 ## 6. Interpretation
 
 ### 6.1 What is now proven
@@ -340,7 +385,8 @@ The project does not yet prove:
 2. that the current descending-population decoder is the true natural locomotor code
 3. that the current system implements a full neck-connective, VNC, and muscle pathway
 4. that short isolated left/right target stimuli produce a clean mirrored pursuit reflex
-5. exact parity with any private Eon integration stack
+5. that a structurally grounded semantic-VNC decoder is already sufficient for target pursuit
+6. exact parity with any private Eon integration stack
 
 ### 6.3 Why the discovery process mattered
 
@@ -365,6 +411,8 @@ Third, the whole-brain backend already has structural edge weights, but much of 
 Fourth, the visual splice is still an inferred overlap splice. It is grounded more strongly than the original scalar bridge, but exact FlyVis-to-FlyWire neuron identity and fine retinotopic column alignment remain unresolved.
 
 Fifth, the current strongest locomotion result is not pure target pursuit. The rest of the visual scene still drives locomotion substantially.
+
+Sixth, the broader semantic-VNC replacement program is still incomplete. A real MANC-derived semantic-VNC branch now exists and is no longer blocked by raw ID mismatch, silent decoding, or off-screen framing, but it still fails target-tracking parity. That means broader structural coverage alone is not yet enough to replace the current sampled descending decoder.
 
 ## 8. Comparison With The Subsequent Eon Embodiment Update
 
@@ -496,6 +544,19 @@ python scripts/run_feeding_probe.py --config configs/default.yaml
 python scripts/run_grooming_probe.py --config configs/default.yaml
 ```
 
+### 9.5 Reproduce the synchronized activation visualization
+
+From WSL:
+
+```bash
+export MUJOCO_GL=egl
+~/.local/bin/micromamba run -n flysim-full python scripts/build_best_branch_activation_visualization.py --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_monitored.yaml --mode flygym --duration 2.0 --output-root outputs/visualizations/current_best_branch_activation
+```
+
+Expected summary artifact:
+
+- `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/summary.json`
+
 ## 10. Immediate Next Steps
 
 The current next steps are already tracked in `TASKS.md`:
@@ -505,7 +566,9 @@ The current next steps are already tracked in `TASKS.md`:
 - `T072`: clarify or stabilize the short side-isolated left/right pursuit response
 - `T076`: embody the new feeding and grooming tasks using grounded body-side sensory and motor interfaces
 
-The highest-value next loop remains body-free splice refinement plus descending-path analysis. That is the shortest path to a more defensible embodied controller because it isolates interface failures before expensive body runs are reintroduced.
+The highest-value next loop remains body-free splice refinement plus descending-path analysis. That is still the shortest path to a more defensible embodied controller because it isolates interface failures before expensive body runs are reintroduced.
+
+The semantic-VNC branch should not be the active parity path right now. It is preserved as a useful negative result and should only be revisited as a new branch with new output roots, not by mutating the frozen artifacts in place.
 
 ## 11. Conclusion
 

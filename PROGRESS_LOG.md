@@ -4812,3 +4812,38 @@ Interpretation:
 5. Next actions
 - None in this turn.
 - The requested activation visualization artifact now exists and is documented.
+
+## 2026-03-12 - Whitepaper and README frontpage refresh
+
+1. What I attempted
+- Refreshed the main whitepaper so it reflects the newest repo state instead of stopping before the semantic-VNC freeze and the activation visualization artifact.
+- Replaced the repo-home `README.md` with an actual front page derived from the whitepaper and parity docs.
+- Prepared the docs-only update for commit and push.
+
+2. What succeeded
+- Updated the long-form whitepaper:
+  - `docs/openfly_whitepaper.md`
+- Rewrote the GitHub landing page:
+  - `README.md`
+- Added tracker coverage for the docs refresh:
+  - `TASKS.md`
+  - `PROGRESS_LOG.md`
+- The whitepaper now explicitly includes:
+  - the semantic-VNC `exit_nerve_flywire_semantic` branch as a frozen failed parity result
+  - the synchronized current-best activation visualization as a first-class evidence artifact
+
+3. What failed
+- No code or runtime work was attempted in this slice.
+- No tests were run because this was a documentation-only refresh.
+
+4. Evidence paths
+- `docs/openfly_whitepaper.md`
+- `README.md`
+- `TASKS.md`
+- `PROGRESS_LOG.md`
+- `REPRO_PARITY_REPORT.md`
+- `docs/current_best_branch_activation_visualization.md`
+- `docs/semantic_vnc_failed_parity_branch.md`
+
+5. Next actions
+- Commit and push the docs-only refresh to `origin/main`.
