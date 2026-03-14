@@ -3,10 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from body.interfaces import BodyObservation, HybridDriveCommand
+from body.interfaces import BodyCommand, BodyObservation, HybridDriveCommand
 from bridge.brain_context import BrainContextConfig, BrainContextInjector
 from bridge.controller import ClosedLoopBridge
-from bridge.decoder import DecoderConfig, MotorDecoder
+from bridge.decoder import DecoderConfig, MotorDecoder, MotorReadout
 from brain.mock_backend import MockWholeBrainBackend
 from brain.public_ids import (
     DNA01_LEFT,
@@ -359,6 +359,246 @@ def test_decoder_can_monitor_population_groups_without_using_them_for_control(tm
     assert readout.neuron_rates["monitor_DNp103_right_hz"] == 60.0
     assert readout.neuron_rates["monitor_DNp103_bilateral_hz"] == 40.0
     assert readout.neuron_rates["monitor_DNp103_right_minus_left_hz"] == 40.0
+
+
+def test_decoder_can_compose_promoted_turn_readout_without_changing_forward_state() -> None:
+    decoder = MotorDecoder(
+        DecoderConfig(
+            command_mode="hybrid_multidrive",
+            forward_gain=1.0,
+            turn_gain=0.6,
+            signal_smoothing_alpha=1.0,
+        )
+    )
+    rates = {
+        DNA01_LEFT: 0.0,
+        DNA02_LEFT: 0.0,
+        DNA01_RIGHT: 0.0,
+        DNA02_RIGHT: 0.0,
+        P9_LEFT: 80.0,
+        P9_RIGHT: 80.0,
+        P9_ODN1_LEFT: 80.0,
+        P9_ODN1_RIGHT: 80.0,
+        MDN_1: 0.0,
+        MDN_2: 0.0,
+        MDN_3: 0.0,
+        MDN_4: 0.0,
+    }
+
+    base_readout = decoder.decode(rates)
+    promoted = decoder.compose_promoted_readout(
+        base_readout=base_readout,
+        promoted_turn_state=0.5,
+        promotion_debug={"promotion_shadow_turn_state": 0.5},
+    )
+
+    assert promoted.command.right_drive > promoted.command.left_drive
+    assert promoted.command.left_amp < promoted.command.right_amp
+    assert promoted.forward_signal == base_readout.forward_signal
+    assert promoted.neuron_rates["turn_state_live"] == base_readout.neuron_rates["turn_state"]
+    assert promoted.neuron_rates["turn_state_promoted"] == 0.5
+
+
+def test_bridge_can_promote_named_shadow_turn_into_live_command() -> None:
+    class FixedShadowDecoder:
+        def reset(self) -> None:
+            return None
+
+        def decode(self, rates) -> MotorReadout:
+            del rates
+            return MotorReadout(
+                command=BodyCommand(left_drive=-0.2, right_drive=0.2),
+                forward_signal=0.0,
+                turn_signal=1.0,
+                reverse_signal=0.0,
+                neuron_rates={"shadow_turn_state": 1.0},
+            )
+
+    backend = MockWholeBrainBackend()
+    decoder = MotorDecoder(
+        DecoderConfig(
+            forward_gain=0.8,
+            turn_gain=0.6,
+            signal_smoothing_alpha=1.0,
+        )
+    )
+    bridge = ClosedLoopBridge(
+        backend,
+        decoder=decoder,
+        shadow_decoders=[("shadow_fixed", FixedShadowDecoder())],
+        steering_promotion={
+            "enabled": True,
+            "shadow_label": "shadow_fixed",
+            "mode": "replace",
+            "shadow_turn_scale": 0.5,
+            "max_abs_turn_state": 1.0,
+        },
+    )
+    observation = BodyObservation(
+        sim_time=0.0,
+        position_xy=(0.0, 0.0),
+        yaw=0.0,
+        forward_speed=0.2,
+        yaw_rate=0.0,
+        contact_force=1.0,
+        realistic_vision={"T2": [0.1, 0.9], "T4a": [0.0, 0.6], "T5a": [0.0, 0.6]},
+    )
+
+    readout, info = bridge.step(observation, num_brain_steps=20)
+
+    assert readout.command.right_drive > readout.command.left_drive
+    assert info["steering_promotion"]["enabled"] is True
+    assert info["steering_promotion"]["shadow_label"] == "shadow_fixed"
+    assert info["steering_promotion"]["promoted_turn_state"] == 0.5
+
+
+def test_bridge_conflict_blend_can_override_live_turn_with_strong_shadow() -> None:
+    bridge = ClosedLoopBridge(
+        MockWholeBrainBackend(),
+        steering_promotion={
+            "enabled": True,
+            "shadow_label": "shadow_fixed",
+            "mode": "conflict_blend",
+            "turn_blend": 0.4,
+            "conflict_turn_blend": 1.0,
+            "conflict_shadow_min_abs": 0.15,
+            "conflict_shadow_min_ratio": 1.0,
+            "shadow_turn_scale": 1.0,
+            "max_abs_turn_state": 1.0,
+        },
+    )
+
+    promoted_turn_state, info = bridge._promoted_turn_state(
+        live_turn_state=-0.2,
+        shadow_turn_state=0.4,
+    )
+
+    assert promoted_turn_state == 0.4
+    assert info["live_shadow_opposite_sign"] is True
+    assert info["shadow_confident"] is True
+    assert info["conflict_override_active"] is True
+    assert info["selected_turn_blend"] == 1.0
+    assert info["promoted_turn_state"] == 0.4
+
+
+def test_bridge_conflict_blend_scales_override_with_visual_evidence_gate() -> None:
+    bridge = ClosedLoopBridge(
+        MockWholeBrainBackend(),
+        steering_promotion={
+            "enabled": True,
+            "shadow_label": "shadow_fixed",
+            "mode": "conflict_blend",
+            "turn_blend": 0.4,
+            "conflict_turn_blend": 1.0,
+            "conflict_shadow_min_abs": 0.15,
+            "conflict_shadow_min_ratio": 1.0,
+            "shadow_turn_scale": 1.0,
+            "max_abs_turn_state": 1.0,
+        },
+    )
+
+    promoted_turn_state, info = bridge._promoted_turn_state(
+        live_turn_state=-0.2,
+        shadow_turn_state=0.4,
+        conflict_visual_evidence_gate=0.5,
+    )
+
+    expected_turn = 0.3 * (-0.2) + 0.7 * 0.4
+    assert abs(promoted_turn_state - expected_turn) < 1e-9
+    assert info["shadow_confident"] is True
+    assert info["conflict_override_active"] is True
+    assert info["selected_turn_blend"] == 0.7
+    assert info["conflict_visual_evidence_gate"] == 0.5
+
+
+def test_bridge_conflict_blend_keeps_base_blend_when_shadow_not_confident() -> None:
+    bridge = ClosedLoopBridge(
+        MockWholeBrainBackend(),
+        steering_promotion={
+            "enabled": True,
+            "shadow_label": "shadow_fixed",
+            "mode": "conflict_blend",
+            "turn_blend": 0.4,
+            "conflict_turn_blend": 1.0,
+            "conflict_shadow_min_abs": 0.15,
+            "conflict_shadow_min_ratio": 1.0,
+            "shadow_turn_scale": 1.0,
+            "max_abs_turn_state": 1.0,
+        },
+    )
+
+    promoted_turn_state, info = bridge._promoted_turn_state(
+        live_turn_state=-0.2,
+        shadow_turn_state=0.05,
+    )
+
+    expected_turn = 0.6 * (-0.2) + 0.4 * 0.05
+    assert abs(promoted_turn_state - expected_turn) < 1e-9
+    assert info["shadow_confident"] is False
+    assert info["conflict_override_active"] is False
+    assert info["selected_turn_blend"] == 0.4
+
+
+def test_bridge_conflict_blend_drops_to_base_when_visual_evidence_gate_zero() -> None:
+    bridge = ClosedLoopBridge(
+        MockWholeBrainBackend(),
+        steering_promotion={
+            "enabled": True,
+            "shadow_label": "shadow_fixed",
+            "mode": "conflict_blend",
+            "turn_blend": 0.4,
+            "conflict_turn_blend": 1.0,
+            "conflict_shadow_min_abs": 0.15,
+            "conflict_shadow_min_ratio": 1.0,
+            "shadow_turn_scale": 1.0,
+            "max_abs_turn_state": 1.0,
+        },
+    )
+
+    promoted_turn_state, info = bridge._promoted_turn_state(
+        live_turn_state=-0.2,
+        shadow_turn_state=0.4,
+        conflict_visual_evidence_gate=0.0,
+    )
+
+    expected_turn = 0.6 * (-0.2) + 0.4 * 0.4
+    assert abs(promoted_turn_state - expected_turn) < 1e-9
+    assert info["shadow_confident"] is True
+    assert info["conflict_override_active"] is False
+    assert info["selected_turn_blend"] == 0.4
+    assert info["conflict_visual_evidence_gate"] == 0.0
+
+
+def test_decoder_uses_population_groups_as_monitor_fallback(tmp_path: Path) -> None:
+    candidates_json = tmp_path / "candidates.json"
+    candidates_json.write_text(
+        json.dumps(
+            {
+                "selected_paired_cell_types": [
+                    {
+                        "candidate_label": "DNp103",
+                        "left_root_ids": [101, 102],
+                        "right_root_ids": [201, 202],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    decoder = MotorDecoder(
+        DecoderConfig(
+            population_candidates_json=str(candidates_json),
+            population_forward_cell_types=("DNp103",),
+            population_forward_weight=1.0,
+            signal_smoothing_alpha=1.0,
+        )
+    )
+
+    readout = decoder.decode({101: 10.0, 102: 30.0, 201: 50.0, 202: 70.0})
+
+    assert "DNp103" in decoder._monitor_cell_types()
+    assert readout.neuron_rates["monitor_DNp103_left_hz"] == 20.0
+    assert readout.neuron_rates["monitor_DNp103_right_hz"] == 60.0
 
 
 def test_decoder_can_use_fitted_motor_basis_weights(tmp_path: Path) -> None:

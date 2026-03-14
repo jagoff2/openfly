@@ -4847,3 +4847,696 @@ Interpretation:
 
 5. Next actions
 - Commit and push the docs-only refresh to `origin/main`.
+
+## 2026-03-13 - Best-branch end-to-end investigation for no-shortcuts embodiment
+
+1. What I attempted
+- Investigated the current best branch using only recorded artifacts rather than
+  launching a new heavy embodied run.
+- Analyzed the synchronized activation capture, matched behavior metrics, and
+  monitor/controller traces together.
+- Focused on learning what would plausibly advance embodiment without adding
+  new shortcuts.
+
+2. What succeeded
+- Added a reusable analysis module and CLI:
+  - `src/analysis/best_branch_investigation.py`
+  - `scripts/analyze_best_branch_embodiment.py`
+- Added a focused local test:
+  - `tests/test_best_branch_investigation.py`
+- Materialized investigation artifacts:
+  - `outputs/metrics/best_branch_investigation_summary.json`
+  - `outputs/metrics/best_branch_investigation_behavior_summary.csv`
+  - `outputs/metrics/best_branch_investigation_family_correlations.csv`
+  - `outputs/metrics/best_branch_investigation_monitor_correlations.csv`
+  - `outputs/metrics/best_branch_investigation_unsampled_central_units.csv`
+  - `outputs/metrics/best_branch_investigation_unsampled_central_spiking_units.csv`
+  - `outputs/plots/best_branch_investigation_family_target_bearing_corr.png`
+  - `outputs/plots/best_branch_investigation_monitor_target_bearing_corr.png`
+- Wrote the interpretation note:
+  - `docs/best_branch_e2e_investigation.md`
+
+3. What failed
+- No new runtime failure occurred.
+- Sub-agent turnaround was unreliable in this slice, so the decisive technical
+  findings came from the local reproducible analysis rather than waiting on the
+  sidecar syntheses.
+
+4. Evidence
+- Tests:
+  - `python -m pytest tests/test_best_branch_investigation.py -q` -> `3 passed`
+- Analysis outputs:
+  - `outputs/metrics/best_branch_investigation_summary.json`
+  - `outputs/metrics/best_branch_investigation_family_correlations.csv`
+  - `outputs/metrics/best_branch_investigation_monitor_correlations.csv`
+  - `docs/best_branch_e2e_investigation.md`
+
+5. Next actions
+- Build matched monitored activation captures for `target`, `no_target`, and
+  `zero_brain` under the same config.
+- Expand monitoring to the strongest unsampled relay families before changing
+  the splice or decoder again.
+
+## 2026-03-13 - Spontaneous-state workstream framing
+
+1. What I attempted
+- Added a docs-only framing note for the spontaneous-state program so the next
+  cold-start work is defined before anyone starts patching runtime logic.
+- Tied the new note directly to the current best-branch investigation and the
+  existing `zero_brain` / brain-control evidence.
+- Added a tracked task for the spontaneous-state workstream.
+
+2. What succeeded
+- Added the workstream note:
+  - `docs/spontaneous_state_program.md`
+- Added a new tracked task:
+  - `T117` in `TASKS.md`
+- Recorded this docs-only milestone in:
+  - `PROGRESS_LOG.md`
+- The new note now states:
+  - why the current cold-start is functionally dead at the body-control
+    boundary even though the backend itself is not dead
+  - what counts as biologically plausible endogenous activity in this repo
+  - what validation gates must be passed before any spontaneous-state
+    implementation can be treated as honest progress
+
+3. What failed
+- No code or runtime experiments were attempted in this slice.
+- No tests were run because this update intentionally stayed within
+  `docs/`, `TASKS.md`, and `PROGRESS_LOG.md`.
+
+4. Evidence
+- `docs/spontaneous_state_program.md`
+- `TASKS.md`
+- `PROGRESS_LOG.md`
+- `docs/best_branch_e2e_investigation.md`
+- `docs/brain_control_validation.md`
+
+5. Next actions
+- Use `T117` as the tracking root for matched startup-state diagnostics.
+- Add matched `target`, `no_target`, and `zero_brain` activation/control
+  captures before proposing any endogenous-state mechanism.
+- Keep the spontaneous-state path inside the no-shortcuts boundary documented
+  in `docs/spontaneous_state_program.md`.
+
+## 2026-03-13 - Spontaneous-state backend pilot: sparse tonic occupancy plus slow latent fluctuations
+
+1. What I attempted
+- Audited the current Torch whole-brain backend and confirmed that the old
+  reset path had an absorbing silent fixed point with no endogenous source of
+  activity.
+- Added an opt-in spontaneous-state path inside `WholeBrainTorchBackend`
+  instead of touching the decoder or body controller.
+- Implemented a first biologically stricter candidate: sparse lognormal tonic
+  background plus low-rank slow latent fluctuations and reset voltage
+  heterogeneity.
+- Added a brain-only audit path and startup-state logging so the new branch can
+  be judged from saved artifacts rather than from impressionistic demos.
+
+2. What succeeded
+- Wired the new backend config path:
+  - `src/brain/pytorch_backend.py`
+  - `src/runtime/closed_loop.py`
+  - `benchmarks/run_brain_benchmarks.py`
+  - `configs/brain_spontaneous_probe.yaml`
+- Added tests and logging support:
+  - `tests/test_spontaneous_state_unit.py`
+  - `tests/test_closed_loop_smoke.py`
+  - `src/bridge/controller.py`
+- Added reproducible docs for the workstream:
+  - `docs/spontaneous_state_backend_design.md`
+  - `docs/spontaneous_state_validation_plan.md`
+  - `docs/spontaneous_state_results.md`
+- Added a reproducible brain-only audit:
+  - `scripts/run_spontaneous_state_audit.py`
+- Produced the first artifact-complete pilot bundle:
+  - `outputs/metrics/spontaneous_state_pilot_summary.json`
+  - `outputs/metrics/spontaneous_state_latent_pilot_summary.json`
+  - `outputs/metrics/spontaneous_state_latent_seed0_summary.json`
+  - `outputs/metrics/spontaneous_state_latent_seed1_summary.json`
+  - `outputs/metrics/spontaneous_state_latent_seed2_summary.json`
+  - matching CSV, PNG, and benchmark CSV outputs under `outputs/metrics/`,
+    `outputs/plots/`, and `outputs/benchmarks/`
+- The old cold-start condition stayed exactly silent.
+- The latent pilot no longer stayed dead:
+  - `candidate_ongoing.mean_spike_fraction ~= 3.14e-4`
+  - `candidate_ongoing.background_mean_rate_hz ~= 0.254`
+  - `candidate_ongoing.background_active_fraction ~= 0.147`
+  - `candidate_ongoing.nonzero_window_fraction = 1.0`
+  - structure ratio `~= 1.115`
+  - pulse peak turn asymmetry `= 200 Hz` in the seed-0 pilot
+
+3. What failed
+- The first static sparse-tonic candidate was too weak; monitored structure was
+  effectively absent and the monitored motor layer stayed near zero.
+- The current latent candidate is not yet robust enough across seeds:
+  - seed `0`: ongoing baseline turn bias `+20 Hz`, pulse peak `200 Hz`
+  - seed `1`: ongoing baseline turn bias `-5 Hz`, pulse peak `0 Hz`
+  - seed `2`: ongoing baseline turn bias `+17.5 Hz`, pulse peak `200 Hz`
+- Spontaneous motor-side lateral bias under symmetric zero-input conditions is
+  still too strong for promotion.
+- No embodied `target` / `no_target` / `zero_brain` spontaneous-state runs were
+  launched in this slice, so no embodied improvement claim is being made.
+
+4. Evidence
+- Tests:
+  - `python -m pytest tests/test_closed_loop_smoke.py tests/test_brain_backend.py tests/test_spontaneous_state_unit.py -q` -> `21 passed`
+- Brain-only pilot outputs:
+  - `outputs/metrics/spontaneous_state_pilot_summary.json`
+  - `outputs/metrics/spontaneous_state_latent_pilot_summary.json`
+  - `outputs/metrics/spontaneous_state_latent_seed0_summary.json`
+  - `outputs/metrics/spontaneous_state_latent_seed1_summary.json`
+  - `outputs/metrics/spontaneous_state_latent_seed2_summary.json`
+- Docs:
+  - `docs/spontaneous_state_backend_design.md`
+  - `docs/spontaneous_state_validation_plan.md`
+  - `docs/spontaneous_state_results.md`
+
+5. Next actions
+- Reduce spontaneous left/right bias under symmetric control without falling
+  back into a dead-cold state.
+- Improve seed robustness of the latent candidate.
+- Run short matched embodied `target` / `no_target` / `zero_brain` validations
+  with the new `brain_backend_state` logging before promoting any spontaneous
+  branch config.
+
+## 2026-03-13 - Central-family bilateral spontaneous-state candidate clears the brain-only bar
+
+1. What I attempted
+- Iterated on the backend-only spontaneous-state candidate instead of moving to
+  embodied validation too early.
+- Replaced the earlier random neuron-level latent structure with a bilateral
+  family-structured candidate built from the public FlyWire annotation
+  supplement.
+- Restricted the spontaneous family pool to central/integrative super-classes
+  so the background state would stop being dominated by giant optic/sensory
+  families.
+- Added homologous-family metrics to the audit so the candidate could be judged
+  against public whole-brain monitoring results rather than only against a few
+  motor readouts.
+
+2. What succeeded
+- Updated the backend to support family-structured spontaneous modes:
+  - `src/brain/pytorch_backend.py`
+- Updated the audit tool to evaluate family-level bilateral structure:
+  - `scripts/run_spontaneous_state_audit.py`
+- Promoted the new best probe config:
+  - `configs/brain_spontaneous_probe.yaml`
+- Materialized the new best-candidate artifacts:
+  - `outputs/metrics/spontaneous_state_best_candidate_summary.json`
+  - `outputs/metrics/spontaneous_state_central_seed0_summary.json`
+  - `outputs/metrics/spontaneous_state_central_seed1_summary.json`
+  - `outputs/metrics/spontaneous_state_central_seed2_summary.json`
+  - `outputs/metrics/spontaneous_state_central_seed_summary.json`
+  - `outputs/metrics/spontaneous_state_central_seed_summary.csv`
+- The new candidate now shows:
+  - sparse bounded ongoing activity
+  - low spontaneous turn bias under symmetric zero-input conditions
+  - positive homologous-family coupling
+  - retained pulse perturbability across all tested seeds
+
+3. What failed
+- The first bilateral family sweep was too weak and effectively silent:
+  - `outputs/metrics/spontaneous_state_bilateral_a_summary.json`
+- A stronger bilateral family sweep became active but had weak structure and no
+  useful pulse expression:
+  - `outputs/metrics/spontaneous_state_bilateral_b_summary.json`
+- The family-level audit initially had a real bug: family monitor groups were
+  registered with backend indices instead of FlyWire root IDs. That produced
+  invalid homologous-family metrics until fixed.
+- Embodied matched-control validation is still intentionally not done in this
+  entry.
+
+4. Evidence
+- Tests:
+  - `python -m pytest tests/test_closed_loop_smoke.py tests/test_brain_backend.py tests/test_spontaneous_state_unit.py -q` -> `21 passed`
+- Best-candidate summaries:
+  - `outputs/metrics/spontaneous_state_best_candidate_summary.json`
+  - `outputs/metrics/spontaneous_state_central_seed_summary.json`
+  - `docs/spontaneous_state_results.md`
+- Updated mechanism/design notes:
+  - `docs/spontaneous_state_backend_design.md`
+  - `ASSUMPTIONS_AND_GAPS.md`
+
+5. Next actions
+- Use the central-family bilateral candidate as the baseline for the first
+  embodied spontaneous-state validation.
+- Run matched short `target` / `no_target` / `zero_brain` tests with
+  `brain_backend_state` logging.
+- Keep embodied promotion blocked until the new candidate improves startup
+  readiness without collapsing control separation.
+
+## 2026-03-13 - Default activation capture and iterative decoding workbench
+
+1. What I attempted
+- Moved the synchronized activation visualization out of its special-case
+  rerun path and into the normal closed-loop run path.
+- Added a repo-native decoding-cycle workbench so the activation artifact can
+  drive a repeatable relay/monitor expansion loop instead of ad hoc neuron
+  guessing.
+- Reused sub-agent scouting to ground the design against the current repo seam
+  and the public data layers that are actually available now.
+
+2. What succeeded
+- Added same-run activation capture/render support to the main runtime:
+  - `src/runtime/closed_loop.py`
+  - `src/visualization/session.py`
+  - `src/visualization/activation_viz.py`
+- Ensured non-monitored population configs still expose monitor-style traces by
+  falling back to population groups when explicit monitor groups are absent:
+  - `src/bridge/decoder.py`
+- Added a synthetic splice-cache path for fast mock runs so the activation
+  capture seam can be smoke-tested:
+  - `src/body/mock_body.py`
+- Relaxed the standalone visualization script so it discovers monitor labels
+  from live motor-readout keys instead of requiring a hand-authored monitor
+  list:
+  - `scripts/build_best_branch_activation_visualization.py`
+- Added the iterative decoding workbench and CLI:
+  - `src/analysis/iterative_decoding.py`
+  - `scripts/run_iterative_decoding_cycle.py`
+  - `tests/test_iterative_decoding.py`
+- Ran the first decoding cycle on the current best activation capture:
+  - `outputs/metrics/iterative_decoding_cycle_summary.json`
+  - `outputs/metrics/iterative_decoding_cycle_family_scores.csv`
+  - `outputs/metrics/iterative_decoding_cycle_monitor_scores.csv`
+  - `outputs/metrics/iterative_decoding_cycle_monitor_expansion.csv`
+  - `outputs/metrics/iterative_decoding_cycle_relay_candidates.csv`
+- Wrote the design record:
+  - `docs/iterative_brain_decoding_system.md`
+
+3. What failed
+- Nothing failed in the code path after the final patch set, but the workbench
+  result is still a planning/probing layer, not a solved full-brain decode.
+- The first workbench output confirms the existing problem rather than solving
+  it automatically: monitored DN labels are still weaker than upstream central
+  / ascending / visual-projection families for target-bearing structure.
+
+4. Evidence
+- Tests:
+  - `python -m pytest tests/test_iterative_decoding.py tests/test_bridge_unit.py tests/test_closed_loop_smoke.py tests/test_activation_viz.py -q` -> `34 passed`
+- New workbench output:
+  - `outputs/metrics/iterative_decoding_cycle_summary.json`
+  - `docs/iterative_brain_decoding_system.md`
+- Key first-cycle findings:
+  - best monitored target-bearing label remains weak: `DNg97 = 0.2192`
+  - recommended next relay families include `AVLP370a`, `AN_multi_67`,
+    `LHAV3e6`, `AN_AVLP_16`, `CB1505`, and `LT57`
+
+5. Next actions
+- Generate matched activation captures for `target`, `no_target`, and
+  `zero_brain` using the new default run path.
+- Run those matched captures through the decoding-cycle workbench.
+- Promote the resulting relay families only as monitoring-only checkpoints
+  before changing any live control path.
+
+## 2026-03-13 - First matched relay-monitor and shadow-VNC control loop
+
+1. What I attempted
+- Built a merged monitor candidate set from the current strict DN shortlist plus
+  the first relay families ranked by the iterative decoding workbench.
+- Added a shadow-decoder seam so the same embodied run can carry the live
+  descending controller and a passive semantic-VNC decoder at the same time.
+- Ran serialized real WSL `0.2 s` matched controls for:
+  - `target`
+  - `no_target`
+  - `zero_brain`
+- Ran the iterative decoding workbench on the `target` and `no_target`
+  activation captures.
+
+2. What succeeded
+- Added monitor-family tooling and widened matched-control configs:
+  - `scripts/build_family_monitor_candidates.py`
+  - `outputs/metrics/iterative_monitor_candidates_merged.json`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_relay_monitored.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_relay_monitored_no_target.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_relay_monitored_zero_brain.yaml`
+- Added the shadow-decoder seam and raw monitored-rate logging:
+  - `src/bridge/controller.py`
+  - `src/runtime/closed_loop.py`
+- Extended capture/logging to preserve raw monitored voltage/spike state:
+  - `src/visualization/session.py`
+- Materialized the first matched-control artifacts:
+  - `outputs/requested_0p2s_relay_monitored_target/flygym-demo-20260313-215135/*`
+  - `outputs/requested_0p2s_relay_monitored_no_target/flygym-demo-20260313-215459/*`
+  - `outputs/requested_0p2s_relay_monitored_zero_brain/flygym-demo-20260313-215725/*`
+  - `outputs/metrics/relay_monitored_control_metrics_0p2s.csv`
+  - `outputs/metrics/relay_monitored_shadow_control_summary_0p2s.csv`
+  - `outputs/metrics/iterative_decoding_cycle_relay_target_summary.json`
+  - `outputs/metrics/iterative_decoding_cycle_relay_no_target_summary.json`
+- Wrote the result note:
+  - `docs/relay_monitored_shadow_control_loop.md`
+
+3. What failed
+- The widened relay monitor and shadow-VNC loop did not make the behavior
+  target-selective.
+- `no_target` still beat `target` on displacement and forward speed at the
+  matched `0.2 s` duration.
+- The newly added relay families were much more visible in voltage space than
+  in firing-rate space. In the first widened target and no-target runs, many of
+  the added relay labels stayed at or near zero rate even when whole-family
+  voltage correlations were strong.
+- The `zero` backend does not expose brain-state tensors, so the zero-brain run
+  honestly skipped the rendered activation artifact.
+
+4. Evidence
+- Tests:
+  - `python -m pytest tests/test_family_monitor_candidates.py tests/test_closed_loop_smoke.py tests/test_bridge_unit.py tests/test_iterative_decoding.py -q` -> `38 passed`
+- Behavioral control comparison:
+  - `target`: `avg_forward_speed = 2.7087`, `net_displacement = 0.2248`
+  - `no_target`: `3.3055`, `0.2972`
+  - `zero_brain`: `1.7358`, `0.0162`
+- Shadow VNC comparison:
+  - `target`: `forward_mean = 0.01093`, `abs_turn_mean = 0.00842`
+  - `no_target`: `0.01322`, `0.00881`
+  - `zero_brain`: exact zero
+- Ranked-family outputs:
+  - `outputs/metrics/iterative_decoding_cycle_relay_target_family_scores.csv`
+  - `outputs/metrics/iterative_decoding_cycle_relay_no_target_family_scores.csv`
+
+5. Next actions
+- Re-run the matched relay-control analysis using the new monitored-voltage
+  logging path rather than relying on rate-only relay monitors.
+- Compare target / no-target relay families in voltage space to find
+  target-selective families that survive the controls.
+- Keep the semantic-VNC branch in shadow mode until it separates `target` from
+  `no_target` better than the live descending controller.
+
+## 2026-03-13 - Target-engagement metric pivot for iterative decoding
+
+1. What I attempted
+- Replaced the decode-loop behavior diagnosis that had been leaning too heavily
+  on speed/displacement with behavior metrics that separate:
+  - target engagement / steering alignment
+  - spontaneous locomotor richness
+- Re-scored the existing matched relay-monitored `target`, `no_target`, and
+  `zero_brain` runs without launching any new heavy embodied jobs.
+- Ranked target-specific relay families against the `no_target` spontaneous
+  baseline so the next monitor expansion is chosen for steering relevance
+  rather than generic locomotor correlation.
+
+2. What succeeded
+- Added the new analysis layer:
+  - `src/analysis/behavior_metrics.py`
+  - `scripts/analyze_behavior_conditions.py`
+- Integrated those metrics into the iterative decoding workbench:
+  - `src/analysis/iterative_decoding.py`
+- Added the target-specific relay ranking layer:
+  - `src/analysis/relay_target_specificity.py`
+  - `scripts/compare_relay_condition_scores.py`
+- Added regression coverage:
+  - `tests/test_behavior_metrics.py`
+  - `tests/test_relay_target_specificity.py`
+  - updated `tests/test_iterative_decoding.py`
+- Materialized the new artifacts:
+  - `outputs/metrics/relay_monitored_behavior_conditions_0p2s.csv`
+  - `outputs/metrics/relay_monitored_behavior_conditions_0p2s.json`
+  - `outputs/metrics/relay_target_specificity_0p2s_summary.json`
+  - `outputs/metrics/relay_target_specificity_0p2s_families.csv`
+  - `outputs/metrics/relay_target_specificity_0p2s_monitors.csv`
+- Wrote the result notes:
+  - `docs/target_engagement_metric_pivot.md`
+  - updated `docs/relay_monitored_shadow_control_loop.md`
+  - updated `docs/iterative_brain_decoding_system.md`
+
+3. What failed
+- The current relay branch still does not clear a target-engagement bar.
+- The target run now looks clearly locomotor-rich, but the signed steering
+  transfer is still wrong:
+  - `turn_alignment_fraction_active = 0.467`
+  - `turn_bearing_corr = -0.697`
+  - `fixation_fraction_20deg = 0.0`
+- Simple target-bearing reduction cannot be trusted by itself because the
+  matched `zero_brain` control still gets passive bearing improvement.
+
+4. Evidence
+- Tests:
+  - `python -m pytest tests/test_behavior_metrics.py tests/test_iterative_decoding.py tests/test_closed_loop_smoke.py -q` -> `20 passed`
+  - `python -m pytest tests/test_behavior_metrics.py tests/test_iterative_decoding.py tests/test_relay_target_specificity.py -q` -> `4 passed`
+- Target condition summary:
+  - `locomotor_active_fraction = 0.96`
+  - `controller_state_entropy = 0.583`
+  - `bearing_reduction_rad = 0.250`
+  - `turn_alignment_fraction_active = 0.467`
+  - `turn_bearing_corr = -0.697`
+- Zero-brain control:
+  - `locomotor_active_fraction = 0.40`
+  - `controller_state_entropy = 0.0`
+  - `bearing_reduction_rad = 0.273`
+- Target-specific relay shortlist after penalizing the no-target spontaneous
+  baseline:
+  - `MTe14`
+  - `LTe62`
+  - `VCH`
+  - `CB0828`
+  - `cL02c`
+  - `CB1492`
+  - `CB3516`
+  - `LTe11`
+
+5. Next actions
+- Use signed target-engagement metrics rather than raw locomotion totals when
+  judging the next relay-monitor iteration.
+- Re-run the relay-monitor workstream with the new target-specific shortlist,
+  using voltage-space relay diagnostics as the main guide.
+- Keep the semantic-VNC path in shadow mode and keep spontaneous-state as a
+  background condition rather than a motor floor.
+
+## 2026-03-14 - Steering-aware turn-voltage decode iteration
+
+1. What I attempted
+- Extended the iterative decode workbench so it scores lateralized monitored
+  voltages and family asymmetries against target-bearing and controller
+  asymmetry, instead of relying mainly on bilateral mean activation.
+- Re-ran the matched target-specific monitored target / no-target analysis with
+  that steering-aware table set.
+- Built the next turn-voltage monitor cohort from the new family ranking.
+- Built and replayed voltage-driven shadow turn decoders from the ranked monitor
+  labels to test whether the relay voltages carry a better steering signal than
+  the live sampled descending turn scalar.
+
+2. What succeeded
+- Added steering-aware decode artifacts:
+  - `outputs/metrics/iterative_decoding_cycle_target_specific_target_family_turn_scores.csv`
+  - `outputs/metrics/iterative_decoding_cycle_target_specific_target_monitor_voltage_turn_scores.csv`
+  - `outputs/metrics/iterative_decoding_cycle_target_specific_no_target_family_turn_scores.csv`
+  - `outputs/metrics/iterative_decoding_cycle_target_specific_no_target_monitor_voltage_turn_scores.csv`
+- Added target-vs-no-target steering-specific comparisons:
+  - `outputs/metrics/target_specific_relay_turn_voltage_specificity_0p2s_families.csv`
+  - `outputs/metrics/target_specific_relay_turn_voltage_specificity_0p2s_monitors.csv`
+  - `outputs/metrics/target_specific_relay_turn_voltage_specificity_0p2s_summary.json`
+- Built the next monitor cohort:
+  - `outputs/metrics/relay_turn_voltage_monitor_candidates.json`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_turn_voltage_monitored.yaml`
+  - matched `no_target` and `zero_brain` configs
+- Added the shadow turn decoder seam:
+  - `src/bridge/voltage_decoder.py`
+  - `scripts/build_turn_voltage_signal_library.py`
+  - `scripts/replay_voltage_turn_shadow_decoder.py`
+- Built two shadow signal libraries:
+  - broad central+visual:
+    - `outputs/metrics/target_specific_turn_voltage_signal_library_0p2s.json`
+  - stricter visual-only:
+    - `outputs/metrics/target_specific_turn_voltage_signal_library_visual_only_0p2s.json`
+- Replayed both against the recorded target run:
+  - `outputs/metrics/target_specific_turn_voltage_shadow_replay_target_0p2s.json`
+  - `outputs/metrics/target_specific_turn_voltage_shadow_replay_visual_only_target_0p2s.json`
+
+3. What failed
+- The live embodied controller is still unchanged and still steering-poor.
+- This slice does not yet prove online embodied improvement; the new turn
+  decoders were evaluated as shadow replays on existing logs.
+- The broader library still mixes plausible visual relays with central-state
+  families, so it is not the cleanest biological candidate even though it is
+  slightly stronger numerically.
+
+4. Evidence
+- Steering-aware monitor comparison now highlights current monitored labels such
+  as:
+  - `IB015`
+  - `CB1492`
+  - `MTe14`
+  - `VCH`
+  - `LTe62`
+  - `LT43`
+  - `LTe11`
+- Steering-aware family comparison now highlights turn-voltage families such as:
+  - `LTe74`
+  - `cL17`
+  - `LC10d`
+  - `LPT27`
+  - `LPT51`
+  - `LC36`
+- Replay result on the recorded target run:
+  - live sampled turn signal:
+    - `live_turn_bearing_corr = -0.1663`
+  - broad voltage shadow:
+    - `shadow_turn_bearing_corr = -0.7276`
+  - visual-only voltage shadow:
+    - `shadow_turn_bearing_corr = -0.7114`
+- Tests:
+  - `python -m pytest tests/test_iterative_decoding.py tests/test_closed_loop_smoke.py -q` -> `22 passed`
+  - `python -m pytest tests/test_voltage_turn_decoder.py tests/test_closed_loop_smoke.py -q` -> `22 passed`
+
+5. Next actions
+- Run the new `turn_voltage_monitored` matched target / no-target / zero-brain
+  embodied cohort with the semantic-VNC shadow plus both voltage-turn shadows.
+- Compare whether the visual-only shadow stays nearly as predictive online as
+  the broader library.
+- Do not mutate the live controller until the shadow decoders show stable
+  online target-signed steering above the zero-brain baseline.
+
+## 2026-03-14 - Online matched turn-voltage monitored cohort
+
+1. What I attempted
+- Ran the new `turn_voltage_monitored` target / no-target / zero-brain
+  embodied cohort in real FlyGym with:
+  - the unchanged live controller
+  - the semantic-VNC shadow
+  - the broad voltage-turn shadow
+  - the visual-only voltage-turn shadow
+
+2. What succeeded
+- All three serialized `0.2 s` runs completed:
+  - `outputs/requested_0p2s_turn_voltage_monitored_target/flygym-demo-20260314-093340`
+  - `outputs/requested_0p2s_turn_voltage_monitored_no_target/flygym-demo-20260314-093552`
+  - `outputs/requested_0p2s_turn_voltage_monitored_zero_brain/flygym-demo-20260314-093805`
+- Same-run activation artifacts were generated for the target and no-target
+  runs.
+- The online shadow voltage-turn signals remained strongly target-signed in the
+  fresh target run:
+  - broad: `turn_bearing_corr = -0.9206`
+  - visual-only: `turn_bearing_corr = -0.9147`
+- Both voltage shadows collapsed to zero in the zero-brain control.
+
+3. What failed
+- The live controller still did not improve. Behavior remained effectively the
+  same steering-poor branch:
+  - `turn_alignment_fraction_active = 0.467`
+  - `fixation_fraction_20deg = 0.0`
+- So this slice still does not deliver embodied target tracking; it only proves
+  that the monitored relay voltages contain a strong online steering signal.
+
+4. Evidence
+- Behavior conditions:
+  - `outputs/metrics/turn_voltage_monitored_behavior_conditions_0p2s.json`
+- Shadow summaries:
+  - `outputs/metrics/turn_voltage_shadow_all_target_0p2s.json`
+  - `outputs/metrics/turn_voltage_shadow_all_no_target_0p2s.json`
+  - `outputs/metrics/turn_voltage_shadow_all_zero_brain_0p2s.json`
+  - `outputs/metrics/turn_voltage_shadow_visual_target_0p2s.json`
+  - `outputs/metrics/turn_voltage_shadow_visual_no_target_0p2s.json`
+  - `outputs/metrics/turn_voltage_shadow_visual_zero_brain_0p2s.json`
+- Target-run correlations:
+  - live sampled turn: `-0.1663`
+  - broad voltage shadow: `-0.9206`
+  - visual-only voltage shadow: `-0.9147`
+- Condition separation:
+  - broad shadow abs-turn mean:
+    - target `0.6078`
+    - no-target `0.4944`
+    - zero-brain `0.0`
+  - visual-only shadow abs-turn mean:
+    - target `0.6167`
+    - no-target `0.4973`
+    - zero-brain `0.0`
+
+5. Next actions
+- Design a bounded steering-only live promotion experiment using the visual-only
+  voltage shadow first.
+- Keep forward drive untouched.
+- Re-run matched target / no-target / zero-brain controls after any promotion.
+
+## 2026-03-14 10:35 - Recorded hard duration rule for future evaluation
+
+1. What I attempted
+- Added a repo-level rule clarifying which run durations count as benchmark
+  evidence versus smoke-only diagnostics.
+
+2. What succeeded
+- The rule is now recorded in:
+  - `TASKS.md`
+  - `ASSUMPTIONS_AND_GAPS.md`
+  - `PROGRESS_LOG.md`
+
+3. Rule
+- `>= 1.0 s` counts as benchmarking / real evaluation.
+- `< 1.0 s` counts only as smoke test / sanity check.
+
+4. Evidence
+- `TASKS.md`
+- `ASSUMPTIONS_AND_GAPS.md`
+- `PROGRESS_LOG.md`
+
+5. Next actions
+- Apply this rule to future reporting and do not treat sub-`1.0 s` runs as
+  benchmark evidence.
+
+## 2026-03-14 13:10 - Resolved the bounded turn-voltage promotion failure with matched 2.0 s controls
+
+1. What I attempted
+- Investigated the failing promoted visual-core branch with local analysis plus
+  multiple sub-agents.
+- Proved the original `>500 ms` issue was not just “vision dropoff”:
+  - first failure mode was live/shadow arbitration collapse
+  - second failure mode was a deeper generic relay bias visible in matched
+    no-target controls
+- Iterated through three code fixes:
+  - conflict-aware steering arbitration in `src/bridge/controller.py`
+  - salience-gated conflict override in `src/bridge/controller.py`
+  - bias-corrected visual-core shadow decoding plus silent-brain guards in
+    `src/bridge/voltage_decoder.py`
+- Revalidated each step with real serialized WSL `2.0 s` runs.
+
+2. What succeeded
+- The final bounded promotion branch now has matched `2.0 s` evidence across
+  target / no-target / zero-brain.
+- Final target branch:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_conflict_gated_bias_target/flygym-demo-20260314-121624/summary.json`
+  - `turn_alignment_fraction_active = 0.7973`
+  - `aligned_turn_fraction = 0.704`
+  - `turn_bearing_corr = 0.7626`
+  - `mean_abs_bearing_rad = 0.9020`
+  - `right_turn_dominant_fraction = 0.232`
+  - `left_turn_dominant_fraction = 0.768`
+- Final no-target branch:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_conflict_gated_bias_no_target/flygym-demo-20260314-123350/summary.json`
+  - `right_turn_dominant_fraction = 0.374`
+  - `left_turn_dominant_fraction = 0.626`
+  - `mean_turn_drive = -0.0385`
+  - `turn_switch_rate_hz = 21.021`
+  - the old generic one-sided right-turn lock is gone
+- Final zero-brain integrity branch:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_conflict_gated_bias_zero_brain_guarded_v3/flygym-demo-20260314-131053/summary.json`
+  - `controller_summary_forward_nonzero_fraction = 0.0`
+  - `controller_summary_turn_nonzero_fraction = 0.0`
+  - `mean_turn_drive = 0.0`
+  - `net_displacement = 0.0118`
+- The production run path kept generating same-run activation artifacts for the
+  target and no-target branches.
+
+3. What failed
+- The first conflict-aware promotion patch alone was not sufficient.
+- A naive no-target baseline subtraction initially broke the zero-brain control
+  because the shadow decoder interpreted missing or uniform rest-state voltage
+  as real signal.
+- That was fixed by adding explicit silent-brain guards to the voltage shadow
+  decoder.
+
+4. Evidence
+- Final target benchmark:
+  - `outputs/benchmarks/fullstack_turn_voltage_promoted_visual_core_conflict_gated_bias_target_2s.csv`
+- Final no-target benchmark:
+  - `outputs/benchmarks/fullstack_turn_voltage_promoted_visual_core_conflict_gated_bias_no_target_2s.csv`
+- Final zero-brain benchmark:
+  - `outputs/benchmarks/fullstack_turn_voltage_promoted_visual_core_conflict_gated_bias_zero_brain_guarded_v3_2s.csv`
+- Updated workstream note:
+  - `docs/turn_voltage_decode_iteration.md`
+- Derived bias-corrected library:
+  - `outputs/metrics/target_specific_turn_voltage_signal_library_visual_core_2s_bias_corrected.json`
+
+5. Next actions
+- Treat `T134` as complete.
+- Keep this branch as the current best bounded steering-promotion result.
+- Future work should widen biological motor semantics beyond steering-only
+  promotion rather than re-opening the resolved no-target bias bug.

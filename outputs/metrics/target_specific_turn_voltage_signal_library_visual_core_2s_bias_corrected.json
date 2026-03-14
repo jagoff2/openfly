@@ -1,0 +1,77 @@
+{
+  "selection_rule": "target-specific monitor turn-voltage ranking with sign chosen to oppose body-frame target bearing",
+  "turn_scale_mv": 5.0,
+  "weight_mode": "score_over_sqrt_asym",
+  "selected_groups": [
+    {
+      "label": "MTe14",
+      "super_class": "visual_projection",
+      "left_root_ids": [
+        720575940612993191,
+        720575940619689280
+      ],
+      "right_root_ids": [
+        720575940625914501,
+        720575940636624120
+      ],
+      "target_specificity_score": 0.8403810506702856,
+      "corr_target_bearing": 0.8609326519915608,
+      "corr_drive_asymmetry": -0.6534023051777432,
+      "mean_abs_asymmetry_voltage_mv": 0.8467082977294922,
+      "turn_weight": -1.0,
+      "baseline_asymmetry_mv": -1.9359924449920654
+    },
+    {
+      "label": "LTe62",
+      "super_class": "visual_projection",
+      "left_root_ids": [
+        720575940627486236
+      ],
+      "right_root_ids": [
+        720575940624542451
+      ],
+      "target_specificity_score": 0.8199897910291968,
+      "corr_target_bearing": 0.9893011897348593,
+      "corr_drive_asymmetry": -0.6749019760816871,
+      "mean_abs_asymmetry_voltage_mv": 4.026050090789795,
+      "turn_weight": -0.44746545752072714,
+      "baseline_asymmetry_mv": -9.621215324401856
+    },
+    {
+      "label": "LT43",
+      "super_class": "visual_projection",
+      "left_root_ids": [
+        720575940610053827,
+        720575940645104840
+      ],
+      "right_root_ids": [
+        720575940629376528,
+        720575940630879548
+      ],
+      "target_specificity_score": 0.6705501627589464,
+      "corr_target_bearing": -0.7657367928743174,
+      "corr_drive_asymmetry": 0.3063256850491294,
+      "mean_abs_asymmetry_voltage_mv": 1.3579765558242798,
+      "turn_weight": 0.4725383453951514,
+      "baseline_asymmetry_mv": 1.4560834274291992
+    },
+    {
+      "label": "LTe11",
+      "super_class": "visual_projection",
+      "left_root_ids": [
+        720575940619676480
+      ],
+      "right_root_ids": [
+        720575940609454802
+      ],
+      "target_specificity_score": 0.530841630749271,
+      "corr_target_bearing": 0.6036497888852359,
+      "corr_drive_asymmetry": -0.7311277252104549,
+      "mean_abs_asymmetry_voltage_mv": 1.3617236614227295,
+      "turn_weight": -0.49809380413029464,
+      "baseline_asymmetry_mv": -6.748358222961426
+    }
+  ],
+  "baseline_source": "matched 2.0 s no-target visual-core control",
+  "baseline_run": "outputs/requested_2s_turn_voltage_promoted_visual_core_conflict_no_target/flygym-demo-20260314-114017/run.jsonl"
+}
