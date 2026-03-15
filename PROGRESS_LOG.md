@@ -5540,3 +5540,528 @@ Interpretation:
 - Keep this branch as the current best bounded steering-promotion result.
 - Future work should widen biological motor semantics beyond steering-only
   promotion rather than re-opening the resolved no-target bias bug.
+
+## 2026-03-14 18:05 - Grounded the behavior target set in real adult-fly literature
+
+1. What I attempted
+- Used sub-agents plus direct literature review to verify that the behaviors we
+  are optimizing are real adult-fly behaviors rather than synthetic benchmark
+  artifacts.
+- Reviewed visually guided fixation / orientation / perturbation refixation,
+  spontaneous locomotion and pauses, structured turning, short-timescale
+  orientation memory, and walking-linked whole-brain state.
+- Reviewed the current repo docs to decide where the canonical behavior target
+  set and state-management consequences should live.
+
+2. What succeeded
+- Added the canonical grounded spec:
+  - `docs/behavior_target_set.md`
+- Threaded that spec into the main decode and state-management docs:
+  - `docs/target_engagement_metric_pivot.md`
+  - `docs/iterative_brain_decoding_system.md`
+  - `docs/spontaneous_state_program.md`
+  - `docs/spontaneous_state_validation_plan.md`
+  - `ASSUMPTIONS_AND_GAPS.md`
+- The repo now distinguishes:
+  - real target behaviors we should optimize for:
+    - spontaneous roaming
+    - intermittent locomotion with pauses
+    - structured turning / reorientation
+    - landmark fixation / orientation
+    - perturbation refixation
+    - short-timescale orientation memory
+  - real but out-of-scope or context-specific behaviors we should not treat as
+    default acceptance targets yet:
+    - odor-loss search
+    - reward local search
+    - hunger-state foraging
+    - looming freeze / flee
+    - courtship-specific pursuit
+- The repo now explicitly rejects generic indefinite smooth pursuit of an
+  arbitrary moving target as the default real-fly behavior claim.
+
+3. What failed
+- The repo still does not have a perturbation-specific `target_jump` or
+  `target_removed_brief` evaluation path, so refixation and short-timescale
+  persistence are grounded by literature but not yet directly scored in the
+  live branch.
+- Repo-level verdict docs still need to be re-scored against the new canonical
+  behavior target set.
+
+4. Evidence
+- `docs/behavior_target_set.md`
+- `docs/target_engagement_metric_pivot.md`
+- `docs/iterative_brain_decoding_system.md`
+- `docs/spontaneous_state_program.md`
+- `docs/spontaneous_state_validation_plan.md`
+- `ASSUMPTIONS_AND_GAPS.md`
+- `TASKS.md`
+
+5. Next actions
+- Re-score the current best embodied branch against the new canonical behavior
+  target set.
+- Add perturbation-aware target assays so refixation and brief-loss persistence
+  are measured directly instead of inferred from continuous-target runs.
+
+## 2026-03-14 21:10 - Implemented and benchmarked the first grounded target perturbation assays
+
+1. What I attempted
+- Used sub-agents to confirm the clean implementation seam for a grounded
+  visual perturbation assay:
+  - perturb the target in the body runtime
+  - log perturbation state through `target_state`
+  - score refixation and brief-loss persistence in `behavior_metrics.py`
+- Implemented runtime-side target scheduling with `jump` and `hide` events.
+- Added perturbation-aware behavior metrics.
+- Added runnable current-branch configs for:
+  - `target_jump`
+  - `target_removed_brief`
+- Ran real serialized `2.0 s` embodied FlyGym assays with same-run activation
+  visualization for both perturbation types.
+
+2. What succeeded
+- New runtime and metric seams are in place:
+  - `src/body/target_schedule.py`
+  - `src/body/flygym_runtime.py`
+  - `src/runtime/closed_loop.py`
+  - `src/analysis/behavior_metrics.py`
+- Focused validation passed:
+  - `python -m pytest tests/test_target_schedule.py tests/test_behavior_metrics.py tests/test_closed_loop_smoke.py -q`
+  - `26 passed`
+- First real jump assay completed with activation capture:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_jump/flygym-demo-20260314-203328`
+- First real brief-removal assay completed with activation capture:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_removed_brief/flygym-demo-20260314-204945`
+- The new assay doc is written:
+  - `docs/target_perturbation_assay.md`
+
+3. What failed
+- The current best branch does not yet solve perturbation behavior.
+- Jump assay:
+  - immediate corrective turning is strong
+  - but frontal refixation fails within the `2.0 s` window
+- Brief-removal assay:
+  - hidden-target persistence is weak
+  - the branch behaves more like a visually contingent re-stabilizer than a
+    persistent internal target tracker
+- Matched `no_target` / `zero_brain` perturbation controls still do not exist
+  yet for these new assays.
+
+4. Evidence
+- Assay implementation:
+  - `src/body/target_schedule.py`
+  - `src/body/flygym_runtime.py`
+  - `src/analysis/behavior_metrics.py`
+  - `src/runtime/closed_loop.py`
+- Configs:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_turn_voltage_promoted_visual_core_target_jump.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_turn_voltage_promoted_visual_core_target_removed_brief.yaml`
+- Real jump assay:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_jump/flygym-demo-20260314-203328/summary.json`
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_jump/flygym-demo-20260314-203328/activation_side_by_side.mp4`
+- Real brief-removal assay:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_removed_brief/flygym-demo-20260314-204945/summary.json`
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_removed_brief/flygym-demo-20260314-204945/activation_side_by_side.mp4`
+- Summary note:
+  - `docs/target_perturbation_assay.md`
+
+5. Next actions
+- Run matched `no_target` and `zero_brain` perturbation controls.
+- Diagnose the failed jump refixation and weak hidden persistence directly from
+  the new activation captures rather than from continuous-target proxies.
+
+## 2026-03-14 23:59 - Corrected the turn-voltage sign convention and advanced the perturbation branch
+
+1. What I attempted
+- Used sub-agents plus local activation/log analysis to diagnose why the
+  perturbation branch still failed after the first refixation-gate experiment.
+- Proved that the refixation gate itself was a bad intervention:
+  - it stayed active almost the whole run
+  - it increased one-sided left bias
+  - it did not improve jump-specific frontal refixation
+- Followed the failure upstream into the shadow-steering library and found a
+  deeper sign-convention bug:
+  - `src/analysis/turn_voltage_library.py` was still assigning turn weights
+    with the old opposite-sign convention
+- Added a reusable baseline-correction utility for shadow libraries:
+  - `scripts/bias_correct_turn_voltage_signal_library.py`
+- Rebuilt a bias-corrected jump-aware shadow library, promoted it into the
+  active configs, disabled the failed refixation override, and increased the
+  base shadow blend.
+- Ran new real serialized `2.0 s` WSL embodied runs with same-run activation
+  visualization for:
+  - corrected `target_jump`
+  - corrected `target_removed_brief`
+  - corrected `no_target`
+  - corrected `zero_brain`
+
+2. What succeeded
+- The turn-voltage builder now uses the current same-sign steering convention:
+  - `src/analysis/turn_voltage_library.py`
+- New reusable baseline-correction path exists and is covered:
+  - `scripts/bias_correct_turn_voltage_signal_library.py`
+  - `tests/test_turn_voltage_library.py`
+- Focused validation passed:
+  - `python -m pytest tests/test_turn_voltage_library.py tests/test_bridge_unit.py tests/test_closed_loop_smoke.py -q`
+  - `48 passed`
+- The corrected jump-aware library is now the promoted shadow library:
+  - `outputs/metrics/jump_turn_voltage_signal_library_top8_mixed_bias_corrected.json`
+- Corrected jump target run completed:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_jump_signfix_blend08/flygym-demo-20260314-230110`
+- Corrected brief-removal target run completed:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_removed_brief_signfix_blend08/flygym-demo-20260314-231851`
+- Corrected `no_target` control completed:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_no_target_signfix_blend08/flygym-demo-20260314-233644`
+- Corrected `zero_brain` control completed:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_zero_brain_signfix_blend08/flygym-demo-20260314-235119`
+- The corrected branch is now the strongest target-condition perturbation
+  branch so far on steering metrics:
+  - jump target:
+    - `target_condition_turn_bearing_corr = 0.8745`
+    - `jump_turn_bearing_corr = 0.9589`
+    - `jump_bearing_recovery_fraction_2s = -1.3164`
+  - brief removal:
+    - `target_condition_turn_bearing_corr = 0.9176`
+    - `removal_persistence_turn_alignment_fraction = 0.9762`
+    - `removal_mean_abs_bearing_rad = 0.1546`
+- The corrected `no_target` control stayed mixed and nearly zero-mean in turn:
+  - `mean_turn_drive = 0.0010`
+  - `right_turn_dominant_fraction = 0.549`
+  - `left_turn_dominant_fraction = 0.448`
+- The corrected `zero_brain` control remained silent:
+  - `controller_summary_forward_nonzero_fraction = 0.0`
+  - `controller_summary_turn_nonzero_fraction = 0.0`
+
+3. What failed
+- Jump-specific frontal refixation is still not solved on the corrected branch:
+  - `jump_refixation_latency_s = null`
+  - `jump_refixation_fraction_20deg = 0.0`
+- The corrected jump run improved steering correlation and recovery, but did not
+  beat the original baseline on `jump_turn_alignment_fraction_active`.
+- Matched perturbation-specific `no_target` / `zero_brain` controls still do
+  not exist yet; the new controls were run on the corrected main branch, not on
+  the perturbation schedules themselves.
+- The fly is still not an indistinguishable living-fly embodiment. This is a
+  materially improved partial branch, not a final parity claim.
+
+4. Evidence
+- Code and utility changes:
+  - `src/analysis/turn_voltage_library.py`
+  - `scripts/bias_correct_turn_voltage_signal_library.py`
+  - `tests/test_turn_voltage_library.py`
+- Corrected shadow library:
+  - `outputs/metrics/jump_turn_voltage_signal_library_top8_mixed_bias_corrected.json`
+- Corrected jump target run:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_jump_signfix_blend08/flygym-demo-20260314-230110/summary.json`
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_jump_signfix_blend08/flygym-demo-20260314-230110/activation_side_by_side.mp4`
+  - `outputs/benchmarks/fullstack_turn_voltage_promoted_visual_core_target_jump_signfix_blend08_2s.csv`
+- Corrected brief-removal target run:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_removed_brief_signfix_blend08/flygym-demo-20260314-231851/summary.json`
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_removed_brief_signfix_blend08/flygym-demo-20260314-231851/activation_side_by_side.mp4`
+  - `outputs/benchmarks/fullstack_turn_voltage_promoted_visual_core_target_removed_brief_signfix_blend08_2s.csv`
+- Corrected controls:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_no_target_signfix_blend08/flygym-demo-20260314-233644/summary.json`
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_zero_brain_signfix_blend08/flygym-demo-20260314-235119/summary.json`
+- Updated assay state:
+  - `docs/target_perturbation_assay.md`
+
+5. Next actions
+- Run matched perturbation-specific controls on the corrected branch:
+  - `target_jump + no_target-equivalent baseline`
+  - `target_jump + zero_brain`
+  - `target_removed_brief + zero_brain`
+- Diagnose why jump steering is now strong but jump-specific frontal refixation
+  still does not complete within `2.0 s`.
+- Re-score the corrected branch against the canonical behavior target set in
+  the repo-level verdict docs before promoting it as the new default claim
+  branch.
+
+## 2026-03-15 02:10 - Enforced the no-hacks hard rule and reset the perturbation path to brain-driven monitoring
+
+1. What I attempted
+- Recorded the user's new hard rule:
+  - no hacks
+  - everything in the active embodiment path must be brain-driven and biologically plausible
+- Audited the just-added turn-forward suppression intervention against that
+  rule.
+- Checked the interrupted rerun state and confirmed it did not produce a valid
+  embodied result.
+- Replaced the next controller-side iteration with a monitoring-only,
+  relay-first jump config on the canonical calibrated decoder.
+
+2. What succeeded
+- The controller-side turn-forward suppression experiment was removed from the
+  worktree:
+  - `src/bridge/decoder.py`
+  - `tests/test_bridge_unit.py`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_turn_voltage_promoted_visual_core*.yaml`
+- Focused validation passed again after the rollback:
+  - `python -m pytest tests/test_bridge_unit.py tests/test_closed_loop_smoke.py -q`
+  - `45 passed`
+- Added an explicit jump-specific monitoring branch that keeps the canonical
+  calibrated decoder and adds only relay-heavy monitoring:
+  - `outputs/metrics/jump_brain_driven_relay_monitor_families.csv`
+  - `outputs/metrics/jump_brain_driven_relay_monitor_candidates.json`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_relay_monitored.yaml`
+- Added config-level smoke coverage to keep that branch honest:
+  - `tests/test_closed_loop_smoke.py`
+
+3. What failed
+- The interrupted rerun attempt did not produce a valid embodied result:
+  - the benchmark runner defaulted to `mock` without `--mode flygym`
+  - the aborted output root only contains a zero-length mock stub
+  - that artifact does not count as evidence
+- The jump refixation problem itself is not solved yet.
+
+4. Evidence
+- Hard-rule record:
+  - `TASKS.md`
+  - `ASSUMPTIONS_AND_GAPS.md`
+  - `docs/target_perturbation_assay.md`
+- Rolled-back heuristic change:
+  - `src/bridge/decoder.py`
+  - `tests/test_bridge_unit.py`
+- New brain-driven monitoring branch:
+  - `outputs/metrics/jump_brain_driven_relay_monitor_families.csv`
+  - `outputs/metrics/jump_brain_driven_relay_monitor_candidates.json`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_relay_monitored.yaml`
+- Invalid aborted stub:
+  - `outputs/requested_2s_turn_voltage_promoted_visual_core_target_jump_turnsuppress/mock-demo-20260315-015719/run.jsonl`
+
+5. Next actions
+- Run the new jump-specific brain-relay monitored branch in `flygym` mode with
+  same-run activation capture.
+- Use that capture to expand relay-state decoding upstream of the current
+  descending readout, instead of adding new controller-side logic.
+
+## 2026-03-15 02:45 - Ran the first honest jump-monitor capture and extracted a second-wave relay cohort
+
+1. What I attempted
+- Ran a real `2.0 s` `flygym` target-jump assay on the canonical calibrated
+  decoder with no steering promotion and relay-heavy monitoring only:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_relay_monitored.yaml`
+- Used the resulting activation capture and run log to execute a fresh decode
+  cycle on the no-hacks branch.
+- Built a second-wave relay monitor cohort directly from that honest capture.
+
+2. What succeeded
+- The embodied run completed with same-run activation visualization:
+  - `outputs/requested_2s_calibrated_target_jump_brain_relay_monitored/flygym-demo-20260315-020918`
+- Key metrics from the honest branch:
+  - `target_condition_turn_bearing_corr = 0.8813`
+  - `target_perturbation_jump_turn_alignment_fraction_active = 1.0`
+  - `target_perturbation_jump_bearing_recovery_fraction_2s = -0.8210`
+  - `target_perturbation_jump_refixation_latency_s = null`
+- This branch still does not solve frontal refixation, but it improves jump
+  recovery over the promoted sign-fix branch while staying inside the hard
+  rule.
+- The decode workbench produced a new relay ranking from the honest capture:
+  - `outputs/metrics/jump_brain_driven_relay_cycle_summary.json`
+- Built the second-wave candidate set:
+  - `outputs/metrics/jump_brain_driven_relay_monitor_candidates_wave2.json`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_relay_monitored_wave2.yaml`
+- Wrote the branch note:
+  - `docs/brain_driven_jump_relay_monitoring.md`
+
+3. What failed
+- Frontal refixation is still not solved on the honest branch.
+- The target still reaches the rear field in roughly `0.386 s` after the jump.
+- No matched no-hacks `no_target` / `zero_brain` controls were run in this
+  slice yet.
+
+4. Evidence
+- Honest jump run:
+  - `outputs/requested_2s_calibrated_target_jump_brain_relay_monitored/flygym-demo-20260315-020918/summary.json`
+  - `outputs/requested_2s_calibrated_target_jump_brain_relay_monitored/flygym-demo-20260315-020918/activation_side_by_side.mp4`
+- Honest decode-cycle outputs:
+  - `outputs/metrics/jump_brain_driven_relay_cycle_summary.json`
+  - `outputs/metrics/jump_brain_driven_relay_cycle_monitor_turn_candidates.csv`
+  - `outputs/metrics/jump_brain_driven_relay_cycle_relay_turn_candidates.csv`
+- Wave-2 monitoring artifacts:
+  - `outputs/metrics/jump_brain_driven_relay_monitor_candidates_wave2.json`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_relay_monitored_wave2.yaml`
+- Writeup:
+  - `docs/brain_driven_jump_relay_monitoring.md`
+
+5. Next actions
+- Run matched no-hacks controls on this relay-monitored path.
+- Run the wave-2 jump-monitor capture.
+- Use the matched relay state to design a brain-side latent upstream of the
+  current motor decoder instead of adding new controller logic.
+
+## 2026-03-15 06:55 - Integrated the first decoder-internal brain-latent turn branch and validated it on a live target / no-target / zero-brain trio
+
+1. What I attempted
+- Added a decoder-internal brain-state latent seam to the primary motor
+  decoder:
+  - `src/bridge/decoder.py`
+  - `src/bridge/controller.py`
+- Built a matched-condition turn-latent library from the honest `target` and
+  `no_target` captures:
+  - `scripts/build_brain_turn_latent_library.py`
+  - `src/analysis/brain_latent_library.py`
+- Replayed that latent offline, tightened the library to a stricter upstream
+  subset, swept candidate weights, then promoted the bounded latent into the
+  live canonical jump branch.
+- Ran a full serialized live trio on the new branch:
+  - `target`
+  - `no_target`
+  - `zero_brain`
+
+2. What succeeded
+- The decoder can now consume monitored brain voltage directly through the
+  live decoder path instead of only through shadow decoders.
+- Focused validation passed after the integration:
+  - `python -m pytest tests/test_turn_voltage_library.py tests/test_bridge_unit.py tests/test_closed_loop_smoke.py -q`
+  - `56 passed`
+- Built the matched latent artifacts:
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s.json`
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s_ranked.csv`
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s_library.json`
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s_library_strict.json`
+  - `outputs/metrics/jump_brain_driven_turn_latent_weight_sweep.csv`
+- The bounded strict live branch completed with same-run activation
+  visualization on both `target` and `no_target`:
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819`
+  - `outputs/requested_2s_calibrated_no_target_brain_latent_turn/flygym-demo-20260315-063511`
+- The matched live trio comparison is now explicit:
+  - `outputs/metrics/brain_latent_turn_live_comparison.json`
+- Relative to the honest relay-monitored baseline:
+  - `jump_bearing_recovery_fraction_2s` improved from `-0.8210` to `-0.5658`
+  - `jump_turn_bearing_corr` improved from `0.3215` to `0.8177`
+  - `fixation_fraction_20deg` improved from `0.043` to `0.059`
+  - overall `target_condition_turn_bearing_corr` stayed essentially unchanged
+    (`0.8813 -> 0.8806`)
+- `no_target` remained behaviorally sane on the new branch:
+  - `mean_turn_drive = 0.0054`
+  - `mean_abs_turn_drive = 0.1634`
+  - `right/left dominance = 0.552 / 0.448`
+- `zero_brain` remained silent on the new decoder path:
+  - `controller_summary_turn_nonzero_fraction = 0.0`
+  - `mean_abs_turn_drive = 0.0`
+
+3. What failed
+- The branch still does not complete frontal jump refixation within `2.0 s`.
+- This remains only a signed-steering-error latent, not yet a full
+  heading / goal / steering-gain scaffold.
+- The active branch is improved, but it is not yet an indistinguishable living
+  fly.
+
+4. Evidence
+- Decoder / analysis code:
+  - `src/bridge/decoder.py`
+  - `src/bridge/controller.py`
+  - `src/analysis/brain_latent_library.py`
+  - `scripts/build_brain_turn_latent_library.py`
+- Live configs:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_latent_turn.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_zero_brain_target_jump_brain_latent_turn.yaml`
+- Target run:
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819/summary.json`
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819/activation_side_by_side.mp4`
+- No-target run:
+  - `outputs/requested_2s_calibrated_no_target_brain_latent_turn/flygym-demo-20260315-063511/summary.json`
+  - `outputs/requested_2s_calibrated_no_target_brain_latent_turn/flygym-demo-20260315-063511/activation_side_by_side.mp4`
+- Zero-brain run:
+  - `outputs/requested_2s_calibrated_zero_brain_target_jump_brain_latent_turn/flygym-demo-20260315-065048/summary.json`
+- Branch note:
+  - `docs/brain_latent_turn_decoder.md`
+
+5. Next actions
+- Extend the decoder-internal brain latent beyond signed steering error toward a
+  literature-grounded heading / goal / steering-gain scaffold.
+- Re-test that richer latent on `jump` and `target_removed_brief` assays.
+- Keep the hard rule in force:
+  - no controller-side steering arbitration
+  - no body-side shortcut logic
+
+## 2026-03-15 09:40 - Rewrote the whitepaper as a publication-style manuscript around the current best honest branch
+
+1. What I attempted
+- Replaced the old project-summary whitepaper with a full manuscript-style
+  document that reads like a real computational systems paper rather than a
+  changelog.
+- Re-centered the narrative on the actual branch progression:
+  - strict public-anchor failure
+  - body-free splice localization
+  - descending-readout embodiment
+  - semantic-VNC negative result
+  - spontaneous-state pilot
+  - decoder-internal brain-latent turn branch as the current best honest result
+- Used sub-agent review to tighten the claim boundary, section structure, and
+  publishable tone before rewriting the file.
+
+2. What succeeded
+- [openfly_whitepaper.md](/G:/flysim/docs/openfly_whitepaper.md) is now a
+  complete journal-style manuscript with:
+  - abstract
+  - introduction
+  - system overview
+  - experimental program
+  - results
+  - discussion
+  - limitations
+  - methods
+  - reproducibility section
+  - references
+- The manuscript now presents the repo as a reconstruction-and-falsification
+  study instead of a simple parity narrative.
+- The current best honest branch is now explicit:
+  - `requested_2s_calibrated_target_jump_brain_latent_turn`
+- The main quantitative claim boundary is explicit:
+  - jump-linked steering improved materially
+  - `zero_brain` remained silent
+  - frontal jump refixation still failed within `2.0 s`
+
+3. What failed
+- No new experiments were run in this slice.
+- The whitepaper rewrite does not by itself resolve the remaining scientific
+  gaps around refixation, heading/goal state, or full biological motor output.
+
+4. Evidence
+- Manuscript:
+  - `docs/openfly_whitepaper.md`
+- Current best branch:
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819/summary.json`
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819/activation_side_by_side.mp4`
+- Matched comparison:
+  - `outputs/metrics/brain_latent_turn_live_comparison.json`
+- Supporting branch notes:
+  - `docs/brain_latent_turn_decoder.md`
+  - `docs/spontaneous_state_results.md`
+  - `docs/semantic_vnc_failed_parity_branch.md`
+
+5. Next actions
+- Keep the manuscript synchronized with the active branch as the heading / goal
+  latent work proceeds.
+- When branch verdict docs are updated later, reconcile the whitepaper,
+  parity report, and README front-page language so they all reference the same
+  leading branch and claim boundary.
+
+## 2026-03-15 09:55 - Promoted the rewritten whitepaper to the repo front page and prepared a docs-only push
+
+1. What I attempted
+- Made `README.md` match the rewritten manuscript exactly so the GitHub landing
+  page shows the paper rather than the older front-page summary.
+- Kept the commit scoped to documentation/tracker files only because the
+  worktree still contains unrelated in-flight code and artifact changes.
+
+2. What succeeded
+- `README.md` now mirrors:
+  - `docs/openfly_whitepaper.md`
+- Added the corresponding tracker row so the front-page sync is explicit in
+  repo state.
+
+3. What failed
+- No code or experiment changes were included in this slice.
+- The broader uncommitted worktree remains intentionally untouched.
+
+4. Evidence
+- `README.md`
+- `docs/openfly_whitepaper.md`
+- `TASKS.md`
+
+5. Next actions
+- Commit only the manuscript/front-page/tracker files.
+- Push that docs-only commit without sweeping in the unrelated local changes.

@@ -1,313 +1,120 @@
-# OpenFly
+# Reconstructing a Public-Equivalent Embodied *Drosophila* Brain-Body System from Open Components
 
-Public-equivalent reconstruction of an embodied Drosophila brain-body stack from open artifacts.
-
-Status: complete with partial parity verdict.
-
-This repo runs a real closed loop locally on one Windows 11 workstation with WSL2, dual RTX 5060 Ti 16 GB GPUs, and 192 GB RAM. The production path combines a persistent FlyWire-derived whole-brain backend, FlyGym / NeuroMechFly v2 embodiment, FlyGym realistic vision with FlyVis-derived activity, and in-repo bridge code for online control. It is not a claim that the private Eon glue or unpublished parameters were recovered exactly.
-
-The strongest current branch is [configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml). In the current `2.0 s` target run it reaches `avg_forward_speed = 4.9241`, `net_displacement = 5.7583`, `displacement_efficiency = 0.5853`, and `corr(right_drive - left_drive, target_bearing) = 0.8810`. The matched `zero_brain` control stays near zero with `nonzero_command_cycles = 0`, which is the strongest evidence that the embodied motion is coming from the brain-driven branch rather than a hidden locomotion fallback.
-
-**What Runs Today**
-
-- Real FlyGym body and realistic vision in the production path, not toy RGB-only input.
-- Persistent Torch whole-brain backend over the local FlyWire-derived graph.
-- Closed-loop body -> vision/splice -> brain -> decoder -> body runtime.
-- Benchmark, demo, plot, JSONL, CSV, and video artifacts saved locally.
-- A synchronized activation visualization showing the current best branch at the body, whole-brain, FlyVis, decoder, and controller layers.
-
-**What This Is And Is Not**
-
-- This is a public-equivalent reconstruction from open repositories and papers.
-- The bridge layer is in-repo engineering glue because the public repos do not ship a turnkey persistent embodied controller.
-- The best current result is visually driven embodied locomotion with partial parity, not a claim of full biological motor-path fidelity.
-- The semantic-VNC structural decoder line was tested and frozen as a failed parity branch after it moved the fly but still failed target tracking.
-
-**Current Best Evidence**
-
-- Best production config: [configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml)
-- Target run: [demo.mp4](/G:/flysim/outputs/requested_2s_splice_uvgrid_descending_calibrated_target/flygym-demo-20260311-071452/demo.mp4)
-- Target metrics: [metrics.csv](/G:/flysim/outputs/requested_2s_splice_uvgrid_descending_calibrated_target/flygym-demo-20260311-071452/metrics.csv)
-- No-target control: [demo.mp4](/G:/flysim/outputs/requested_2s_splice_uvgrid_descending_calibrated_no_target/flygym-demo-20260311-073028/demo.mp4)
-- Zero-brain control: [demo.mp4](/G:/flysim/outputs/requested_2s_splice_uvgrid_descending_calibrated_zero_brain/flygym-demo-20260311-074301/demo.mp4)
-- Validation summary: [uvgrid_decoder_calibration.md](/G:/flysim/docs/uvgrid_decoder_calibration.md)
-
-**Activation Visualization**
-
-The best branch now has a synchronized side-by-side activation artifact:
-
-- Composite video: [activation_side_by_side.mp4](/G:/flysim/outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/activation_side_by_side.mp4)
-- Overview frame: [overview.png](/G:/flysim/outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/overview.png)
-- Capture bundle: [capture_data.npz](/G:/flysim/outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/capture_data.npz)
-- Writeup: [current_best_branch_activation_visualization.md](/G:/flysim/docs/current_best_branch_activation_visualization.md)
-
-That artifact captures `200` synchronized frames across `138639` local FlyWire brain points, `45669` FlyVis nodes, `16` monitored decoder labels, and `8` controller channels. It is a visibility artifact, not a new parity claim.
-
-**Quick Start**
-
-From WSL:
-
-```bash
-bash scripts/bootstrap_wsl.sh
-bash scripts/bootstrap_env.sh
-~/.local/bin/micromamba run -n flysim-full bash scripts/check_cuda.sh
-~/.local/bin/micromamba run -n flysim-full bash scripts/check_mujoco.sh
-```
-
-Run the strongest current embodied branch:
-
-```bash
-export MUJOCO_GL=egl
-~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py \
-  --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml \
-  --mode flygym \
-  --duration 2.0 \
-  --output-root outputs/requested_2s_splice_uvgrid_descending_calibrated_target \
-  --output-csv outputs/benchmarks/fullstack_splice_uvgrid_descending_calibrated_target_2s.csv
-```
-
-Build the side-by-side activation visualization:
-
-```bash
-export MUJOCO_GL=egl
-~/.local/bin/micromamba run -n flysim-full python scripts/build_best_branch_activation_visualization.py \
-  --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_monitored.yaml \
-  --mode flygym \
-  --duration 2.0 \
-  --output-root outputs/visualizations/current_best_branch_activation
-```
-
-Run focused tests:
-
-```bash
-python -m pytest tests/test_bridge_unit.py tests/test_closed_loop_smoke.py tests/test_activation_viz.py -q
-```
-
-**Architecture At A Glance**
-
-`FlyGym body + realistic vision -> visual splice / encoder -> persistent whole-brain backend -> descending/efferent decoder -> FlyGym controller`
-
-Implementation spine:
-
-- [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py)
-- [visual_splice.py](/G:/flysim/src/bridge/visual_splice.py)
-- [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py)
-- [decoder.py](/G:/flysim/src/bridge/decoder.py)
-- [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py)
-
-**Performance Snapshot**
-
-| Workload | Device | Sim time | Wall time | Real-time factor |
-| --- | --- | ---: | ---: | ---: |
-| Brain only, Torch | `cuda:0` | `0.100 s` | `0.923 s` | `0.1083x` |
-| Brain only, Brian2 CPU | `cpu` | `0.100 s` | `10.852 s` | `0.0092x` |
-| Body only | `cpu` | `0.020 s` | `0.285 s` | `0.0701x` |
-| Realistic vision only | `cpu` | `0.020 s` | `22.644 s` | `0.000883x` |
-| Full legacy closed loop | `cpu` | `0.098 s` | `125.350 s` | `0.000782x` |
-
-**Ground-Truth Docs**
-
-- Whitepaper: [openfly_whitepaper.md](/G:/flysim/docs/openfly_whitepaper.md)
-- Parity report: [REPRO_PARITY_REPORT.md](/G:/flysim/REPRO_PARITY_REPORT.md)
-- Assumptions and gaps: [ASSUMPTIONS_AND_GAPS.md](/G:/flysim/ASSUMPTIONS_AND_GAPS.md)
-- Task tracker: [TASKS.md](/G:/flysim/TASKS.md)
-- Lab notebook: [PROGRESS_LOG.md](/G:/flysim/PROGRESS_LOG.md)
-
-**Known Limits**
-
-- Exact private Eon glue is unavailable, so parity is measured against public observables rather than claimed internal equivalence.
-- The validated WSL production path is still CPU-only for FlyVis on this hardware because public wheels do not support RTX 5060 Ti `sm_120`.
-- The visual splice is still an inferred FlyVis-to-FlyWire interface.
-- The motor interface is still a compressed descending/efferent-to-controller abstraction, not a full biological VNC-to-muscle pathway.
-- The semantic-VNC structural decoder branch is frozen as a failed parity line: [semantic_vnc_failed_parity_branch.md](/G:/flysim/docs/semantic_vnc_failed_parity_branch.md).
-
-**Repo Layout**
-
-- `src/`: brain, body, bridge, runtime, visualization, and VNC code
-- `configs/`: runnable production, control, and experimental configs
-- `benchmarks/`: reproducible benchmark runners
-- `scripts/`: setup, probe, summary, and artifact-build scripts
-- `tests/`: unit, smoke, integration, and artifact tests
-- `outputs/`: demos, metrics, plots, logs, profiling, and visualization artifacts
-- `docs/`: whitepaper, parity report support, and detailed technical notes
-
-- 
-
-
-
-
-
-
-
-
-# OpenFly: Reconstructing a Public-Equivalent Embodied Drosophila Brain-Body Stack from Open Artifacts
-
-Author: Codex
-Date: 2026-03-12
+Author: Codex  
+Project: OpenFly Reconstruction  
+Date: 2026-03-15
 
 ## Abstract
 
-This whitepaper consolidates the engineering and scientific findings from `openfly`, a local reproduction effort targeting the public-equivalent embodied fruit-fly simulation stack implied by the public Eon demo context. The goal was not to claim access to private glue or unpublished parameters. The goal was to determine how far the public artifacts can be pushed on one workstation: Windows 11, WSL2, dual RTX 5060 Ti 16 GB GPUs, and 192 GB RAM.
+Public artifacts now exist for the adult *Drosophila melanogaster* whole-brain connectome, a connectome-derived recurrent brain model, realistic embodied biomechanics, and realistic visual processing. What remains unavailable as a turnkey public system is the persistent closed-loop integration layer that converts realistic sensory state into online brain input, converts online brain state into locomotor output, and validates the resulting behavior under matched controls. This study reports a public-equivalent reconstruction of that missing stack on one local workstation using only open repositories, public datasets, and in-repo integration code.
 
-The current stack combines four public subsystems: a whole-brain recurrent model derived from the FlyWire connectome, the FlyGym and NeuroMechFly v2 embodied simulation stack, FlyGym realistic vision with FlyVis-derived neural activity, and new in-repo bridge code that maintains persistent closed-loop control online rather than as offline batch analyses. The main result is that a realistic-vision, real-body, real-whole-brain closed loop now runs locally and produces brain-driven, visually driven embodied locomotion under matched controls.
+The reconstructed system combines a persistent FlyWire-derived whole-brain Torch backend, FlyGym and NeuroMechFly v2 embodiment, FlyGym realistic vision with FlyVis-derived activity, and an explicitly documented bridge for online closed-loop control. The work was organized as a reconstruction-and-falsification program rather than as a claim of access to unpublished private glue. Every promoted claim was required to survive matched `target`, `no_target`, and `zero_brain` controls, artifact generation, and fixed-duration benchmarking on the local machine.
 
-The strongest current branch is `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml`. In the current `2 s` logged-target validation run, this branch yields `avg_forward_speed = 4.9241`, `net_displacement = 5.7583`, `displacement_efficiency = 0.5853`, `corr(right_drive - left_drive, target_bearing) = 0.8810`, and `steer_sign_match_rate = 0.8878`, while the matched `zero_brain` control still yields `nonzero_command_cycles = 0` and `net_displacement = 0.0118`. A no-target control still produces substantial locomotion, which means the branch is visually driven but not purely target-driven: optic flow and scene structure also contribute.
+The main findings are fourfold. First, a realistic-vision, real-body, whole-brain closed loop now runs locally and reproducibly. Second, the earliest plausible public-anchor bridge failed for structural reasons: it collapsed informative visual structure and compressed output through too small a descending readout. Third, a body-free splice program and a wider descending readout established the first credible brain-driven, visually modulated embodied locomotion branch. Fourth, a later decoder-internal brain-latent turn branch improved perturbation-linked steering on the honest path: in a matched `2.0 s` jump assay, jump turn-bearing correlation improved from `0.3215` to `0.8177`, jump bearing-recovery fraction improved from `-0.8210` to `-0.5658`, and the matched `zero_brain` control remained silent with `controller_turn_nonzero_fraction = 0.0`.
 
-The project also produced negative results that matter. A minimal public-anchor bridge built from bilateral `LC4` and `JON` pools plus a tiny descending-neuron bottleneck does not produce useful locomotion once decoder-side and body-side fallbacks are removed. That failure is not explained by a dead backend. Instead, body-free splice experiments showed that the original scalar bridge destroyed lateralized visual structure already present in FlyVis, and that the output bottleneck was also too narrow. A calibrated splice using exact shared FlyVis/FlyWire `cell_type + side + bin` groups can preserve grouped boundary activity strongly and launch the correct downstream turn sign at `100 ms`, but downstream sign drifts by `500 ms`, and exact column alignment remains unresolved. A later semantic-VNC branch built from real MANC `exit_nerve` structure and a FlyWire semantic bridge proved that monitor-space alignment can be solved, but it still failed target-tracking parity and is now frozen as a negative result rather than promoted.
-
-In addition to locomotion, the repo now includes grounded brain-only reproductions of the feeding and grooming tasks from Shiu et al. Feeding probes recover clear `MN9` responses to unilateral sugar GRN input, and grooming probes recover `aBN1` responses in short windows and weaker `aDN1_right` responses in longer windows. These tasks are now ready for later embodiment work. The repo also now includes a synchronized activation visualization of the best embodied branch, showing the embodied run, whole-brain point cloud, FlyVis nodes, monitored decoder populations, and controller channels side by side. The repo therefore meets the public-equivalent acceptance gate in `AGENTS.MD`, but final parity remains partial because the exact private Eon glue is unavailable, GPU FlyVis remains blocked in WSL by public `sm_120` wheel support, and the current motor interface is still a descending-population-to-two-drive abstraction rather than a full biological motor pathway.
+The current best branch is therefore not a final parity claim but a constrained scientific result: the public-equivalent stack can produce real brain-driven, visually modulated, embodied orientation behavior, and a decoder-internal latent derived from monitored brain state improves perturbation-linked steering without controller-side or body-side shortcuts. Full parity remains unresolved because frontal refixation after jump still fails within `2.0 s`, the visual splice remains inferred rather than neuron-identical, the embodied motor interface remains compressed, and the most biologically ambitious semantic-VNC branch failed target-tracking parity despite solving several lower-level implementation bugs.
 
 ## 1. Introduction
 
-The public Eon fly demo context implies a demanding systems problem: a whole-brain connectome model, realistic vision, embodied physics, and persistent online control must all operate together in closed loop. Publicly, the relevant pieces exist, but they do not arrive as a turnkey, unified runtime. The principal open components are the FlyWire-derived computational brain model and associated `fly-brain` codebase, the FlyWire whole-brain connectome and annotation releases, the FlyGym and NeuroMechFly v2 embodied simulator, and FlyGym's realistic-vision path. What is not public is the exact integration glue, task-specific sensory and motor mapping, parameterization, and any proprietary control heuristics that may have been used in internal demos.
+The public Eon-style embodied fly demo context implies a difficult systems problem. A realistic adult fly body must move in a physics simulator. A realistic visual system must transform the scene into neural activity rather than raw pixels. A recurrent whole-brain model must preserve internal state across time. And the entire stack must run online, not as disconnected notebook analyses. Public repositories provide most of the ingredients for this program, but they do not provide a validated, persistent, local, end-to-end closed loop with matched controls and explicit acceptance logic.
 
-This project was therefore organized as a public-equivalent reconstruction rather than an attempt to claim private parity. The central question was: what can be reproduced honestly from public artifacts alone, on this machine, with explicit evidence at each step? The answer required both positive and negative results. Positive results establish what is now working. Negative results identify which apparently reasonable bridges fail, and why.
+This gap matters scientifically as much as it matters technically. A convincing embodied brain system is not simply a matter of getting independent modules to import successfully. The crucial question is whether sensory state, recurrent brain state, descending readout, and body control can be linked in a way that remains observable, reproducible, and biologically interpretable. In practice, this required not just integration but repeated falsification of appealing but incorrect interfaces.
 
-The work proceeded in phases mandated by `AGENTS.MD`: initial scouting, environment creation, standalone benchmarking, architecture design, bridge implementation, realistic-vision integration, optimization, parity demos, and hardening. At every step, the repo maintained an explicit task tracker in `TASKS.md` and a dated lab notebook in `PROGRESS_LOG.md`. This whitepaper synthesizes that engineering record into a single technical narrative.
+This study therefore treated OpenFly as a reconstruction study rather than a demo-assembly exercise. The goal was to reproduce a public-equivalent embodied fly stack as closely as the public artifacts allow, to define explicit parity criteria against public observables, and to reject branches that moved the fly for the wrong reasons. Under that framing, negative results were as important as positive ones. They identified where information was being destroyed, where controls were insufficient, and where apparently more biologically ambitious routes still failed behaviorally.
 
-## 2. Scope, Hardware, and Public Components
+The result is a local system that now supports three classes of claim. First, the stack can run a real realistic-vision, whole-brain, embodied closed loop locally. Second, the system produces brain-driven and visually modulated embodied behavior under matched controls. Third, a decoder-internal latent derived from monitored brain state improves perturbation-linked steering without reintroducing controller or body shortcuts. The system does not yet justify the stronger claim of an indistinguishable living fly.
+
+## 2. Scope, Hardware, and Honesty Boundary
 
 ### 2.1 Hardware target
 
-All work targeted one workstation:
+All reported results were obtained on one workstation:
 
 | Component | Value |
 | --- | --- |
 | Host OS | Windows 11 |
-| Linux runtime | WSL2, Ubuntu 24.04 |
+| Linux runtime | WSL2 |
 | GPUs | 2x NVIDIA RTX 5060 Ti 16 GB |
 | System RAM | 192 GB |
-| Driver | 581.29 |
+| Production vision device | CPU in WSL |
 
 ### 2.2 Public components used
 
-| Subsystem | Public source | Role in this project |
+| Subsystem | Public source | Role in this study |
 | --- | --- | --- |
-| Whole-brain model | `eonsystemspbc/fly-brain`; Shiu et al. computational brain model | recurrent brain backend and task notebooks |
-| Whole-brain connectome | FlyWire adult female brain releases | neuron graph, synapse-weight proxy, annotations |
-| Embodied body sim | `NeLy-EPFL/flygym` / NeuroMechFly v2 | body physics, realistic vision, environment |
-| Realistic vision | FlyGym realistic vision + FlyVis path | neural visual frontend |
+| Whole-brain model | `eonsystemspbc/fly-brain`; Shiu et al. 2024 | recurrent online brain backend |
+| Whole-brain connectome | FlyWire adult whole-brain releases | graph, coordinates, annotations |
+| Embodied body | `NeLy-EPFL/flygym`; NeuroMechFly v2 | body physics and sensorimotor environment |
+| Realistic vision | FlyGym realistic vision and FlyVis-derived activity | neural visual frontend |
+| VNC connectome data | MANC/BANC public releases | structural-output exploration and falsification |
 
-### 2.3 Public scope versus inferred glue
+### 2.3 Honesty boundary
 
-The whole-brain backend, body simulation, and realistic vision are public. The closed-loop online bridge was not available as a finished public subsystem and had to be implemented in-repo. That bridge includes both public-grounded and inferred components. Public-grounded components include use of the public FlyWire graph, direct notebook-derived task IDs for feeding and grooming, public descending and efferent annotations for expanded readouts, and exact shared `cell_type + side` overlap groups grounded by the official FlyWire annotation supplement. Inferred components include retinotopic binning between FlyVis and FlyWire groups, signed current scaling at the splice boundary, and the current descending-population decoder that reduces rich descending activity into `left_drive` and `right_drive`.
-## 3. System Architecture
+This repo does not claim access to unpublished Eon glue, private parameters, or hidden controller logic. The whole-brain core, connectome, visual frontend, and body simulator are public. The persistent closed-loop bridge, matched-control evaluation logic, perturbation assays, activation visualization, and decoding workbench were implemented in this repo because the public components did not ship as a turnkey online controller. Wherever an interface remained inferred rather than neuron-identical, that inference was documented explicitly and the resulting claims were limited accordingly.
 
-### 3.1 High-level architecture
+Two rules governed every promoted branch.
 
-The current closed-loop production path has five persistent subsystems:
+1. `>= 1.0 s` runs count as real evaluation; `< 1.0 s` runs count only as smoke or sanity checks.
+2. The active embodiment path may not rely on controller-side or body-side shortcut heuristics. New control changes must be brain-driven and biologically plausible.
 
-1. `FlyGymRealisticVisionRuntime` provides a persistent FlyGym world, a body state, and visual-system activity from the realistic-vision path.
-2. `VisualSplice` converts raw FlyVis activity into direct current injected into exact shared FlyWire groups.
-3. `WholeBrainTorchBackend` maintains a persistent recurrent whole-brain state and steps the FlyWire-derived graph online.
-4. `MotorDecoder` reads out selected descending and efferent populations and converts them into a compact body command.
-5. `ClosedLoopRunner` synchronizes stepping, logging, metrics, and artifact generation.
+Those rules are recorded in [TASKS.md](/G:/flysim/TASKS.md) and [ASSUMPTIONS_AND_GAPS.md](/G:/flysim/ASSUMPTIONS_AND_GAPS.md).
 
-Implementation lives in:
+## 3. System Overview
 
-- `src/body/flygym_runtime.py`
-- `src/bridge/visual_splice.py`
-- `src/brain/pytorch_backend.py`
-- `src/bridge/decoder.py`
-- `src/runtime/closed_loop.py`
+The production stack is a persistent five-part loop:
 
-### 3.2 Brain backend
+1. [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py) maintains a live FlyGym world, embodied state, and realistic visual activity.
+2. [visual_splice.py](/G:/flysim/src/bridge/visual_splice.py) transforms structured FlyVis activity into direct brain-side input at a grounded overlap boundary.
+3. [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py) maintains recurrent whole-brain state over a FlyWire-derived graph of `138,639` neurons and `15,091,983` weighted edges.
+4. [decoder.py](/G:/flysim/src/bridge/decoder.py) converts monitored brain activity into the body-facing locomotor interface.
+5. [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py) synchronizes time stepping, logging, metrics, activation capture, and artifact generation.
 
-The current production backend is a persistent Torch implementation over a public FlyWire-derived graph:
+The current production path is not a notebook replay. It is a persistent closed loop with run directories, JSONL logs, metrics CSVs, videos, activation captures, and explicit condition metadata.
 
-- neurons: `138,639`
-- weighted directed edges: `15,091,983`
-- weight source: `Excitatory x Connectivity` from `external/fly-brain/data/2025_Connectivity_783.parquet`
+## 4. Experimental Program
 
-The graph is not unweighted. It already contains a sparse signed structural weight matrix. What remains simplified is not whether weights exist, but how much physiology is collapsed into global parameters. The current public backend uses shared membrane and synapse time constants, shared thresholding, shared refractory behavior, and a global synaptic scale.
+### 4.1 Reconstruction logic
 
-### 3.3 Body and realistic vision
+The work proceeded through a sequence of progressively stricter hypotheses.
 
-The body runtime uses FlyGym and NeuroMechFly v2 for embodied physics and FlyGym's realistic-vision path for neural visual activity rather than trivial RGB frames. The current strongest embodied branch uses:
+1. A minimal public-anchor bridge might be enough.
+2. If it failed, a better visual splice might rescue the system.
+3. If splice improvement alone failed, output compression might be the deeper bottleneck.
+4. If wider descending readouts helped, perturbation assays could localize the remaining missing state.
+5. If monitored relay state carried cleaner steering information than the live decoder, that information should be decoded inside the primary decoder rather than injected as controller logic.
+6. If the system still lacked autonomy, the brain backend itself would need endogenous state rather than a silent cold start.
 
-- real FlyGym body
-- real FlyVis-derived neural visual activity
-- real whole-brain recurrent stepping
-- no decoder idle-drive fallback
-- no body-side hidden locomotion fallback
-- no prosthetic `P9` locomotor-context injection
+Each step generated runnable code, tests, output artifacts, and a written branch note. Several branches were kept explicitly as negative results because they clarified the actual bottleneck.
 
-### 3.4 Logging, controls, and artifacts
+### 4.2 Control logic
 
-The runtime emits timestamped demo videos, JSONL logs with per-cycle state, metrics CSVs, trajectory and command plots, benchmark CSVs and plots, and profiler artifacts. Later iterations also added explicit target-state logging so that target-bearing analysis no longer depends on reconstructing `MovingFlyArena` kinematics from public formulas.
+The main behavioral conditions were:
 
-## 4. Methods
+- `target`
+- `no_target`
+- `zero_brain`
+- `target_jump`
+- `target_removed_brief`
 
-### 4.1 Environment strategy
+The corresponding behavior targets were restricted to real adult-fly behaviors documented in [behavior_target_set.md](/G:/flysim/docs/behavior_target_set.md): spontaneous roaming, intermittent locomotion, structured reorientation, landmark fixation, perturbation refixation, short-timescale orientation persistence, and walking-linked global brain state. Generic indefinite smooth pursuit of an arbitrary moving target was explicitly rejected as the default acceptance criterion.
 
-The environment strategy had to be split. The modern FlyGym stack and the secondary Brian2 benchmark stack were not cleanly co-installable in one environment. The project therefore created a production environment for FlyGym, realistic vision, and the Torch brain backend, and a separate Brian2 CPU benchmark environment for secondary backend comparison.
+### 4.3 Whole-brain activation visibility
 
-Bootstrap and validation scripts were created early:
+A synchronized activation visualization now ships with the same embodied run rather than requiring a special-case rerun. The resulting artifact shows, side by side:
 
-- `scripts/bootstrap_wsl.sh`
-- `scripts/bootstrap_env.sh`
-- `scripts/check_cuda.sh`
-- `scripts/check_mujoco.sh`
+- the embodied FlyGym view
+- the whole-brain point cloud
+- FlyVis left/right activity
+- monitored brain populations
+- controller channels
 
-### 4.2 Benchmarking methodology
+For the current leading branch, the activation composite records `200` synchronized frames, `138,639` brain neurons, `45,669` FlyVis nodes, `48` monitor labels, and `307` monitored root IDs from the same run directory as the body video.
 
-Each benchmark records `wall_seconds`, `sim_seconds`, `real_time_factor`, backend, device, config, and commit hash when available. Standalone runners were created for brain-only, body-only, realistic vision, and full stack workloads.
-
-### 4.3 Initial public-anchor bridge
-
-The first bridge encoded visual and mechanosensory evidence into bilateral public input pools derived from checked public notebook IDs and decoded a very small set of descending readouts (`P9`, `oDN1`, `DNa01`, `DNa02`, `MDN`) into a two-scalar body command. This bridge had one engineering virtue: every input and output handle was easy to explain. It also had two critical flaws:
-
-1. it collapsed rich visual structure into a few scalar pools
-2. it compressed output through a readout set that was too narrow
-
-That initial bridge was useful only because it failed clearly once hidden fallbacks were removed.
-
-### 4.4 Fast realistic-vision path
-
-Performance profiling showed that the realistic-vision runtime, not the in-repo bridge, dominated runtime. The initial path spent disproportionate time in the `LayerActivity` and `datamate` access path. A fast path was therefore added that consumes raw `nn_activities_arr` directly, caches cell-type indices, and avoids repeated construction of higher-overhead activity objects for the control-relevant path. That new path was not accepted until exact control-path equivalence was proven for the repo's actual control computations.
-
-### 4.5 Body-free splice program
-
-The decisive methodological change was to remove the body from the inner discovery loop and work directly on the FlyVis-to-whole-brain splice. This produced a much faster iteration cycle and a cleaner causal question: same visual stimulus in, compare teacher (FlyVis) and student (whole-brain overlap groups), determine whether left/right structure is preserved, and determine whether downstream motor-sign predictions emerge.
-
-The splice program advanced through these steps:
-
-1. exact shared `cell_type + side` overlap grounded by the official FlyWire annotation supplement
-2. signed boundary injection instead of positive-only rate drive
-3. coarse spatial binning to preserve more retinotopic structure
-4. voltage and conductance readouts in addition to spike-rate summaries
-5. calibration of current scale and spatial bins against boundary preservation and downstream sign
-6. deeper relay and longer-window probes
-
-### 4.6 Embodied descending-readout expansion
-
-Once the splice was good enough to launch the correct downstream sign at `100 ms`, the bottleneck shifted to the output side. An invalid relay-to-body shortcut through optic-lobe populations was explicitly rejected. Instead, a strict descending-only readout expansion was mined from public annotations and the connectome using anatomical constraints:
-
-- `super_class == descending`
-- `flow == efferent`
-- DN/oDN/MDN-like labels
-
-The selected supplemental groups were:
-
-- forward-biased: `DNp103`, `DNp06`, `DNp18`, `DNp35`
-- turn-biased: `DNpe056`, `DNp71`, `DNpe040`
-
-### 4.7 Controls and falsification logic
-
-The current strongest claims rely on matched controls:
-
-- `zero_brain` control: proves there is no hidden body fallback
-- no-target control: proves that the target specifically modulates behavior beyond the rest of the visual scene
-- controlled left/right target conditions: test whether short side-isolated pursuit behavior mirrors correctly
-
-Earlier hack branches are now treated only as diagnostics, not as success targets.
 ## 5. Results
 
-### 5.1 Module-level validation and performance
+### 5.1 The local public-equivalent stack runs end to end
 
-The repo satisfies the module-level acceptance gate: brain-only, body-only, realistic-vision, and full closed-loop benchmarks all run locally and save artifacts.
-
-Measured performance:
+The system now satisfies the module-level reconstruction gate: brain-only, body-only, realistic-vision, and full closed-loop workloads all run locally and emit benchmark artifacts. Representative performance on this machine is shown below.
 
 | Workload | Device | Sim time | Wall time | Real-time factor |
 | --- | --- | ---: | ---: | ---: |
@@ -317,415 +124,261 @@ Measured performance:
 | Realistic vision only | `cpu` | `0.020 s` | `22.644 s` | `0.000883x` |
 | Full legacy closed loop | `cpu` | `0.098 s` | `125.350 s` | `0.000782x` |
 
-Two points follow immediately. First, the realistic-vision path dominates runtime. Second, the validated WSL production path remains CPU-only for FlyVis because public `cu126` wheels still do not support RTX 5060 Ti `sm_120`.
+The bottleneck is unambiguous: realistic vision dominates runtime. The validated WSL path remains CPU-bound for FlyVis because the public WSL wheels do not yet support RTX 5060 Ti `sm_120`. That is a performance limitation, not an architectural ambiguity.
 
-### 5.2 Exact fast-path equivalence
+### 5.2 The minimal public-anchor bridge failed for structural reasons
 
-The fast realistic-vision path was proven exact for the control-relevant computations in this repo. For identical `nn_activities_arr` and connectome metadata, the legacy and fast paths yielded exact equality of extracted features, sensor pool rates, sensor metadata, downstream motor-rate summaries, and the final decoded body command. Evidence is in `outputs/metrics/vision_fast_equivalence.json` and `docs/vision_fast_equivalence.md`.
+The first strict bridge used public bilateral anchor pools derived from checked public IDs (`LC4`, `JON`, `P9`, `DNa01`, `DNa02`, `MDN`) and a small descending readout. Once decoder idle-drive fallback, fake lateralized public inputs, and body-side hidden locomotion fallback were removed, that bridge no longer produced convincing locomotion.
 
-### 5.3 The strict minimal public bridge failed for structural reasons
+This failure was not caused by a dead backend. The backend responded strongly to positive-control stimulation, but the observed bilateral production inputs under-drove the monitored locomotor readouts. The failure therefore falsified the initial hypothesis that a small, clean public-anchor bridge would be sufficient. It also established an important methodological lesson: visually convincing behavior must not be accepted unless matched controls prove that the body is not moving on an auxiliary motor floor.
 
-Once decoder idle-drive fallback, fake left/right public splits, and hidden body locomotion fallback were removed, the strict public-anchor path did not produce meaningful locomotion. It produced sparse twitching or no useful monitored motor output under short real diagnostics. The motor-path audit showed that the bilateral public sensory inputs were weak for the monitored DN readouts, while direct `P9` stimulation remained a strong positive control.
+### 5.3 A body-free visual splice program localized the sensory bottleneck
 
-### 5.4 The original visual bridge destroyed lateralized structure already present in FlyVis
-
-Crafted visual probes showed that several strong left/right visual families were already present in the data stream being computed by FlyVis. The problem was not that the bridge omitted the relevant visual families. The problem was that it averaged away their signed and lateralized structure before the whole-brain backend saw them.
-
-### 5.5 A grounded body-free splice is possible
-
-Using the official FlyWire annotation supplement, the overlap between FlyVis and the whole-brain graph could be grounded by exact shared `cell_type + side`, not by fabricated hemisphere splits. The repo found:
+The next advance came from removing the body from the inner discovery loop and directly testing how FlyVis activity entered the whole-brain model. The splice boundary was grounded using the official FlyWire annotation supplement and exact shared visual `cell_type + side` groups rather than fabricated left/right splits. The repo identified:
 
 - `49` exact shared visual cell types
-- `98` type+side groups
-- `392` groups after splitting into `4` coarse spatial bins
+- `98` exact `cell_type + side` groups
+- `392` groups after `4` coarse spatial bins
 
-The key calibrated result was:
+The calibrated signed splice reached strong boundary agreement and produced the correct downstream turn-sign launch at short latency. In the curated calibration regime, mean voltage group correlation reached `0.8709` and mean side-difference correlation reached `0.8079`. However, the correct downstream sign collapsed by `500 ms`, even when the external input was reduced to a short pulse. This narrowed the failure from “no visual structure reaches the brain” to “longer-window downstream stability remains wrong.”
 
-- `4` spatial bins
-- signed current injection
-- `max_abs_current = 120`
+### 5.4 Output compression was as important as sensory fidelity
 
-At that point, mean voltage-based boundary agreement was strong:
-
-- mean voltage group correlation: `0.8709`
-- mean voltage side-difference correlation: `0.8079`
-
-and the correct downstream turn-sign flip appeared at `100 ms`:
-
-- left-dark: `turn_right - turn_left = -10`
-- right-dark: `turn_right - turn_left = +10`
-
-### 5.6 The splice is not yet final
-
-Two blockers remained after splice calibration.
-
-First, downstream sign drifted by `500 ms`. The `100 ms` launch was correct, but longer windows failed:
-
-- `100 ms` hold: correct sign
-- `500 ms` hold: wrong sign
-- `500 ms` with only a `25 ms` pulse: still wrong sign
-
-Second, better two-dimensional boundary fit did not automatically yield better downstream sign. The `uv_grid` splice improved voltage-side agreement, but no tested orientation-only variant restored the correct left-versus-right downstream sign.
-
-### 5.7 Output bottleneck was also fundamental
-
-A real `2 s` embodied run using the new splice but the old tiny motor readout remained behaviorally poor. The splice was active on `999/1000` cycles and generated `982/1000` nonzero commands, but maximum decoded drives were only about `0.14`, net displacement was only `0.113`, and displacement efficiency was only `0.0519`.
-
-The failure was therefore not that the brain was silent. It was that the current output abstraction was too small and too weak for the FlyGym locomotion controller.
-
-### 5.8 Descending-only expanded readout produced the first convincing embodied traversal without locomotion prosthetics
-
-The descending-only expanded readout transformed the embodied result.
-
-Old splice-only readout:
-
-- `net_displacement = 0.1132`
-- `displacement_efficiency = 0.0519`
-
-Descending-only expanded readout:
+Improving the input boundary alone did not solve embodied behavior. The next decisive result was that a wider descending-only readout transformed the embodied system far more than further scalar encoder tuning. The older splice-only embodied readout produced `net_displacement = 0.1132` and `displacement_efficiency = 0.0519`. A descending-only expanded readout then produced:
 
 - `avg_forward_speed = 4.5638`
 - `path_length = 9.1185`
 - `net_displacement = 5.6330`
 - `displacement_efficiency = 0.6178`
 
-This was the first embodied branch in the repo to produce meaningful traversal with no optic-lobe-as-motor shortcut, no `P9` prosthetic locomotor-context mode, no decoder idle-drive fallback, and no body-side hidden locomotion fallback.
-### 5.9 The strongest current embodied claim is supported by matched controls
+This was the first branch to produce convincing traversal without optic-lobe-as-motor shortcuts, explicit `P9` prosthetic locomotor context, decoder idle floor, or body-side hidden locomotion fallback.
 
-The strongest current branch is now validated by matched controls with explicit target-state logging.
+### 5.5 The calibrated realistic-vision descending branch established the first strong control-backed embodied baseline
 
-Target + real brain:
+The best-performing continuous-target branch under the original acceptance criteria remains the calibrated realistic-vision descending configuration. In its `2.0 s` target run, it achieved:
 
 - `avg_forward_speed = 4.9241`
 - `net_displacement = 5.7583`
 - `displacement_efficiency = 0.5853`
-- `nonzero_command_cycles = 993`
 
-No target + real brain:
+Matched controls established the valid interpretation of this branch:
 
-- `avg_forward_speed = 3.9070`
-- `net_displacement = 5.2903`
-- `displacement_efficiency = 0.6777`
+- target + real brain: meaningful traversal and target-bearing-aligned steering
+- no-target + real brain: substantial locomotion remained
+- target + zero-brain: decoded commands vanished and net displacement collapsed to `0.0118`
 
-Target + zero brain:
+This combination supports a specific claim: the branch is brain-driven and visually driven, but not purely target-driven. Scene structure, optic flow, and self-motion still contribute materially under `no_target`. That distinction is essential. The branch established a credible embodied baseline, but it did not yet solve perturbation refixation or long-horizon target stabilization.
 
-- `avg_forward_speed = 0.1847`
-- `net_displacement = 0.0118`
-- `nonzero_command_cycles = 0`
+### 5.6 The perturbation assay localized the missing state more sharply than continuous-target metrics
 
-Three conclusions are justified.
+Continuous-target metrics were insufficient to diagnose whether the system truly stabilized a target or merely acquired it transiently. This study therefore added a target perturbation schedule with jump and brief-removal events. These assays are more biologically grounded for the current vision-first branch because they test landmark refixation and bounded orientation persistence rather than unbounded pursuit.
 
-First, there is no hidden locomotion fallback. The zero-brain control stays near zero and produces zero commands.
+The first honest jump-monitor branch, built on the canonical calibrated decoder with no steering promotion, produced strong signed corrective turning immediately after the jump but still failed actual frontal refixation. The target often reached the rear field within a few hundred milliseconds after the perturbation. This was an important result: the system already had signed steering, but it lacked a more persistent, better-structured internal variable needed to restabilize the target.
 
-Second, the branch is visually driven. It moves with the real brain and the realistic visual scene.
+### 5.7 Relay monitoring showed that informative steering structure lived in brain voltage, not only in DN spike-rate summaries
 
-Third, the target modulates behavior specifically. Compared with the no-target run, the target run increases:
+The next discovery was that rate-only DN summaries were under-reporting the available control signal. When monitored relay and visual families were rescored in voltage space, steering-relevant structure became much clearer than in the live sampled turn scalar. This led to two important conclusions.
 
-- forward speed by about `26.0%`
-- mean total drive by about `12.0%`
-- mean steering asymmetry by about `121.4%`
+First, the problem was not simply absence of target-bearing information. Second, further controller-side steering patches would be scientifically weak, because the relevant signal already existed upstream in monitored brain state. This finding justified the next move: decode that state inside the primary motor decoder rather than injecting new controller logic.
 
-In addition, steering tracks directly logged target bearing:
+### 5.8 A decoder-internal brain-latent turn branch is the strongest current honest branch
 
-- `corr(right_drive - left_drive, target_bearing) = 0.8810`
-- steer-sign match rate `= 0.8878`
+The current lead branch is the decoder-internal brain-latent turn configuration:
 
-and forward drive increases as the target becomes more frontal:
+- target run: [summary.json](/G:/flysim/outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819/summary.json)
+- target activation video: [activation_side_by_side.mp4](/G:/flysim/outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819/activation_side_by_side.mp4)
+- no-target run: [summary.json](/G:/flysim/outputs/requested_2s_calibrated_no_target_brain_latent_turn/flygym-demo-20260315-063511/summary.json)
+- no-target activation video: [activation_side_by_side.mp4](/G:/flysim/outputs/requested_2s_calibrated_no_target_brain_latent_turn/flygym-demo-20260315-063511/activation_side_by_side.mp4)
+- zero-brain run: [summary.json](/G:/flysim/outputs/requested_2s_calibrated_zero_brain_target_jump_brain_latent_turn/flygym-demo-20260315-065048/summary.json)
+- matched comparison: [brain_latent_turn_live_comparison.json](/G:/flysim/outputs/metrics/brain_latent_turn_live_comparison.json)
 
-- `corr(total_drive, target_frontalness) = 0.4634`
-- `corr(forward_speed, target_frontalness) = 0.1298`
+This branch was constructed under the hard no-shortcuts rule. The new turn term is decoded inside [decoder.py](/G:/flysim/src/bridge/decoder.py) from monitored brain voltage using a matched target/no-target library. No privileged target metadata enters control, and no controller-side steering promotion or body-side override is used.
 
-### 5.10 What remains unresolved in locomotion
+Relative to the honest relay-monitored baseline, the latent branch improved perturbation-linked steering materially:
 
-The no-target run still produces substantial locomotion. That is consistent with the visual scene, floor texture, and self-motion driving the system via optic flow. This means the current branch is not a pure target-pursuit-only controller. It is better understood as a visually driven locomotor policy whose steering and drive are modulated by the target.
+| Metric | Honest baseline | Brain-latent branch | Delta |
+| --- | ---: | ---: | ---: |
+| Jump turn-bearing correlation | `0.3215` | `0.8177` | `+0.4962` |
+| Jump bearing-recovery fraction over `2.0 s` | `-0.8210` | `-0.5658` | `+0.2551` |
+| Fixation fraction at `20 deg` | `0.043` | `0.059` | `+0.016` |
 
-The short isolated left/right target conditions are still mixed. Controlled left and right placements now work correctly and target bearings are logged directly, but the short `1 s` side-isolated conditions do not yet show a clean mirrored reflex.
+The live target run for this branch also remained robustly embodied:
 
-### 5.11 Feeding and grooming brain tasks were added and reproduced as grounded brain probes
-
-The repo now includes grounded reproductions of the Shiu et al. feeding and grooming tasks using public notebook IDs.
-
-Feeding, `100 ms` sweep:
-
-- `sugar_right @ 180 Hz -> mn9_left = 60 Hz, mn9_right = 40 Hz`
-- `sugar_left` remained silent in the same short sweep
-
-Grooming, `100 ms` sweep:
-
-- `JON_CE` and `JON_all` activate `aBN1` up to `20 Hz`
-- `aDN1` is silent in the same short window
-
-Grooming, `500 ms` sweep:
-
-- `jon_all @ 220 Hz -> aDN1_right = 6 Hz, aBN1 = 28 Hz`
-
-These are biologically cleaner than the earlier locomotion prosthetic experiments because they use published sensory and output neuron groups from the public task notebooks. They are not yet embodied.
-
-### 5.12 A real semantic-VNC structural decoder was built, but it failed as a parity branch
-
-The repo did not stop at small sampled descending populations. It also compiled a real MANC-derived `exit_nerve` structural spec, resolved the raw ID-space mismatch with a FlyWire semantic bridge, and ran that path through the embodied closed loop.
-
-This branch proved several things:
-
-- the raw MANC-versus-FlyWire ID mismatch was a real blocker
-- the semantic bridge solved monitor-space alignment rather than hiding it
-- the first bridged decoder was not silent
-- the first bridged decoder also had a real saturation bug
-
-After the semantic bridge, the real decoder requested `685` IDs and matched `685`. The first short bridged embodied run was therefore no longer silent, but it saturated immediately. Later normalization in `src/vnc/spec_decoder.py` removed that obvious decoder failure, and later follow-camera support removed the separate framing problem.
-
-The corrected `2.0 s` semantic-VNC rerun reached:
-
-- `avg_forward_speed = 4.7635`
-- `net_displacement = 7.0699`
-- `displacement_efficiency = 0.7428`
+- `avg_forward_speed = 5.4296`
+- `net_displacement = 6.2632`
 - `stable = 1.0`
+- `target_condition_turn_bearing_corr = 0.8806`
+- `target_perturbation_jump_turn_bearing_corr = 0.8177`
 
-Those numbers matter because they show the branch was no longer failing for trivial reasons such as dead monitor alignment, raw drive clipping, or a broken camera. Even so, scene-level review showed that the branch still did not track the target credibly enough to count as parity.
+The control logic remained intact:
 
-The honest conclusion is therefore negative: structural semantic reachability was enough to build a working locomotor branch, but not enough to recover target-directed behavior. The semantic-VNC branch is now frozen as a failed parity branch rather than left in an ambiguous "needs tuning" state.
+- `no_target` stayed near zero-mean in turn: `mean_turn_drive = 0.0054`
+- `zero_brain` remained silent: `controller_turn_nonzero_fraction = 0.0`
 
-### 5.13 The current best branch now has a synchronized activation visualization
+This branch is also visually the most compelling result in the repo to date. The synchronized activation composite and the embodied video show behavior that looks purposeful during acquisition and perturbation response. However, the branch still falls short of a full living-fly claim. Frontal jump refixation was not achieved within `2.0 s`:
 
-The repo now includes a dedicated visualization artifact for the monitored-only extension of the strongest current embodied branch. This artifact is not a new parity claim. It is a visibility artifact that shows, in one synchronized view, what the current best branch is doing at the embodied, whole-brain, FlyVis, decoder, and controller layers.
+- `jump_refixation_latency_s = null`
+- `jump_refixation_fraction_20deg = 0.0`
 
-The captured run records:
+The correct claim is therefore narrow but important: a decoder-internal, brain-side latent improves perturbation-linked steering on the honest path. It does not yet establish robust refixation, goal memory, or full behavioral parity.
 
-- `200` synchronized frames
-- `138,639` local FlyWire brain points
-- `45,669` FlyVis nodes
-- `16` monitored decoder labels
-- `8` controller channels
+### 5.9 The backend can now start from an endogenous sparse ongoing state rather than a dead silent reset
 
-and the monitored visualization run itself remained behaviorally consistent with the best branch:
+The original whole-brain backend had an absorbing silent cold start. With zero input and zero recurrent activity, it stayed at rest indefinitely. Because that is a major biological gap, this study added and tested endogenous spontaneous-state candidates inside the brain backend rather than in the decoder or body controller.
 
-- `avg_forward_speed = 4.8348`
-- `net_displacement = 6.2200`
-- `displacement_efficiency = 0.6439`
-- `stable = 1.0`
+The current best spontaneous-state candidate uses bilateral family-structured tonic occupancy and slow latent fluctuations over central, ascending, visual-projection, visual-centrifugal, and endocrine families. In the brain-only audit, the old cold start remained exactly silent, while the new candidate produced sparse, bounded, perturbable ongoing activity. Across three seeds, ongoing spontaneous turn bias was reduced to `+2.5`, `+10.0`, and `+12.5 Hz`, pulse peak turn asymmetry remained `100 Hz` in all seeds, and homologous bilateral voltage correlation became positive and measurable.
 
-This matters for two reasons. First, it gives the repo a direct inspection tool for activation flow rather than relying only on scalar summaries. Second, it makes the current state of the system legible: where visual activity lives, how monitored descending groups evolve across time, and what the controller channels are doing on the same cycles as the body and target.
+This clears a brain-only plausibility bar. It does not yet count as an embodied production result because matched embodied `target`, `no_target`, and `zero_brain` validations have not yet been completed for the spontaneous-state branch.
 
-## 6. Interpretation
+### 5.10 A semantic-VNC structural decoder was a useful negative result, not a parity path
 
-### 6.1 What is now proven
+One of the major exploratory lines in this project attempted to move beyond small sampled descending populations toward a broader structural output interface derived from public VNC connectome resources. That line solved several real implementation problems:
 
-The project now supports these claims with direct evidence:
+- raw MANC-to-FlyWire ID mismatch
+- silent monitor-space incompatibility
+- early decoder saturation
+- off-screen camera framing
 
-1. A realistic-vision-enabled, whole-brain, embodied closed loop runs locally on this machine.
-2. The strongest current embodied branch does not depend on hidden locomotion fallback.
-3. The strongest current embodied branch is brain-driven.
-4. The strongest current embodied branch is visually driven.
-5. A moving target measurably modulates steering and forward drive.
-6. The public whole-brain model can reproduce grounded non-locomotion sensorimotor brain tasks for feeding and grooming.
+The corrected semantic-VNC branch became stable and locomotor-capable. Even so, it still failed target-tracking parity. The important inference is not that the branch “needed more tuning.” It is that structural semantic reachability alone was insufficient to recover target-directed behavior. This is one of the most important negative results in the repo because it rules out a superficially attractive but incomplete route to full embodiment.
 
-### 6.2 What is not yet proven
+## 6. Discussion
 
-The project does not yet prove:
+The central lesson of this study is that the hard problem was not simply to make public modules coexist in one process. The hard problem was to locate the biologically meaningful state that must pass between realistic sensory activity, recurrent whole-brain dynamics, descending output, and embodied control. Several findings now appear robust.
 
-1. that the current visual splice is the final endogenous biological interface
-2. that the current descending-population decoder is the true natural locomotor code
-3. that the current system implements a full neck-connective, VNC, and muscle pathway
-4. that short isolated left/right target stimuli produce a clean mirrored pursuit reflex
-5. that a structurally grounded semantic-VNC decoder is already sufficient for target pursuit
-6. exact parity with any private Eon integration stack
+First, realistic-vision, whole-brain, embodied closed-loop operation is achievable from public components on a single workstation. Second, matched `zero_brain` controls are indispensable: they prevented misleading claims based on hidden locomotor floors. Third, the earliest major failure was not backend inactivity but information loss at the sensory bridge and over-compression at the output decoder. Fourth, brain voltage carried useful steering structure that rate-only DN summaries were obscuring. Fifth, decoding that structure inside the primary decoder is scientifically cleaner and empirically stronger than adding more controller-side logic.
 
-### 6.3 Why the discovery process mattered
+The current best branch, `requested_2s_calibrated_target_jump_brain_latent_turn`, should therefore be understood as the leading honest branch rather than as the final answer. It is the first branch in the repo that combines all of the following:
 
-The most important discoveries in this project were not only positive results. They were falsifications:
+- realistic vision
+- real whole-brain recurrence
+- embodied locomotion
+- perturbation-aware evaluation
+- same-run activation visualization
+- matched `target`, `no_target`, and `zero_brain` controls
+- a decoder-internal improvement derived from monitored brain state rather than controller heuristics
 
-- simply connecting bilateral public sensory anchors to a tiny DN bottleneck does not work
-- hiding locomotion behind decoder or body fallback creates misleading demo behavior
-- optic-lobe relay cells must not be treated as motor output
-- the visual bridge was too lossy even before the whole-brain backend saw the data
-- improving the input side alone is not enough; the output bottleneck is also structural
+What remains unresolved is not whether the system can move or even whether it can steer in a target-signed way. The remaining gap is a richer internal scaffold for heading, goal persistence, steering gain, and reorientation policy, plus a more biological output pathway. The next biologically plausible move is therefore not another controller patch. It is to extend the decoder-internal latent beyond signed steering error toward a better-structured heading/goal scaffold and to validate spontaneous-state effects in matched embodied assays.
 
 ## 7. Limitations
 
-The current limitations are precise.
+This study has clear limitations.
 
-First, the validated WSL production path is CPU-only for FlyVis because public `sm_120` wheel support is still absent. This constrains runtime severely.
+First, the public/private boundary remains real. The exact Eon integration logic is not public, so this repo is a public-equivalent reconstruction rather than an exact clone.
 
-Second, the current motor interface remains compressed. The decoder maps descending and efferent population activity into `left_drive` and `right_drive`, and FlyGym then transforms those into gait. This is materially better than the older hacks, but it is still not a full biological motor pathway.
+Second, the sensory splice is still inferred. It is more strongly grounded than the original scalar bridge, but it is not an exact neuron-identity mapping between FlyVis and FlyWire.
 
-Third, the whole-brain backend already has structural edge weights, but much of the physiology remains globally parameterized. Better functional-weight estimation or richer cell-class physiology could change longer-window dynamics.
+Third, the motor output remains compressed. Even the best current branch still maps rich brain state into a compact body-facing locomotor interface rather than a full VNC-to-muscle pathway.
 
-Fourth, the visual splice is still an inferred overlap splice. It is grounded more strongly than the original scalar bridge, but exact FlyVis-to-FlyWire neuron identity and fine retinotopic column alignment remain unresolved.
+Fourth, the current leading branch improves perturbation-linked steering but still fails frontal refixation within `2.0 s`. It therefore does not justify claims of robust reacquisition, orientation memory, or full pursuit parity.
 
-Fifth, the current strongest locomotion result is not pure target pursuit. The rest of the visual scene still drives locomotion substantially.
+Fifth, the spontaneous-state program has only cleared a brain-only plausibility gate so far. It is not yet an embodied production claim.
 
-Sixth, the broader semantic-VNC replacement program is still incomplete. A real MANC-derived semantic-VNC branch now exists and is no longer blocked by raw ID mismatch, silent decoding, or off-screen framing, but it still fails target-tracking parity. That means broader structural coverage alone is not yet enough to replace the current sampled descending decoder.
+Sixth, realistic vision remains performance-limited on this hardware in WSL because public wheels do not support `sm_120`.
 
-## 8. Comparison With The Subsequent Eon Embodiment Update
+## 8. Methods
 
-After the work in this repo, Eon published a new embodiment update:
+### 8.1 Environments and installation
 
-- `https://eon.systems/updates/embodied-brain-emulation`
+The repo uses a split environment strategy because modern FlyGym and the secondary Brian2 benchmark stack are not cleanly co-installable. Bootstrap and validation are scripted in:
 
-The post is important because it narrows what their current public embodiment appears to be.
+- [bootstrap_wsl.sh](/G:/flysim/scripts/bootstrap_wsl.sh)
+- [bootstrap_env.sh](/G:/flysim/scripts/bootstrap_env.sh)
+- [check_cuda.sh](/G:/flysim/scripts/check_cuda.sh)
+- [check_mujoco.sh](/G:/flysim/scripts/check_mujoco.sh)
 
-### 8.1 What the new Eon update now makes explicit
+### 8.2 Closed-loop runtime
 
-The post says, in substance:
+The closed loop is orchestrated in [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py). The body runtime is [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py). The production brain backend is [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py). The primary decoder is [decoder.py](/G:/flysim/src/bridge/decoder.py).
 
-- they are using the Shiu-style simplified LIF whole-brain model rather than disclosing a radically different full biological brain core
-- they run a visual-system model and feed those activations into the brain model
-- they synchronize brain and body every `15 ms`
-- they use slightly modified existing NeuroMechFly controllers trained by imitation learning for walking
-- they do not know the exact mapping from brain outputs to locomotion-controller inputs
-- their current visual input is not yet significantly influencing the embodied behavior
+### 8.3 Visual boundary
 
-This matters because it weakens any theory that the public demo must already have depended on a fully solved, biologically faithful, end-to-end controller hidden behind the scenes.
+The production bridge uses [visual_splice.py](/G:/flysim/src/bridge/visual_splice.py) to convert realistic visual activity into grounded direct brain-side input. The splice program was calibrated body-free before embodied promotion.
 
-### 8.2 What the Eon update confirms from this repo
+### 8.4 Perturbation assays
 
-The new post largely confirms the central diagnosis reached here:
+Stimulus-side target perturbations are implemented in [target_schedule.py](/G:/flysim/src/body/target_schedule.py). Behavioral metrics, including jump and brief-removal summaries, are computed in [behavior_metrics.py](/G:/flysim/src/analysis/behavior_metrics.py). These assays do not provide privileged target metadata to the controller.
 
-1. The hard problem is the interface.
-- The unresolved system is the splice between vision, brain, and embodied control.
-- That matches the findings in `docs/splice_probe_results.md`.
+### 8.5 Decoder-internal brain latent
 
-2. Existing locomotion controllers still matter.
-- Their disclosed embodiment still uses modified NeuroMechFly controllers.
-- This repo also still relies on FlyGym / NeuroMechFly control machinery underneath the body wrappers.
+The current leading branch reads monitored brain voltage inside [decoder.py](/G:/flysim/src/bridge/decoder.py) through a matched target/no-target latent library built by:
 
-3. Output mapping is still heuristic.
-- Their post now explicitly says they do not know the exact correspondence between brain outputs and controller inputs.
-- That matches the current limitation here: `src/bridge/decoder.py` still compresses descending and efferent population activity into `left_drive` and `right_drive`.
+- [brain_latent_library.py](/G:/flysim/src/analysis/brain_latent_library.py)
+- [build_brain_turn_latent_library.py](/G:/flysim/scripts/build_brain_turn_latent_library.py)
 
-### 8.3 Where this repo is currently stronger
+The live config set is:
 
-This repo currently has stronger explicit evidence that the embodied branch is visually driven.
+- [target jump latent config](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn.yaml)
+- [no-target latent config](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_latent_turn.yaml)
+- [zero-brain latent config](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_zero_brain_target_jump_brain_latent_turn.yaml)
 
-The strongest current branch:
+### 8.6 Activation visualization
 
-- has a matched `zero_brain` control
-- has a matched no-target control
-- logs target state directly from simulation
-- shows:
-  - `corr(right_drive - left_drive, target_bearing) = 0.8810`
-  - target-present runs increase drive and steering asymmetry relative to no-target runs
+Same-run activation capture and rendering are handled by:
 
-Those results are documented in:
+- [session.py](/G:/flysim/src/visualization/session.py)
+- [activation_viz.py](/G:/flysim/src/visualization/activation_viz.py)
 
-- `docs/uvgrid_decoder_calibration.md`
+The capture bundle for the current leading branch is:
 
-By contrast, the Eon update explicitly says that their current visual input is not yet significantly influencing the embodied behavior.
+- [activation_capture.npz](/G:/flysim/outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819/activation_capture.npz)
 
-### 8.4 Where the Eon path may still be ahead
+### 8.7 Testing and acceptance
 
-The Eon post likely reflects a more polished controller-mediated embodiment layer.
+Promoted claims required tests and saved artifacts. The relevant focused suites for the current branch include:
 
-In particular:
+- [test_bridge_unit.py](/G:/flysim/tests/test_bridge_unit.py)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+- [test_turn_voltage_library.py](/G:/flysim/tests/test_turn_voltage_library.py)
+- [test_spontaneous_state_unit.py](/G:/flysim/tests/test_spontaneous_state_unit.py)
 
-- they describe modified imitation-learning-based NeuroMechFly walking controllers
-- this repo still uses a hand-built descending-population decoder into a two-drive interface
+The branch progression and claim logic are tracked continuously in:
 
-So the most likely tradeoff is:
+- [TASKS.md](/G:/flysim/TASKS.md)
+- [PROGRESS_LOG.md](/G:/flysim/PROGRESS_LOG.md)
+- [ASSUMPTIONS_AND_GAPS.md](/G:/flysim/ASSUMPTIONS_AND_GAPS.md)
 
-- their disclosed embodiment may currently be smoother as a practical controller stack
-- this repo is currently stronger on explicit visual-drive validation and falsification logic
+## 9. Author Contributions
 
-### 8.5 Bottom line of the comparison
+The author conceived and led the reconstruction effort, defined the evaluation and falsification framework, implemented or supervised the bridge, runtime, decoder, assay, and visualization stack, ran the reported analyses, and wrote the manuscript.
 
-The subsequent Eon post does not invalidate the direction of this repo. It mostly confirms it.
+## 10. Reproducibility and Principal Artifacts
 
-The public evidence now supports this interpretation:
+The current leading branch is reproduced by the run roots:
 
-- the whole-brain core is only one part of the problem
-- the real systems bottleneck is the interface between vision, brain dynamics, and embodied control
-- the current public state of the art is still controller-mediated and heuristic at the body interface
-- exact biologically grounded output semantics remain unresolved on both sides
+- [target run](/G:/flysim/outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819)
+- [no-target run](/G:/flysim/outputs/requested_2s_calibrated_no_target_brain_latent_turn/flygym-demo-20260315-063511)
+- [zero-brain run](/G:/flysim/outputs/requested_2s_calibrated_zero_brain_target_jump_brain_latent_turn/flygym-demo-20260315-065048)
 
-## 9. Reproducibility
+The key comparison summary is:
 
-### 9.1 Core setup
+- [brain_latent_turn_live_comparison.json](/G:/flysim/outputs/metrics/brain_latent_turn_live_comparison.json)
 
-From WSL:
+The main negative-result branch remains frozen at:
 
-```bash
-bash scripts/bootstrap_wsl.sh
-bash scripts/bootstrap_env.sh
-~/.local/bin/micromamba run -n flysim-full bash scripts/check_cuda.sh
-~/.local/bin/micromamba run -n flysim-full bash scripts/check_mujoco.sh
-python -m pytest tests/test_imports.py tests/test_bridge_unit.py tests/test_closed_loop_smoke.py tests/test_realistic_vision_path.py tests/test_benchmark_output_format.py tests/test_artifact_generation.py
-```
+- [semantic_vnc_failed_parity_branch.md](/G:/flysim/docs/semantic_vnc_failed_parity_branch.md)
 
-### 9.2 Reproduce the strongest current embodied claim
+The main spontaneous-state summary is:
 
-Run these from WSL:
-
-```bash
-export MUJOCO_GL=egl
-~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_uvgrid_descending_calibrated_target --output-csv outputs/benchmarks/fullstack_splice_uvgrid_descending_calibrated_target_2s.csv
-~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_uvgrid_descending_calibrated_no_target --output-csv outputs/benchmarks/fullstack_splice_uvgrid_descending_calibrated_no_target_2s.csv
-~/.local/bin/micromamba run -n flysim-full python benchmarks/run_fullstack_with_realistic_vision.py --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_zero_brain.yaml --mode flygym --duration 2.0 --output-root outputs/requested_2s_splice_uvgrid_descending_calibrated_zero_brain --output-csv outputs/benchmarks/fullstack_splice_uvgrid_descending_calibrated_zero_brain_2s.csv
-python scripts/summarize_descending_visual_drive.py --target-metrics outputs/requested_2s_splice_uvgrid_descending_calibrated_target/flygym-demo-20260311-071452/metrics.csv --target-log outputs/requested_2s_splice_uvgrid_descending_calibrated_target/flygym-demo-20260311-071452/run.jsonl --no-target-metrics outputs/requested_2s_splice_uvgrid_descending_calibrated_no_target/flygym-demo-20260311-073028/metrics.csv --no-target-log outputs/requested_2s_splice_uvgrid_descending_calibrated_no_target/flygym-demo-20260311-073028/run.jsonl --zero-brain-metrics outputs/requested_2s_splice_uvgrid_descending_calibrated_zero_brain/flygym-demo-20260311-074301/metrics.csv --zero-brain-log outputs/requested_2s_splice_uvgrid_descending_calibrated_zero_brain/flygym-demo-20260311-074301/run.jsonl --csv-output outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.csv --json-output outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.json
-```
-
-Expected summary artifacts:
-
-- `outputs/metrics/descending_uvgrid_calibrated_visual_drive_validation.json`
-- `docs/uvgrid_decoder_calibration.md`
-
-### 9.3 Reproduce the body-free splice program
-
-```bash
-python scripts/run_splice_probe.py
-python scripts/run_splice_calibration.py
-python scripts/summarize_splice_calibration.py
-python scripts/find_splice_relay_candidates.py
-python scripts/run_splice_relay_probe.py
-python scripts/summarize_relay_drift.py
-```
-
-### 9.4 Reproduce feeding and grooming brain tasks
-
-```bash
-python scripts/run_feeding_probe.py --config configs/default.yaml
-python scripts/run_grooming_probe.py --config configs/default.yaml
-```
-
-### 9.5 Reproduce the synchronized activation visualization
-
-From WSL:
-
-```bash
-export MUJOCO_GL=egl
-~/.local/bin/micromamba run -n flysim-full python scripts/build_best_branch_activation_visualization.py --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_monitored.yaml --mode flygym --duration 2.0 --output-root outputs/visualizations/current_best_branch_activation
-```
-
-Expected summary artifact:
-
-- `outputs/visualizations/current_best_branch_activation/activation-viz-20260312-202618/summary.json`
-
-## 10. Immediate Next Steps
-
-The current next steps are already tracked in `TASKS.md`:
-
-- `T063`: improve per-cell-type column alignment beyond the current coarse shared UV-grid
-- `T064`: identify which downstream recurrent pathways or readout assumptions drive the `500 ms` sign collapse
-- `T072`: clarify or stabilize the short side-isolated left/right pursuit response
-- `T076`: embody the new feeding and grooming tasks using grounded body-side sensory and motor interfaces
-
-The highest-value next loop remains body-free splice refinement plus descending-path analysis. That is still the shortest path to a more defensible embodied controller because it isolates interface failures before expensive body runs are reintroduced.
-
-The semantic-VNC branch should not be the active parity path right now. It is preserved as a useful negative result and should only be revisited as a new branch with new output roots, not by mutating the frozen artifacts in place.
+- [spontaneous_state_results.md](/G:/flysim/docs/spontaneous_state_results.md)
 
 ## 11. Conclusion
 
-This project now provides a reproducible public-equivalent embodied fly stack that is materially stronger than a thin demo wrapper around public repos. It includes persistent online control, realistic vision, a recurrent whole-brain backend, benchmark and profiler evidence, negative-control logic, and a descending-only embodied branch whose movement disappears in a `zero_brain` control and is measurably modulated by a moving target under realistic vision. It also includes grounded feeding and grooming brain-task reproductions ready for later embodiment work.
+OpenFly now constitutes a reproducible public-equivalent reconstruction of an embodied *Drosophila* brain-body stack assembled from open components. The study did not merely glue together public repos; it built the missing online bridge, enforced matched controls, falsified incorrect interfaces, and narrowed the current bottleneck to a biologically meaningful region of the system. The strongest earlier branch established credible brain-driven, visually modulated embodied locomotion. The current leading branch, `requested_2s_calibrated_target_jump_brain_latent_turn`, goes further by improving jump-linked steering through a decoder-internal latent derived from monitored brain state while preserving bounded `no_target` behavior and silent `zero_brain` controls.
 
-The central scientific and engineering discovery is that the problem was never just to run the public components together. The crucial work was at the splice and the output abstraction. The original scalar bridge destroyed useful visual structure, and the original motor readout was too narrow. A calibrated, grounded splice and a broader descending-only readout jointly moved the system from misleading fallback-heavy behavior to evidence-backed brain-driven visuomotor locomotion.
-
-That is meaningful progress, but not the end state. Exact biological motor semantics, finer visual alignment, longer-window recurrent stability, and full embodiment of additional tasks remain unresolved. The current parity verdict therefore remains partial.
+That is a significant result, but it is not yet the end state. The system still lacks robust frontal refixation after perturbation, a fully grounded heading/goal scaffold, an embodied spontaneous-state validation, and a biologically richer output pathway. The correct verdict is therefore not final parity, but a strong public-equivalent partial reconstruction whose current best branch is scientifically useful, visually compelling, and honest about its remaining gaps.
 
 ## References
 
-1. Shiu, P. K., Sterne, G. R., Spiller, N. et al. *A Drosophila computational brain model reveals sensorimotor processing*. Nature 634, 210-219 (2024). `https://www.nature.com/articles/s41586-024-07763-9`
-2. Dorkenwald, S., McKellar, C., Macrina, T. et al. *Neuronal wiring diagram of an adult brain*. Nature 634, 124-138 (2024). `https://www.nature.com/articles/s41586-024-07558-y`
-3. Schlegel, P., Bates, A. S., Stuerner, T. et al. *Whole-brain annotation and multi-connectome cell typing of Drosophila*. Nature 634, 153-163 (2024). `https://www.nature.com/articles/s41586-024-07686-5`
-4. Eichler, K., Li, F., Litwin-Kumar, A. et al. *Network statistics of the whole-brain connectome of Drosophila*. Nature 634, 164-171 (2024). `https://www.nature.com/articles/s41586-024-07968-y`
-5. Vaxenburg, R., Rockenfeller, B., Bidaye, S. S. et al. *NeuroMechFly v2: simulating embodied sensorimotor control in adult Drosophila*. Nature Methods 22 (2024). `https://www.nature.com/articles/s41592-024-02497-y`
-6. `eonsystemspbc/fly-brain` public repository. `https://github.com/eonsystemspbc/fly-brain`
-7. `NeLy-EPFL/flygym` public repository. `https://github.com/NeLy-EPFL/flygym`
+1. Shiu, P. K., Sterne, G. R., Spiller, N., et al. *A Drosophila computational brain model reveals sensorimotor processing*. Nature 634, 210-219 (2024). https://www.nature.com/articles/s41586-024-07763-9
+2. Dorkenwald, S., McKellar, C., Macrina, T., et al. *Neuronal wiring diagram of an adult brain*. Nature 634, 124-138 (2024). https://www.nature.com/articles/s41586-024-07558-y
+3. Schlegel, P., Bates, A. S., Stuerner, T., et al. *Whole-brain annotation and multi-connectome cell typing of Drosophila*. Nature 634, 153-163 (2024). https://www.nature.com/articles/s41586-024-07686-5
+4. Eichler, K., Li, F., Litwin-Kumar, A., et al. *Network statistics of the whole-brain connectome of Drosophila*. Nature 634, 164-171 (2024). https://www.nature.com/articles/s41586-024-07968-y
+5. Vaxenburg, R., Rockenfeller, B., Bidaye, S. S., et al. *NeuroMechFly v2: simulating embodied sensorimotor control in adult Drosophila*. Nature Methods 22 (2024). https://www.nature.com/articles/s41592-024-02497-y
+6. Aimon, S., Katsuki, T., Jia, T., et al. *Walking and turning shape brain-wide activity in Drosophila*. eLife 12 (2023). https://elifesciences.org/articles/85202
+7. Geurten, B. R. H., Jahde, P., Corthals, K., Gopfert, M. C. *Saccadic body turns in walking Drosophila*. Journal of Comparative Physiology A 200, 653-663 (2014). https://pmc.ncbi.nlm.nih.gov/articles/PMC4205811/
+8. Moore, R. J. D., Taylor, G. J., Paulk, A. C., Pearson, T., van Swinderen, B. *Separable visual feature extraction and fixation behavior in Drosophila*. Scientific Reports 4, 4768 (2014). https://pmc.ncbi.nlm.nih.gov/articles/PMC6605338/
+9. Xiong, Y., Lv, H., Gong, Z., Liu, L. *Fixation and menotaxis behavior in freely walking Drosophila*. PLoS Computational Biology 16, e1007843 (2020). https://pmc.ncbi.nlm.nih.gov/articles/PMC7843020/
+10. Neuser, K., Triphan, T., Mronz, M., Poeck, B., Strauss, R. *Analysis of a spatial orientation memory in Drosophila*. Nature 453, 1244-1247 (2008). https://pubmed.ncbi.nlm.nih.gov/18509336/
+11. Kuntz, S., Poeck, B., Strauss, R. *Visual working memory in Drosophila*. Journal of Neurogenetics 26, 351-364 (2012). https://pubmed.ncbi.nlm.nih.gov/22815538/
+12. `eonsystemspbc/fly-brain` public repository. https://github.com/eonsystemspbc/fly-brain
+13. `NeLy-EPFL/flygym` public repository. https://github.com/NeLy-EPFL/flygym
