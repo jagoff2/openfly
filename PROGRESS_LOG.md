@@ -207,6 +207,79 @@ Ground truth source: `AGENTS.MD`
 - Update `docs/install_report.md`, `docs/benchmark_summary.md`, `docs/perf_tuning.md`, `docs/multi_gpu_evaluation.md`, `ASSUMPTIONS_AND_GAPS.md`, and `REPRO_PARITY_REPORT.md` with the WSL findings.
 - Harden `README.md` so the documented quick start matches the now-validated WSL workflow exactly.
 
+## 2026-03-18 - Living-branch mesoscale spontaneous-state validation
+
+1. What I attempted
+- Fixed the spontaneous-data validation seam on the living branch instead of treating mesoscale validation as a pure literature note.
+- Added a public spontaneous-dataset registry plus a deterministic metadata fetch path for Aimon 2023 Dryad and related spontaneous-state anchors.
+- Staged the Aimon 2023 `README.md` and `GoodICsdf.pkl` artifacts that were actually obtainable in this environment.
+- Implemented a living-branch mesoscale validator over the spontaneous-refit `target` / `no_target` pair using run logs, activation captures, the FlyWire annotation supplement, and completeness ordering.
+- Ran focused tests, metadata fetch, and the full validation script.
+
+2. What succeeded
+- The repo now has a real spontaneous-dataset source registry:
+  - `src/brain/spontaneous_data_sources.py`
+- The repo now has reusable public-dataset inspectors:
+  - `src/analysis/public_spontaneous_dataset.py`
+- The repo now fetches and records Aimon 2023 Dryad metadata and access status:
+  - `scripts/fetch_spontaneous_public_data.py`
+  - `external/spontaneous/aimon2023_dryad/spontaneous_public_dataset_aimon2023_dryad_manifest.json`
+  - `external/spontaneous/aimon2023_dryad/spontaneous_public_dataset_aimon2023_dryad_access_report.json`
+- The repo now stages the small Aimon 2023 artifacts already obtained:
+  - `external/spontaneous/aimon2023_dryad/README.md`
+  - `external/spontaneous/aimon2023_dryad/GoodICsdf.pkl`
+- The first living-branch mesoscale validation bundle now exists:
+  - `scripts/run_spontaneous_mesoscale_validation.py`
+  - `src/analysis/spontaneous_mesoscale_validation.py`
+  - `outputs/metrics/spontaneous_mesoscale_validation_summary.json`
+  - `outputs/metrics/spontaneous_mesoscale_validation_components.csv`
+  - `outputs/metrics/spontaneous_mesoscale_target_family_turn_table.csv`
+  - `outputs/metrics/spontaneous_mesoscale_no_target_family_turn_table.csv`
+  - `outputs/plots/spontaneous_mesoscale_onset_curves.png`
+  - `outputs/plots/spontaneous_mesoscale_bilateral_corr_hist.png`
+  - `outputs/plots/spontaneous_mesoscale_turn_family_corr.png`
+- Current living-branch mesoscale result:
+  - non-quiescent awake state: pass
+  - matched living baseline: pass
+  - walk-linked global modulation: pass
+  - bilateral family coupling: pass
+  - residual high-dimensional structure: pass
+  - residual temporal structure: pass
+  - turn-linked spatial heterogeneity: pass
+  - forced-vs-spontaneous walk similarity: not yet evaluated
+  - connectome-function correspondence: not yet evaluated
+- Focused validation passed:
+  - `18 passed` across the new spontaneous-data and mesoscale-validation tests plus the existing spontaneous-state and living-activation tests
+
+3. What failed
+- Dryad direct file API endpoints still return `401 Unauthorized` in scripted checks from this environment.
+- The large Aimon 2023 bundles are still not staged locally:
+  - `Walk_anatomical_regions.zip`
+  - `Walk_components.zip`
+  - `Additional_data.zip`
+- So the current mesoscale pass is strong and useful, but it is still based on:
+  - living-branch run outputs
+  - public literature anchors
+  - public Dryad metadata
+  - small local Aimon 2023 metadata artifacts
+  rather than the full public regional/component timeseries bundles.
+
+4. Evidence paths
+- `docs/spontaneous_mesoscale_validation.md`
+- `external/spontaneous/aimon2023_dryad/local_dataset_summary.json`
+- `external/spontaneous/aimon2023_dryad/spontaneous_public_dataset_aimon2023_dryad_manifest.json`
+- `external/spontaneous/aimon2023_dryad/spontaneous_public_dataset_aimon2023_dryad_access_report.json`
+- `outputs/metrics/spontaneous_mesoscale_validation_summary.json`
+- `outputs/metrics/spontaneous_mesoscale_validation_components.csv`
+- `outputs/plots/spontaneous_mesoscale_onset_curves.png`
+- `outputs/plots/spontaneous_mesoscale_bilateral_corr_hist.png`
+- `outputs/plots/spontaneous_mesoscale_turn_family_corr.png`
+
+5. Next actions
+- Add a forced-walk assay so the living branch can be judged against the Aimon 2023 spontaneous-vs-forced mesoscale comparison directly.
+- Add a connectome-to-functional-coupling comparison layer for the living branch.
+- Stage and ingest the full Aimon 2023 regional/component bundles when a deterministic public download path is made reliable enough for this repo.
+
 ## 2026-03-08 - Longest stable demo, profiling, and acceptance hardening
 
 1. What I attempted
@@ -6444,3 +6517,418 @@ Interpretation:
   spontaneous state.
 - Keep the project claim ceiling at mesoscale physiological validation unless
   materially stronger public datasets appear.
+## 2026-03-18 11:42 - Mesoscale validation extended on the living-brain branch
+
+1. What I attempted
+- Repaired and extended the living-branch mesoscale validation slice rather
+  than treating it as a one-off summary artifact.
+- Used sub-agents for three parallel tracks:
+  - validator bug / code-path review
+  - public spontaneous-dataset access review
+  - literature-grounded mesoscale acceptance spec
+- Re-ran the canonical mesoscale bundle on the spontaneous-refit living
+  `target` / `no_target` pair after patching the validator and dataset tools.
+
+2. What succeeded
+- Fixed the public Dryad metadata path so the scripted manifest fetch now
+  resolves relative API `href` values consistently and writes current outputs:
+  - `outputs/metrics/spontaneous_public_dataset_aimon2023_dryad_manifest.json`
+  - `outputs/metrics/spontaneous_public_dataset_aimon2023_dryad_access_report.json`
+  - `outputs/metrics/spontaneous_public_dataset_aimon2023_dryad_files.csv`
+- Extended the canonical mesoscale validator in:
+  - `src/analysis/spontaneous_mesoscale_validation.py`
+  with a new surrogate-tested family-structure criterion.
+- Re-ran:
+  - `python scripts/run_spontaneous_mesoscale_validation.py`
+  and refreshed:
+  - `outputs/metrics/spontaneous_mesoscale_validation_summary.json`
+  - `outputs/metrics/spontaneous_mesoscale_validation_components.csv`
+- Focused validation passed:
+  - `23 passed`
+  - files:
+    - `tests/test_spontaneous_mesoscale_validation.py`
+    - `tests/test_public_spontaneous_dataset.py`
+    - `tests/test_spontaneous_state_unit.py`
+    - `tests/test_spontaneous_state.py`
+    - `tests/test_spontaneous_data_sources.py`
+
+3. What I learned
+- The living branch now clears a materially stronger mesoscale slice than the
+  earlier state:
+  - non-quiescent awake baseline: pass
+  - matched living target / no-target baseline: pass
+  - walk-linked global modulation: pass
+  - bilateral family coupling: pass
+  - family structure above a circular-shift surrogate: pass
+    - `target ratio = 2.6001`
+    - `no_target ratio = 2.7912`
+  - residual high-dimensional structure: pass
+  - residual temporal structure: pass
+  - turn-linked spatial heterogeneity: pass
+  - connectome-to-function correspondence: pass, but weak-effect
+    - `target log corr = 0.0545`
+    - `no_target log corr = 0.0534`
+- The current strongest honest label is no longer just “awake and plausible”.
+  It is now:
+  - living-branch mesoscale spontaneous-state validation: real and partial
+
+4. What failed
+- Forced-vs-spontaneous public comparison is still not executable locally.
+- `Walk_components.zip` is present under
+  `external/spontaneous/aimon2023_dryad/`, but its local size does not match
+  the public manifest, so it is not yet counted as validated staged evidence.
+- `Walk_anatomical_regions.zip` and `Additional_data.zip` remain unstaged.
+
+5. Evidence
+- Docs:
+  - `docs/spontaneous_mesoscale_validation.md`
+- Metrics:
+  - `outputs/metrics/spontaneous_mesoscale_validation_summary.json`
+  - `outputs/metrics/spontaneous_mesoscale_validation_components.csv`
+  - `outputs/metrics/spontaneous_public_dataset_aimon2023_dryad_manifest.json`
+  - `outputs/metrics/spontaneous_public_dataset_aimon2023_dryad_access_report.json`
+- Plots:
+  - `outputs/plots/spontaneous_mesoscale_onset_curves.png`
+  - `outputs/plots/spontaneous_mesoscale_bilateral_corr_hist.png`
+  - `outputs/plots/spontaneous_mesoscale_turn_family_corr.png`
+
+6. Next actions
+- Stage a verified full local copy of the public Aimon large timeseries
+  bundles, not just metadata and small support files.
+- Add the forced-vs-spontaneous mesoscale comparator once those bundles are
+  locally validated.
+- Keep the living-branch mesoscale bundle as the default spontaneous-state
+  claim gate going forward.
+## 2026-03-18 11:58 - Living-branch mesoscale validation extended with structure-function evidence
+
+1. What I attempted
+- Repaired and re-ran the canonical living-branch mesoscale validation bundle on
+  the spontaneous-refit `target` / `no_target` pair.
+- Strengthened the validator to handle controller/brain frame-length mismatch
+  explicitly instead of relying on matching shapes by accident.
+- Integrated a family-scale connectome-to-functional coupling comparison using
+  the local FlyWire sparse weight cache.
+- Re-fetched the Aimon 2023 public manifest and access report to confirm the
+  current public-data boundary before extending the criteria.
+- Started a scripted Zenodo staging attempt for `Walk_components.zip` to push
+  the public forced-vs-spontaneous slice forward.
+
+2. What succeeded
+- The canonical bundle now completes cleanly and writes updated evidence:
+  - `outputs/metrics/spontaneous_mesoscale_validation_summary.json`
+  - `outputs/metrics/spontaneous_mesoscale_validation_components.csv`
+  - `outputs/metrics/spontaneous_mesoscale_target_family_turn_table.csv`
+  - `outputs/metrics/spontaneous_mesoscale_no_target_family_turn_table.csv`
+- The validator now records connectome/function correspondence instead of
+  leaving it unevaluated:
+  - raw family-scale structure/function corr:
+    - `target = 0.00998`
+    - `no_target = 0.00989`
+  - `log1p`-weight family-scale structure/function corr:
+    - `target = 0.05449`
+    - `no_target = 0.05339`
+- Focused validation is clean:
+  - `python -m pytest tests/test_spontaneous_mesoscale_validation.py tests/test_public_spontaneous_dataset.py tests/test_spontaneous_data_sources.py tests/test_spontaneous_state.py tests/test_spontaneous_state_unit.py -q`
+  - result: `20 passed`
+- Updated the living spontaneous-state docs/tracker:
+  - `docs/spontaneous_mesoscale_validation.md`
+  - `TASKS.md`
+  - `ASSUMPTIONS_AND_GAPS.md`
+
+3. What I learned
+- The living-brain mesoscale slice is stronger than the prior repo state in two
+  concrete ways:
+  - it is robust to the old frame-alignment failure mode
+  - it now shows weak but real family-scale structure/function alignment to the
+    public connectome after log-weight aggregation
+- The correct claim boundary is now sharper:
+  - mesoscale awake-state structure: real
+  - connectome/function family-scale alignment: weak positive, not absent
+  - forced-vs-spontaneous public-timeseries comparison: still missing
+- The Aimon public metadata and `GoodICsdf.pkl` confirm the public comparator
+  exists across `271` experiments with both spontaneous and forced walk/turn
+  regressors, so the remaining gap is data staging and analysis, not a missing
+  public concept.
+
+4. What failed
+- The scripted Zenodo staging attempt for `Walk_components.zip` did not yet
+  produce a local file, so that attempt is not counted as completed public-data
+  staging evidence.
+
+5. Evidence
+- `src/analysis/spontaneous_mesoscale_validation.py`
+- `src/analysis/mesoscale_validation.py`
+- `scripts/run_spontaneous_mesoscale_validation.py`
+- `outputs/metrics/spontaneous_mesoscale_validation_summary.json`
+- `outputs/metrics/spontaneous_public_dataset_aimon2023_dryad_manifest.json`
+- `outputs/metrics/spontaneous_public_dataset_aimon2023_dryad_access_report.json`
+- `docs/spontaneous_mesoscale_validation.md`
+
+6. Next actions
+- Stage the large Aimon timeseries bundles locally through a reliable path.
+- Add the public forced-vs-spontaneous comparator to the living-branch
+  mesoscale validator.
+- Keep comparing only within the awakened living regime for spontaneous-state
+  claims.
+## 2026-03-18 16:29 - Aimon public forced-vs-spontaneous comparator resolved and staged locally
+
+1. What I attempted
+- Resolved the lingering public-comparator blocker on the living-brain branch by
+  treating `Walk_components.zip` as a validation question instead of the
+  comparator substrate, then inspecting the staged Aimon archives directly.
+- Repaired the forced-vs-spontaneous comparator so it uses the real public
+  substrate, tolerates missing regressor pointers when valid window bounds and
+  full regional traces exist, masks `NaN` rows before similarity metrics, and
+  drops overlapping public windows explicitly instead of silently failing.
+- Refreshed the staged public-dataset summaries and reran the canonical
+  spontaneous mesoscale validation writer on the living branch.
+
+2. What succeeded
+- All five canonical Aimon files are now staged locally and verified against the
+  recorded Zenodo-backed registry:
+  - `README.md`
+  - `GoodICsdf.pkl`
+  - `Walk_anatomical_regions.zip`
+  - `Walk_components.zip`
+  - `Additional_data.zip`
+- The refreshed local summary confirms exact SHA256 and zip-integrity matches:
+  - `external/spontaneous/aimon2023_dryad/local_dataset_summary.json`
+  - `outputs/metrics/local_dataset_summary.json`
+- The real public comparator is now live and reproducible:
+  - `src/analysis/aimon_public_comparator.py`
+  - `outputs/metrics/aimon_forced_spontaneous_comparator_summary.json`
+  - `outputs/metrics/aimon_forced_spontaneous_comparator_rows.csv`
+  - `outputs/metrics/spontaneous_public_forced_vs_spontaneous_table.csv`
+- Focused validation is clean:
+  - `python -m pytest tests/test_aimon_public_comparator.py tests/test_spontaneous_mesoscale_validation.py tests/test_public_spontaneous_dataset.py tests/test_spontaneous_data_sources.py tests/test_aimon_components_summary.py -q`
+  - result: `24 passed`
+
+3. What I learned
+- `Walk_components.zip` was never the decisive public comparator substrate.
+- The correct comparator path is:
+  - `GoodICsdf.pkl` for public experiment IDs and spontaneous/forced windows
+  - `Additional_data.zip`
+    - `FunctionallyDefinedAnatomicalRegions/*.mat` for full-length regional
+      traces
+    - `AllRegressors/*.mat` for walk / forced regressor metadata
+  - `Walk_anatomical_regions.zip` only as a secondary source when useful
+- The public overlap is small and messy:
+  - candidate rows in `GoodICsdf.pkl`: `4`
+  - usable distinct comparisons: `2`
+  - surviving experiments: `B350`, `B1269`
+  - dropped experiments: `B1037`, `B378`
+  - drop reason: spontaneous/forced public windows overlap too strongly to
+    support an honest comparison
+- The living-branch public forced-vs-spontaneous slice is now real but partial:
+  - `median_steady_walk_vector_corr = -0.2016`
+  - `median_steady_walk_vector_cosine = -0.1868`
+  - `median_steady_walk_rank_corr = -0.2013`
+  - `median_spontaneous_prelead_fraction = 0.6241`
+  - `median_spontaneous_minus_forced_prelead_delta = 0.01393`
+
+4. What failed
+- The public comparator does not pass as a strong steady-state
+  forced-vs-spontaneous similarity result on the currently valid subset.
+- `B350` is actively negative on the steady-state similarity measures, while
+  `B1269` is only weakly positive.
+- So the public Aimon slice now constrains the living branch as a mixed partial
+  criterion, not a clean validation pass.
+
+5. Evidence
+- `src/analysis/aimon_public_comparator.py`
+- `src/analysis/spontaneous_mesoscale_validation.py`
+- `scripts/fetch_spontaneous_public_data.py`
+- `scripts/run_aimon_forced_spontaneous_comparator.py`
+- `scripts/run_spontaneous_mesoscale_validation.py`
+- `external/spontaneous/aimon2023_dryad/local_dataset_summary.json`
+- `outputs/metrics/aimon_forced_spontaneous_comparator_summary.json`
+- `outputs/metrics/aimon_forced_spontaneous_comparator_rows.csv`
+- `outputs/metrics/spontaneous_mesoscale_validation_summary.json`
+- `docs/aimon_public_comparator_resolution.md`
+- `docs/spontaneous_mesoscale_validation.md`
+
+6. Next actions
+- Keep the living-branch mesoscale bundle as the default spontaneous-state claim
+  gate.
+- When building a repo-side forced-walk assay, align it first to the surviving
+  public Aimon subset instead of assuming every `GoodICsdf` row is usable.
+- Continue evaluating spontaneous-state claims only within the awakened living
+  regime.
+
+## 2026-03-18 13:24 - Public Aimon forced-vs-spontaneous comparator resolved
+
+1. What I attempted
+- Resolved the stalled public Aimon forced-vs-spontaneous comparator instead of
+  treating it as a file-staging problem.
+- Treated `Walk_components.zip` as acceptable local evidence per the user's
+  instruction, then verified the actual staged dataset contents and repaired the
+  comparator path against the live public files.
+- Used parallel sidecar analysis for comparator-path review while keeping the
+  main work local and reproducible.
+
+2. What succeeded
+- Refreshed the staged public-data summaries:
+  - `outputs/metrics/local_dataset_summary.json`
+  - `external/spontaneous/aimon2023_dryad/local_dataset_summary.json`
+- Confirmed the full declared Aimon file set is locally staged and digest-valid:
+  - `README.md`
+  - `GoodICsdf.pkl`
+  - `Walk_anatomical_regions.zip`
+  - `Walk_components.zip`
+  - `Additional_data.zip`
+- Repaired the comparator code in:
+  - `src/analysis/aimon_public_comparator.py`
+- Aligned the standalone CLI to the repaired comparator:
+  - `scripts/run_aimon_forced_spontaneous_comparator.py`
+- Re-ran the comparator and validator:
+  - `python scripts/run_aimon_forced_spontaneous_comparator.py --dataset-root external/spontaneous/aimon2023_dryad`
+  - `python scripts/run_spontaneous_mesoscale_validation.py`
+- Wrote the resolution note:
+  - `docs/aimon_public_comparator_resolution.md`
+- Updated the mesoscale note and tracker state:
+  - `docs/spontaneous_mesoscale_validation.md`
+  - `TASKS.md`
+  - `ASSUMPTIONS_AND_GAPS.md`
+- Focused validation passed:
+  - `python -m pytest tests/test_public_spontaneous_dataset.py tests/test_spontaneous_data_sources.py tests/test_aimon_components_summary.py tests/test_aimon_public_comparator.py tests/test_spontaneous_mesoscale_validation.py -q`
+  - result: `24 passed`
+
+3. What I learned
+- The real blocker was not `Walk_components.zip`.
+- The actual public forced-vs-spontaneous substrate is:
+  - `GoodICsdf.pkl`
+  - `Additional_data.zip`
+    - `FunctionallyDefinedAnatomicalRegions/*.mat` for full regional traces
+    - `AllRegressors/*.mat` for walk/forced regressor support
+  - `Walk_anatomical_regions.zip` only as a secondary source when it contains a
+    usable full-length trace
+- The old comparator path was too brittle:
+  - it treated missing regressor filenames as hard blockers even when public
+    window annotations were enough
+  - it did not treat overlapping spontaneous/forced windows as an explicit
+    exclusion reason
+  - it let finite region overlap collapse into `NaN` summary metrics
+- The repaired public comparator is now real and honest:
+  - `status = ok`
+  - `n_candidate_rows = 4`
+  - `n_experiments_used = 2`
+  - valid distinct public comparisons:
+    - `B350`
+    - `B1269`
+  - dropped:
+    - `B1037` because spontaneous and forced windows overlap by `0.8958`
+    - `B378` because spontaneous and forced windows overlap by `1.0`
+  - public metrics:
+    - `median_steady_walk_vector_corr = -0.2016`
+    - `median_steady_walk_vector_cosine = -0.1868`
+    - `median_steady_walk_rank_corr = -0.2013`
+    - `median_spontaneous_prelead_fraction = 0.6241`
+    - `median_spontaneous_minus_forced_prelead_delta = 0.01393`
+- So the public forced-vs-spontaneous slice is no longer blocked or
+  hypothetical. It is now a real measured partial comparator.
+
+4. What failed
+- The public overlap set is still small and semantically messy.
+- The surviving subset does not support a strong steady spontaneous-vs-forced
+  similarity claim.
+- The mesoscale criterion therefore remains `partial`, not `pass`.
+
+5. Evidence
+- Comparator:
+  - `outputs/metrics/aimon_forced_spontaneous_comparator_summary.json`
+  - `outputs/metrics/aimon_forced_spontaneous_comparator_rows.csv`
+- Mesoscale validator:
+  - `outputs/metrics/spontaneous_mesoscale_validation_summary.json`
+  - `outputs/metrics/spontaneous_public_forced_vs_spontaneous_table.csv`
+- Dataset validation:
+  - `outputs/metrics/local_dataset_summary.json`
+  - `external/spontaneous/aimon2023_dryad/local_dataset_summary.json`
+- Docs:
+  - `docs/aimon_public_comparator_resolution.md`
+  - `docs/spontaneous_mesoscale_validation.md`
+
+6. Next actions
+- Treat the public forced-vs-spontaneous slice as a standing partial criterion
+  in the living-branch mesoscale bundle, not as a missing one.
+- Align future forced-walk validation to the surviving public subset instead of
+  assuming every `GoodICsdf` row is a valid comparator.
+
+## 2026-03-18 13:10 - Aimon forced-vs-spontaneous public comparator repaired and staged
+
+1. What I attempted
+- Resolved the staged-public-data confusion around the Aimon comparator.
+- Treated `Walk_components.zip` as acceptable staged evidence after the user's
+  explicit instruction and then verified the actual staged bundle against the
+  local digest summary.
+- Repaired the public forced-vs-spontaneous comparator so it uses the staged
+  public data honestly instead of blocking on missing or unnecessary metadata.
+- Re-ran the living-branch mesoscale validation bundle on the repaired public
+  comparator path.
+
+2. What succeeded
+- The full staged Aimon bundle is now locally present and validated in:
+  - `external/spontaneous/aimon2023_dryad/local_dataset_summary.json`
+- The decisive public comparator substrate is now explicit:
+  - `GoodICsdf.pkl`
+  - `Additional_data.zip`
+    - `FunctionallyDefinedAnatomicalRegions/*.mat`
+    - `AllRegressors/*.mat`
+  - `Walk_anatomical_regions.zip` as a secondary source
+- `Walk_components.zip` is now treated as locally staged and digest-valid, but
+  it is not the primary archive for the forced-vs-spontaneous comparator.
+- Repaired comparator code and tests landed in:
+  - `src/analysis/aimon_public_comparator.py`
+  - `tests/test_aimon_public_comparator.py`
+- Focused validation passed:
+  - `python -m pytest tests/test_aimon_public_comparator.py tests/test_spontaneous_mesoscale_validation.py tests/test_public_spontaneous_dataset.py tests/test_spontaneous_data_sources.py tests/test_aimon_components_summary.py -q`
+  - `24 passed`
+- The repaired public comparator now runs and writes:
+  - `outputs/metrics/aimon_public_forced_spontaneous_comparator_summary.json`
+  - `outputs/metrics/aimon_public_forced_spontaneous_comparator_rows.csv`
+  - `outputs/metrics/spontaneous_public_forced_vs_spontaneous_table.csv`
+- The canonical living-branch mesoscale bundle was rerun and now includes the
+  repaired public comparator in:
+  - `outputs/metrics/spontaneous_mesoscale_validation_summary.json`
+  - `outputs/metrics/spontaneous_mesoscale_validation_components.csv`
+  - `docs/spontaneous_mesoscale_validation.md`
+
+3. What the repaired public comparator actually says
+- Comparator status: `ok`
+- Candidate Aimon rows with both spontaneous and forced windows: `4`
+- Distinct usable experiments after honest filtering: `2`
+  - `B350`
+  - `B1269`
+- Dropped experiments:
+  - `B1037` because spontaneous and forced windows overlap by `0.8958`
+  - `B378` because spontaneous and forced windows overlap by `1.0`
+- Resulting public metrics:
+  - `median_steady_walk_vector_corr = -0.2016`
+  - `median_steady_walk_vector_cosine = -0.1868`
+  - `median_steady_walk_rank_corr = -0.2013`
+  - `median_spontaneous_prelead_fraction = 0.6241`
+  - `median_spontaneous_minus_forced_prelead_delta = 0.01393`
+- So the forced-vs-spontaneous public slice is no longer missing. It is now a
+  real measured partial result with weak-to-negative steady-state similarity and
+  a positive spontaneous-prelead effect in the surviving subset.
+
+4. What failed
+- The repaired comparator does not convert the public Aimon slice into a clean
+  pass condition.
+- The main failure is not missing data anymore. It is that the valid public
+  overlap set is small and the surviving comparisons do not show strong positive
+  steady-state similarity.
+
+5. Evidence
+- `external/spontaneous/aimon2023_dryad/local_dataset_summary.json`
+- `outputs/metrics/local_dataset_summary.json`
+- `outputs/metrics/aimon_public_forced_spontaneous_comparator_summary.json`
+- `outputs/metrics/aimon_public_forced_spontaneous_comparator_rows.csv`
+- `outputs/metrics/spontaneous_public_forced_vs_spontaneous_table.csv`
+- `outputs/metrics/spontaneous_mesoscale_validation_summary.json`
+- `docs/spontaneous_mesoscale_validation.md`
+
+6. Next actions
+- Align a repo-side forced-walk assay against the surviving Aimon comparator
+  subset instead of assuming every GoodICs row is a valid comparator row.
+- Keep the living-branch mesoscale bundle as the default spontaneous-state
+  claim gate going forward.

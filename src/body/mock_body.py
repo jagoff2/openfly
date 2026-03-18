@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
+from types import SimpleNamespace
 
 import numpy as np
 
@@ -81,6 +82,7 @@ class MockEmbodiedRuntime(EmbodiedRuntime):
         realistic_vision_array = None
         realistic_vision_features = None
         realistic_vision_index_cache = None
+        realistic_vision_splice_cache = None
         realistic_vision_mapping = realistic_vision
         if self.vision_payload_mode == "fast":
             if self._vision_cell_order is None:
@@ -89,6 +91,14 @@ class MockEmbodiedRuntime(EmbodiedRuntime):
             realistic_vision_array = np.stack([np.asarray(realistic_vision[cell], dtype=float) for cell in self._vision_cell_order], axis=0).T
             realistic_vision_features = self._vision_feature_extractor.extract_from_array(realistic_vision_array, self._vision_index_cache).to_dict()
             realistic_vision_index_cache = self._vision_index_cache
+            node_types = np.asarray(self._vision_cell_order, dtype=object)
+            node_u = np.linspace(-1.0, 1.0, num=len(node_types), dtype=float)
+            node_v = np.linspace(-0.75, 0.75, num=len(node_types), dtype=float)
+            realistic_vision_splice_cache = SimpleNamespace(
+                node_u=node_u,
+                node_v=node_v,
+                node_types=node_types,
+            )
             realistic_vision_mapping = {}
         metadata["vision_payload_mode"] = self.vision_payload_mode
         return BodyObservation(
@@ -102,6 +112,7 @@ class MockEmbodiedRuntime(EmbodiedRuntime):
             realistic_vision_array=realistic_vision_array,
             realistic_vision_features=realistic_vision_features,
             realistic_vision_index_cache=realistic_vision_index_cache,
+            realistic_vision_splice_cache=realistic_vision_splice_cache,
             vision_payload_mode=self.vision_payload_mode,
             metadata=metadata,
         )

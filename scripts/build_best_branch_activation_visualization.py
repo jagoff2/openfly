@@ -49,6 +49,17 @@ def _monitor_bilateral_rates(bridge_info: dict, monitor_labels: list[str]) -> li
     return [float(motor_readout.get(f"monitor_{label}_bilateral_hz", 0.0)) for label in monitor_labels]
 
 
+def _discover_monitor_labels(bridge_info: dict) -> list[str]:
+    motor_readout = bridge_info.get("motor_readout", {})
+    labels = []
+    prefix = "monitor_"
+    suffix = "_bilateral_hz"
+    for key in motor_readout:
+        if key.startswith(prefix) and key.endswith(suffix):
+            labels.append(key[len(prefix) : -len(suffix)])
+    return sorted(set(str(label) for label in labels))
+
+
 def build_activation_visualization(
     *,
     config_path: str | Path,
@@ -71,8 +82,6 @@ def build_activation_visualization(
     observation = body_runtime.reset(seed=int(runtime_cfg.get("seed", 0)))
 
     monitor_labels = [str(label) for label in config.get("decoder", {}).get("monitor_cell_types", [])]
-    if not monitor_labels:
-        raise ValueError("activation visualization requires a monitored decoder config with decoder.monitor_cell_types")
     if observation.realistic_vision_splice_cache is None or observation.realistic_vision_array is None:
         raise ValueError("activation visualization requires fast realistic vision payload mode")
 
@@ -150,6 +159,8 @@ def build_activation_visualization(
             )
             for label, value in controller_values.items():
                 controller_history[label].append(float(value))
+            if not monitor_labels:
+                monitor_labels = _discover_monitor_labels(bridge_info)
             monitor_history.append(_monitor_bilateral_rates(bridge_info, monitor_labels))
 
             observation = body_runtime.step(command, num_substeps=num_substeps)

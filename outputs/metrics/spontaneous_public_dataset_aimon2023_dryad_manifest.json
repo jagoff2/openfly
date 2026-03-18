@@ -1,0 +1,211 @@
+{
+  "source_key": "aimon2023_dryad",
+  "title": "Global change in brain state during spontaneous and forced walk in Drosophila",
+  "primary_url": "https://datadryad.org/dataset/doi:10.5061/dryad.3bk3j9kpb",
+  "data_access_url": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.3bk3j9kpb",
+  "access": "public metadata plus browser-downloadable data files",
+  "version_id": "230771",
+  "dataset_metadata": {
+    "_links": {
+      "self": {
+        "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.3bk3j9kpb"
+      },
+      "stash:versions": {
+        "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.3bk3j9kpb/versions"
+      },
+      "stash:version": {
+        "href": "/api/v2/versions/230771"
+      },
+      "stash:download": {
+        "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.3bk3j9kpb/download"
+      },
+      "curies": [
+        {
+          "name": "stash",
+          "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+          "templated": "true"
+        }
+      ]
+    },
+    "identifier": "doi:10.5061/dryad.3bk3j9kpb",
+    "id": 101033,
+    "storageSize": 1833526995,
+    "relatedPublicationISSN": "2050-084X",
+    "title": "Data from: Global change in brain state during spontaneous and forced walk in Drosophila is composed of combined activity patterns of different neuron classes",
+    "authors": [
+      {
+        "firstName": "Sophie",
+        "lastName": "Aimon",
+        "email": "aimon.sophie@gmail.com",
+        "affiliation": "Max Planck Institute for Biological Cybernetics",
+        "affiliationROR": "https://ror.org/026nmvv73",
+        "affiliations": [
+          {
+            "name": "Max Planck Institute for Biological Cybernetics",
+            "ror_id": "https://ror.org/026nmvv73"
+          }
+        ],
+        "orcid": "0000-0002-0990-0342"
+      },
+      {
+        "firstName": "Ilona C.",
+        "lastName": "Grunwald Kadow",
+        "email": "ilona.grunwald@uni-bonn.de",
+        "affiliation": "University of Bonn",
+        "affiliationROR": "https://ror.org/041nas322",
+        "affiliations": [
+          {
+            "name": "University of Bonn",
+            "ror_id": "https://ror.org/041nas322"
+          }
+        ],
+        "order": 1
+      },
+      {
+        "firstName": "Karen Y.",
+        "lastName": "Cheng",
+        "email": "",
+        "affiliation": "University of Bonn",
+        "affiliationROR": "https://ror.org/041nas322",
+        "affiliations": [
+          {
+            "name": "University of Bonn",
+            "ror_id": "https://ror.org/041nas322"
+          }
+        ],
+        "order": 2
+      }
+    ],
+    "abstract": "<p><span lang=\"EN-US\">Movement-correlated brain activity has been found across species and brain regions. Here, we used fast whole-brain lightfield imaging in adult <em>Drosophila </em>to investigate the relationship between walk and brain-wide neuronal activity. We observed a global change in activity that tightly correlated with spontaneous bouts of walk. While imaging specific sets of excitatory, inhibitory, and neuromodulatory neurons highlighted their joint contribution, spatial heterogeneity in walk- and turning-induced activity allowed parsing unique responses from subregions and sometimes individual candidate neurons. For example, previously uncharacterized serotonergic neurons were inhibited during walk. While activity onset in some areas preceded walk onset exclusively in spontaneously walking animals, spontaneous and forced walk elicited similar activity in most brain regions. These data suggest a major contribution of walk and walk-related sensory or proprioceptive information to global activity of all major neuronal classes.</span></p>",
+    "funders": [
+      {
+        "organization": "European Research Council",
+        "identifierType": "ror",
+        "identifier": "https://ror.org/0472cxd90",
+        "awardNumber": "FlyContext"
+      },
+      {
+        "organization": "SCGB*",
+        "identifierType": "crossref_funder_id",
+        "identifier": "",
+        "awardNumber": "414701"
+      }
+    ],
+    "keywords": [
+      "Drosophila",
+      "Dopamine",
+      "Serotonin",
+      "octopamine",
+      "whole brain",
+      "Calcium"
+    ],
+    "fieldOfScience": "Natural sciences",
+    "methods": "<p>See\u00a0<a href=\"https://doi.org/10.1101/2022.01.17.476660\">https://doi.org/10.1101/2022.01.17.476660</a> and\u00a0https://github.com/sophie63/Aimon2022</p>",
+    "usageNotes": "<p>Applications that can be used to access the data are Python, Matlab and Julia.</p>\n<p>## File/Folder Details</p>\n<p>Details for: Walk_anatomical__regions.zip \u00a0 \u00a0<br>---------------------------------------</p>\n<p>* Description: Time series of regional calcium activity during walk used for Fig. 1-3, 6SA, 7A</p>\n<p>* Format(s): .npy</p>\n<p>* Size(s): 176.09 MB</p>\n<p>* The identity of each region in the _Regions and _LargeRegions files are in the _RegionNames file. Files ending in Walk, Left or Right are regressors convolved by the GCaMP response (see manuscript methods section).</p>\n<p><br>Details for: Walk_components.zip<br>---------------------------------------<br>* Description: Time series of pca/ica components during walk used for Fig. 4-7</p>\n<p>* Format(s): .npy</p>\n<p>* Size(s): 186.94 MB</p>\n<p>* Component identity are in the panda GoodICsdf.pkl database (see also https://github.com/sophie63/Aimon2022). Files ending in Walk, Left or Right are regressors convolved by the GCaMP response (see manuscript methods section).</p>\n<p><br>Details for: Additional_data.zip<br>---------------------------------------<br>* Description: Additional data for Figures and potentially useful for additional analysis. These data are less well curated than the other folders.</p>\n<p>* Format(s): .mat and .npy</p>\n<p>* Size(s): 599.36 MB</p>\n<p>* Variables<br>\u00a0 * FunctionallyDefinedAnatomicalRegions folder: The anatomical regions were defined using components maps and the masks are available in the _Func_regions_masks.nii file. The name of the files start with the experimental ID (see other folders and database in https://github.com/sophie63/Aimon2022). These datasets could be useful to analyse the data with a finer resolution than regions in the Walk_anatomical_regions files, but without the problems (such as missing data) arising from the use of the components in the Walk_components folder.<br>\u00a0 * AllRegressors folder contain additional behavioral regressors (Flail, Groom, walk onset: Ron, Roff, Regressors for forced walk and forced turns, in addition to walk binary regressor and direction of movement). Names also include the experiment ID (see GoodICsdf.pkl database and https://github.com/sophie63/Aimon2022), and weather it is a temporal subset of the whole experiment (e.g. in B902Forced600_1500kd, it is from the 600 to the 1500 time points). All regressors are convolved with the GCaMP kernel and the same deltaF/F procedure than for the fluorescence time series was applied.</p>\n<p>Details for: GoodICsdf.pkl<br>---------------------------------------<br>* Description: Pandas data base containing all information on the experiments including the name of the components.</p>\n<p>* Format(s): .pkl</p>\n<p>* Size(s): 240.94 KB</p>\n<p>* The Correspondance column contains the name of the components, the expID column contain the name of the experiment id used in the time series names.</p>",
+    "relatedWorks": [
+      {
+        "relationship": "primary_article",
+        "identifierType": "DOI",
+        "identifier": "https://doi.org/10.7554/eLife.85202"
+      },
+      {
+        "relationship": "software",
+        "identifierType": "URL",
+        "identifier": "https://github.com/sophie63/Aimon2022"
+      }
+    ],
+    "versionNumber": 8,
+    "versionStatus": "submitted",
+    "curationStatus": "Published",
+    "versionChanges": "files_changed",
+    "publicationDate": "2023-04-20",
+    "lastModificationDate": "2023-04-20",
+    "visibility": "public",
+    "sharingLink": "http://datadryad.org/dataset/doi:10.5061/dryad.3bk3j9kpb",
+    "changedFields": [
+      "related_identifiers",
+      [
+        {
+          "index": 0,
+          "type": "primary_article"
+        }
+      ],
+      "data_files"
+    ],
+    "license": "https://spdx.org/licenses/CC0-1.0.html",
+    "metrics": {
+      "views": 180,
+      "downloads": 14,
+      "citations": 1
+    }
+  },
+  "files": [
+    {
+      "path": "Additional_data.zip",
+      "size_bytes": 599364517,
+      "digest": "fd96bc47ee8761bb5f2704c616708855c11bc5a05ef2ecb2d1d7b2dd87436631",
+      "api_download_url": "https://datadryad.org/api/v2/files/2240206/download",
+      "browser_download_url": null
+    },
+    {
+      "path": "GoodICsdf.pkl",
+      "size_bytes": 240944,
+      "digest": "c03572c270b333aef2f4ec645f400c868e5a4c78d2d65f623b1871be88eacbd5",
+      "api_download_url": "https://datadryad.org/api/v2/files/2240208/download",
+      "browser_download_url": null
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 4917,
+      "digest": "639569d783c0611da52ace054c5a573775efc92699a4713090e02a661cc55553",
+      "api_download_url": "https://datadryad.org/api/v2/files/2240212/download",
+      "browser_download_url": null
+    },
+    {
+      "path": "Walk_anatomical_regions.zip",
+      "size_bytes": 176088991,
+      "digest": "14039b2ab1a689e58b08324747daf275b8555837395df1951c7528ab3f8d4a91",
+      "api_download_url": "https://datadryad.org/api/v2/files/2240207/download",
+      "browser_download_url": null
+    },
+    {
+      "path": "Walk_components.zip",
+      "size_bytes": 186935529,
+      "digest": "b557b4d267e8d926da4d21a51dc7b311fbd48cd68daa318243ae6d216f12d176",
+      "api_download_url": "https://datadryad.org/api/v2/files/2240209/download",
+      "browser_download_url": null
+    }
+  ],
+  "access_checks": [
+    {
+      "url": "https://datadryad.org/api/v2/files/2240206/download",
+      "ok": false,
+      "status_code": 401,
+      "error": "HTTP Error 401: Unauthorized"
+    },
+    {
+      "url": "https://datadryad.org/api/v2/files/2240208/download",
+      "ok": false,
+      "status_code": 401,
+      "error": "HTTP Error 401: Unauthorized"
+    },
+    {
+      "url": "https://datadryad.org/api/v2/files/2240212/download",
+      "ok": false,
+      "status_code": 401,
+      "error": "HTTP Error 401: Unauthorized"
+    },
+    {
+      "url": "https://datadryad.org/api/v2/files/2240207/download",
+      "ok": false,
+      "status_code": 401,
+      "error": "HTTP Error 401: Unauthorized"
+    },
+    {
+      "url": "https://datadryad.org/api/v2/files/2240209/download",
+      "ok": false,
+      "status_code": 401,
+      "error": "HTTP Error 401: Unauthorized"
+    }
+  ]
+}

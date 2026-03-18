@@ -7,6 +7,14 @@ steering-aware lateralized voltage analysis, then used those results to build
 the next relay-monitor cohort and the first voltage-driven shadow turn
 decoders. No live controller gains or body shortcuts were changed.
 
+The canonical real-fly behavior target set for interpreting this branch is:
+
+- [behavior_target_set.md](/G:/flysim/docs/behavior_target_set.md)
+
+That means this branch should be read as a landmark-orientation / fixation
+improvement with stronger target-signed steering, not as proof of generic
+continuous pursuit of an arbitrary moving target.
+
 ## Inputs
 
 - Target monitored run:

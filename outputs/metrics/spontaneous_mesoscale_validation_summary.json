@@ -1,0 +1,1048 @@
+{
+  "public_dataset": {
+    "dataset": {
+      "key": "aimon2023_dryad",
+      "title": "Global change in brain state during spontaneous and forced walk in Drosophila",
+      "citation_label": "Aimon et al. 2023 eLife / Dryad",
+      "scope": "Fast whole-brain light-field imaging with walk- and turn-linked regressors, regional timeseries, PCA/ICA component timeseries, and experiment metadata.",
+      "access": "public metadata plus browser-downloadable data files",
+      "primary_url": "https://datadryad.org/dataset/doi:10.5061/dryad.3bk3j9kpb",
+      "metadata_url": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.3bk3j9kpb",
+      "notes": "Dryad exposes version/file metadata publicly through the JSON API. Direct scripted file download from Dryad is inconsistent because file-stream endpoints may trigger anti-bot validation. The same record is mirrored on Zenodo with stable public file URLs.",
+      "expected_local_dir": "external/spontaneous/aimon2023_dryad",
+      "files": [
+        {
+          "name": "README.md",
+          "size_bytes": 4917,
+          "description": "Dataset structure and file-level description.",
+          "primary_download_url": "https://zenodo.org/records/7849014/files/README.md?download=1",
+          "md5": "639569d783c0611da52ace054c5a573775efc92699a4713090e02a661cc55553"
+        },
+        {
+          "name": "GoodICsdf.pkl",
+          "size_bytes": 240944,
+          "description": "Pandas experiment/component metadata used to interpret the walk component files.",
+          "primary_download_url": "https://zenodo.org/records/7849014/files/GoodICsdf.pkl?download=1",
+          "md5": "c03572c270b333aef2f4ec645f400c868e5a4c78d2d65f623b1871be88eacbd5"
+        },
+        {
+          "name": "Walk_anatomical_regions.zip",
+          "size_bytes": 176088991,
+          "description": "Regional calcium timeseries and walk/turn regressors for Fig. 1-3, 6SA, 7A.",
+          "primary_download_url": "https://zenodo.org/records/7849014/files/Walk_anatomical_regions.zip?download=1",
+          "md5": "14039b2ab1a689e58b08324747daf275b8555837395df1951c7528ab3f8d4a91"
+        },
+        {
+          "name": "Walk_components.zip",
+          "size_bytes": 186935529,
+          "description": "PCA/ICA component timeseries and walk/turn regressors for Fig. 4-7.",
+          "primary_download_url": "https://zenodo.org/records/7849014/files/Walk_components.zip?download=1",
+          "md5": "b557b4d267e8d926da4d21a51dc7b311fbd48cd68daa318243ae6d216f12d176"
+        },
+        {
+          "name": "Additional_data.zip",
+          "size_bytes": 599364517,
+          "description": "Additional masks, regressors, and less-curated figure-side data.",
+          "primary_download_url": "https://zenodo.org/records/7849014/files/Additional_data.zip?download=1",
+          "md5": "fd96bc47ee8761bb5f2704c616708855c11bc5a05ef2ecb2d1d7b2dd87436631"
+        }
+      ]
+    },
+    "root_dir": "external\\spontaneous\\aimon2023_dryad",
+    "files": [
+      {
+        "name": "README.md",
+        "exists": true,
+        "size_bytes": 4917,
+        "expected_size_bytes": 4917,
+        "expected_digest": "639569d783c0611da52ace054c5a573775efc92699a4713090e02a661cc55553",
+        "actual_digest": "639569d783c0611da52ace054c5a573775efc92699a4713090e02a661cc55553",
+        "digest_algorithm": "sha256",
+        "digest_match": true,
+        "zip_valid": null,
+        "primary_download_url": "https://zenodo.org/records/7849014/files/README.md?download=1"
+      },
+      {
+        "name": "GoodICsdf.pkl",
+        "exists": true,
+        "size_bytes": 240944,
+        "expected_size_bytes": 240944,
+        "expected_digest": "c03572c270b333aef2f4ec645f400c868e5a4c78d2d65f623b1871be88eacbd5",
+        "actual_digest": "c03572c270b333aef2f4ec645f400c868e5a4c78d2d65f623b1871be88eacbd5",
+        "digest_algorithm": "sha256",
+        "digest_match": true,
+        "zip_valid": null,
+        "primary_download_url": "https://zenodo.org/records/7849014/files/GoodICsdf.pkl?download=1"
+      },
+      {
+        "name": "Walk_anatomical_regions.zip",
+        "exists": true,
+        "size_bytes": 176088991,
+        "expected_size_bytes": 176088991,
+        "expected_digest": "14039b2ab1a689e58b08324747daf275b8555837395df1951c7528ab3f8d4a91",
+        "actual_digest": "14039b2ab1a689e58b08324747daf275b8555837395df1951c7528ab3f8d4a91",
+        "digest_algorithm": "sha256",
+        "digest_match": true,
+        "zip_valid": true,
+        "primary_download_url": "https://zenodo.org/records/7849014/files/Walk_anatomical_regions.zip?download=1"
+      },
+      {
+        "name": "Walk_components.zip",
+        "exists": true,
+        "size_bytes": 186935529,
+        "expected_size_bytes": 186935529,
+        "expected_digest": "b557b4d267e8d926da4d21a51dc7b311fbd48cd68daa318243ae6d216f12d176",
+        "actual_digest": "b557b4d267e8d926da4d21a51dc7b311fbd48cd68daa318243ae6d216f12d176",
+        "digest_algorithm": "sha256",
+        "digest_match": true,
+        "zip_valid": true,
+        "primary_download_url": "https://zenodo.org/records/7849014/files/Walk_components.zip?download=1"
+      },
+      {
+        "name": "Additional_data.zip",
+        "exists": true,
+        "size_bytes": 599364517,
+        "expected_size_bytes": 599364517,
+        "expected_digest": "fd96bc47ee8761bb5f2704c616708855c11bc5a05ef2ecb2d1d7b2dd87436631",
+        "actual_digest": "fd96bc47ee8761bb5f2704c616708855c11bc5a05ef2ecb2d1d7b2dd87436631",
+        "digest_algorithm": "sha256",
+        "digest_match": true,
+        "zip_valid": true,
+        "primary_download_url": "https://zenodo.org/records/7849014/files/Additional_data.zip?download=1"
+      }
+    ],
+    "readme_summary": {
+      "summary_metrics": {},
+      "file_details": [
+        {
+          "name": "Walk_anatomical__regions.zip",
+          "description": "Time series of regional calcium activity during walk used for Fig. 1-3, 6SA, 7A",
+          "formats": ".npy",
+          "declared_size": "176.09 MB"
+        },
+        {
+          "name": "Walk_components.zip",
+          "description": "Time series of pca/ica components during walk used for Fig. 4-7",
+          "formats": ".npy",
+          "declared_size": "186.94 MB"
+        },
+        {
+          "name": "Additional_data.zip",
+          "description": "Additional data for Figures and potentially useful for additional analysis. These data are less well curated than the other folders.",
+          "formats": ".mat and .npy",
+          "declared_size": "599.36 MB"
+        },
+        {
+          "name": "GoodICsdf.pkl",
+          "description": "Pandas data base containing all information on the experiments including the name of the components.",
+          "formats": ".pkl",
+          "declared_size": "240.94 KB"
+        }
+      ]
+    },
+    "goodics_summary": {
+      "rows": 271,
+      "unique_fly_ids": 124,
+      "unique_exp_ids": 271,
+      "unique_gal4_lines": 8,
+      "unique_uas_lines": 6,
+      "walk_regressor_rows": 100,
+      "turn_regressor_rows": 62,
+      "forced_walk_regressor_rows": 38,
+      "forced_turn_regressor_rows": 29,
+      "top_gal4_lines": {
+        "Nsyb": 69,
+        "Trh": 37,
+        "TH": 36,
+        "TDC": 34,
+        "UNKNOWN": 25,
+        "Gad": 24,
+        "GMR57C10": 18,
+        "Cha": 14,
+        "Vglut": 14
+      },
+      "top_walk_substrates": {
+        "Styr": 87,
+        "AirBall": 66,
+        "UNKNOWN": 49,
+        "RotRod": 43,
+        "Straight": 26
+      }
+    }
+  },
+  "conditions": {
+    "target": {
+      "sample_count": 1000,
+      "dt_s": 0.001999974250793457,
+      "locomotor_onset_count": 2,
+      "forward_speed_mean": 4.179676532745361,
+      "global_spike_fraction_mean": 0.0016067917458713055,
+      "global_voltage_std_mean": 56.0675163269043,
+      "background_mean_rate_hz_mean": 0.03136318922042847,
+      "background_active_fraction_mean": 0.024228811264038086,
+      "background_latent_mean_abs_hz_mean": 0.961259663105011,
+      "speed_spike_corr": 0.24693894204028521,
+      "speed_voltage_std_corr": 0.274496089046599,
+      "yaw_spike_corr": 0.1915434009130254,
+      "yaw_voltage_std_corr": 0.22257192117585997,
+      "onset_spike_delta": 4.1763181798160076e-05,
+      "onset_voltage_std_delta": 0.9491958618164062,
+      "onset_spike_curve": [
+        0.0016553783789277077,
+        0.0015580031322315335,
+        0.0014317759778350592,
+        0.0015832486096769571,
+        0.0015616095624864101,
+        0.0015940680168569088,
+        0.0015255447942763567,
+        0.0017635729163885117,
+        0.0015219382476061583,
+        0.001478660386055708,
+        0.0018393092323094606,
+        0.0017094756476581097,
+        0.0014894797932356596,
+        0.0015039057470858097,
+        0.0013921046629548073,
+        0.002034059725701809,
+        0.0016048874240368605,
+        0.0014966928865760565,
+        0.0016409524250775576,
+        0.0014317759778350592,
+        0.0014678409788757563,
+        0.0016878367168828845,
+        0.0015399707481265068,
+        0.0015868550399318337,
+        0.001677017193287611,
+        0.0016661977861076593,
+        0.0015976745635271072,
+        0.0013921046629548073,
+        0.0014606278855353594,
+        0.001500299316830933,
+        0.0016517718322575092,
+        0.0015219382476061583,
+        0.0014606278855353594,
+        0.0015255447942763567,
+        0.00154718360863626,
+        0.0015868550399318337,
+        0.0015760355163365602,
+        0.0015580031322315335,
+        0.0013019423931837082,
+        0.00153275765478611,
+        0.0015796420630067587,
+        0.001424563117325306,
+        0.0017707860097289085,
+        0.0016265264712274075,
+        0.001424563117325306,
+        0.0015399707481265068,
+        0.001478660386055708,
+        0.00154718360863626,
+        0.001485873362980783,
+        0.0015291512245312333,
+        0.001478660386055708,
+        0.0015291512245312333,
+        0.0015796420630067587,
+        0.0016048874240368605,
+        0.0015616095624864101,
+        0.0016481652855873108,
+        0.0015832486096769571,
+        0.0015796420630067587,
+        0.001478660386055708,
+        0.0015111188404262066,
+        0.0017816054169088602,
+        0.0015796420630067587,
+        0.0019835687708109617,
+        0.0014317759778350592,
+        0.0015868550399318337,
+        0.0015760355163365602,
+        0.0015976745635271072,
+        0.0016445588553324342,
+        0.001568822655826807,
+        0.0015760355163365602,
+        0.0013812852557748556,
+        0.0017599666025489569,
+        0.001698656240478158,
+        0.0017852119635790586,
+        0.001630132901482284,
+        0.001615706947632134,
+        0.0014606278855353594,
+        0.0014642344322055578,
+        0.001821276848204434,
+        0.0015724290860816836,
+        0.0015976745635271072,
+        0.0014894797932356596,
+        0.0014714474091306329,
+        0.0018032443476840854,
+        0.0016842302866280079,
+        0.0016337393317371607,
+        0.0017058691009879112,
+        0.0015363642014563084,
+        0.0015435771783813834,
+        0.0016698043327778578,
+        0.0015147252706810832,
+        0.001622919924557209,
+        0.0016517718322575092,
+        0.0017383275553584099,
+        0.0016806237399578094,
+        0.001341613824479282,
+        0.001402924070134759,
+        0.0014101371634751558,
+        0.0017635729163885117,
+        0.0016950496938079596,
+        0.0016012809937819839
+      ],
+      "onset_voltage_std_curve": [
+        52.194297790527344,
+        52.21625900268555,
+        52.24059295654297,
+        52.277587890625,
+        52.31947326660156,
+        52.357994079589844,
+        52.40605926513672,
+        52.45167541503906,
+        52.505271911621094,
+        52.56864929199219,
+        52.631752014160156,
+        52.687828063964844,
+        52.75292205810547,
+        52.817317962646484,
+        52.887474060058594,
+        52.969749450683594,
+        53.03498077392578,
+        53.11198425292969,
+        53.19075012207031,
+        53.270233154296875,
+        53.348045349121094,
+        53.41443634033203,
+        53.49009704589844,
+        53.545555114746094,
+        53.58717346191406,
+        53.618751525878906,
+        53.632789611816406,
+        53.626548767089844,
+        53.605079650878906,
+        53.56671142578125,
+        53.513946533203125,
+        53.45403289794922,
+        53.388893127441406,
+        53.321380615234375,
+        53.25068283081055,
+        53.17497634887695,
+        53.10298156738281,
+        53.04002380371094,
+        52.97821807861328,
+        52.928382873535156,
+        52.87383270263672,
+        52.82343292236328,
+        52.78916931152344,
+        52.75636672973633,
+        52.744163513183594,
+        52.73683547973633,
+        52.73699951171875,
+        52.746734619140625,
+        52.760337829589844,
+        52.78550338745117,
+        52.82142639160156,
+        52.86170959472656,
+        52.909584045410156,
+        52.953956604003906,
+        53.01110076904297,
+        53.065277099609375,
+        53.121238708496094,
+        53.190818786621094,
+        53.267112731933594,
+        53.363224029541016,
+        53.462486267089844,
+        53.57076644897461,
+        53.68336486816406,
+        53.79460144042969,
+        53.90736389160156,
+        54.004676818847656,
+        54.090824127197266,
+        54.1629753112793,
+        54.2137336730957,
+        54.244056701660156,
+        54.248016357421875,
+        54.24479675292969,
+        54.22692108154297,
+        54.18750762939453,
+        54.141090393066406,
+        54.09697341918945,
+        54.05134582519531,
+        54.00426483154297,
+        53.964012145996094,
+        53.93073272705078,
+        53.901885986328125,
+        53.87999725341797,
+        53.87203598022461,
+        53.882415771484375,
+        53.8865852355957,
+        53.913177490234375,
+        53.94871139526367,
+        53.98634338378906,
+        54.03887176513672,
+        54.09015655517578,
+        54.1561393737793,
+        54.219825744628906,
+        54.27794647216797,
+        54.33201599121094,
+        54.369659423828125,
+        54.410667419433594,
+        54.443355560302734,
+        54.47644805908203,
+        54.50875473022461,
+        54.53903579711914,
+        54.58641815185547
+      ],
+      "locomotor_active_fraction": 0.995
+    },
+    "no_target": {
+      "sample_count": 1000,
+      "dt_s": 0.001999974250793457,
+      "locomotor_onset_count": 0,
+      "forward_speed_mean": 3.9865965843200684,
+      "global_spike_fraction_mean": 0.0016660824185237288,
+      "global_voltage_std_mean": 50.19036865234375,
+      "background_mean_rate_hz_mean": 0.03136318922042847,
+      "background_active_fraction_mean": 0.024228811264038086,
+      "background_latent_mean_abs_hz_mean": 0.961259663105011,
+      "speed_spike_corr": 0.04453683129480503,
+      "speed_voltage_std_corr": 0.018481393711520102,
+      "yaw_spike_corr": 0.10079571849417125,
+      "yaw_voltage_std_corr": 0.10228472488627431,
+      "onset_spike_delta": 0.0,
+      "onset_voltage_std_delta": 0.0,
+      "onset_spike_curve": [],
+      "onset_voltage_std_curve": [],
+      "locomotor_active_fraction": 0.997
+    }
+  },
+  "monitored_voltage_structure": {
+    "target": {
+      "raw": {
+        "pc1_variance_ratio": 0.30658942461013794,
+        "pc3_cumulative_variance_ratio": 0.5777372121810913,
+        "participation_ratio_topk": 4.108901492949445,
+        "lag1_autocorr_mean": 0.9493641777554528
+      },
+      "residual": {
+        "pc1_variance_ratio": 0.21496416628360748,
+        "pc3_cumulative_variance_ratio": 0.46967315673828125,
+        "participation_ratio_topk": 4.7608864415076075,
+        "lag1_autocorr_mean": 0.915253662610497
+      },
+      "monitored_neuron_count": 307
+    },
+    "no_target": {
+      "raw": {
+        "pc1_variance_ratio": 0.3034502863883972,
+        "pc3_cumulative_variance_ratio": 0.535651683807373,
+        "participation_ratio_topk": 4.063426933290862,
+        "lag1_autocorr_mean": 0.9375501652541497
+      },
+      "residual": {
+        "pc1_variance_ratio": 0.2656426727771759,
+        "pc3_cumulative_variance_ratio": 0.4971090853214264,
+        "participation_ratio_topk": 4.265003695280576,
+        "lag1_autocorr_mean": 0.9169942585259179
+      },
+      "monitored_neuron_count": 307
+    }
+  },
+  "family_voltage_structure": {
+    "target": {
+      "family_pair_count": 2947,
+      "mean_bilateral_voltage_corr": 0.3604842030770339,
+      "median_bilateral_voltage_corr": 0.3679714256786903,
+      "turn_corr_std": 0.25277358644593967,
+      "turn_corr_abs_p90": 0.4708304166793824,
+      "observed_mean_abs_pairwise_corr": 0.34349953624754775,
+      "shuffled_mean_abs_pairwise_corr": 0.1321085365399595,
+      "structure_ratio_vs_circular_shift": 2.6001312651256856,
+      "top_positive_turn_families": [
+        {
+          "family": "PLP013",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": -0.2958381958051594,
+          "turn_drive_asym_corr": 0.8375309009952584,
+          "mean_abs_asym_mv": 2.9091405868530273
+        },
+        {
+          "family": "LTe01",
+          "super_class": "visual_projection",
+          "left_count": 3,
+          "right_count": 2,
+          "bilateral_voltage_corr": -0.24099922650797392,
+          "turn_drive_asym_corr": 0.8355010055628653,
+          "mean_abs_asym_mv": 2.1062240600585938
+        },
+        {
+          "family": "LC26",
+          "super_class": "visual_projection",
+          "left_count": 26,
+          "right_count": 31,
+          "bilateral_voltage_corr": 0.056854626859223996,
+          "turn_drive_asym_corr": 0.8346327231194289,
+          "mean_abs_asym_mv": 1.5352686643600464
+        },
+        {
+          "family": "IbSpsP",
+          "super_class": "central",
+          "left_count": 17,
+          "right_count": 13,
+          "bilateral_voltage_corr": 0.30102897490023495,
+          "turn_drive_asym_corr": 0.82890692499594,
+          "mean_abs_asym_mv": 0.23314207792282104
+        },
+        {
+          "family": "LC13",
+          "super_class": "visual_projection",
+          "left_count": 75,
+          "right_count": 70,
+          "bilateral_voltage_corr": -0.5989830000939399,
+          "turn_drive_asym_corr": 0.8271656948542975,
+          "mean_abs_asym_mv": 1.2518702745437622
+        },
+        {
+          "family": "MTe50",
+          "super_class": "visual_projection",
+          "left_count": 25,
+          "right_count": 29,
+          "bilateral_voltage_corr": -0.31209878571339117,
+          "turn_drive_asym_corr": 0.8061042687107274,
+          "mean_abs_asym_mv": 1.078950047492981
+        },
+        {
+          "family": "LC16",
+          "super_class": "visual_projection",
+          "left_count": 77,
+          "right_count": 74,
+          "bilateral_voltage_corr": 0.28989555691984353,
+          "turn_drive_asym_corr": 0.7948252521096006,
+          "mean_abs_asym_mv": 1.265252709388733
+        },
+        {
+          "family": "CB3162",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": 0.5914206617447151,
+          "turn_drive_asym_corr": 0.7885406586376005,
+          "mean_abs_asym_mv": 0.4614843726158142
+        },
+        {
+          "family": "LTe43",
+          "super_class": "visual_projection",
+          "left_count": 4,
+          "right_count": 4,
+          "bilateral_voltage_corr": 0.19197490538072232,
+          "turn_drive_asym_corr": 0.7870072414381255,
+          "mean_abs_asym_mv": 0.6254687309265137
+        },
+        {
+          "family": "MeMe_e08",
+          "super_class": "visual_projection",
+          "left_count": 6,
+          "right_count": 6,
+          "bilateral_voltage_corr": -0.19672342015476926,
+          "turn_drive_asym_corr": 0.7665332657242283,
+          "mean_abs_asym_mv": 16.164947509765625
+        }
+      ],
+      "top_negative_turn_families": [
+        {
+          "family": "SMP429",
+          "super_class": "central",
+          "left_count": 3,
+          "right_count": 4,
+          "bilateral_voltage_corr": -0.07424402783852077,
+          "turn_drive_asym_corr": -0.822708441619071,
+          "mean_abs_asym_mv": 0.32958343625068665
+        },
+        {
+          "family": "PVLP112b",
+          "super_class": "central",
+          "left_count": 4,
+          "right_count": 4,
+          "bilateral_voltage_corr": -0.4229639062905818,
+          "turn_drive_asym_corr": -0.8196435441604621,
+          "mean_abs_asym_mv": 3.6040234565734863
+        },
+        {
+          "family": "CB2804",
+          "super_class": "central",
+          "left_count": 3,
+          "right_count": 2,
+          "bilateral_voltage_corr": -0.3724795387495947,
+          "turn_drive_asym_corr": -0.7645561349819108,
+          "mean_abs_asym_mv": 0.12458320707082748
+        },
+        {
+          "family": "CB2453",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": -0.3685203758151526,
+          "turn_drive_asym_corr": -0.7610210566048546,
+          "mean_abs_asym_mv": 11.470468521118164
+        },
+        {
+          "family": "CB2635",
+          "super_class": "central",
+          "left_count": 3,
+          "right_count": 2,
+          "bilateral_voltage_corr": -0.09020541415874714,
+          "turn_drive_asym_corr": -0.7515954259477341,
+          "mean_abs_asym_mv": 7.401406288146973
+        },
+        {
+          "family": "LTe33",
+          "super_class": "visual_projection",
+          "left_count": 3,
+          "right_count": 2,
+          "bilateral_voltage_corr": 0.6565547082862251,
+          "turn_drive_asym_corr": -0.7363618460507911,
+          "mean_abs_asym_mv": 3.3868227005004883
+        },
+        {
+          "family": "WED012",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": 0.4976780417240449,
+          "turn_drive_asym_corr": -0.735778316112017,
+          "mean_abs_asym_mv": 0.71484375
+        },
+        {
+          "family": "LCe07",
+          "super_class": "visual_projection",
+          "left_count": 6,
+          "right_count": 6,
+          "bilateral_voltage_corr": 0.14938964799631366,
+          "turn_drive_asym_corr": -0.7316178762946496,
+          "mean_abs_asym_mv": 4.245755195617676
+        },
+        {
+          "family": "LC45",
+          "super_class": "visual_projection",
+          "left_count": 12,
+          "right_count": 12,
+          "bilateral_voltage_corr": 0.6192780630733775,
+          "turn_drive_asym_corr": -0.7314478031369996,
+          "mean_abs_asym_mv": 3.0971744060516357
+        },
+        {
+          "family": "LAL127",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": 0.27366396105758406,
+          "turn_drive_asym_corr": -0.7251803148979579,
+          "mean_abs_asym_mv": 4.088828086853027
+        }
+      ]
+    },
+    "no_target": {
+      "family_pair_count": 2947,
+      "mean_bilateral_voltage_corr": 0.3890008814763814,
+      "median_bilateral_voltage_corr": 0.41360394647570736,
+      "turn_corr_std": 0.27804480947267246,
+      "turn_corr_abs_p90": 0.445123952627182,
+      "observed_mean_abs_pairwise_corr": 0.3600661562452871,
+      "shuffled_mean_abs_pairwise_corr": 0.12900032161713862,
+      "structure_ratio_vs_circular_shift": 2.7912035546231517,
+      "top_positive_turn_families": [
+        {
+          "family": "LTe01",
+          "super_class": "visual_projection",
+          "left_count": 3,
+          "right_count": 2,
+          "bilateral_voltage_corr": -0.1968281686434622,
+          "turn_drive_asym_corr": 0.8531338693647721,
+          "mean_abs_asym_mv": 2.2109375
+        },
+        {
+          "family": "LC10f",
+          "super_class": "visual_projection",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": 0.2854159587799068,
+          "turn_drive_asym_corr": 0.794060157471469,
+          "mean_abs_asym_mv": 1.0290625095367432
+        },
+        {
+          "family": "LC13",
+          "super_class": "visual_projection",
+          "left_count": 75,
+          "right_count": 70,
+          "bilateral_voltage_corr": -0.10496046198036783,
+          "turn_drive_asym_corr": 0.7624286740641585,
+          "mean_abs_asym_mv": 1.0259606838226318
+        },
+        {
+          "family": "LC26",
+          "super_class": "visual_projection",
+          "left_count": 26,
+          "right_count": 31,
+          "bilateral_voltage_corr": 0.4670530405112821,
+          "turn_drive_asym_corr": 0.7516538592836426,
+          "mean_abs_asym_mv": 0.6742962002754211
+        },
+        {
+          "family": "LT70",
+          "super_class": "visual_centrifugal",
+          "left_count": 4,
+          "right_count": 4,
+          "bilateral_voltage_corr": 0.031081635747694923,
+          "turn_drive_asym_corr": 0.7255275950070605,
+          "mean_abs_asym_mv": 0.4267578125
+        },
+        {
+          "family": "LCe02",
+          "super_class": "visual_projection",
+          "left_count": 25,
+          "right_count": 28,
+          "bilateral_voltage_corr": 0.023466166455583103,
+          "turn_drive_asym_corr": 0.7128708748999765,
+          "mean_abs_asym_mv": 1.2518162727355957
+        },
+        {
+          "family": "CB1189",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": 0.24020313991027867,
+          "turn_drive_asym_corr": 0.6948681325233456,
+          "mean_abs_asym_mv": 2.258125066757202
+        },
+        {
+          "family": "LC20a",
+          "super_class": "visual_projection",
+          "left_count": 20,
+          "right_count": 26,
+          "bilateral_voltage_corr": 0.5354232431044789,
+          "turn_drive_asym_corr": 0.6899875054647122,
+          "mean_abs_asym_mv": 0.9352433681488037
+        },
+        {
+          "family": "LPLC2",
+          "super_class": "visual_projection",
+          "left_count": 108,
+          "right_count": 102,
+          "bilateral_voltage_corr": -0.025287516084695493,
+          "turn_drive_asym_corr": 0.67616594099012,
+          "mean_abs_asym_mv": 1.8098868131637573
+        },
+        {
+          "family": "PVLP148",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": 0.4015404424288634,
+          "turn_drive_asym_corr": 0.6408058222577477,
+          "mean_abs_asym_mv": 9.651171684265137
+        }
+      ],
+      "top_negative_turn_families": [
+        {
+          "family": "MTe14",
+          "super_class": "visual_projection",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": 0.5480999341347775,
+          "turn_drive_asym_corr": -0.750769151969385,
+          "mean_abs_asym_mv": 2.657890558242798
+        },
+        {
+          "family": "CB1353",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": -0.5022949208975884,
+          "turn_drive_asym_corr": -0.734722461070473,
+          "mean_abs_asym_mv": 0.5454687476158142
+        },
+        {
+          "family": "LAL089",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 3,
+          "bilateral_voltage_corr": -0.26555628626501043,
+          "turn_drive_asym_corr": -0.6797686213746746,
+          "mean_abs_asym_mv": 0.410625159740448
+        },
+        {
+          "family": "PVLP036",
+          "super_class": "central",
+          "left_count": 3,
+          "right_count": 3,
+          "bilateral_voltage_corr": 0.25214965859720534,
+          "turn_drive_asym_corr": -0.6756064921539775,
+          "mean_abs_asym_mv": 4.021667003631592
+        },
+        {
+          "family": "LAL111,PS060",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": -0.09261703359537218,
+          "turn_drive_asym_corr": -0.660150028708401,
+          "mean_abs_asym_mv": 1.34765625
+        },
+        {
+          "family": "MTe04",
+          "super_class": "visual_projection",
+          "left_count": 12,
+          "right_count": 18,
+          "bilateral_voltage_corr": -0.3468956955128669,
+          "turn_drive_asym_corr": -0.649830859419283,
+          "mean_abs_asym_mv": 1.8723739385604858
+        },
+        {
+          "family": "LCe07",
+          "super_class": "visual_projection",
+          "left_count": 6,
+          "right_count": 6,
+          "bilateral_voltage_corr": 0.35854297282860187,
+          "turn_drive_asym_corr": -0.6488057858885014,
+          "mean_abs_asym_mv": 3.518385410308838
+        },
+        {
+          "family": "CB0742",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": -0.19237472300432956,
+          "turn_drive_asym_corr": -0.631566486110698,
+          "mean_abs_asym_mv": 2.770078182220459
+        },
+        {
+          "family": "CB2785",
+          "super_class": "central",
+          "left_count": 3,
+          "right_count": 2,
+          "bilateral_voltage_corr": 0.32909551169185774,
+          "turn_drive_asym_corr": -0.6231141206472013,
+          "mean_abs_asym_mv": 0.5294791460037231
+        },
+        {
+          "family": "LAL127",
+          "super_class": "central",
+          "left_count": 2,
+          "right_count": 2,
+          "bilateral_voltage_corr": 0.4537738620059098,
+          "turn_drive_asym_corr": -0.6218610831395552,
+          "mean_abs_asym_mv": 3.092343807220459
+        }
+      ]
+    }
+  },
+  "public_forced_vs_spontaneous": {
+    "status": "ok",
+    "dataset_root": "external\\spontaneous\\aimon2023_dryad",
+    "missing_files": [],
+    "n_candidate_rows": 4,
+    "n_experiments_used": 2,
+    "n_valid_vector_corr": 2,
+    "n_valid_rank_corr": 2,
+    "n_valid_prelead_fraction": 1,
+    "median_steady_walk_vector_corr": -0.20157593804888388,
+    "median_steady_walk_vector_cosine": -0.18684781533980915,
+    "median_steady_walk_rank_corr": -0.20126518207501815,
+    "median_spontaneous_prelead_fraction": 0.6241135001182556,
+    "median_spontaneous_minus_forced_prelead_delta": 0.013932164758443832,
+    "dropped_experiments": [
+      {
+        "exp_id": "B1037",
+        "reason": "overlapping_walk_forced_windows",
+        "window_overlap_fraction": 0.8957894736842106
+      },
+      {
+        "exp_id": "B378",
+        "reason": "overlapping_walk_forced_windows",
+        "window_overlap_fraction": 1.0
+      }
+    ],
+    "per_experiment_rows": [
+      {
+        "exp_id": "B350",
+        "region_member": "Additional_data/FunctionallyDefinedAnatomicalRegions/B350_150FuncRegionsTS.mat",
+        "region_source": "additional_data",
+        "spontaneous_walk_regressor_member": "Additional_data/AllRegressors/B350_1to3000Walkkd.mat",
+        "forced_walk_regressor_member": "Additional_data/AllRegressors/B350ForcedBin3650_3900kd.mat",
+        "region_count": 150,
+        "time_count": 4996,
+        "walk_window_frames": 3000,
+        "forced_window_frames": 251,
+        "window_overlap_fraction": 0.0,
+        "valid_vector_region_count": 146,
+        "steady_walk_vector_corr": -0.4950717838635071,
+        "steady_walk_vector_cosine": -0.5294635942899466,
+        "steady_walk_rank_corr": -0.5383752205223125,
+        "spontaneous_prelead_fraction": NaN,
+        "spontaneous_minus_forced_prelead_delta": NaN,
+        "prelead_width_frames": 0,
+        "prelead_valid_region_count": 0
+      },
+      {
+        "exp_id": "B1269",
+        "region_member": "Additional_data/FunctionallyDefinedAnatomicalRegions/B1269_150FuncRegionsTS.mat",
+        "region_source": "additional_data",
+        "spontaneous_walk_regressor_member": "Additional_data/AllRegressors/B1269_70_103_Walkbinkd.mat",
+        "forced_walk_regressor_member": "Additional_data/AllRegressors/B1269_240_end_Forcedbinkd.mat",
+        "region_count": 150,
+        "time_count": 536,
+        "walk_window_frames": 34,
+        "forced_window_frames": 297,
+        "window_overlap_fraction": 0.0,
+        "valid_vector_region_count": 141,
+        "steady_walk_vector_corr": 0.09191990776573933,
+        "steady_walk_vector_cosine": 0.15576796361032827,
+        "steady_walk_rank_corr": 0.1358448563722762,
+        "spontaneous_prelead_fraction": 0.6241135001182556,
+        "spontaneous_minus_forced_prelead_delta": 0.013932164758443832,
+        "prelead_width_frames": 34,
+        "prelead_valid_region_count": 141
+      }
+    ]
+  },
+  "connectome_function_correspondence": {
+    "target": {
+      "family_functional_corr_vs_structural_weight_corr": 0.009975644490810447,
+      "explained_variance_functional_from_structure": 9.951348300703681e-05,
+      "family_functional_corr_vs_log_structural_weight_corr": 0.054489794092171015,
+      "explained_variance_functional_from_log_structure": 0.002969137660207195,
+      "family_pair_count": 4340931,
+      "status": "ok"
+    },
+    "no_target": {
+      "family_functional_corr_vs_structural_weight_corr": 0.009888212285828604,
+      "explained_variance_functional_from_structure": 9.777674220961174e-05,
+      "family_functional_corr_vs_log_structural_weight_corr": 0.05339290549614016,
+      "explained_variance_functional_from_log_structure": 0.002850802357319754,
+      "family_pair_count": 4340931,
+      "status": "ok"
+    }
+  },
+  "criteria": {
+    "non_quiescent_awake_state": {
+      "status": "pass",
+      "summary": "Living target and no-target runs both occupy a non-dead spontaneous regime.",
+      "metrics": {
+        "target_background_mean_rate_hz": 0.03136318922042847,
+        "no_target_background_mean_rate_hz": 0.03136318922042847,
+        "target_global_spike_fraction": 0.0016067917458713055,
+        "no_target_global_spike_fraction": 0.0016660824185237288
+      }
+    },
+    "matched_living_baseline": {
+      "status": "pass",
+      "summary": "Target-conditioned differences ride on the same awakened baseline instead of a different spontaneous regime.",
+      "metrics": {
+        "background_mean_rate_hz_delta": 0.0,
+        "background_active_fraction_delta": 0.0,
+        "background_latent_mean_abs_hz_delta": 0.0,
+        "global_spike_fraction_delta": -5.929067265242338e-05
+      }
+    },
+    "walk_linked_global_modulation": {
+      "status": "pass",
+      "summary": "Global brain activity should covary with locomotion and rise around locomotor onset, consistent with Aimon-style walk-linked global state shifts.",
+      "metrics": {
+        "target_speed_voltage_std_corr": 0.274496089046599,
+        "no_target_speed_voltage_std_corr": 0.018481393711520102,
+        "target_onset_voltage_std_delta": 0.9491958618164062,
+        "no_target_onset_voltage_std_delta": 0.0,
+        "target_locomotor_onset_count": 2,
+        "no_target_locomotor_onset_count": 0
+      }
+    },
+    "bilateral_family_coupling": {
+      "status": "pass",
+      "summary": "Homologous bilateral family traces should remain positively coupled in the living regime, consistent with mesoscale intrinsic-network structure.",
+      "metrics": {
+        "target_mean_bilateral_voltage_corr": 0.3604842030770339,
+        "no_target_mean_bilateral_voltage_corr": 0.3890008814763814,
+        "target_family_pair_count": 2947,
+        "no_target_family_pair_count": 2947
+      }
+    },
+    "family_structure_exceeds_shift_surrogate": {
+      "status": "pass",
+      "summary": "Family-level functional structure should exceed a circular-shift surrogate, indicating real mesoscale organization rather than only per-family autocorrelation.",
+      "metrics": {
+        "target_observed_mean_abs_pairwise_corr": 0.34349953624754775,
+        "target_shuffled_mean_abs_pairwise_corr": 0.1321085365399595,
+        "target_structure_ratio_vs_circular_shift": 2.6001312651256856,
+        "no_target_observed_mean_abs_pairwise_corr": 0.3600661562452871,
+        "no_target_shuffled_mean_abs_pairwise_corr": 0.12900032161713862,
+        "no_target_structure_ratio_vs_circular_shift": 2.7912035546231517
+      }
+    },
+    "residual_high_dimensional_structure": {
+      "status": "pass",
+      "summary": "After regressing controller-linked covariates, monitored voltages should retain nontrivial residual dimensionality rather than collapse to a single global mode.",
+      "metrics": {
+        "target_raw_pc1": 0.30658942461013794,
+        "target_residual_pc1": 0.21496416628360748,
+        "target_residual_participation_ratio": 4.7608864415076075,
+        "no_target_raw_pc1": 0.3034502863883972,
+        "no_target_residual_pc1": 0.2656426727771759,
+        "no_target_residual_participation_ratio": 4.265003695280576
+      }
+    },
+    "residual_temporal_structure": {
+      "status": "pass",
+      "summary": "Residual monitored voltages should remain temporally structured, not white-noise-like.",
+      "metrics": {
+        "target_residual_lag1": 0.915253662610497,
+        "no_target_residual_lag1": 0.9169942585259179
+      }
+    },
+    "turn_linked_spatial_heterogeneity": {
+      "status": "pass",
+      "summary": "Different family asymmetries should carry different turn relationships, matching the public observation that turning is spatially heterogeneous rather than uniform.",
+      "metrics": {
+        "target_turn_corr_std": 0.25277358644593967,
+        "target_turn_corr_abs_p90": 0.4708304166793824,
+        "no_target_turn_corr_std": 0.27804480947267246,
+        "no_target_turn_corr_abs_p90": 0.445123952627182
+      }
+    },
+    "forced_vs_spontaneous_walk_similarity": {
+      "status": "partial",
+      "summary": "The public Aimon comparator is live on the staged dataset, but the current overlap yields mixed evidence: spontaneous pre-onset lead is positive while steady forced/spontaneous regional similarity is weak or negative.",
+      "metrics": {
+        "n_candidate_rows": 4,
+        "n_experiments_used": 2,
+        "n_valid_vector_corr": 2,
+        "n_valid_rank_corr": 2,
+        "n_valid_prelead_fraction": 1,
+        "median_steady_walk_vector_corr": -0.20157593804888388,
+        "median_steady_walk_vector_cosine": -0.18684781533980915,
+        "median_steady_walk_rank_corr": -0.20126518207501815,
+        "median_spontaneous_prelead_fraction": 0.6241135001182556,
+        "median_spontaneous_minus_forced_prelead_delta": 0.013932164758443832,
+        "dropped_experiment_count": 2
+      }
+    },
+    "connectome_function_correspondence": {
+      "status": "pass",
+      "summary": "Living-branch family-scale functional coupling should show at least weak positive correspondence to connectome-predicted coupling when aggregated at the same family scale.",
+      "metrics": {
+        "target_family_structural_functional_corr": 0.009975644490810447,
+        "target_family_log_structural_functional_corr": 0.054489794092171015,
+        "no_target_family_structural_functional_corr": 0.009888212285828604,
+        "no_target_family_log_structural_functional_corr": 0.05339290549614016,
+        "target_family_pair_count": 4340931,
+        "no_target_family_pair_count": 4340931
+      }
+    }
+  },
+  "plot_paths": {
+    "onset_curves": "outputs\\plots\\spontaneous_mesoscale_onset_curves.png",
+    "bilateral_hist": "outputs\\plots\\spontaneous_mesoscale_bilateral_corr_hist.png",
+    "turn_family_corr": "outputs\\plots\\spontaneous_mesoscale_turn_family_corr.png"
+  }
+}

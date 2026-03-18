@@ -71,7 +71,7 @@ shadow_decoders:
   - label: shadow_turn_voltage_visual_core
     decoder:
       type: voltage_turn_shadow
-      signal_library_json: outputs/metrics/target_specific_turn_voltage_signal_library_visual_core_2s_bias_corrected.json
+      signal_library_json: outputs/metrics/jump_turn_voltage_signal_library_top8_mixed_bias_corrected.json
       turn_scale_mv: 5.0
       turn_gain: 0.65
       signal_smoothing_alpha: 0.06
@@ -79,7 +79,7 @@ steering_promotion:
   enabled: true
   shadow_label: shadow_turn_voltage_visual_core
   mode: conflict_blend
-  turn_blend: 0.4
+  turn_blend: 0.8
   conflict_turn_blend: 1.0
   shadow_turn_scale: 0.5
   max_abs_turn_state: 1.0

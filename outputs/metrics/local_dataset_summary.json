@@ -1,0 +1,171 @@
+{
+  "dataset": {
+    "key": "aimon2023_dryad",
+    "title": "Global change in brain state during spontaneous and forced walk in Drosophila",
+    "citation_label": "Aimon et al. 2023 eLife / Dryad",
+    "scope": "Fast whole-brain light-field imaging with walk- and turn-linked regressors, regional timeseries, PCA/ICA component timeseries, and experiment metadata.",
+    "access": "public metadata plus browser-downloadable data files",
+    "primary_url": "https://datadryad.org/dataset/doi:10.5061/dryad.3bk3j9kpb",
+    "metadata_url": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.3bk3j9kpb",
+    "notes": "Dryad exposes version/file metadata publicly through the JSON API. Direct scripted file download from Dryad is inconsistent because file-stream endpoints may trigger anti-bot validation. The same record is mirrored on Zenodo with stable public file URLs.",
+    "expected_local_dir": "external/spontaneous/aimon2023_dryad",
+    "files": [
+      {
+        "name": "README.md",
+        "size_bytes": 4917,
+        "description": "Dataset structure and file-level description.",
+        "primary_download_url": "https://zenodo.org/records/7849014/files/README.md?download=1",
+        "md5": "639569d783c0611da52ace054c5a573775efc92699a4713090e02a661cc55553"
+      },
+      {
+        "name": "GoodICsdf.pkl",
+        "size_bytes": 240944,
+        "description": "Pandas experiment/component metadata used to interpret the walk component files.",
+        "primary_download_url": "https://zenodo.org/records/7849014/files/GoodICsdf.pkl?download=1",
+        "md5": "c03572c270b333aef2f4ec645f400c868e5a4c78d2d65f623b1871be88eacbd5"
+      },
+      {
+        "name": "Walk_anatomical_regions.zip",
+        "size_bytes": 176088991,
+        "description": "Regional calcium timeseries and walk/turn regressors for Fig. 1-3, 6SA, 7A.",
+        "primary_download_url": "https://zenodo.org/records/7849014/files/Walk_anatomical_regions.zip?download=1",
+        "md5": "14039b2ab1a689e58b08324747daf275b8555837395df1951c7528ab3f8d4a91"
+      },
+      {
+        "name": "Walk_components.zip",
+        "size_bytes": 186935529,
+        "description": "PCA/ICA component timeseries and walk/turn regressors for Fig. 4-7.",
+        "primary_download_url": "https://zenodo.org/records/7849014/files/Walk_components.zip?download=1",
+        "md5": "b557b4d267e8d926da4d21a51dc7b311fbd48cd68daa318243ae6d216f12d176"
+      },
+      {
+        "name": "Additional_data.zip",
+        "size_bytes": 599364517,
+        "description": "Additional masks, regressors, and less-curated figure-side data.",
+        "primary_download_url": "https://zenodo.org/records/7849014/files/Additional_data.zip?download=1",
+        "md5": "fd96bc47ee8761bb5f2704c616708855c11bc5a05ef2ecb2d1d7b2dd87436631"
+      }
+    ]
+  },
+  "root_dir": "G:\\flysim\\external\\spontaneous\\aimon2023_dryad",
+  "files": [
+    {
+      "name": "README.md",
+      "exists": true,
+      "size_bytes": 4917,
+      "expected_size_bytes": 4917,
+      "expected_digest": "639569d783c0611da52ace054c5a573775efc92699a4713090e02a661cc55553",
+      "actual_digest": "639569d783c0611da52ace054c5a573775efc92699a4713090e02a661cc55553",
+      "digest_algorithm": "sha256",
+      "digest_match": true,
+      "zip_valid": null,
+      "primary_download_url": "https://zenodo.org/records/7849014/files/README.md?download=1"
+    },
+    {
+      "name": "GoodICsdf.pkl",
+      "exists": true,
+      "size_bytes": 240944,
+      "expected_size_bytes": 240944,
+      "expected_digest": "c03572c270b333aef2f4ec645f400c868e5a4c78d2d65f623b1871be88eacbd5",
+      "actual_digest": "c03572c270b333aef2f4ec645f400c868e5a4c78d2d65f623b1871be88eacbd5",
+      "digest_algorithm": "sha256",
+      "digest_match": true,
+      "zip_valid": null,
+      "primary_download_url": "https://zenodo.org/records/7849014/files/GoodICsdf.pkl?download=1"
+    },
+    {
+      "name": "Walk_anatomical_regions.zip",
+      "exists": true,
+      "size_bytes": 176088991,
+      "expected_size_bytes": 176088991,
+      "expected_digest": "14039b2ab1a689e58b08324747daf275b8555837395df1951c7528ab3f8d4a91",
+      "actual_digest": "14039b2ab1a689e58b08324747daf275b8555837395df1951c7528ab3f8d4a91",
+      "digest_algorithm": "sha256",
+      "digest_match": true,
+      "zip_valid": true,
+      "primary_download_url": "https://zenodo.org/records/7849014/files/Walk_anatomical_regions.zip?download=1"
+    },
+    {
+      "name": "Walk_components.zip",
+      "exists": true,
+      "size_bytes": 186935529,
+      "expected_size_bytes": 186935529,
+      "expected_digest": "b557b4d267e8d926da4d21a51dc7b311fbd48cd68daa318243ae6d216f12d176",
+      "actual_digest": "b557b4d267e8d926da4d21a51dc7b311fbd48cd68daa318243ae6d216f12d176",
+      "digest_algorithm": "sha256",
+      "digest_match": true,
+      "zip_valid": true,
+      "primary_download_url": "https://zenodo.org/records/7849014/files/Walk_components.zip?download=1"
+    },
+    {
+      "name": "Additional_data.zip",
+      "exists": true,
+      "size_bytes": 599364517,
+      "expected_size_bytes": 599364517,
+      "expected_digest": "fd96bc47ee8761bb5f2704c616708855c11bc5a05ef2ecb2d1d7b2dd87436631",
+      "actual_digest": "fd96bc47ee8761bb5f2704c616708855c11bc5a05ef2ecb2d1d7b2dd87436631",
+      "digest_algorithm": "sha256",
+      "digest_match": true,
+      "zip_valid": true,
+      "primary_download_url": "https://zenodo.org/records/7849014/files/Additional_data.zip?download=1"
+    }
+  ],
+  "readme_summary": {
+    "summary_metrics": {},
+    "file_details": [
+      {
+        "name": "Walk_anatomical__regions.zip",
+        "description": "Time series of regional calcium activity during walk used for Fig. 1-3, 6SA, 7A",
+        "formats": ".npy",
+        "declared_size": "176.09 MB"
+      },
+      {
+        "name": "Walk_components.zip",
+        "description": "Time series of pca/ica components during walk used for Fig. 4-7",
+        "formats": ".npy",
+        "declared_size": "186.94 MB"
+      },
+      {
+        "name": "Additional_data.zip",
+        "description": "Additional data for Figures and potentially useful for additional analysis. These data are less well curated than the other folders.",
+        "formats": ".mat and .npy",
+        "declared_size": "599.36 MB"
+      },
+      {
+        "name": "GoodICsdf.pkl",
+        "description": "Pandas data base containing all information on the experiments including the name of the components.",
+        "formats": ".pkl",
+        "declared_size": "240.94 KB"
+      }
+    ]
+  },
+  "goodics_summary": {
+    "rows": 271,
+    "unique_fly_ids": 124,
+    "unique_exp_ids": 271,
+    "unique_gal4_lines": 8,
+    "unique_uas_lines": 6,
+    "walk_regressor_rows": 100,
+    "turn_regressor_rows": 62,
+    "forced_walk_regressor_rows": 38,
+    "forced_turn_regressor_rows": 29,
+    "top_gal4_lines": {
+      "Nsyb": 69,
+      "Trh": 37,
+      "TH": 36,
+      "TDC": 34,
+      "UNKNOWN": 25,
+      "Gad": 24,
+      "GMR57C10": 18,
+      "Cha": 14,
+      "Vglut": 14
+    },
+    "top_walk_substrates": {
+      "Styr": 87,
+      "AirBall": 66,
+      "UNKNOWN": 49,
+      "RotRod": 43,
+      "Straight": 26
+    }
+  }
+}

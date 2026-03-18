@@ -1,0 +1,27 @@
+{
+  "living_target_old_vs_refit": {
+    "avg_forward_speed_delta": 0.42870041623824395,
+    "net_displacement_delta": 0.6833677827734252,
+    "target_condition_mean_abs_bearing_rad_delta": -0.09678292274475098,
+    "target_condition_turn_bearing_corr_delta": 0.005427376599963285,
+    "jump_turn_alignment_fraction_active_delta": 0.5781587301587301,
+    "jump_turn_bearing_corr_delta": 1.3128658480008535,
+    "jump_bearing_recovery_fraction_2s_delta": 0.5273388674217916
+  },
+  "living_refit_target_vs_no_target": {
+    "avg_forward_speed_delta": 0.19327296530680682,
+    "net_displacement_delta": 0.09565676302466475,
+    "mean_turn_drive_delta": -0.09506306517869234,
+    "mean_abs_turn_drive_delta": 0.061169713735580444,
+    "right_turn_dominant_fraction_delta": -0.059,
+    "left_turn_dominant_fraction_delta": 0.05900000000000005
+  },
+  "artifacts": {
+    "builder_summary": "outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit.json",
+    "builder_library": "outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_library.json",
+    "target_summary": "outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-203010/summary.json",
+    "target_activation": "outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-203010/activation_side_by_side.mp4",
+    "no_target_summary": "outputs/requested_2s_calibrated_no_target_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-204719/summary.json",
+    "no_target_activation": "outputs/requested_2s_calibrated_no_target_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-204719/activation_side_by_side.mp4"
+  }
+}

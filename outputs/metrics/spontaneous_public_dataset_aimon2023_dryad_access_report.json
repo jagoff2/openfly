@@ -1,0 +1,36 @@
+{
+  "source": "aimon2023_dryad",
+  "version_id": "230771",
+  "access_checks": [
+    {
+      "url": "https://datadryad.org/api/v2/files/2240206/download",
+      "ok": false,
+      "status_code": 401,
+      "error": "HTTP Error 401: Unauthorized"
+    },
+    {
+      "url": "https://datadryad.org/api/v2/files/2240208/download",
+      "ok": false,
+      "status_code": 401,
+      "error": "HTTP Error 401: Unauthorized"
+    },
+    {
+      "url": "https://datadryad.org/api/v2/files/2240212/download",
+      "ok": false,
+      "status_code": 401,
+      "error": "HTTP Error 401: Unauthorized"
+    },
+    {
+      "url": "https://datadryad.org/api/v2/files/2240207/download",
+      "ok": false,
+      "status_code": 401,
+      "error": "HTTP Error 401: Unauthorized"
+    },
+    {
+      "url": "https://datadryad.org/api/v2/files/2240209/download",
+      "ok": false,
+      "status_code": 401,
+      "error": "HTTP Error 401: Unauthorized"
+    }
+  ]
+}

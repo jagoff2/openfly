@@ -1,0 +1,69 @@
+{
+  "status": "ok",
+  "dataset_root": "G:\\flysim\\external\\spontaneous\\aimon2023_dryad",
+  "missing_files": [],
+  "n_candidate_rows": 4,
+  "n_experiments_used": 2,
+  "n_valid_vector_corr": 2,
+  "n_valid_rank_corr": 2,
+  "n_valid_prelead_fraction": 1,
+  "median_steady_walk_vector_corr": -0.20157593804888388,
+  "median_steady_walk_vector_cosine": -0.18684781533980915,
+  "median_steady_walk_rank_corr": -0.20126518207501815,
+  "median_spontaneous_prelead_fraction": 0.6241135001182556,
+  "median_spontaneous_minus_forced_prelead_delta": 0.013932164758443832,
+  "dropped_experiments": [
+    {
+      "exp_id": "B1037",
+      "reason": "overlapping_walk_forced_windows",
+      "window_overlap_fraction": 0.8957894736842106
+    },
+    {
+      "exp_id": "B378",
+      "reason": "overlapping_walk_forced_windows",
+      "window_overlap_fraction": 1.0
+    }
+  ],
+  "per_experiment_rows": [
+    {
+      "exp_id": "B350",
+      "region_member": "Additional_data/FunctionallyDefinedAnatomicalRegions/B350_150FuncRegionsTS.mat",
+      "region_source": "additional_data",
+      "spontaneous_walk_regressor_member": "Additional_data/AllRegressors/B350_1to3000Walkkd.mat",
+      "forced_walk_regressor_member": "Additional_data/AllRegressors/B350ForcedBin3650_3900kd.mat",
+      "region_count": 150,
+      "time_count": 4996,
+      "walk_window_frames": 3000,
+      "forced_window_frames": 251,
+      "window_overlap_fraction": 0.0,
+      "valid_vector_region_count": 146,
+      "steady_walk_vector_corr": -0.4950717838635071,
+      "steady_walk_vector_cosine": -0.5294635942899466,
+      "steady_walk_rank_corr": -0.5383752205223125,
+      "spontaneous_prelead_fraction": NaN,
+      "spontaneous_minus_forced_prelead_delta": NaN,
+      "prelead_width_frames": 0,
+      "prelead_valid_region_count": 0
+    },
+    {
+      "exp_id": "B1269",
+      "region_member": "Additional_data/FunctionallyDefinedAnatomicalRegions/B1269_150FuncRegionsTS.mat",
+      "region_source": "additional_data",
+      "spontaneous_walk_regressor_member": "Additional_data/AllRegressors/B1269_70_103_Walkbinkd.mat",
+      "forced_walk_regressor_member": "Additional_data/AllRegressors/B1269_240_end_Forcedbinkd.mat",
+      "region_count": 150,
+      "time_count": 536,
+      "walk_window_frames": 34,
+      "forced_window_frames": 297,
+      "window_overlap_fraction": 0.0,
+      "valid_vector_region_count": 141,
+      "steady_walk_vector_corr": 0.09191990776573933,
+      "steady_walk_vector_cosine": 0.15576796361032827,
+      "steady_walk_rank_corr": 0.1358448563722762,
+      "spontaneous_prelead_fraction": 0.6241135001182556,
+      "spontaneous_minus_forced_prelead_delta": 0.013932164758443832,
+      "prelead_width_frames": 34,
+      "prelead_valid_region_count": 141
+    }
+  ]
+}

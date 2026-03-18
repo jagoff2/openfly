@@ -206,8 +206,34 @@
     needed for an honest full-validation claim
   - current strongest honest target is mesoscale physiological validation of
     spontaneous state against public imaging literature and datasets
+  - current living-branch mesoscale result:
+    - matched living target / no-target baseline: achieved
+    - walk-linked global modulation: achieved
+    - bilateral family coupling: achieved
+    - family-scale structure above a circular-shift surrogate: achieved
+    - residual high-dimensional / temporal structure: achieved
+    - weak positive family-scale connectome-to-functional correspondence after
+      log-weight aggregation: achieved
+    - forced-vs-spontaneous public timeseries comparison: achieved as a real
+      partial comparator
+      - the staged Aimon public comparator is now executable locally
+      - the decisive substrate is `Additional_data.zip`
+        `FunctionallyDefinedAnatomicalRegions/*.mat` plus
+        `AllRegressors/*.mat`, with `Walk_anatomical_regions.zip` used as a
+        secondary source when available
+      - `Walk_components.zip` is locally staged and digest-valid, but it is not
+        the primary archive for this comparator
+      - only `B350` and `B1269` survive as distinct forced-vs-spontaneous
+        comparisons
+      - `B1037` and `B378` are dropped because the public GoodICs windows
+        overlap between spontaneous and forced segments
+      - the resulting public slice is honest but weak:
+        `median_steady_walk_vector_corr = -0.2016`,
+        `median_steady_walk_rank_corr = -0.2013`,
+        `median_spontaneous_prelead_fraction = 0.6241`
   - evidence:
     - `docs/spontaneous_state_full_validation_requirements.md`
+    - `docs/spontaneous_mesoscale_validation.md`
 
 ## Engineering Substitutes Used
 

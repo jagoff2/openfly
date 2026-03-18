@@ -9,6 +9,7 @@ import shutil
 import numpy as np
 import yaml
 
+from analysis.behavior_metrics import compute_behavior_metrics, flatten_behavior_metrics, load_run_records
 from brain.public_ids import collapse_sensor_pool_rates
 from body.interfaces import BodyCommand
 from body.mock_body import MockEmbodiedRuntime
@@ -22,6 +23,7 @@ from metrics.parity import compute_parity_metrics, write_metrics_csv
 from runtime.logging_utils import JsonlLogger, make_run_dir, save_command_plot, save_trajectory_plot, save_video
 from vision.feature_extractor import RealisticVisionFeatureExtractor
 from vision.inferred_lateralized import InferredLateralizedFeatureExtractor
+from visualization.session import ActivationCaptureSession
 
 
 def load_config(path: str | Path) -> dict:
@@ -45,6 +47,7 @@ def build_body_runtime(mode: str, config: dict, run_dir: Path):
         target_fly_enabled=bool(config["body"].get("target_fly_enabled", True)),
         target_initial_phase_rad=float(config["body"].get("target_initial_phase_rad", 0.0)),
         target_angular_direction=float(config["body"].get("target_angular_direction", 1.0)),
+        target_schedule=config["body"].get("target_schedule"),
         output_dir=run_dir,
         camera_fps=int(config["runtime"].get("video_fps", 24)),
         force_cpu_vision=bool(config["runtime"].get("force_cpu_vision", False)),
@@ -62,7 +65,14 @@ def build_brain_backend(mode: str, config: dict):
         from brain.zero_backend import ZeroWholeBrainBackend
         return ZeroWholeBrainBackend(dt_ms=float(config["brain"].get("dt_ms", 0.1)))
     from brain.pytorch_backend import WholeBrainTorchBackend
-    return WholeBrainTorchBackend(completeness_path=config["brain"]["completeness_path"], connectivity_path=config["brain"]["connectivity_path"], cache_dir=config["brain"].get("cache_dir", "outputs/cache"), device=config["brain"].get("device", "cuda:0"), dt_ms=float(config["brain"].get("dt_ms", 0.1)))
+    return WholeBrainTorchBackend(
+        completeness_path=config["brain"]["completeness_path"],
+        connectivity_path=config["brain"]["connectivity_path"],
+        cache_dir=config["brain"].get("cache_dir", "outputs/cache"),
+        device=config["brain"].get("device", "cuda:0"),
+        dt_ms=float(config["brain"].get("dt_ms", 0.1)),
+        spontaneous_state=config["brain"].get("spontaneous_state"),
+    )
 
 
 def build_bridge(config: dict, brain_backend) -> ClosedLoopBridge:
@@ -72,8 +82,18 @@ def build_bridge(config: dict, brain_backend) -> ClosedLoopBridge:
     visual_splice_cfg = VisualSpliceConfig.from_mapping(config.get("visual_splice"))
     vision_extractor = None
     decoder = build_motor_decoder(config.get("decoder"))
+    shadow_decoders: list[tuple[str, Any]] = []
+    for idx, item in enumerate(config.get("shadow_decoders", [])):
+        item = dict(item or {})
+        label = str(item.get("label", f"shadow_{idx}"))
+        shadow_decoder = build_motor_decoder(item.get("decoder"))
+        shadow_decoders.append((label, shadow_decoder))
     if hasattr(brain_backend, "set_monitored_ids") and hasattr(decoder, "required_neuron_ids"):
-        brain_backend.set_monitored_ids(decoder.required_neuron_ids())
+        monitored_ids = set(decoder.required_neuron_ids())
+        for _, shadow_decoder in shadow_decoders:
+            if hasattr(shadow_decoder, "required_neuron_ids"):
+                monitored_ids.update(shadow_decoder.required_neuron_ids())
+        brain_backend.set_monitored_ids(sorted(monitored_ids))
     if bool(inferred_visual_cfg.get("enabled", False)):
         inferred_turn_extractor = InferredLateralizedFeatureExtractor.from_probe_csv(
             inferred_visual_cfg.get("probe_csv", "outputs/metrics/inferred_lateralized_visual_candidates.csv"),
@@ -89,6 +109,8 @@ def build_bridge(config: dict, brain_backend) -> ClosedLoopBridge:
         vision_extractor=vision_extractor,
         brain_context_injector=BrainContextInjector(brain_context_cfg),
         visual_splice_injector=VisualSpliceInjector(visual_splice_cfg),
+        shadow_decoders=shadow_decoders,
+        steering_promotion=config.get("steering_promotion"),
     )
 
 
@@ -110,10 +132,17 @@ def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, ou
     bridge = build_bridge(config, brain_backend)
     bridge.reset(seed=int(runtime_cfg.get("seed", 0)))
     observation = body_runtime.reset(seed=int(runtime_cfg.get("seed", 0)))
+    activation_capture, activation_status = ActivationCaptureSession.try_create(
+        config=config,
+        run_dir=run_dir,
+        initial_observation=observation,
+        title=str(runtime_cfg.get("activation_title", f"{mode.capitalize()} Closed-Loop Activation Visualization")),
+    )
     num_cycles = int(duration_s / control_interval_s)
     num_substeps = max(1, int(round(control_interval_s / body_runtime.timestep)))
     num_brain_steps = max(1, int(round(control_interval_s / (float(config["brain"].get("dt_ms", 0.1)) / 1000.0))))
     logger = JsonlLogger(run_dir / "run.jsonl")
+    log_path = run_dir / "run.jsonl"
     trajectory = []
     left_hist = []
     right_hist = []
@@ -125,14 +154,24 @@ def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, ou
     completed_cycles = 0
     try:
         for cycle in range(num_cycles):
+            driving_observation = observation
             bridge_wall_start = perf_counter()
-            readout, bridge_info = bridge.step(observation, num_brain_steps=num_brain_steps)
+            readout, bridge_info = bridge.step(driving_observation, num_brain_steps=num_brain_steps)
             bridge_wall = perf_counter() - bridge_wall_start
             command = readout.command
             observation = body_runtime.step(command, num_substeps=num_substeps)
             frame = body_runtime.render_frame()
             if frame is not None and cycle % int(runtime_cfg.get("video_stride", 1)) == 0:
                 frames.append(frame)
+            if activation_capture is not None:
+                activation_capture.record_cycle(
+                    cycle=cycle,
+                    observation=driving_observation,
+                    frame=frame,
+                    bridge_info=bridge_info,
+                    command_log=command.to_log_dict(),
+                    brain_backend=brain_backend,
+                )
             trajectory.append(np.array(observation.position_xy))
             left_drive, right_drive = _legacy_drive_summary(command)
             left_hist.append(left_drive)
@@ -178,12 +217,25 @@ def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, ou
                 "failure_message": failure_message,
             }
         )
+        behavior_metrics = compute_behavior_metrics(load_run_records(log_path))
+        metrics.update(flatten_behavior_metrics(behavior_metrics))
     metrics_path = run_dir / "metrics.csv"
     write_metrics_csv(metrics_path, metrics)
     save_trajectory_plot(run_dir / "trajectory.png", trajectory_arr)
     save_command_plot(run_dir / "commands.png", left_hist, right_hist)
     video_path = save_video(run_dir / "demo.mp4", frames, fps=int(runtime_cfg.get("video_fps", 24)))
-    summary = {"run_dir": str(run_dir), "metrics_path": str(metrics_path), "video_path": str(video_path) if video_path else None, "log_path": str(run_dir / "run.jsonl"), "metrics": metrics}
+    summary = {
+        "run_dir": str(run_dir),
+        "metrics_path": str(metrics_path),
+        "video_path": str(video_path) if video_path else None,
+        "log_path": str(log_path),
+        "metrics": metrics,
+        "behavior_metrics": behavior_metrics,
+    }
+    if activation_capture is not None:
+        summary["activation_visualization"] = activation_capture.finalize(metrics=metrics)
+    else:
+        summary["activation_visualization"] = activation_status
     with open(run_dir / "summary.json", "w", encoding="utf-8") as handle:
         json.dump(summary, handle, indent=2)
     output_root_path = Path(output_root).resolve()

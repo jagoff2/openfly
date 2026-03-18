@@ -361,6 +361,63 @@ def test_decoder_can_monitor_population_groups_without_using_them_for_control(tm
     assert readout.neuron_rates["monitor_DNp103_right_minus_left_hz"] == 40.0
 
 
+def test_decoder_can_add_turn_voltage_latent_from_monitored_brain_state(tmp_path: Path) -> None:
+    signal_library_json = tmp_path / "turn_latent.json"
+    signal_library_json.write_text(
+        json.dumps(
+            {
+                "turn_scale_mv": 5.0,
+                "selected_groups": [
+                    {
+                        "label": "RelayA",
+                        "left_root_ids": [301],
+                        "right_root_ids": [401],
+                        "turn_weight": 1.0,
+                        "baseline_asymmetry_mv": 0.0,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    decoder = MotorDecoder(
+        DecoderConfig(
+            turn_gain=0.6,
+            turn_voltage_signal_library_json=str(signal_library_json),
+            turn_voltage_weight=1.0,
+            signal_smoothing_alpha=1.0,
+        )
+    )
+    rates = {
+        DNA01_LEFT: 0.0,
+        DNA02_LEFT: 0.0,
+        DNA01_RIGHT: 0.0,
+        DNA02_RIGHT: 0.0,
+        P9_LEFT: 0.0,
+        P9_RIGHT: 0.0,
+        P9_ODN1_LEFT: 0.0,
+        P9_ODN1_RIGHT: 0.0,
+        MDN_1: 0.0,
+        MDN_2: 0.0,
+        MDN_3: 0.0,
+        MDN_4: 0.0,
+    }
+
+    readout = decoder.decode_state(
+        rates,
+        monitored_voltage={
+            301: -52.0,
+            401: -47.0,
+        },
+    )
+
+    assert set(decoder.required_neuron_ids()).issuperset({301, 401})
+    assert readout.neuron_rates["turn_voltage_signal"] > 0.7
+    assert readout.turn_signal > 0.7
+    assert readout.command.right_drive > readout.command.left_drive
+    assert readout.neuron_rates["RelayA_centered_asymmetry_voltage_mv"] == 5.0
+
+
 def test_decoder_can_compose_promoted_turn_readout_without_changing_forward_state() -> None:
     decoder = MotorDecoder(
         DecoderConfig(
@@ -567,6 +624,35 @@ def test_bridge_conflict_blend_drops_to_base_when_visual_evidence_gate_zero() ->
     assert info["conflict_override_active"] is False
     assert info["selected_turn_blend"] == 0.4
     assert info["conflict_visual_evidence_gate"] == 0.0
+
+
+def test_bridge_can_apply_refixation_override_without_sign_conflict() -> None:
+    bridge = ClosedLoopBridge(
+        MockWholeBrainBackend(),
+        steering_promotion={
+            "enabled": True,
+            "shadow_label": "shadow_fixed",
+            "mode": "conflict_blend",
+            "turn_blend": 0.4,
+            "conflict_turn_blend": 1.0,
+            "refixation_turn_blend": 1.0,
+            "shadow_turn_scale": 1.0,
+            "max_abs_turn_state": 1.0,
+        },
+    )
+
+    promoted_turn_state, info = bridge._promoted_turn_state(
+        live_turn_state=0.2,
+        shadow_turn_state=0.25,
+        refixation_evidence_gate=1.0,
+        raw_shadow_turn_state=0.8,
+    )
+
+    assert promoted_turn_state == 0.8
+    assert info["refixation_override_active"] is True
+    assert info["selected_mode"] == "refixation_override"
+    assert info["selected_turn_blend"] == 1.0
+    assert info["shadow_state_for_mix"] == 0.8
 
 
 def test_decoder_uses_population_groups_as_monitor_fallback(tmp_path: Path) -> None:

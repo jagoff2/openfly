@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 from copy import deepcopy
@@ -142,6 +142,138 @@ def test_turn_voltage_monitored_config_wires_new_monitor_candidates_json() -> No
     assert decoder.config.monitor_candidates_json == "outputs/metrics/relay_turn_voltage_monitor_candidates.json"
 
 
+def test_jump_brain_relay_monitored_config_stays_on_canonical_decoder_path() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_relay_monitored.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/jump_brain_driven_relay_monitor_candidates.json"
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+    assert config["body"]["target_schedule"][0]["kind"] == "jump"
+
+
+def test_jump_brain_relay_monitored_wave2_config_uses_second_wave_candidates() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_relay_monitored_wave2.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/jump_brain_driven_relay_monitor_candidates_wave2.json"
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+
+
+def test_no_target_brain_relay_monitored_config_disables_target_without_new_control_logic() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_relay_monitored.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/jump_brain_driven_relay_monitor_candidates.json"
+    assert config["body"]["target_fly_enabled"] is False
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+
+
+def test_zero_brain_target_jump_brain_relay_monitored_config_keeps_jump_target_but_disables_brain_drive() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_zero_brain_target_jump_brain_relay_monitored.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/jump_brain_driven_relay_monitor_candidates.json"
+    assert config["brain"]["backend"] == "zero"
+    assert config["visual_splice"]["enabled"] is False
+    assert config["body"]["target_schedule"][0]["kind"] == "jump"
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+
+
+def test_target_jump_brain_latent_turn_config_stays_on_primary_decoder_path() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/jump_brain_driven_relay_monitor_candidates.json"
+    assert decoder.config.turn_voltage_signal_library_json == "outputs/metrics/jump_brain_driven_turn_latent_2s_library_strict.json"
+    assert decoder.config.turn_voltage_weight == 0.3
+    assert config["body"]["target_schedule"][0]["kind"] == "jump"
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+
+
+def test_no_target_brain_latent_turn_config_disables_target_without_sidecar_logic() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_latent_turn.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert decoder.config.turn_voltage_signal_library_json == "outputs/metrics/jump_brain_driven_turn_latent_2s_library_strict.json"
+    assert decoder.config.turn_voltage_weight == 0.3
+    assert config["body"]["target_fly_enabled"] is False
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+
+
+def test_zero_brain_target_jump_brain_latent_turn_config_disables_brain_drive_but_keeps_primary_decoder_path() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_zero_brain_target_jump_brain_latent_turn.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert config["brain"]["backend"] == "zero"
+    assert config["visual_splice"]["enabled"] is False
+    assert decoder.config.turn_voltage_signal_library_json == "outputs/metrics/jump_brain_driven_turn_latent_2s_library_strict.json"
+    assert decoder.config.turn_voltage_weight == 0.3
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+
+
+def test_no_target_brain_latent_turn_spontaneous_config_keeps_awake_backend_but_disables_target() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_latent_turn_spontaneous.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert config["brain"]["backend"] == "torch"
+    assert config["brain"]["spontaneous_state"]["mode"] == "sparse_lognormal_latent_ou"
+    assert config["body"]["target_fly_enabled"] is False
+    assert decoder.config.turn_voltage_signal_library_json == "outputs/metrics/jump_brain_driven_turn_latent_2s_library_strict.json"
+    assert decoder.config.turn_voltage_weight == 0.3
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+
+
+def test_target_jump_brain_latent_turn_spontaneous_refit_config_points_to_spontaneous_library() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn_spontaneous_refit.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert config["brain"]["spontaneous_state"]["mode"] == "sparse_lognormal_latent_ou"
+    assert config["body"]["target_schedule"][0]["kind"] == "jump"
+    assert decoder.config.turn_voltage_signal_library_json == "outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_library.json"
+    assert decoder.config.turn_voltage_weight == 0.3
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+
+
+def test_no_target_brain_latent_turn_spontaneous_refit_config_points_to_spontaneous_library() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_latent_turn_spontaneous_refit.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert config["brain"]["spontaneous_state"]["mode"] == "sparse_lognormal_latent_ou"
+    assert config["body"]["target_fly_enabled"] is False
+    assert decoder.config.turn_voltage_signal_library_json == "outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_library.json"
+    assert decoder.config.turn_voltage_weight == 0.3
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+
+
+def test_target_jump_brain_latent_turn_spontaneous_config_enables_backend_state_without_controller_changes() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn_spontaneous.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert config["brain"]["backend"] == "torch"
+    assert config["brain"]["spontaneous_state"]["mode"] == "sparse_lognormal_latent_ou"
+    assert config["brain"]["spontaneous_state"]["included_super_classes"] == [
+        "central",
+        "ascending",
+        "visual_projection",
+        "visual_centrifugal",
+        "endocrine",
+    ]
+    assert config["body"]["target_schedule"][0]["kind"] == "jump"
+    assert decoder.config.turn_voltage_signal_library_json == "outputs/metrics/jump_brain_driven_turn_latent_2s_library_strict.json"
+    assert decoder.config.turn_voltage_weight == 0.3
+    assert "shadow_decoders" not in config
+    assert "steering_promotion" not in config
+
 def test_closed_loop_smoke_logs_vnc_structural_decoder_fields(tmp_path: Path) -> None:
     config = deepcopy(load_config("configs/mock_vnc_structural_spec_exit_nerve.yaml"))
     config.setdefault("brain", {})["backend"] = "mock"
@@ -180,10 +312,14 @@ def test_build_body_runtime_passes_camera_mode_to_flygym_runtime(tmp_path: Path,
 
     monkeypatch.setattr(flygym_runtime_module, "FlyGymRealisticVisionRuntime", FakeFlyGymRuntime)
     config = deepcopy(load_config("configs/flygym_realistic_vision_splice_uvgrid_vnc_structural_spec_exit_nerve_flywire_semantic.yaml"))
+    config.setdefault("body", {})["target_schedule"] = [
+        {"kind": "jump", "time_s": 0.5, "delta_phase_rad": 1.0472}
+    ]
     runtime = build_body_runtime("flygym", config, tmp_path)
 
     assert isinstance(runtime, FakeFlyGymRuntime)
     assert captured["camera_mode"] == "follow_yaw"
+    assert captured["target_schedule"] == [{"kind": "jump", "time_s": 0.5, "delta_phase_rad": 1.0472}]
 
 
 def test_closed_loop_smoke_writes_partial_metrics_on_runtime_failure(tmp_path: Path, monkeypatch) -> None:
@@ -377,3 +513,6 @@ def test_closed_loop_smoke_logs_voltage_turn_shadow_decode(tmp_path: Path) -> No
     assert "shadow_voltage_turn" in first_record["shadow_decodes"]
     shadow_rates = first_record["shadow_decodes"]["shadow_voltage_turn"]["neuron_rates"]
     assert "RelayA_asymmetry_voltage_mv" in shadow_rates or shadow_rates.get("voltage_turn_silent_guard") == 1.0
+
+
+

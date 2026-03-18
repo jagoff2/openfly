@@ -23,6 +23,11 @@ class SteeringPromotionConfig:
     conflict_shadow_min_ratio: float = 1.0
     conflict_visual_evidence_scale: float = 0.0
     conflict_visual_evidence_floor: float = 0.0
+    refixation_turn_blend: float = 0.0
+    refixation_balance_delta_scale: float = 0.0
+    refixation_forward_salience_delta_scale: float = 0.0
+    refixation_shadow_raw_delta_scale: float = 0.0
+    refixation_gate_decay: float = 0.0
 
     @classmethod
     def from_mapping(cls, mapping: dict[str, Any] | None) -> "SteeringPromotionConfig":
@@ -39,6 +44,11 @@ class SteeringPromotionConfig:
             conflict_shadow_min_ratio=float(mapping.get("conflict_shadow_min_ratio", 1.0)),
             conflict_visual_evidence_scale=float(mapping.get("conflict_visual_evidence_scale", 0.0)),
             conflict_visual_evidence_floor=float(mapping.get("conflict_visual_evidence_floor", 0.0)),
+            refixation_turn_blend=float(mapping.get("refixation_turn_blend", 0.0)),
+            refixation_balance_delta_scale=float(mapping.get("refixation_balance_delta_scale", 0.0)),
+            refixation_forward_salience_delta_scale=float(mapping.get("refixation_forward_salience_delta_scale", 0.0)),
+            refixation_shadow_raw_delta_scale=float(mapping.get("refixation_shadow_raw_delta_scale", 0.0)),
+            refixation_gate_decay=float(mapping.get("refixation_gate_decay", 0.0)),
         )
 
 
@@ -52,8 +62,20 @@ class ClosedLoopBridge:
         self.visual_splice_injector = visual_splice_injector or VisualSpliceInjector()
         self.shadow_decoders = list(shadow_decoders or [])
         self.steering_promotion = steering_promotion if isinstance(steering_promotion, SteeringPromotionConfig) else SteeringPromotionConfig.from_mapping(steering_promotion)
+        self._previous_salience_diff: float | None = None
+        self._previous_forward_salience: float | None = None
+        self._previous_shadow_raw_turn_state: dict[str, float] = {}
+        self._refixation_gate_state = 0.0
 
-    def _promoted_turn_state(self, *, live_turn_state: float, shadow_turn_state: float, conflict_visual_evidence_gate: float = 1.0) -> tuple[float, dict[str, Any]]:
+    def _promoted_turn_state(
+        self,
+        *,
+        live_turn_state: float,
+        shadow_turn_state: float,
+        conflict_visual_evidence_gate: float = 1.0,
+        refixation_evidence_gate: float = 0.0,
+        raw_shadow_turn_state: float | None = None,
+    ) -> tuple[float, dict[str, Any]]:
         cfg = self.steering_promotion
         live_sign = 0.0 if abs(live_turn_state) <= 1e-9 else float(1.0 if live_turn_state > 0.0 else -1.0)
         shadow_sign = 0.0 if abs(shadow_turn_state) <= 1e-9 else float(1.0 if shadow_turn_state > 0.0 else -1.0)
@@ -65,20 +87,33 @@ class ClosedLoopBridge:
         )
         selected_mode = str(cfg.mode)
         selected_blend = float(max(0.0, min(1.0, cfg.turn_blend)))
+        refixation_override_active = False
+        refixation_evidence_gate = float(max(0.0, min(1.0, refixation_evidence_gate)))
+        shadow_state_for_mix = float(shadow_turn_state)
+        if raw_shadow_turn_state is not None and refixation_evidence_gate > 0.0:
+            raw_shadow_turn_state = float(raw_shadow_turn_state)
+            shadow_state_for_mix = (1.0 - refixation_evidence_gate) * float(shadow_turn_state) + refixation_evidence_gate * raw_shadow_turn_state
+            max_refixation_blend = float(max(0.0, min(1.0, cfg.refixation_turn_blend)))
+            if max_refixation_blend > selected_blend:
+                candidate_blend = selected_blend + refixation_evidence_gate * (max_refixation_blend - selected_blend)
+                if candidate_blend > selected_blend + 1e-9:
+                    refixation_override_active = True
+                    selected_mode = "refixation_override"
+                selected_blend = max(selected_blend, candidate_blend)
         conflict_override_active = False
         if cfg.mode == "replace":
-            promoted_turn_state = shadow_turn_state
+            promoted_turn_state = shadow_state_for_mix
         elif cfg.mode == "conflict_blend":
             if opposite_sign and shadow_confident:
-                base_blend = float(max(0.0, min(1.0, cfg.turn_blend)))
+                base_blend = float(selected_blend)
                 max_conflict_blend = float(max(0.0, min(1.0, cfg.conflict_turn_blend)))
                 conflict_visual_evidence_gate = float(max(0.0, min(1.0, conflict_visual_evidence_gate)))
                 selected_blend = base_blend + conflict_visual_evidence_gate * (max_conflict_blend - base_blend)
                 conflict_override_active = selected_blend > float(max(0.0, min(1.0, cfg.turn_blend))) + 1e-9
                 selected_mode = "conflict_override" if conflict_override_active else "conflict_blend"
-            promoted_turn_state = (1.0 - selected_blend) * live_turn_state + selected_blend * shadow_turn_state
+            promoted_turn_state = (1.0 - selected_blend) * live_turn_state + selected_blend * shadow_state_for_mix
         else:
-            promoted_turn_state = (1.0 - selected_blend) * live_turn_state + selected_blend * shadow_turn_state
+            promoted_turn_state = (1.0 - selected_blend) * live_turn_state + selected_blend * shadow_state_for_mix
         promoted_turn_state = float(
             max(
                 -abs(cfg.max_abs_turn_state),
@@ -98,6 +133,10 @@ class ClosedLoopBridge:
             "conflict_shadow_min_ratio": float(cfg.conflict_shadow_min_ratio),
             "conflict_visual_evidence_scale": float(cfg.conflict_visual_evidence_scale),
             "conflict_visual_evidence_floor": float(cfg.conflict_visual_evidence_floor),
+            "refixation_turn_blend": float(cfg.refixation_turn_blend),
+            "refixation_evidence_gate": float(refixation_evidence_gate),
+            "raw_shadow_turn_state": None if raw_shadow_turn_state is None else float(raw_shadow_turn_state),
+            "shadow_state_for_mix": float(shadow_state_for_mix),
             "live_turn_state": float(live_turn_state),
             "shadow_turn_state": float(shadow_turn_state),
             "promoted_turn_state": float(promoted_turn_state),
@@ -105,6 +144,7 @@ class ClosedLoopBridge:
             "live_shadow_opposite_sign": opposite_sign,
             "shadow_confident": shadow_confident,
             "conflict_visual_evidence_gate": float(max(0.0, min(1.0, conflict_visual_evidence_gate))),
+            "refixation_override_active": refixation_override_active,
             "conflict_override_active": conflict_override_active,
             "selected_turn_blend": float(selected_blend),
         }
@@ -121,6 +161,10 @@ class ClosedLoopBridge:
             self.brain_context_injector.reset()
         if hasattr(self.visual_splice_injector, "reset"):
             self.visual_splice_injector.reset()
+        self._previous_salience_diff = None
+        self._previous_forward_salience = None
+        self._previous_shadow_raw_turn_state.clear()
+        self._refixation_gate_state = 0.0
 
     def step(self, observation: BodyObservation, num_brain_steps: int) -> tuple[MotorReadout, dict[str, Any]]:
         vision_features = self.vision_extractor.extract_observation(observation)
@@ -144,7 +188,14 @@ class ClosedLoopBridge:
             spike_values = self.brain_backend.spikes[0, monitored_indices].detach().cpu().numpy().astype(float, copy=False)
             monitored_spikes = {str(neuron_id): float(value) for neuron_id, value in zip(monitored_ids, spike_values)}
         backend_state = self.brain_backend.state_summary() if hasattr(self.brain_backend, "state_summary") else {}
-        motor_readout = self.decoder.decode(firing_rates)
+        if hasattr(self.decoder, "decode_state"):
+            motor_readout = self.decoder.decode_state(
+                firing_rates,
+                monitored_voltage=monitored_voltage,
+                monitored_spikes=monitored_spikes,
+            )
+        else:
+            motor_readout = self.decoder.decode(firing_rates)
         shadow_decodes: dict[str, Any] = {}
         shadow_readout_objects: dict[str, MotorReadout] = {}
         for label, shadow_decoder in self.shadow_decoders:
@@ -181,6 +232,19 @@ class ClosedLoopBridge:
                 )
             )
             salience_diff = float(vision_features.salience_right) - float(vision_features.salience_left)
+            forward_salience = float(getattr(vision_features, "forward_salience", 0.0))
+            raw_shadow_turn_state = float(
+                shadow_readout.neuron_rates.get(
+                    "voltage_turn_signal",
+                    shadow_readout.neuron_rates.get("turn_signal", shadow_readout.turn_signal),
+                )
+            ) * float(self.steering_promotion.shadow_turn_scale)
+            raw_shadow_turn_state = float(
+                max(
+                    -abs(self.steering_promotion.max_abs_turn_state),
+                    min(abs(self.steering_promotion.max_abs_turn_state), raw_shadow_turn_state),
+                )
+            )
             evidence_scale = float(self.steering_promotion.conflict_visual_evidence_scale)
             if evidence_scale > 0.0:
                 conflict_visual_evidence_gate = float(
@@ -191,10 +255,35 @@ class ClosedLoopBridge:
                 )
             else:
                 conflict_visual_evidence_gate = 1.0
+            balance_delta = 0.0 if self._previous_salience_diff is None else salience_diff - float(self._previous_salience_diff)
+            forward_salience_delta = 0.0 if self._previous_forward_salience is None else forward_salience - float(self._previous_forward_salience)
+            previous_raw_shadow_turn_state = self._previous_shadow_raw_turn_state.get(self.steering_promotion.shadow_label)
+            raw_shadow_turn_delta = 0.0 if previous_raw_shadow_turn_state is None else raw_shadow_turn_state - float(previous_raw_shadow_turn_state)
+            instant_refixation_gate = 0.0
+            if self.steering_promotion.refixation_balance_delta_scale > 0.0:
+                instant_refixation_gate = max(
+                    instant_refixation_gate,
+                    abs(balance_delta) / float(self.steering_promotion.refixation_balance_delta_scale),
+                )
+            if self.steering_promotion.refixation_forward_salience_delta_scale > 0.0:
+                instant_refixation_gate = max(
+                    instant_refixation_gate,
+                    abs(forward_salience_delta) / float(self.steering_promotion.refixation_forward_salience_delta_scale),
+                )
+            if self.steering_promotion.refixation_shadow_raw_delta_scale > 0.0:
+                instant_refixation_gate = max(
+                    instant_refixation_gate,
+                    abs(raw_shadow_turn_delta) / float(self.steering_promotion.refixation_shadow_raw_delta_scale),
+                )
+            instant_refixation_gate = float(max(0.0, min(1.0, instant_refixation_gate)))
+            refixation_decay = float(max(0.0, min(1.0, self.steering_promotion.refixation_gate_decay)))
+            self._refixation_gate_state = max(instant_refixation_gate, self._refixation_gate_state * refixation_decay)
             promoted_turn_state, promotion_info = self._promoted_turn_state(
                 live_turn_state=live_turn_state,
                 shadow_turn_state=shadow_turn_state,
                 conflict_visual_evidence_gate=conflict_visual_evidence_gate,
+                refixation_evidence_gate=self._refixation_gate_state,
+                raw_shadow_turn_state=raw_shadow_turn_state,
             )
             motor_readout = self.decoder.compose_promoted_readout(
                 base_readout=motor_readout,
@@ -206,11 +295,21 @@ class ClosedLoopBridge:
                     "promotion_conflict_turn_blend": float(self.steering_promotion.conflict_turn_blend),
                     "promotion_shadow_turn_scale": float(self.steering_promotion.shadow_turn_scale),
                     "promotion_conflict_visual_evidence_gate": float(conflict_visual_evidence_gate),
+                    "promotion_refixation_evidence_gate": float(self._refixation_gate_state),
+                    "promotion_refixation_instant_gate": float(instant_refixation_gate),
+                    "promotion_refixation_balance_delta": float(balance_delta),
+                    "promotion_refixation_forward_salience_delta": float(forward_salience_delta),
+                    "promotion_refixation_raw_shadow_turn_delta": float(raw_shadow_turn_delta),
+                    "promotion_raw_shadow_turn_state": float(raw_shadow_turn_state),
                     "promotion_selected_turn_blend": float(promotion_info.get("selected_turn_blend", self.steering_promotion.turn_blend)),
                     "promotion_conflict_override_active": 1.0 if promotion_info.get("conflict_override_active", False) else 0.0,
+                    "promotion_refixation_override_active": 1.0 if promotion_info.get("refixation_override_active", False) else 0.0,
                     "promotion_mode_replace": 1.0 if self.steering_promotion.mode == "replace" else 0.0,
                 },
             )
+            self._previous_salience_diff = salience_diff
+            self._previous_forward_salience = forward_salience
+            self._previous_shadow_raw_turn_state[self.steering_promotion.shadow_label] = raw_shadow_turn_state
         info = {
             "vision_features": vision_features.to_dict(),
             "vision_payload_mode": observation.vision_payload_mode,

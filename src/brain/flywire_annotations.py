@@ -103,6 +103,13 @@ def load_flywire_annotation_table(path: str | Path) -> pd.DataFrame:
         "cell_type",
         "hemibrain_type",
         "side",
+        "super_class",
+        "cell_class",
+        "cell_sub_class",
+        "morphology_group",
+        "nerve",
+        "top_nt",
+        "known_nt",
         "pos_x",
         "pos_y",
         "pos_z",
@@ -123,6 +130,17 @@ def load_flywire_annotation_table(path: str | Path) -> pd.DataFrame:
         df["cell_type"] = df["cell_type"].fillna("").astype(str)
     if "hemibrain_type" in df.columns:
         df["hemibrain_type"] = df["hemibrain_type"].fillna("").astype(str)
+    for column in (
+        "super_class",
+        "cell_class",
+        "cell_sub_class",
+        "morphology_group",
+        "nerve",
+        "top_nt",
+        "known_nt",
+    ):
+        if column in df.columns:
+            df[column] = df[column].fillna("").astype(str)
     df["side"] = df["side"].astype(str).str.lower()
     return df
 

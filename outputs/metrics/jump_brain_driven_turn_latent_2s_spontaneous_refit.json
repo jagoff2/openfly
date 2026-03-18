@@ -1,0 +1,29 @@
+{
+  "target_capture": "outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous/flygym-demo-20260315-150545/activation_capture.npz",
+  "no_target_capture": "outputs/requested_2s_calibrated_no_target_brain_latent_turn_spontaneous/flygym-demo-20260315-200558/activation_capture.npz",
+  "target_log": "outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous/flygym-demo-20260315-150545/run.jsonl",
+  "no_target_log": "outputs/requested_2s_calibrated_no_target_brain_latent_turn_spontaneous/flygym-demo-20260315-200558/run.jsonl",
+  "state_key": "brain_backend_state.background_latent_mean_abs_hz",
+  "monitor_candidates_json": "outputs/metrics/jump_brain_driven_relay_monitor_candidates.json",
+  "top_k": 8,
+  "min_target_corr": 0.2,
+  "selected_labels": [
+    "MeLp1",
+    "PVLP112b",
+    "cM15",
+    "CB0965",
+    "CL294",
+    "CB1916",
+    "cML02",
+    "AVLP091"
+  ],
+  "selected_group_count": 8,
+  "artifacts": {
+    "target_turn_csv": "outputs\\metrics\\jump_brain_driven_turn_latent_2s_spontaneous_refit_target_turn.csv",
+    "no_target_turn_csv": "outputs\\metrics\\jump_brain_driven_turn_latent_2s_spontaneous_refit_no_target_turn.csv",
+    "ranked_csv": "outputs\\metrics\\jump_brain_driven_turn_latent_2s_spontaneous_refit_ranked.csv",
+    "library_json": "outputs\\metrics\\jump_brain_driven_turn_latent_2s_spontaneous_refit_library.json",
+    "target_state_bins_csv": "outputs\\metrics\\jump_brain_driven_turn_latent_2s_spontaneous_refit_target_state_bins.csv",
+    "no_target_state_bins_csv": "outputs\\metrics\\jump_brain_driven_turn_latent_2s_spontaneous_refit_no_target_state_bins.csv"
+  }
+}

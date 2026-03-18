@@ -1,0 +1,146 @@
+{
+  "selection_rule": "target-specific monitor turn-voltage ranking with sign chosen to align with body-frame target bearing",
+  "turn_scale_mv": 5.0,
+  "weight_mode": "score",
+  "selected_groups": [
+    {
+      "label": "MeLp1",
+      "super_class": "visual_projection",
+      "left_root_ids": [
+        720575940606584766
+      ],
+      "right_root_ids": [
+        720575940622696944
+      ],
+      "target_specificity_score": 0.9372253034831994,
+      "corr_target_bearing": -0.826664340862362,
+      "corr_drive_asymmetry": -0.8771361633533881,
+      "mean_abs_asymmetry_voltage_mv": 49.88542938232422,
+      "turn_weight": -1.0,
+      "baseline_asymmetry_mv": -49.867515563964844
+    },
+    {
+      "label": "PVLP112b",
+      "super_class": "central",
+      "left_root_ids": [
+        720575940615026739,
+        720575940621101411,
+        720575940625759065,
+        720575940632310940
+      ],
+      "right_root_ids": [
+        720575940621415389,
+        720575940622297293,
+        720575940631534161,
+        720575940653703841
+      ],
+      "target_specificity_score": 0.8371070549579129,
+      "corr_target_bearing": -0.8058554756253772,
+      "corr_drive_asymmetry": -0.8494893234985884,
+      "mean_abs_asymmetry_voltage_mv": 3.3792951107025146,
+      "turn_weight": -0.8931759010846199,
+      "baseline_asymmetry_mv": -2.0431039333343506
+    },
+    {
+      "label": "cM15",
+      "super_class": "visual_centrifugal",
+      "left_root_ids": [
+        720575940628038808
+      ],
+      "right_root_ids": [
+        720575940631190016
+      ],
+      "target_specificity_score": 0.7700756793350629,
+      "corr_target_bearing": 0.7253957285135796,
+      "corr_drive_asymmetry": 0.8763384692330403,
+      "mean_abs_asymmetry_voltage_mv": 6.449240684509277,
+      "turn_weight": 0.821654810719552,
+      "baseline_asymmetry_mv": 6.06613302230835
+    },
+    {
+      "label": "CB0965",
+      "super_class": "central",
+      "left_root_ids": [
+        720575940621988684,
+        720575940623998563,
+        720575940625355281
+      ],
+      "right_root_ids": [
+        720575940622438621,
+        720575940646705028
+      ],
+      "target_specificity_score": 0.6627401676060917,
+      "corr_target_bearing": 0.6122954198990392,
+      "corr_drive_asymmetry": 0.7026702651430943,
+      "mean_abs_asymmetry_voltage_mv": 1.1889666318893433,
+      "turn_weight": 0.7071300413497339,
+      "baseline_asymmetry_mv": 0.7436292767524719
+    },
+    {
+      "label": "CL294",
+      "super_class": "central",
+      "left_root_ids": [
+        720575940619915934
+      ],
+      "right_root_ids": [
+        720575940628910415
+      ],
+      "target_specificity_score": 0.5692981331150462,
+      "corr_target_bearing": 0.8972608011616349,
+      "corr_drive_asymmetry": 0.6735208980107501,
+      "mean_abs_asymmetry_voltage_mv": 3.2421703338623047,
+      "turn_weight": 0.6074293246237044,
+      "baseline_asymmetry_mv": -1.469933032989502
+    },
+    {
+      "label": "CB1916",
+      "super_class": "central",
+      "left_root_ids": [
+        720575940633403839,
+        720575940634834356
+      ],
+      "right_root_ids": [
+        720575940625035301,
+        720575940628915191
+      ],
+      "target_specificity_score": 0.45247273608104266,
+      "corr_target_bearing": 0.5725980739081471,
+      "corr_drive_asymmetry": 0.7778706974712661,
+      "mean_abs_asymmetry_voltage_mv": 1.2577301263809204,
+      "turn_weight": 0.4827790440563512,
+      "baseline_asymmetry_mv": 1.5332238674163818
+    },
+    {
+      "label": "cML02",
+      "super_class": "visual_centrifugal",
+      "left_root_ids": [
+        720575940627278340
+      ],
+      "right_root_ids": [
+        720575940623234518
+      ],
+      "target_specificity_score": 0.4197002030227294,
+      "corr_target_bearing": 0.7679866890783648,
+      "corr_drive_asymmetry": 0.8068096280943695,
+      "mean_abs_asymmetry_voltage_mv": 2.653179883956909,
+      "turn_weight": 0.4478114296134696,
+      "baseline_asymmetry_mv": 4.660414218902588
+    },
+    {
+      "label": "AVLP091",
+      "super_class": "central",
+      "left_root_ids": [
+        720575940626196313
+      ],
+      "right_root_ids": [
+        720575940612409494
+      ],
+      "target_specificity_score": 0.39579604218301184,
+      "corr_target_bearing": 0.5517381099755296,
+      "corr_drive_asymmetry": 0.7217693779487296,
+      "mean_abs_asymmetry_voltage_mv": 2.182711124420166,
+      "turn_weight": 0.42230618476905735,
+      "baseline_asymmetry_mv": 2.7781591415405273
+    }
+  ]
+}

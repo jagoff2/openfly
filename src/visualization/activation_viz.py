@@ -383,13 +383,19 @@ def render_activation_frame(
     _plot_flyvis(ax_flyvis_left, flyvis_left, "FlyVis Left Eye")
     _plot_flyvis(ax_flyvis_right, flyvis_right, "FlyVis Right Eye")
 
-    monitor_img = _normalize_rows(monitor_matrix, signed=False)
-    ax_monitor.imshow(monitor_img, aspect="auto", origin="lower", cmap="magma", interpolation="nearest")
-    ax_monitor.axvline(cycle_index, color="cyan", linewidth=1.0)
     ax_monitor.set_title("Monitored Decoder Populations")
-    ax_monitor.set_yticks(np.arange(len(monitor_labels)))
-    ax_monitor.set_yticklabels([str(label) for label in monitor_labels], fontsize=7)
-    ax_monitor.set_xlabel("cycle")
+    if monitor_matrix.size == 0 or len(monitor_labels) == 0:
+        ax_monitor.text(0.5, 0.5, "No monitored groups", ha="center", va="center", fontsize=11, color="white")
+        ax_monitor.set_facecolor("black")
+        ax_monitor.set_xticks([])
+        ax_monitor.set_yticks([])
+    else:
+        monitor_img = _normalize_rows(monitor_matrix, signed=False)
+        ax_monitor.imshow(monitor_img, aspect="auto", origin="lower", cmap="magma", interpolation="nearest")
+        ax_monitor.axvline(cycle_index, color="cyan", linewidth=1.0)
+        ax_monitor.set_yticks(np.arange(len(monitor_labels)))
+        ax_monitor.set_yticklabels([str(label) for label in monitor_labels], fontsize=7)
+        ax_monitor.set_xlabel("cycle")
 
     controller_img = _normalize_rows(controller_matrix, signed=True)
     ax_controller.imshow(controller_img, aspect="auto", origin="lower", cmap="coolwarm", interpolation="nearest", vmin=-1.0, vmax=1.0)

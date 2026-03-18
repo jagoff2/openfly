@@ -10,6 +10,7 @@ from typing import Any
 import numpy as np
 
 from body.interfaces import BodyObservation, ControlCommand, EmbodiedRuntime
+from body.target_schedule import TargetScheduleState, parse_target_schedule
 
 @dataclass
 class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
@@ -20,6 +21,7 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
     target_fly_enabled: bool = True
     target_initial_phase_rad: float = 0.0
     target_angular_direction: float = 1.0
+    target_schedule: list[dict[str, Any]] | None = None
     output_dir: str | Path = "outputs/demos"
     camera_fps: int = 24
     force_cpu_vision: bool = False
@@ -36,6 +38,7 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
         self._last_position = None
         self._last_yaw = 0.0
         self._time = 0.0
+        self._target_current_theta = float(self.target_initial_phase_rad)
 
     def _setup_imports(self) -> None:
         if self.force_cpu_vision:
@@ -75,6 +78,7 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
             radius = max(float(self.leading_fly_radius), 1e-9)
             direction = 1.0 if float(self.target_angular_direction) >= 0.0 else -1.0
             self._target_angular_speed = direction * abs(float(self.leading_fly_speed)) / radius
+        self._target_schedule_state = TargetScheduleState(parse_target_schedule(self.target_schedule))
         if self.control_mode == "hybrid_multidrive":
             fly_cls = self.FastRealisticVisionFly if self.vision_payload_mode == "fast" else self.ConnectomeTurningFly
         else:
@@ -107,9 +111,26 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
         if not self.target_fly_enabled or not hasattr(self.arena, "freejoint"):
             return
         physics = physics or self.sim.physics
+        position, heading, _velocity_xy = self._ghost_target_pose(theta)
+        self.arena.fly_pos = position.copy()
+        quat = np.exp(1j * heading / 2.0)
+        qpos = (*position, float(quat.real), 0.0, 0.0, float(quat.imag))
+        physics.bind(self.arena.freejoint).qpos = qpos
+        physics.bind(self.arena.freejoint).qvel[:] = 0
+        self.arena._prev_pos = complex(*self.arena.fly_pos[:2])
+
+    def _apply_hidden_target_pose(self, physics: Any | None = None) -> None:
+        if not self.target_fly_enabled or not hasattr(self.arena, "freejoint"):
+            return
+        physics = physics or self.sim.physics
+        hidden_pos = np.array([0.0, 0.0, -10.0], dtype=float)
+        physics.bind(self.arena.freejoint).qpos = (*hidden_pos, 1.0, 0.0, 0.0, 0.0)
+        physics.bind(self.arena.freejoint).qvel[:] = 0
+
+    def _ghost_target_pose(self, theta: float) -> tuple[np.ndarray, float, tuple[float, float]]:
         radius = float(self.arena.radius)
         height = float(self.arena.init_fly_pos[2])
-        self.arena.fly_pos = np.array(
+        position = np.array(
             [
                 radius * math.sin(theta),
                 radius * math.cos(theta),
@@ -117,54 +138,63 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
             ],
             dtype=float,
         )
-        heading_x = radius * math.cos(theta) * float(self._target_angular_speed)
-        heading_y = -radius * math.sin(theta) * float(self._target_angular_speed)
-        heading = math.atan2(heading_y, heading_x) if abs(heading_x) + abs(heading_y) > 1e-12 else 0.0
-        quat = np.exp(1j * heading / 2.0)
-        qpos = (*self.arena.fly_pos, float(quat.real), 0.0, 0.0, float(quat.imag))
-        physics.bind(self.arena.freejoint).qpos = qpos
-        physics.bind(self.arena.freejoint).qvel[:] = 0
-        self.arena._prev_pos = complex(*self.arena.fly_pos[:2])
+        velocity_x = radius * math.cos(theta) * float(self._target_angular_speed)
+        velocity_y = -radius * math.sin(theta) * float(self._target_angular_speed)
+        heading = math.atan2(velocity_y, velocity_x) if abs(velocity_x) + abs(velocity_y) > 1e-12 else 0.0
+        return position, heading, (float(velocity_x), float(velocity_y))
+
+    def _update_target_pose(self, current_time_s: float, physics: Any | None = None) -> None:
+        if not self.target_fly_enabled or not hasattr(self.arena, "freejoint"):
+            return
+        self._target_schedule_state.advance(float(current_time_s))
+        self._target_current_theta = (
+            float(self.target_initial_phase_rad)
+            + float(self._target_schedule_state.phase_offset_rad)
+            + float(self._target_angular_speed) * float(current_time_s)
+        )
+        if self._target_schedule_state.visible:
+            self._apply_target_pose(self._target_current_theta, physics)
+        else:
+            self._apply_hidden_target_pose(physics)
 
     def _controlled_target_step(self, arena: Any, dt: float, physics: Any) -> None:
         del arena
-        theta = float(self.target_initial_phase_rad) + float(self._target_angular_speed) * float(self.arena.curr_time)
-        self._apply_target_pose(theta, physics)
+        self._update_target_pose(float(self.arena.curr_time), physics)
         self.arena.curr_time += dt
 
     def _target_state_metadata(self, position_xy: tuple[float, float], yaw: float) -> dict[str, Any]:
         if not self.target_fly_enabled or not hasattr(self.arena, "freejoint"):
             return {"enabled": False}
-        qpos = np.asarray(self.sim.physics.bind(self.arena.freejoint).qpos, dtype=float)
-        qvel = np.asarray(self.sim.physics.bind(self.arena.freejoint).qvel, dtype=float)
-        target_x, target_y, target_z = (float(qpos[0]), float(qpos[1]), float(qpos[2]))
-        qw, qx, qy, qz = (float(qpos[3]), float(qpos[4]), float(qpos[5]), float(qpos[6]))
-        target_yaw = float(math.atan2(2.0 * (qw * qz + qx * qy), 1.0 - 2.0 * (qy * qy + qz * qz)))
+        target_position, target_yaw, target_velocity = self._ghost_target_pose(self._target_current_theta)
+        target_x, target_y, target_z = (float(target_position[0]), float(target_position[1]), float(target_position[2]))
         rel_x = target_x - float(position_xy[0])
         rel_y = target_y - float(position_xy[1])
         target_bearing_world = float(math.atan2(rel_y, rel_x))
         target_bearing_body = float((target_bearing_world - yaw + math.pi) % (2.0 * math.pi) - math.pi)
-        return {
+        metadata = {
             "enabled": True,
+            **self._target_schedule_state.metadata(self._time),
             "position_x": target_x,
             "position_y": target_y,
             "position_z": target_z,
             "yaw": target_yaw,
-            "velocity_x": float(qvel[0]) if qvel.size > 0 else 0.0,
-            "velocity_y": float(qvel[1]) if qvel.size > 1 else 0.0,
+            "velocity_x": float(target_velocity[0]),
+            "velocity_y": float(target_velocity[1]),
             "distance": float(math.hypot(rel_x, rel_y)),
             "bearing_world": target_bearing_world,
             "bearing_body": target_bearing_body,
             "initial_phase_rad": float(self.target_initial_phase_rad),
             "angular_direction": 1.0 if float(self.target_angular_direction) >= 0.0 else -1.0,
         }
+        return metadata
 
     def reset(self, seed: int = 0) -> BodyObservation:
         obs, info = self.sim.reset(seed=seed)
         self._time = 0.0
         if self.target_fly_enabled and hasattr(self.arena, "curr_time"):
             self.arena.curr_time = 0.0
-            self._apply_target_pose(float(self.target_initial_phase_rad))
+            self._target_schedule_state.reset()
+            self._update_target_pose(0.0)
         self._last_position = np.array(obs["fly"][0, :2], dtype=float)
         self._last_yaw = float(np.arctan2(obs["fly_orientation"][1], obs["fly_orientation"][0])) if "fly_orientation" in obs else 0.0
         self._last_frame = self.sim.render()[0]

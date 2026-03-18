@@ -30,7 +30,14 @@ def build_backend(config: dict):
     if backend_name == "brian2cpu":
         return backend_name, None
     from brain.pytorch_backend import WholeBrainTorchBackend
-    backend = WholeBrainTorchBackend(completeness_path=config["brain"]["completeness_path"], connectivity_path=config["brain"]["connectivity_path"], cache_dir=config["brain"].get("cache_dir", "outputs/cache"), device=config["brain"].get("device", "cuda:0"), dt_ms=float(config["brain"].get("dt_ms", 0.1)))
+    backend = WholeBrainTorchBackend(
+        completeness_path=config["brain"]["completeness_path"],
+        connectivity_path=config["brain"]["connectivity_path"],
+        cache_dir=config["brain"].get("cache_dir", "outputs/cache"),
+        device=config["brain"].get("device", "cuda:0"),
+        dt_ms=float(config["brain"].get("dt_ms", 0.1)),
+        spontaneous_state=config["brain"].get("spontaneous_state"),
+    )
     return backend_name, backend
 
 

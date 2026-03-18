@@ -1,4 +1,4 @@
-# Reconstructing a Public-Equivalent Embodied *Drosophila* Brain-Body System from Open Components
+﻿# Reconstructing a Public-Equivalent Embodied *Drosophila* Brain-Body System from Open Components
 
 Author: Codex  
 Project: OpenFly Reconstruction  
@@ -10,9 +10,9 @@ Public artifacts now exist for the adult *Drosophila melanogaster* whole-brain c
 
 The reconstructed system combines a persistent FlyWire-derived whole-brain Torch backend, FlyGym and NeuroMechFly v2 embodiment, FlyGym realistic vision with FlyVis-derived activity, and an explicitly documented bridge for online closed-loop control. The work was organized as a reconstruction-and-falsification program rather than as a claim of access to unpublished private glue. Every promoted claim was required to survive matched `target`, `no_target`, and `zero_brain` controls, artifact generation, and fixed-duration benchmarking on the local machine.
 
-The main findings are fourfold. First, a realistic-vision, real-body, whole-brain closed loop now runs locally and reproducibly. Second, the earliest plausible public-anchor bridge failed for structural reasons: it collapsed informative visual structure and compressed output through too small a descending readout. Third, a body-free splice program and a wider descending readout established the first credible brain-driven, visually modulated embodied locomotion branch. Fourth, a later decoder-internal brain-latent turn branch improved perturbation-linked steering on the honest path: in a matched `2.0 s` jump assay, jump turn-bearing correlation improved from `0.3215` to `0.8177`, jump bearing-recovery fraction improved from `-0.8210` to `-0.5658`, and the matched `zero_brain` control remained silent with `controller_turn_nonzero_fraction = 0.0`.
+The main findings are fivefold. First, a realistic-vision, real-body, whole-brain closed loop now runs locally and reproducibly. Second, the earliest plausible public-anchor bridge failed for structural reasons: it collapsed informative visual structure and compressed output through too small a descending readout. Third, a body-free splice program and a wider descending readout established the first credible brain-driven, visually modulated embodied locomotion branch. Fourth, a decoder-internal brain-latent turn branch improved perturbation-linked steering on the honest non-spontaneous path: in a matched `2.0 s` jump assay, jump turn-bearing correlation improved from `0.3215` to `0.8177`, jump bearing-recovery fraction improved from `-0.8210` to `-0.5658`, and the matched `zero_brain` control remained silent with `controller_turn_nonzero_fraction = 0.0`. Fifth, adding endogenous structured spontaneous state inside the brain backend and refitting the latent in the awakened regime produced a living branch that now clears a mesoscale validation slice against public whole-brain data: matched living `target` and `no_target` runs share the same non-quiescent spontaneous backbone, pass walk-linked global modulation, bilateral family coupling, residual high-dimensional and temporal structure, and a public forced-vs-spontaneous Aimon comparator as a real but partial criterion.
 
-The current best branch is therefore not a final parity claim but a constrained scientific result: the public-equivalent stack can produce real brain-driven, visually modulated, embodied orientation behavior, and a decoder-internal latent derived from monitored brain state improves perturbation-linked steering without controller-side or body-side shortcuts. Full parity remains unresolved because frontal refixation after jump still fails within `2.0 s`, the visual splice remains inferred rather than neuron-identical, the embodied motor interface remains compressed, and the most biologically ambitious semantic-VNC branch failed target-tracking parity despite solving several lower-level implementation bugs.
+The project therefore no longer has one undifferentiated “best branch.” It now has two leading claim branches. The non-spontaneous brain-latent branch remains strongest on perturbation-linked steering. The spontaneous-on refit branch is the strongest living-brain line and the strongest branch on mesoscale physiological plausibility. Full parity remains unresolved because frontal refixation after jump still fails within `2.0 s`, the visual splice remains inferred rather than neuron-identical, the embodied motor interface remains compressed, and the public forced-vs-spontaneous comparator is informative but only partial.
 
 ## 1. Introduction
 
@@ -181,7 +181,7 @@ The next discovery was that rate-only DN summaries were under-reporting the avai
 
 First, the problem was not simply absence of target-bearing information. Second, further controller-side steering patches would be scientifically weak, because the relevant signal already existed upstream in monitored brain state. This finding justified the next move: decode that state inside the primary motor decoder rather than injecting new controller logic.
 
-### 5.8 A decoder-internal brain-latent turn branch is the strongest current honest branch
+### 5.8 A decoder-internal brain-latent turn branch is the strongest perturbation branch on the honest non-spontaneous path
 
 The current lead branch is the decoder-internal brain-latent turn configuration:
 
@@ -220,15 +220,68 @@ This branch is also visually the most compelling result in the repo to date. The
 - `jump_refixation_latency_s = null`
 - `jump_refixation_fraction_20deg = 0.0`
 
-The correct claim is therefore narrow but important: a decoder-internal, brain-side latent improves perturbation-linked steering on the honest path. It does not yet establish robust refixation, goal memory, or full behavioral parity.
+The correct claim is therefore narrow but important: a decoder-internal, brain-side latent improves perturbation-linked steering on the honest non-spontaneous path. It does not yet establish robust refixation, goal memory, or full behavioral parity.
 
-### 5.9 The backend can now start from an endogenous sparse ongoing state rather than a dead silent reset
+### 5.9 The backend can now start from an endogenous living state rather than a dead silent reset, and that living branch now clears a mesoscale validation slice
 
 The original whole-brain backend had an absorbing silent cold start. With zero input and zero recurrent activity, it stayed at rest indefinitely. Because that is a major biological gap, this study added and tested endogenous spontaneous-state candidates inside the brain backend rather than in the decoder or body controller.
 
-The current best spontaneous-state candidate uses bilateral family-structured tonic occupancy and slow latent fluctuations over central, ascending, visual-projection, visual-centrifugal, and endocrine families. In the brain-only audit, the old cold start remained exactly silent, while the new candidate produced sparse, bounded, perturbable ongoing activity. Across three seeds, ongoing spontaneous turn bias was reduced to `+2.5`, `+10.0`, and `+12.5 Hz`, pulse peak turn asymmetry remained `100 Hz` in all seeds, and homologous bilateral voltage correlation became positive and measurable.
+The current spontaneous-state candidate uses bilateral family-structured tonic occupancy and slow latent fluctuations over central, ascending, visual-projection, visual-centrifugal, and endocrine families. In the brain-only audit, the old cold start remained exactly silent, while the new candidate produced sparse, bounded, perturbable ongoing activity. Across three seeds, ongoing spontaneous turn bias was reduced to `+2.5`, `+10.0`, and `+12.5 Hz`, pulse peak turn asymmetry remained `100 Hz` in all seeds, and homologous bilateral voltage correlation became positive and measurable.
 
-This clears a brain-only plausibility bar. It does not yet count as an embodied production result because matched embodied `target`, `no_target`, and `zero_brain` validations have not yet been completed for the spontaneous-state branch.
+The key follow-up result is that the spontaneous state is no longer only a brain-only plausibility result. After refitting the brain-latent decoder on matched awakened `target` and awakened `no_target` captures, the repo now has a living embodied branch:
+
+- target run: [summary.json](/G:/flysim/outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-203010/summary.json)
+- target activation video: [activation_side_by_side.mp4](/G:/flysim/outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-203010/activation_side_by_side.mp4)
+- no-target run: [summary.json](/G:/flysim/outputs/requested_2s_calibrated_no_target_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-204719/summary.json)
+- no-target activation video: [activation_side_by_side.mp4](/G:/flysim/outputs/requested_2s_calibrated_no_target_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-204719/activation_side_by_side.mp4)
+- comparison: [spontaneous_brain_latent_refit_comparison.json](/G:/flysim/outputs/metrics/spontaneous_brain_latent_refit_comparison.json)
+
+This living branch is not directly comparable to the old dead-brain branches on raw absolute movement metrics, because enabling spontaneous state changes the operating regime of the whole brain itself. The correct comparison is living `target` versus living `no_target`, plus mesoscale public anchors. Under that rule, the current living target branch remains bounded and brain-driven while staying in the same awakened regime as living `no_target`:
+
+- `avg_forward_speed = 4.1828`
+- `net_displacement = 5.0591`
+- `target_condition_turn_bearing_corr = 0.7018`
+- `target_perturbation_jump_turn_bearing_corr = 0.5644`
+- `spontaneous_locomotion_locomotor_active_fraction = 0.995`
+
+The deeper result is at mesoscale validation. On the matched living `target` / `no_target` pair, the branch now passes:
+
+- non-quiescent awake state
+- matched living baseline
+- walk-linked global modulation
+- bilateral family coupling
+- family structure against a circular-shift surrogate
+  - `target = 2.6001`
+  - `no_target = 2.7912`
+- residual high-dimensional structure
+- residual temporal structure
+- turn-linked spatial heterogeneity
+- weak positive family-scale connectome-to-function correspondence
+  - `target log corr = 0.0545`
+  - `no_target log corr = 0.0534`
+
+The public Aimon forced-vs-spontaneous comparator is now also live rather than missing. The decisive public substrate turned out to be `Additional_data.zip`, not `Walk_components.zip`. All five declared Aimon files are now staged and digest-valid, and the public comparator now runs against the staged functional-region traces:
+
+- [aimon_forced_spontaneous_comparator_summary.json](/G:/flysim/outputs/metrics/aimon_forced_spontaneous_comparator_summary.json)
+- [aimon_forced_spontaneous_comparator_rows.csv](/G:/flysim/outputs/metrics/aimon_forced_spontaneous_comparator_rows.csv)
+
+Its outcome is real but partial:
+
+- `n_candidate_rows = 4`
+- `n_experiments_used = 2`
+- surviving distinct public comparisons:
+  - `B350`
+  - `B1269`
+- excluded due overlapping public spontaneous/forced windows:
+  - `B1037`
+  - `B378`
+- median public metrics:
+  - `steady_walk_vector_corr = -0.2016`
+  - `steady_walk_rank_corr = -0.2013`
+  - `spontaneous_prelead_fraction = 0.6241`
+  - `spontaneous_minus_forced_prelead_delta = 0.01393`
+
+So the living branch now has a stronger and more honest claim boundary than before. It is not fully physiologically validated, but it is no longer merely “awake-looking.” It is living in a mesoscale-validated sense: ongoing, structured, bilateral, temporally coherent, behavior-linked, and constrained by public spontaneous-state data. The remaining limitation is equally clear: this branch is more biologically plausible at the network scale than the older cold-start branches, but it is still weaker than the non-spontaneous perturbation branch on jump refixation and should not yet be treated as the final embodiment path.
 
 ### 5.10 A semantic-VNC structural decoder was a useful negative result, not a parity path
 
@@ -247,7 +300,9 @@ The central lesson of this study is that the hard problem was not simply to make
 
 First, realistic-vision, whole-brain, embodied closed-loop operation is achievable from public components on a single workstation. Second, matched `zero_brain` controls are indispensable: they prevented misleading claims based on hidden locomotor floors. Third, the earliest major failure was not backend inactivity but information loss at the sensory bridge and over-compression at the output decoder. Fourth, brain voltage carried useful steering structure that rate-only DN summaries were obscuring. Fifth, decoding that structure inside the primary decoder is scientifically cleaner and empirically stronger than adding more controller-side logic.
 
-The current best branch, `requested_2s_calibrated_target_jump_brain_latent_turn`, should therefore be understood as the leading honest branch rather than as the final answer. It is the first branch in the repo that combines all of the following:
+The current repo state should therefore be understood as a two-branch frontier rather than a single winning configuration. `requested_2s_calibrated_target_jump_brain_latent_turn` remains the leading perturbation branch. `requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous_refit` is the leading living-brain mesoscale branch. The former is stronger on perturbation-linked steering; the latter is stronger on spontaneous-state realism and public mesoscale validation.
+
+The non-spontaneous perturbation branch is still the first branch in the repo that combines all of the following:
 
 - realistic vision
 - real whole-brain recurrence
@@ -257,7 +312,7 @@ The current best branch, `requested_2s_calibrated_target_jump_brain_latent_turn`
 - matched `target`, `no_target`, and `zero_brain` controls
 - a decoder-internal improvement derived from monitored brain state rather than controller heuristics
 
-What remains unresolved is not whether the system can move or even whether it can steer in a target-signed way. The remaining gap is a richer internal scaffold for heading, goal persistence, steering gain, and reorientation policy, plus a more biological output pathway. The next biologically plausible move is therefore not another controller patch. It is to extend the decoder-internal latent beyond signed steering error toward a better-structured heading/goal scaffold and to validate spontaneous-state effects in matched embodied assays.
+What remains unresolved is not whether the system can move or even whether it can steer in a target-signed way. The remaining gap is a richer internal scaffold for heading, goal persistence, steering gain, and reorientation policy, plus a more biological output pathway. The next biologically plausible move is therefore not another controller patch. It is to extend the decoder-internal latent beyond signed steering error toward a better-structured heading/goal scaffold while keeping the spontaneous living regime on, and to evaluate that scaffold against matched living controls and the mesoscale validation bundle rather than regressing to silent-brain comparisons.
 
 ## 7. Limitations
 
@@ -271,9 +326,11 @@ Third, the motor output remains compressed. Even the best current branch still m
 
 Fourth, the current leading branch improves perturbation-linked steering but still fails frontal refixation within `2.0 s`. It therefore does not justify claims of robust reacquisition, orientation memory, or full pursuit parity.
 
-Fifth, the spontaneous-state program has only cleared a brain-only plausibility gate so far. It is not yet an embodied production claim.
+Fifth, the spontaneous-state program has now cleared an embodied mesoscale-validation gate, but not a full physiological one.
 
-Sixth, realistic vision remains performance-limited on this hardware in WSL because public wheels do not support `sm_120`.
+Sixth, the public forced-vs-spontaneous comparator is now executable but only partial. It is evidence-producing, not missing, yet the surviving public overlap subset is too small and mixed to support a strong parity claim.
+
+Seventh, realistic vision remains performance-limited on this hardware in WSL because public wheels do not support `sm_120`.
 
 ## 8. Methods
 
@@ -337,13 +394,24 @@ The branch progression and claim logic are tracked continuously in:
 - [PROGRESS_LOG.md](/G:/flysim/PROGRESS_LOG.md)
 - [ASSUMPTIONS_AND_GAPS.md](/G:/flysim/ASSUMPTIONS_AND_GAPS.md)
 
+### 8.8 Spontaneous-state mesoscale validation
+
+The canonical living-branch spontaneous-state validation bundle is:
+
+- [spontaneous_mesoscale_validation.py](/G:/flysim/src/analysis/spontaneous_mesoscale_validation.py)
+- [run_spontaneous_mesoscale_validation.py](/G:/flysim/scripts/run_spontaneous_mesoscale_validation.py)
+- [spontaneous_mesoscale_validation_summary.json](/G:/flysim/outputs/metrics/spontaneous_mesoscale_validation_summary.json)
+- [aimon_public_comparator_resolution.md](/G:/flysim/docs/aimon_public_comparator_resolution.md)
+
+This bundle is now the correct validation surface for the living branch. Once spontaneous state is enabled, the old cold-start branches are only regime-transition baselines, not the primary spontaneous-state comparator.
+
 ## 9. Author Contributions
 
 The author conceived and led the reconstruction effort, defined the evaluation and falsification framework, implemented or supervised the bridge, runtime, decoder, assay, and visualization stack, ran the reported analyses, and wrote the manuscript.
 
 ## 10. Reproducibility and Principal Artifacts
 
-The current leading branch is reproduced by the run roots:
+The current leading perturbation branch is reproduced by the run roots:
 
 - [target run](/G:/flysim/outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819)
 - [no-target run](/G:/flysim/outputs/requested_2s_calibrated_no_target_brain_latent_turn/flygym-demo-20260315-063511)
@@ -361,11 +429,18 @@ The main spontaneous-state summary is:
 
 - [spontaneous_state_results.md](/G:/flysim/docs/spontaneous_state_results.md)
 
+The current leading living spontaneous branch is reproduced by:
+
+- [target spontaneous refit run](/G:/flysim/outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-203010)
+- [no-target spontaneous refit run](/G:/flysim/outputs/requested_2s_calibrated_no_target_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-204719)
+- [living branch mesoscale validation summary](/G:/flysim/outputs/metrics/spontaneous_mesoscale_validation_summary.json)
+- [public forced-vs-spontaneous comparator summary](/G:/flysim/outputs/metrics/aimon_forced_spontaneous_comparator_summary.json)
+
 ## 11. Conclusion
 
-OpenFly now constitutes a reproducible public-equivalent reconstruction of an embodied *Drosophila* brain-body stack assembled from open components. The study did not merely glue together public repos; it built the missing online bridge, enforced matched controls, falsified incorrect interfaces, and narrowed the current bottleneck to a biologically meaningful region of the system. The strongest earlier branch established credible brain-driven, visually modulated embodied locomotion. The current leading branch, `requested_2s_calibrated_target_jump_brain_latent_turn`, goes further by improving jump-linked steering through a decoder-internal latent derived from monitored brain state while preserving bounded `no_target` behavior and silent `zero_brain` controls.
+OpenFly now constitutes a reproducible public-equivalent reconstruction of an embodied *Drosophila* brain-body stack assembled from open components. The study did not merely glue together public repos; it built the missing online bridge, enforced matched controls, falsified incorrect interfaces, and narrowed the current bottleneck to a biologically meaningful region of the system. The strongest earlier branch established credible brain-driven, visually modulated embodied locomotion. The strongest non-spontaneous perturbation branch, `requested_2s_calibrated_target_jump_brain_latent_turn`, improved jump-linked steering through a decoder-internal latent derived from monitored brain state while preserving bounded `no_target` behavior and silent `zero_brain` controls. The strongest living spontaneous branch, `requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous_refit`, goes further on biological plausibility at the network scale by running in an awakened regime that now clears a real mesoscale validation bundle against public spontaneous-state data.
 
-That is a significant result, but it is not yet the end state. The system still lacks robust frontal refixation after perturbation, a fully grounded heading/goal scaffold, an embodied spontaneous-state validation, and a biologically richer output pathway. The correct verdict is therefore not final parity, but a strong public-equivalent partial reconstruction whose current best branch is scientifically useful, visually compelling, and honest about its remaining gaps.
+That is a stronger and more precise result than the repo supported before, but it is still not the end state. The system still lacks robust frontal refixation after perturbation, a fully grounded heading/goal scaffold, full physiological spontaneous-state validation, and a biologically richer output pathway. The public forced-vs-spontaneous comparator is now real and informative, but only partial. The correct verdict is therefore not final parity, but a strong public-equivalent partial reconstruction with one leading perturbation branch and one leading living-brain branch, both scientifically useful and both honest about their remaining gaps.
 
 ## References
 
