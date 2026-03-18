@@ -6065,3 +6065,382 @@ Interpretation:
 5. Next actions
 - Commit only the manuscript/front-page/tracker files.
 - Push that docs-only commit without sweeping in the unrelated local changes.
+
+## 2026-03-15 15:35 - Created `exp/spontaneous-brain-latent-turn` and ran the first honest embodied spontaneous-state fold-in on the brain-latent branch
+
+1. What I attempted
+- Created a new git experiment branch:
+  - `exp/spontaneous-brain-latent-turn`
+- Used sub-agents to audit:
+  - the safest spontaneous-state parameter block to port
+  - the minimal integration seam for the current best brain-latent branch
+  - the clean run/tracker package for the new experiment
+- Added a new config that keeps the current best target-jump brain-latent
+  decoder/body path intact and only enables the current best backend
+  spontaneous-state candidate:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn_spontaneous.yaml`
+- Added smoke coverage to prove the new config stays on the primary
+  no-shortcuts path:
+  - `tests/test_closed_loop_smoke.py`
+- Ran the focused config smoke suite and the backend spontaneous-state unit
+  suite.
+- Ran one serialized real `2.0 s` FlyGym target-jump demo with same-run
+  activation visualization.
+
+2. What succeeded
+- The experimental branch was created cleanly without disturbing the existing
+  in-flight worktree:
+  - `git switch -c exp/spontaneous-brain-latent-turn`
+- The new config passed closed-loop smoke coverage:
+  - `python -m pytest tests/test_closed_loop_smoke.py -q`
+  - `28 passed`
+- The backend spontaneous-state seam is still covered directly:
+  - `python -m pytest tests/test_spontaneous_state_unit.py -q`
+  - `6 passed`
+- The real run completed and emitted the full activation bundle:
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous/flygym-demo-20260315-150545`
+  - `activation_side_by_side.mp4`
+  - `activation_capture.npz`
+  - `activation_overview.png`
+  - `summary.json`
+  - `run.jsonl`
+  - `metrics.csv`
+- The backend was genuinely awake in the live run, not merely configured:
+  - `background_mean_rate_hz_mean ~= 0.0314`
+  - `background_latent_mean_abs_hz_mean ~= 0.9613`
+  - baseline non-spontaneous branch had `background_mean_rate_hz_mean = 0.0`
+
+3. What failed
+- The spontaneous-state fold-in regressed behavior relative to the current best
+  non-spontaneous brain-latent branch.
+- Target metrics worsened:
+  - `avg_forward_speed: 5.4296 -> 3.7541`
+  - `net_displacement: 6.2632 -> 4.3757`
+  - `target_condition_mean_abs_bearing_rad: 1.3842 -> 1.6519`
+  - `target_condition_fixation_fraction_20deg: 0.059 -> 0.045`
+  - `target_condition_turn_bearing_corr: 0.8806 -> 0.6964`
+- Jump behavior degraded badly:
+  - `jump_turn_bearing_corr: 0.8177 -> -0.7485`
+  - `jump_bearing_recovery_fraction_2s: -0.5658 -> -1.5755`
+  - `jump_turn_alignment_fraction_active: 0.6667 -> 0.152`
+- Spontaneous locomotion looked more active in state-space terms, but the
+  control signature shifted toward a new right-dominant bias:
+  - `right_turn_dominant_fraction: 0.388 -> 0.642`
+  - `left_turn_dominant_fraction: 0.612 -> 0.358`
+- This is therefore not a promotable branch. It is a real negative result:
+  backend wakefulness alone does not improve this target-jump latent branch and
+  can actively destabilize the signed steering solution.
+
+4. Evidence
+- Branch and config:
+  - `exp/spontaneous-brain-latent-turn`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn_spontaneous.yaml`
+- Tests:
+  - `tests/test_closed_loop_smoke.py`
+  - `tests/test_spontaneous_state_unit.py`
+- Real run:
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous/flygym-demo-20260315-150545/summary.json`
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous/flygym-demo-20260315-150545/activation_side_by_side.mp4`
+  - `outputs/benchmarks/fullstack_calibrated_target_jump_brain_latent_turn_spontaneous_2s.csv`
+- Baseline comparison reference:
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn/flygym-demo-20260315-061819/summary.json`
+
+5. Next actions
+- Do not promote spontaneous state directly into the current best latent branch.
+- Treat this result as evidence for `T147`: the next required move is a richer
+  heading / goal / steering-gain scaffold, not a naive wakefulness fold-in.
+- Complete `T122` properly with matched spontaneous `no_target` and
+  `zero_brain` controls before making any broader spontaneous-state embodiment
+  claims.
+
+## 2026-03-15 20:35 - Recorded the living-brain evaluation rule in the repo state docs
+
+1. What I attempted
+- Wrote down the evaluation clarification that became necessary after the first
+  spontaneous activation visualization made it obvious that the awakened branch
+  is operating in a different brain-state regime than the old cold-start line.
+
+2. What succeeded
+- The repo now records that the old quiescent branches are only regime-change
+  baselines once endogenous spontaneous state is on.
+- The active evaluation rule is now explicit in:
+  - `TASKS.md`
+  - `ASSUMPTIONS_AND_GAPS.md`
+  - `docs/brain_latent_turn_decoder.md`
+
+3. What failed
+- No experiments were completed in this logging slice.
+
+4. Evidence
+- `TASKS.md`
+- `ASSUMPTIONS_AND_GAPS.md`
+- `docs/brain_latent_turn_decoder.md`
+
+5. Next actions
+- Keep living-brain evaluation centered on matched living `target`,
+  `no_target`, perturbation, and `zero_brain` controls.
+- Treat raw speed / displacement differences versus the old dead-brain regime
+  only as secondary diagnostics.
+
+## 2026-03-15 21:09 - Re-derived the brain-latent decoder inside the awakened regime and validated it on a living target/no-target pair
+
+1. What I attempted
+- Built the missing spontaneous-on `no_target` companion for the
+  brain-latent branch.
+- Extended the latent-library builder so it can penalize sign-unstable
+  candidates across low/high spontaneous-state bins using
+  `background_latent_mean_abs_hz`.
+- Rebuilt the latent from matched awakened `target` / `no_target` captures
+  instead of reusing the old cold-state library.
+- Ran fresh `2.0 s` living `target` and living `no_target` demos on the refit
+  library with same-run activation visualization.
+
+2. What succeeded
+- Focused validation passed after wiring the refit path:
+  - `python -m pytest tests/test_turn_voltage_library.py tests/test_closed_loop_smoke.py -q`
+  - `37 passed`
+- The spontaneous-on matched builder completed:
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit.json`
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_ranked.csv`
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_library.json`
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_target_state_bins.csv`
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_no_target_state_bins.csv`
+- The rebuilt awakened latent selected a new group set:
+  - `MeLp1`
+  - `PVLP112b`
+  - `cM15`
+  - `CB0965`
+  - `CL294`
+  - `CB1916`
+  - `cML02`
+  - `AVLP091`
+- The fresh living target run completed with same-run activation capture:
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-203010`
+- The fresh living no-target run completed with same-run activation capture:
+  - `outputs/requested_2s_calibrated_no_target_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-204719`
+- Relative to the first spontaneous target run, the awakened refit repaired the
+  major pathology:
+  - `jump_turn_alignment_fraction_active: 0.1520 -> 0.7302`
+  - `jump_turn_bearing_corr: -0.7485 -> 0.5644`
+  - `jump_bearing_recovery_fraction_2s: -1.5755 -> -1.0482`
+- The matched awakened no-target control remained near zero-mean in turn:
+  - `mean_turn_drive = 0.0077`
+  - `right/left dominance = 0.413 / 0.587`
+
+3. What failed
+- The branch still does not complete frontal jump refixation within `2.0 s`.
+- Gross locomotion remains strong in both living `target` and living
+  `no_target`, so raw movement totals are still not a clean target-conditioned
+  separator in this regime.
+- A fresh spontaneous zero-brain rerun was not collected in this slice.
+
+4. Evidence
+- Builder and analysis:
+  - `src/analysis/brain_latent_library.py`
+  - `scripts/build_brain_turn_latent_library.py`
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit.json`
+  - `outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_library.json`
+- Live configs:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_latent_turn_spontaneous.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn_spontaneous_refit.yaml`
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_latent_turn_spontaneous_refit.yaml`
+- Live artifacts:
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-203010/summary.json`
+  - `outputs/requested_2s_calibrated_target_jump_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-203010/activation_side_by_side.mp4`
+  - `outputs/requested_2s_calibrated_no_target_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-204719/summary.json`
+  - `outputs/requested_2s_calibrated_no_target_brain_latent_turn_spontaneous_refit/flygym-demo-20260315-204719/activation_side_by_side.mp4`
+  - `outputs/metrics/spontaneous_brain_latent_refit_comparison.json`
+
+5. Next actions
+- Keep treating this as a living-branch partial rather than as a solved branch.
+- Use the repaired spontaneous-on latent as the new base if the next step is a
+  richer heading / goal-memory / steering-gain scaffold.
+- Collect a fresh spontaneous zero-brain rerun before making stronger control
+  claims about the embodied spontaneous branch.
+
+## 2026-03-15 22:28 - Living target/no-target activation analysis recorded
+
+1. What I attempted
+- Analyzed the matched living spontaneous-refit `target` and `no_target`
+  activation captures as a pair, with sub-agents reviewing renderer semantics
+  and future decoder implications in parallel.
+- Converted the one-off inspection into a reproducible analysis path and
+  persisted the findings into repo artifacts and docs.
+
+2. What succeeded
+- Added reusable analysis code:
+  - `src/analysis/living_brain_activation_analysis.py`
+  - `scripts/analyze_living_brain_activation_pair.py`
+  - `tests/test_living_brain_activation_analysis.py`
+- Validation passed:
+  - `python -m pytest tests/test_living_brain_activation_analysis.py -q`
+  - `2 passed`
+  - `python -m py_compile src/analysis/living_brain_activation_analysis.py scripts/analyze_living_brain_activation_pair.py`
+- Generated the recorded analysis bundle:
+  - `outputs/metrics/living_brain_activation_pair_summary.json`
+  - `outputs/metrics/living_brain_activation_pair_condition_summary.csv`
+  - `outputs/metrics/living_brain_activation_pair_family_comparison.csv`
+  - `outputs/metrics/living_brain_activation_pair_monitor_rate_comparison.csv`
+  - `outputs/metrics/living_brain_activation_pair_central_units_target.csv`
+  - `outputs/metrics/living_brain_activation_pair_central_units_no_target.csv`
+  - `outputs/plots/living_brain_activation_pair_renderer_breakdown.png`
+- Wrote the findings note:
+  - `docs/living_brain_activation_analysis.md`
+- Updated the living-branch decoder note:
+  - `docs/brain_latent_turn_decoder.md`
+
+3. What I learned
+- The living `target` and living `no_target` runs are already in the same
+  awakened backend regime; the spontaneous-state backbone statistics are
+  effectively identical across the pair.
+- The large brain cloud in the activation video is real state, but not a
+  whole-brain spike storm. Real spike density remains sparse, around
+  `221-230` spiking neurons per frame across `138,639` neurons, while the
+  renderer fills the rest of the `6000` displayed points with non-spiking
+  high-`|voltage|` units.
+- The visually dominant unsampled families are mostly shared living-brain
+  baseline occupancy:
+  - `MeMe_e13`
+  - `DNa03`
+  - `Nod3`
+  - `H2`
+  - `T2`
+  - `Am1`
+  - `LHMB1`
+  - `H1`
+  - `Mi10`
+  - `T4a`
+- The genuinely spike-heavy unsampled families are different and much smaller:
+  - target: `CT1`, `DM4_adPN`, `LHPV12a1`, `lLN2X03`, `LPi12`
+  - no-target: `lLN2F_b`, `VM6_adPN`, `il3LN6`, `CT1`, `lLN1_a`
+- The decoder-relevant target-conditioned signal is still subtler and more
+  distributed than the bright cloud. Existing living-branch decode outputs
+  continue to point toward upstream voltage-asymmetry families such as
+  `LCe01`, `CL314`, `LLPC4`, `PLP230`, `AVLP417,AVLP438`, and `CB3014`.
+
+4. What failed
+- This was analysis only; no new embodied run or decoder promotion was attempted.
+- The activation video alone is not enough to identify target structure by eye;
+  the visible cloud is too dominated by shared awakened baseline occupancy.
+
+5. Evidence
+- Pair analysis:
+  - `outputs/metrics/living_brain_activation_pair_summary.json`
+  - `outputs/metrics/living_brain_activation_pair_condition_summary.csv`
+  - `outputs/metrics/living_brain_activation_pair_family_comparison.csv`
+  - `outputs/metrics/living_brain_activation_pair_monitor_rate_comparison.csv`
+- Existing living-regime decode evidence:
+  - `outputs/metrics/living_spontaneous_refit_target_cycle_summary.json`
+  - `outputs/metrics/living_spontaneous_refit_target_vs_no_target_summary.json`
+  - `outputs/metrics/living_spontaneous_refit_target_vs_no_target_families.csv`
+  - `outputs/metrics/living_spontaneous_refit_target_vs_no_target_monitors.csv`
+- Docs:
+  - `docs/living_brain_activation_analysis.md`
+  - `docs/brain_latent_turn_decoder.md`
+
+6. Next actions
+- Keep the living branch on the matched-regime evaluation path.
+- Continue decoding from voltage-side asymmetry rather than from gross rates or
+  the visually dominant cloud.
+- Widen monitoring upstream into the target-specific unsampled relay families
+  identified by the living-regime pair analysis before adding more motor-side
+  complexity.
+
+## 2026-03-15 23:06 - Full spontaneous-state physiological-validation audit
+
+1. What I attempted
+- Treated the user goal literally and audited whether the repo can honestly
+  claim fully physiologically validated spontaneous adult fly-brain dynamics.
+- Used primary-source literature plus repo inspection and sub-agent assistance
+  to define the exact requirement boundary rather than silently weakening the
+  claim.
+
+2. What succeeded
+- Wrote the explicit requirement and blocker note:
+  - `docs/spontaneous_state_full_validation_requirements.md`
+- Updated the spontaneous-state status docs:
+  - `docs/spontaneous_state_results.md`
+  - `ASSUMPTIONS_AND_GAPS.md`
+- Updated task tracking:
+  - `T153` done: feasibility/requirement audit
+  - `T154` blocked: full physiological spontaneous-state validation
+
+3. What I learned
+- The field now has enough public evidence to support mesoscale spontaneous-state
+  validation, not full physiological validation.
+- Strong public resources now exist for:
+  - whole-brain connectome and cell typing
+  - spontaneous / behavior-linked whole-brain imaging
+  - mesoscale structure-function comparisons
+- The missing pieces for a full claim are still decisive:
+  - stable alignment from spontaneous recordings to the full simulated
+    connectome identity space
+  - cell-intrinsic physiology and synapse/gap-junction physiology at scale
+  - neuromodulatory/internal-state constraints at scale
+  - broad whole-brain causal perturbation validation for spontaneous dynamics
+- So the correct current repo label remains:
+  - public-data-informed spontaneous-state pilot
+  - partial physiological plausibility
+  - not full physiological validation
+
+4. What failed
+- The final goal requested by the user is not honestly completable from current
+  public artifacts alone.
+- This is an external scientific-data blocker, not merely an engineering delay.
+
+5. Evidence
+- Repo note:
+  - `docs/spontaneous_state_full_validation_requirements.md`
+- Existing spontaneous-state docs:
+  - `docs/spontaneous_state_backend_design.md`
+  - `docs/spontaneous_state_results.md`
+- External primary sources recorded in the new note:
+  - whole-brain spontaneous imaging
+  - spontaneous/forced walking whole-brain state
+  - connectome/cell-typing paper
+  - connectome-is-not-enough review
+  - CRCNS public dataset entry
+
+6. Next actions
+- Keep the strong goal explicitly blocked rather than silently diluted.
+- If the next work should continue honestly, target mesoscale physiological
+  validation against public spontaneous imaging datasets and living matched
+  controls rather than claiming full validation.
+## 2026-03-15 23:34 - Concise memo on the public physiological-validation boundary
+
+1. What I attempted
+- Converted the earlier full-validation audit into a shorter memo targeted at
+  the exact claim boundary the user asked about.
+- Re-checked the main primary-source anchors on adult whole-brain spontaneous
+  imaging, state-space structure, connectome constraints, and neuromodulatory
+  atlases.
+
+2. What succeeded
+- Wrote a concise evidence-backed memo:
+  - `docs/spontaneous_dynamics_validation_memo.md`
+- Recorded the deliverable in task tracking:
+  - `T155` done
+
+3. What I learned
+- The public evidence base is now strong enough for mesoscale physiological
+  anchoring of spontaneous adult fly-brain dynamics.
+- It is still not strong enough for an honest claim of fully physiologically
+  validated spontaneous whole-brain dynamics in the adult fly.
+- The decisive missing pieces remain joint cell-identity alignment, full-brain
+  dynamical physiology, receptor/neuromodulatory operating-state constraints,
+  and broad causal perturbation validation.
+
+4. What failed
+- Exact neuron-by-neuron physiological validation remains blocked by the public
+  evidence base, not by a repo implementation omission.
+
+5. Evidence
+- `docs/spontaneous_dynamics_validation_memo.md`
+- `docs/spontaneous_state_full_validation_requirements.md`
+- `ASSUMPTIONS_AND_GAPS.md`
+
+6. Next actions
+- Use the new memo as the compact citation target when scoping claims about
+  spontaneous state.
+- Keep the project claim ceiling at mesoscale physiological validation unless
+  materially stronger public datasets appear.

@@ -17,6 +17,27 @@
 
 - The strongest public production backend on this machine is the `fly-brain` Torch implementation, not `Brian2` CPU.
 - Realistic vision is mandatory for the production path; the mock path exists only for tests and fast smoke runs.
+- Hard rule for the active embodiment path:
+  - no controller-side or body-side shortcut heuristics
+  - no motor-floor or behavior-floor patches outside the brain
+  - primary-branch behavior changes must be brain-driven and biologically plausible
+  - monitoring-only and explicitly rejected experimental branches may still exist for diagnosis, but they must stay clearly labeled as non-production
+- Evaluation-duration rule:
+  - `>= 1.0 s` runs count as benchmarking / real evaluation.
+  - `< 1.0 s` runs count only as smoke tests / sanity checks.
+- Living-brain evaluation rule:
+  - once endogenous spontaneous state is enabled, the old cold-start / quiescent
+    branches must not be treated as the primary behavioral comparator
+  - cold-start branches remain valid only as regime-transition baselines showing
+    that the brain is no longer silent
+  - the living-brain line must instead be judged against matched living-brain
+    `target`, `no_target`, perturbation, and `zero_brain` controls
+  - raw speed / displacement differences versus the dead-brain regime are
+    secondary diagnostics, not the main success criterion
+- The current closed-loop moving-target assay should be interpreted primarily as
+  a landmark-orientation / fixation benchmark unless stronger context-specific
+  evidence is added. Generic indefinite pursuit of an arbitrary target is not
+  yet treated as a canonical real-fly default behavior in this repo.
 - The public body and brain repos do not provide the exact closed-loop bridge used in the public demo context, so the bridge in `src/bridge/` is an explicit engineering substitute.
 - The public `LC4` and `JON` anchor lists are bilateral in the checked public notebook artifacts, so the production path now treats them as bilateral public input pools instead of inventing left/right halves.
 - The public notebook examples checked in under `external/fly-brain/code/paper-phil-drosophila/example.ipynb` use direct `P9` stimulation as the explicit forward-walking baseline, then add `LC4` or `JON` co-stimulation on top of that baseline.
@@ -125,6 +146,68 @@
   - but the branch still does not track the target
   - current conclusion:
     - structural semantic VNC mapping alone is not enough to recover target-directed behavior in this repo
+- The repo now includes an opt-in backend-side spontaneous-state pilot:
+  - `docs/spontaneous_state_backend_design.md`
+  - `docs/spontaneous_state_results.md`
+  - `outputs/metrics/spontaneous_state_best_candidate_summary.json`
+  - `outputs/metrics/spontaneous_state_central_seed_summary.json`
+- Current honest status of that pilot:
+  - it resolves the fully silent cold-start baseline in the brain-only audit
+  - the current best candidate uses bilateral family-structured tonic occupancy and slow latent fluctuations over central/integrative super-classes rather than decoder/body fallback
+  - it now clears a brain-only plausibility bar: sparse bounded ongoing activity, positive homologous family coupling, and retained perturbability across seeds
+  - but it is not yet promotable as a production embodied branch because matched embodied `target` / `no_target` / `zero_brain` validation has not been run yet
+- The repo now includes a default same-run activation capture path plus an
+  iterative decoding workbench:
+  - `src/visualization/session.py`
+  - `docs/iterative_brain_decoding_system.md`
+  - `outputs/metrics/iterative_decoding_cycle_summary.json`
+- Current honest status of that decoding system:
+  - it makes the relay/decoder search reproducible and data-driven
+  - it can rank candidate relay families and structured signals from recorded
+    activation captures
+  - but it does not constitute a complete decode of the fly brain
+  - exact neuron-identity sensory and VNC mappings remain inferential
+  - live control promotion still requires matched behavioral controls and
+    causal validation
+- The repo now also includes a matched relay-monitor plus shadow semantic-VNC
+  control loop:
+  - `docs/relay_monitored_shadow_control_loop.md`
+  - `outputs/metrics/relay_monitored_control_metrics_0p2s.csv`
+  - `outputs/metrics/relay_monitored_shadow_control_summary_0p2s.csv`
+- Current honest status of that loop:
+  - it proves the shadow VNC decoder is reading real brain-side signal on the
+    same run, because it is nonzero for `target` and `no_target` and collapses
+    exactly on `zero_brain`
+  - it does not solve target tracking or target selectivity
+- many widened relay families are more informative in monitored voltage than
+  in monitored firing rate, so the current rate-only relay heatmap is not a
+  sufficient summary of upstream state
+- the repo did not previously have one canonical literature-grounded behavior
+  target set; behavior criteria were spread across branch notes and metric docs
+  until `docs/behavior_target_set.md`
+- the turn-voltage controller-promotion line is now useful mainly as an
+  evidence path about where target-bearing relay structure lives; under the
+  current hard rule it is not an acceptable final control architecture
+- the current active perturbation-improvement branch is instead a
+  decoder-internal relay-voltage turn latent:
+  - `docs/brain_latent_turn_decoder.md`
+  - confidence: moderate for improved signed steering / jump recovery
+  - confidence: low for full biological parity
+  - remaining gap:
+    - no explicit heading / goal / steering-gain scaffold yet
+    - frontal jump refixation still does not complete within `2.0 s`
+- full physiologically validated spontaneous adult fly-brain dynamics are not
+  currently achievable from public artifacts alone:
+  - public whole-brain spontaneous imaging exists
+  - public connectome and cell-type resources exist
+  - but the field still lacks the combined neuron-identity alignment,
+    cell-intrinsic physiology, synapse/gap-junction physiology,
+    neuromodulatory-state coverage, and whole-brain causal perturbation atlas
+    needed for an honest full-validation claim
+  - current strongest honest target is mesoscale physiological validation of
+    spontaneous state against public imaging literature and datasets
+  - evidence:
+    - `docs/spontaneous_state_full_validation_requirements.md`
 
 ## Engineering Substitutes Used
 
