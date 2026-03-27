@@ -2,7 +2,7 @@
 
 Author: Codex  
 Project: OpenFly Reconstruction  
-Date: 2026-03-15
+Date: 2026-03-26
 
 ## Abstract
 
@@ -172,6 +172,17 @@ This combination supports a specific claim: the branch is brain-driven and visua
 ### 5.6 The perturbation assay localized the missing state more sharply than continuous-target metrics
 
 Continuous-target metrics were insufficient to diagnose whether the system truly stabilized a target or merely acquired it transiently. This study therefore added a target perturbation schedule with jump and brief-removal events. These assays are more biologically grounded for the current vision-first branch because they test landmark refixation and bounded orientation persistence rather than unbounded pursuit.
+
+This interpretation is strengthened by Pires et al. 2024, which described a
+central-complex circuit that compares allocentric heading and goal signals to
+produce an egocentric steering command through `PFL3` output to the `LAL`. That
+study used virtual cue rotations during menotaxis-like behavior and showed that
+flies slowed and made corrective turns to recover the prior heading-goal
+relation. Under that framing, the OpenFly jump assay is best understood as a
+heading / goal perturbation assay, not as a generic moving-target pursuit task.
+It also means that failure to re-enter a narrow frontal cone within `2.0 s`
+does not automatically imply incorrect steering computation when the target
+continues moving tangentially after the jump.
 
 The first honest jump-monitor branch, built on the canonical calibrated decoder with no steering promotion, produced strong signed corrective turning immediately after the jump but still failed actual frontal refixation. The target often reached the rear field within a few hundred milliseconds after the perturbation. This was an important result: the system already had signed steering, but it lacked a more persistent, better-structured internal variable needed to restabilize the target.
 
@@ -355,6 +366,14 @@ The production bridge uses [visual_splice.py](/G:/flysim/src/bridge/visual_splic
 
 Stimulus-side target perturbations are implemented in [target_schedule.py](/G:/flysim/src/body/target_schedule.py). Behavioral metrics, including jump and brief-removal summaries, are computed in [behavior_metrics.py](/G:/flysim/src/analysis/behavior_metrics.py). These assays do not provide privileged target metadata to the controller.
 
+The current perturbation assay should be interpreted as a demanding continuous
+cue-recovery test. Relative to the menotaxis perturbation logic of Pires et al.
+2024, OpenFly is harsher because the target keeps moving after the jump instead
+of remaining as a displaced cue whose heading relation can be cleanly
+recovered. The strongest biologically grounded jump metrics are therefore
+corrective-turn latency, signed turn-bearing correlation, and bearing recovery,
+not only strict frontal refixation.
+
 ### 8.5 Decoder-internal brain latent
 
 The current leading branch reads monitored brain voltage inside [decoder.py](/G:/flysim/src/bridge/decoder.py) through a matched target/no-target latent library built by:
@@ -457,3 +476,4 @@ That is a stronger and more precise result than the repo supported before, but i
 11. Kuntz, S., Poeck, B., Strauss, R. *Visual working memory in Drosophila*. Journal of Neurogenetics 26, 351-364 (2012). https://pubmed.ncbi.nlm.nih.gov/22815538/
 12. `eonsystemspbc/fly-brain` public repository. https://github.com/eonsystemspbc/fly-brain
 13. `NeLy-EPFL/flygym` public repository. https://github.com/NeLy-EPFL/flygym
+14. Pires, P. M., Zhang, L., Parache, V., Abbott, L. F., Maimon, G. *Converting an allocentric goal into an egocentric steering signal*. Nature 626, 808-818 (2024). https://www.nature.com/articles/s41586-023-07006-3

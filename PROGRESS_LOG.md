@@ -70,6 +70,35 @@ Ground truth source: `AGENTS.MD`
 - Build the Torch whole-brain online backend and the mock/FlyGym body adapters.
 - Write tests first for the bridge logic and a deterministic smoke closed loop.
 
+## 2026-03-26 - Pires 2024 steering-circuit review and integration
+
+1. What I attempted
+- Read the Nature paper `s41586-023-07006-3` on allocentric-goal to egocentric-steering conversion in `Drosophila`.
+- Checked whether its claims directly constrain the current OpenFly steering and perturbation work.
+- Integrated the resulting interpretation into the canonical behavior spec and manuscript.
+
+2. What succeeded
+- Confirmed the paper is directly relevant to the current jump-target / steering problem.
+- Recorded a focused literature note at `docs/pires2024_allocentric_goal_to_steering_note.md`.
+- Updated `docs/behavior_target_set.md` so perturbation recovery is framed more explicitly as heading / goal recovery rather than generic moving-target pursuit.
+- Updated `docs/openfly_whitepaper.md` to connect the current perturbation assay to the paper's central-complex steering circuit and to state that strict frontal refixation is harsher than the cited cue-jump paradigm when the target keeps moving tangentially.
+- Marked the literature-integration task complete in `TASKS.md`.
+
+3. What failed
+- The paper does not supply a turnkey implementation path for our whole-brain model.
+- It does not resolve FlyWire-root identity mapping for all relevant steering neurons.
+- It therefore sharpens the biological target but does not by itself complete the steering decode problem.
+
+4. Evidence paths
+- `docs/pires2024_allocentric_goal_to_steering_note.md`
+- `docs/behavior_target_set.md`
+- `docs/openfly_whitepaper.md`
+- `https://www.nature.com/articles/s41586-023-07006-3`
+
+5. Next actions
+- Use the paper's `EPG -> FC2 -> PFL3 -> LAL` scaffold to define a more explicit brain-side heading / goal / steering latent for future embodied steering work.
+- Add a less punitive cue-jump assay that separates correct corrective steering from the physical difficulty of recapturing a continuously moving tangential target.
+
 ## 2026-03-08 - Bridge, tests, and first runnable artifacts
 
 1. What I attempted

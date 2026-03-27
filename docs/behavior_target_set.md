@@ -35,7 +35,7 @@ because the visual-brain-body loop produced the behavior, it fails this spec.
 | Intermittent locomotion with pauses | Walking is not continuous drive; flies stop, restart, and switch modes. | The spontaneous-state branch should preserve pause / move transitions instead of forcing always-on locomotion. | Strauss & Heisenberg 1990: https://pubmed.ncbi.nlm.nih.gov/2121965/ ; Gattuso et al. 2025: https://pubmed.ncbi.nlm.nih.gov/40244663/ |
 | Structured turning / saccadic reorientation | Walking heading changes are organized and often occur in brief turns rather than only smooth continuous curvature. | Steering evaluation should reward plausible reorientation structure, not just raw bearing reduction. | Geurten et al. 2014: https://pmc.ncbi.nlm.nih.gov/articles/PMC4205811/ ; Yang et al. 2024: https://pubmed.ncbi.nlm.nih.gov/37904997/ |
 | Landmark fixation / approach | Flies orient toward and stabilize salient visual objects such as vertical dark bars or stripes. | The current target assay is valid when treated as a landmark-orientation benchmark. | Moore et al. 2014: https://pmc.ncbi.nlm.nih.gov/articles/PMC6605338/ ; Xiong et al. 2020: https://pmc.ncbi.nlm.nih.gov/articles/PMC7843020/ ; Maimon et al. 2008: https://pmc.ncbi.nlm.nih.gov/articles/PMC2861965/ |
-| Refixation after perturbation | When a fixated visual object is displaced, flies can compensate and return it toward the frontal field. | This is the correct grounded form of "reacquisition" for the current vision-first branch. | de Bivort et al. 2020: https://pmc.ncbi.nlm.nih.gov/articles/PMC7703559/ ; Clemens et al. 2025: https://pmc.ncbi.nlm.nih.gov/articles/PMC12212441/ |
+| Refixation after perturbation | When a stabilized landmark or goal cue is displaced, flies can make corrective turns to recover the prior heading / goal relation. | This is the correct grounded form of "reacquisition" for the current vision-first branch and is closer to menotaxis-style cue recovery than to arbitrary moving-target pursuit. | de Bivort et al. 2020: https://pmc.ncbi.nlm.nih.gov/articles/PMC7703559/ ; Pires et al. 2024: https://www.nature.com/articles/s41586-023-07006-3 ; Clemens et al. 2025: https://pmc.ncbi.nlm.nih.gov/articles/PMC12212441/ |
 | Short-timescale orientation memory | Flies can preserve orientation relative to a previously shown visual landmark for seconds after it disappears. | This supports bounded persistence after brief target loss, but not an unlimited pursuit memory claim. | Neuser et al. 2008: https://pubmed.ncbi.nlm.nih.gov/18509336/ ; Kuntz et al. 2012: https://pubmed.ncbi.nlm.nih.gov/22815538/ ; Kuo et al. 2019: https://pmc.ncbi.nlm.nih.gov/articles/PMC6754076/ |
 | Walking-linked global brain state | Whole-brain activity changes with spontaneous walking and turning even without explicit target stimulus. | The spontaneous-state backend should create bounded, structured readiness rather than a silent cold start. | Aimon et al. 2023: https://elifesciences.org/articles/85202 ; Mann et al. 2024: https://pubmed.ncbi.nlm.nih.gov/38109544/ |
 
@@ -60,6 +60,29 @@ acceptance targets for the current branch unless the matching context is added.
 - Search behavior claims that are only supported by odor, reward, or threat
   assays.
 - Any "living fly" claim based purely on speed or displacement.
+
+## Interpretation Of The Current Jump Assay
+
+The current `target_jump` assay is informative, but it is stricter than the
+best grounded central-complex perturbation papers.
+
+- In the strongest grounding paper for allocentric-goal to egocentric-steering
+  conversion, flies recover heading relative to a displaced visual cue during a
+  menotaxis-style perturbation task.
+- In this repo, after the jump the target continues moving tangentially in world
+  space, so strict frontal refixation within `2.0 s` is a harsher criterion than
+  simple recovery toward a prior heading / goal relation.
+- Therefore a branch can show biologically plausible corrective steering after
+  the jump even when it does not re-enter a `20 deg` frontal fixation cone.
+
+This means jump evaluation should prioritize:
+
+- corrective turn latency
+- signed turn-bearing correlation after perturbation
+- bearing-recovery fraction over time
+- bounded heading / goal persistence
+
+before treating strict frontal refixation as the only success signal.
 
 ## Condition Matrix
 
