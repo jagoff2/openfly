@@ -152,6 +152,27 @@ The full workstream is still partial because:
 - there is not yet matched embodied evidence showing better startup readiness
   without collapsing `target` / `no_target` / `zero_brain`
 
+## Current Acceptance Status Under The Hard Rule
+
+The current repo rule is now stricter than the original scope of this pilot.
+
+The only acceptable spontaneous endogenous state is one that emerges from:
+
+- richer intrinsic cell dynamics
+- graded transmission
+- synaptic heterogeneity
+- neuromodulatory state
+
+Under that rule, the current spontaneous-state pilot is **not** an acceptable
+final mechanism, even where it improved mesoscale diagnostics.
+
+So these results must now be interpreted as:
+
+- useful diagnosis of the old absorbing silent fixed point
+- useful mesoscale-regime probe
+- not promotable as the final spontaneous production branch
+- not admissible as the final explanation of living endogenous activity
+
 ## Result 6: First honest embodied fold-in regressed the current best target-jump latent branch
 
 The first real embodied spontaneous-state fold-in is now recorded at:

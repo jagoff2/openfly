@@ -8,8 +8,6 @@ import sys
 from pathlib import Path
 from typing import Any
 
-os.environ.setdefault("CUDA_VISIBLE_DEVICES", "")
-
 import numpy as np
 from torch import Tensor
 
@@ -31,6 +29,7 @@ from brain.flywire_annotations import (
 )
 from brain.public_ids import MOTOR_READOUT_IDS
 from brain.pytorch_backend import WholeBrainTorchBackend
+from vision.flyvis_compat import configure_flyvis_device
 from vision.lateralized_probe import build_body_side_stimuli, compute_retina_geometry
 
 
@@ -98,6 +97,7 @@ def _build_flyvis_uv_grid_bins(
 
 
 def _prepare_visual_network(vision_network_dir: str | None):
+    configure_flyvis_device(force_cpu=False)
     retina = Retina()
     retina_mapper = RetinaMapper(retina=retina)
     if vision_network_dir is None:

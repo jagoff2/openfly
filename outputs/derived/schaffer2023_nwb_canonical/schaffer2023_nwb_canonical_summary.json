@@ -1,0 +1,38 @@
+{
+  "dataset_key": "schaffer2023_figshare_nwb",
+  "dataset_root": "G:\\flysim\\external\\neural_measurements\\schaffer2023_figshare",
+  "bundle_path": "G:\\flysim\\outputs\\derived\\schaffer2023_nwb_canonical\\schaffer2023_nwb_canonical_bundle.json",
+  "staged_session_count": 3,
+  "exported_session_count": 3,
+  "trial_count": 9,
+  "exported_sessions": [
+    {
+      "session_file": "2018_08_24_fly3_run1.nwb",
+      "split": "train",
+      "roi_count": 2170,
+      "time_count": 3435,
+      "interval_count": 1,
+      "behavioral_state_dim": 1,
+      "sampling_rate_hz": 6.025744759102611
+    },
+    {
+      "session_file": "2019_04_25_fly1.nwb",
+      "split": "val",
+      "roi_count": 1006,
+      "time_count": 9247,
+      "interval_count": 2,
+      "behavioral_state_dim": 1,
+      "sampling_rate_hz": 10.008552229688455
+    },
+    {
+      "session_file": "2022_01_08_fly1.nwb",
+      "split": "test",
+      "roi_count": 2,
+      "time_count": 24400,
+      "interval_count": 6,
+      "behavioral_state_dim": 6,
+      "sampling_rate_hz": 14.185281385281385
+    }
+  ],
+  "skipped_sessions": []
+}

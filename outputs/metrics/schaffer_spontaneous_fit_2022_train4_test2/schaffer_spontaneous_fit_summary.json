@@ -1,0 +1,279 @@
+{
+  "bundle_path": "G:\\flysim\\outputs\\derived\\schaffer2023_nwb_canonical\\schaffer2023_nwb_canonical_bundle.json",
+  "brain_config_path": "G:\\flysim\\configs\\flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn_spontaneous_refit.yaml",
+  "device": "cuda:0",
+  "seed": 0,
+  "warmup_s": 1.0,
+  "force_forward_speed": 1.0,
+  "force_contact_force": 1.0,
+  "include_asymmetry_basis": true,
+  "include_global_features": true,
+  "include_ball_motion_feature": true,
+  "include_behavioral_state_features": true,
+  "family_group_count": 2947,
+  "feature_count": 5907,
+  "fit_trial_ids": [
+    "2022_01_08_fly1_trial_000",
+    "2022_01_08_fly1_trial_001",
+    "2022_01_08_fly1_trial_002",
+    "2022_01_08_fly1_trial_003"
+  ],
+  "fit_basis_dim": 16,
+  "ridge_lambda": 0.001,
+  "aggregate": {
+    "trial_count": 6,
+    "mean_pearson_r": 0.08569865369886415,
+    "mean_rmse": 0.005494602911810473,
+    "mean_nrmse": 0.6227078907161823,
+    "mean_abs_error": 0.005057558473460447,
+    "mean_sign_agreement": 0.5365844086726893
+  },
+  "trial_summaries": [
+    {
+      "trial_id": "2022_01_08_fly1_trial_000",
+      "split": "test",
+      "behavior_context": "behaving_imaging",
+      "trace_count": 2,
+      "time_count": 3835,
+      "aggregate": {
+        "trace_count": 2,
+        "mean_pearson_r": 0.047144731115464154,
+        "mean_rmse": 0.003473355493136252,
+        "mean_nrmse": 0.30081288825781055,
+        "mean_abs_error": 0.00272260513830556,
+        "mean_sign_agreement": 0.5449804432855281
+      },
+      "trace_scores": [
+        {
+          "trace_id": "2022_01_08_fly1_trial_000_trace_000",
+          "n_samples": 3835,
+          "pearson_r": 0.047144731115464154,
+          "rmse": 0.003473355493136252,
+          "nrmse": 0.30081288825781055,
+          "mean_abs_error": 0.00272260513830556,
+          "sign_agreement": 0.5449804432855281
+        },
+        {
+          "trace_id": "2022_01_08_fly1_trial_000_trace_001",
+          "n_samples": 3835,
+          "pearson_r": 0.047144731115464154,
+          "rmse": 0.003473355493136252,
+          "nrmse": 0.30081288825781055,
+          "mean_abs_error": 0.00272260513830556,
+          "sign_agreement": 0.5449804432855281
+        }
+      ],
+      "prediction_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_000_predicted_matrix.npy",
+      "feature_matrix_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_000_feature_matrix.npy",
+      "ball_motion_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_000_ball_motion_values.npy",
+      "behavioral_state_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_000_behavioral_state_values.npy",
+      "ball_motion_mean": 0.06675358861684799,
+      "behavioral_state_dim": 6
+    },
+    {
+      "trial_id": "2022_01_08_fly1_trial_001",
+      "split": "test",
+      "behavior_context": "behaving_imaging",
+      "trace_count": 2,
+      "time_count": 4114,
+      "aggregate": {
+        "trace_count": 2,
+        "mean_pearson_r": 0.4283845696684568,
+        "mean_rmse": 0.0020831824067987005,
+        "mean_nrmse": 0.18459972454060644,
+        "mean_abs_error": 0.0016560800714204872,
+        "mean_sign_agreement": 0.648031113271755
+      },
+      "trace_scores": [
+        {
+          "trace_id": "2022_01_08_fly1_trial_001_trace_000",
+          "n_samples": 4114,
+          "pearson_r": 0.4283845696684568,
+          "rmse": 0.0020831824067987005,
+          "nrmse": 0.18459972454060644,
+          "mean_abs_error": 0.0016560800714204872,
+          "sign_agreement": 0.648031113271755
+        },
+        {
+          "trace_id": "2022_01_08_fly1_trial_001_trace_001",
+          "n_samples": 4114,
+          "pearson_r": 0.4283845696684568,
+          "rmse": 0.0020831824067987005,
+          "nrmse": 0.18459972454060644,
+          "mean_abs_error": 0.0016560800714204872,
+          "sign_agreement": 0.648031113271755
+        }
+      ],
+      "prediction_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_001_predicted_matrix.npy",
+      "feature_matrix_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_001_feature_matrix.npy",
+      "ball_motion_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_001_ball_motion_values.npy",
+      "behavioral_state_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_001_behavioral_state_values.npy",
+      "ball_motion_mean": 0.07438016682863235,
+      "behavioral_state_dim": 6
+    },
+    {
+      "trial_id": "2022_01_08_fly1_trial_002",
+      "split": "test",
+      "behavior_context": "behaving_imaging",
+      "trace_count": 2,
+      "time_count": 4114,
+      "aggregate": {
+        "trace_count": 2,
+        "mean_pearson_r": 0.008141057963026097,
+        "mean_rmse": 0.002535570301476096,
+        "mean_nrmse": 0.22356268904825868,
+        "mean_abs_error": 0.0020098205058689768,
+        "mean_sign_agreement": 0.5119105493437044
+      },
+      "trace_scores": [
+        {
+          "trace_id": "2022_01_08_fly1_trial_002_trace_000",
+          "n_samples": 4114,
+          "pearson_r": 0.008141057963026097,
+          "rmse": 0.002535570301476096,
+          "nrmse": 0.22356268904825868,
+          "mean_abs_error": 0.0020098205058689768,
+          "sign_agreement": 0.5119105493437044
+        },
+        {
+          "trace_id": "2022_01_08_fly1_trial_002_trace_001",
+          "n_samples": 4114,
+          "pearson_r": 0.008141057963026097,
+          "rmse": 0.002535570301476096,
+          "nrmse": 0.22356268904825868,
+          "mean_abs_error": 0.0020098205058689768,
+          "sign_agreement": 0.5119105493437044
+        }
+      ],
+      "prediction_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_002_predicted_matrix.npy",
+      "feature_matrix_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_002_feature_matrix.npy",
+      "ball_motion_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_002_ball_motion_values.npy",
+      "behavioral_state_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_002_behavioral_state_values.npy",
+      "ball_motion_mean": 0.05712202191352844,
+      "behavioral_state_dim": 6
+    },
+    {
+      "trial_id": "2022_01_08_fly1_trial_003",
+      "split": "test",
+      "behavior_context": "behaving_imaging",
+      "trace_count": 2,
+      "time_count": 4114,
+      "aggregate": {
+        "trace_count": 2,
+        "mean_pearson_r": 0.03264763252941863,
+        "mean_rmse": 0.0024631189645595306,
+        "mean_nrmse": 0.2876694851547797,
+        "mean_abs_error": 0.0019931439779546267,
+        "mean_sign_agreement": 0.5082644628099173
+      },
+      "trace_scores": [
+        {
+          "trace_id": "2022_01_08_fly1_trial_003_trace_000",
+          "n_samples": 4114,
+          "pearson_r": 0.03264763252941863,
+          "rmse": 0.0024631189645595306,
+          "nrmse": 0.2876694851547797,
+          "mean_abs_error": 0.0019931439779546267,
+          "sign_agreement": 0.5082644628099173
+        },
+        {
+          "trace_id": "2022_01_08_fly1_trial_003_trace_001",
+          "n_samples": 4114,
+          "pearson_r": 0.03264763252941863,
+          "rmse": 0.0024631189645595306,
+          "nrmse": 0.2876694851547797,
+          "mean_abs_error": 0.0019931439779546267,
+          "sign_agreement": 0.5082644628099173
+        }
+      ],
+      "prediction_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_003_predicted_matrix.npy",
+      "feature_matrix_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_003_feature_matrix.npy",
+      "ball_motion_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_003_ball_motion_values.npy",
+      "behavioral_state_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_003_behavioral_state_values.npy",
+      "ball_motion_mean": 0.03062712773680687,
+      "behavioral_state_dim": 6
+    },
+    {
+      "trial_id": "2022_01_08_fly1_trial_004",
+      "split": "test",
+      "behavior_context": "behaving_imaging",
+      "trace_count": 2,
+      "time_count": 4114,
+      "aggregate": {
+        "trace_count": 2,
+        "mean_pearson_r": 0.04804719816111099,
+        "mean_rmse": 0.010713157007675632,
+        "mean_nrmse": 1.348079600331708,
+        "mean_abs_error": 0.010428100950427874,
+        "mean_sign_agreement": 0.5209042294603792
+      },
+      "trace_scores": [
+        {
+          "trace_id": "2022_01_08_fly1_trial_004_trace_000",
+          "n_samples": 4114,
+          "pearson_r": 0.04804719816111099,
+          "rmse": 0.010713157007675632,
+          "nrmse": 1.348079600331708,
+          "mean_abs_error": 0.010428100950427874,
+          "sign_agreement": 0.5209042294603792
+        },
+        {
+          "trace_id": "2022_01_08_fly1_trial_004_trace_001",
+          "n_samples": 4114,
+          "pearson_r": 0.04804719816111099,
+          "rmse": 0.010713157007675632,
+          "nrmse": 1.348079600331708,
+          "mean_abs_error": 0.010428100950427874,
+          "sign_agreement": 0.5209042294603792
+        }
+      ],
+      "prediction_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_004_predicted_matrix.npy",
+      "feature_matrix_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_004_feature_matrix.npy",
+      "ball_motion_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_004_ball_motion_values.npy",
+      "behavioral_state_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_004_behavioral_state_values.npy",
+      "ball_motion_mean": 0.019688867032527924,
+      "behavioral_state_dim": 6
+    },
+    {
+      "trial_id": "2022_01_08_fly1_trial_005",
+      "split": "test",
+      "behavior_context": "behaving_imaging",
+      "trace_count": 2,
+      "time_count": 4114,
+      "aggregate": {
+        "trace_count": 2,
+        "mean_pearson_r": -0.05017326724429184,
+        "mean_rmse": 0.011699233297216633,
+        "mean_nrmse": 1.3915229569639307,
+        "mean_abs_error": 0.011535600196785161,
+        "mean_sign_agreement": 0.48541565386485175
+      },
+      "trace_scores": [
+        {
+          "trace_id": "2022_01_08_fly1_trial_005_trace_000",
+          "n_samples": 4114,
+          "pearson_r": -0.05017326724429184,
+          "rmse": 0.011699233297216633,
+          "nrmse": 1.3915229569639307,
+          "mean_abs_error": 0.011535600196785161,
+          "sign_agreement": 0.48541565386485175
+        },
+        {
+          "trace_id": "2022_01_08_fly1_trial_005_trace_001",
+          "n_samples": 4114,
+          "pearson_r": -0.05017326724429184,
+          "rmse": 0.011699233297216633,
+          "nrmse": 1.3915229569639307,
+          "mean_abs_error": 0.011535600196785161,
+          "sign_agreement": 0.48541565386485175
+        }
+      ],
+      "prediction_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_005_predicted_matrix.npy",
+      "feature_matrix_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_005_feature_matrix.npy",
+      "ball_motion_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_005_ball_motion_values.npy",
+      "behavioral_state_values_path": "G:\\flysim\\outputs\\metrics\\schaffer_spontaneous_fit_2022_train4_test2\\2022_01_08_fly1_trial_005_behavioral_state_values.npy",
+      "ball_motion_mean": 0.013612056151032448,
+      "behavioral_state_dim": 6
+    }
+  ]
+}

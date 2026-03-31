@@ -11,7 +11,7 @@
 | Public `P9` context experiment mode | partial public notebook framing | direct `P9_left` / `P9_right` brain-side Poisson-rate injection with no decoder/body fallback | medium |
 | Inferred `P9` cold-start experiment mode | no direct public grounding | visually gated asymmetric `P9_left` / `P9_right` stimulation from inferred FlyVis evidence | low |
 | Exact Eon private glue | no | not reproducible from public artifacts; replaced with a public-equivalent bridge | low |
-| Multi-GPU production split | no turnkey public path | currently blocked by public WSL wheel support for `sm_120` | medium |
+| Multi-GPU production split | no turnkey public path | single-GPU FlyVis now works locally; dual-GPU production split remains unevaluated | medium |
 
 ## Current Assumptions
 
@@ -46,7 +46,7 @@
 
 ## Validated Gaps
 
-- The current public WSL PyTorch `cu126` wheel used by FlyVis does not support RTX 5060 Ti `sm_120`, so the validated realistic-vision production path is CPU-only in WSL.
+- Single-GPU FlyVis execution now works locally in WSL on RTX 5060 Ti `sm_120` after upgrading the full environment to `cu128` and repairing the upstream FlyGym import-time device reset. Evidence: `outputs/profiling/flyvis_gpu_sm120_check.json`.
 - `Brian2CUDA` and `NEST GPU` were not validated locally.
 - No public raw telemetry or parameter dump from the Eon demo is available, so exact side-by-side trace matching is impossible.
 - This workspace is not itself a Git repository, so benchmark rows cannot carry a real commit hash.
@@ -155,6 +155,11 @@
   - it resolves the fully silent cold-start baseline in the brain-only audit
   - the current best candidate uses bilateral family-structured tonic occupancy and slow latent fluctuations over central/integrative super-classes rather than decoder/body fallback
   - it now clears a brain-only plausibility bar: sparse bounded ongoing activity, positive homologous family coupling, and retained perturbability across seeds
+  - it is **not** fully emergent intrinsic spontaneous physiology
+  - the ongoing state is still injected as structured background drive inside the backend
+  - that makes it a brain-internal surrogate, not a decoder/body shortcut
+  - under the current hard rule, exogenous brain priors are explicitly not acceptable as the final spontaneous-state mechanism
+  - so this mechanism does not clear the final bar and must be replaced by richer endogenous dynamics grounded in intrinsic cell dynamics, graded transmission, synaptic heterogeneity, or neuromodulatory state
   - but it is not yet promotable as a production embodied branch because matched embodied `target` / `no_target` / `zero_brain` validation has not been run yet
 - The repo now includes a default same-run activation capture path plus an
   iterative decoding workbench:
@@ -188,6 +193,32 @@
 - the turn-voltage controller-promotion line is now useful mainly as an
   evidence path about where target-bearing relay structure lives; under the
   current hard rule it is not an acceptable final control architecture
+- the Creamer 2018 visual-speed-control workstream now has a mechanically valid
+  treadmill-ball assay and must be evaluated on treadmill-measured forward
+  speed rather than world-frame displacement
+  - current honest state:
+    - assay geometry is resolved enough to count as biologically plausible
+    - the current living motion-only branch still fails parity in that regime
+    - the deeper translational-speed failure predates spontaneous state and is
+      already present in the last strong non-spontaneous target branch
+    - in the non-spontaneous branch, the first front-to-back treadmill speed
+      delta survives matched `T4/T5` ablation almost perfectly even though the
+      decoder forward-signal delta does not
+    - that means the sensory motion pathway is still entering the system, but
+      the current descending decode/body mapping does not expose a distinct
+      translational speed-control channel in the Creamer sense
+    - one concrete reason is architectural: the current Creamer configs still
+      use decoder `command_mode = two_drive`, and the legacy two-drive body
+      compatibility path maps any active command to fixed gait frequency and
+      fixed correction gains instead of a richer locomotor latent interface
+    - the spontaneous branch then amplifies that older problem by collapsing
+      the assay into a stronger locomotor/turn attractor
+  - evidence:
+    - `docs/creamer2018_visual_speed_control_note.md`
+    - `outputs/metrics/creamer2018_treadmill_tripod_pair_summary.json`
+    - `outputs/metrics/creamer2018_parity_mismatch_diagnosis.json`
+    - `outputs/metrics/creamer_known_good_nonspont_decoder_diagnosis.json`
+    - `outputs/metrics/creamer_spontaneous_decoder_diagnosis.json`
 - the current active perturbation-improvement branch is instead a
   decoder-internal relay-voltage turn latent:
   - `docs/brain_latent_turn_decoder.md`
@@ -206,6 +237,10 @@
     needed for an honest full-validation claim
   - current strongest honest target is mesoscale physiological validation of
     spontaneous state against public imaging literature and datasets
+  - the current whole-brain backend is an alpha-filtered delayed refractory LIF
+    network with global parameters, which is not the strongest current blocker
+    for parity but is a real ceiling for exact imaging-space physiological
+    matching
   - current living-branch mesoscale result:
     - matched living target / no-target baseline: achieved
     - walk-linked global modulation: achieved
@@ -245,7 +280,26 @@
 
 ## Residual Open Questions
 
-- Whether a future public FlyVis wheel with `sm_120` support will make GPU vision practical in WSL on this hardware
+- New top-level open question:
+  - how far the spontaneous / living brain can be forced to match public neural
+    measurements in exact matched format before downstream decoder and
+    embodiment conclusions materially change
+- New program assumption:
+  - for the current phase, direct parity against public neural measurements
+    takes precedence over interpretability or mechanistic elegance
+- New tactical priority:
+  - downstream Creamer / decoder / embodiment interpretation is paused as a
+    primary objective until public neural measurement parity has real traction
+- New parity-program staging gap:
+  - Dryad metadata and file inventories are scriptable in this environment, but
+    raw file delivery still fails on direct scripted paths:
+    - API download endpoints return `401`
+    - direct `file_stream` endpoints return `403`
+  - current staging state is therefore mixed:
+    - Aimon raw files are fully staged from the prior validated mirror-backed path
+    - Schaffer and Ketkar are staged at manifest level, with one lightweight Schaffer spreadsheet artifact downloaded
+    - Dallmann and Shomar are staged at metadata/file-inventory level only
+- Whether the updated GPU FlyVis path materially changes the full-stack benchmark and parity envelopes once the historical CPU-fallback benchmark tables are rerun
 - Whether additional public descending-neuron anchors or better public sensory anchors would materially improve visual turning fidelity
 - Whether a clearly labeled `public_p9_context` brain-side mode is the best public-experiment analogue for recovering locomotor output without reintroducing decoder or body-side fallback behavior
 - Whether the public Eon demo used unpublished downstream control heuristics beyond the whole-brain core

@@ -872,6 +872,156 @@ def test_decoder_can_boost_forward_drive_with_context_groups(tmp_path: Path) -> 
     assert high_context.command.right_drive > low_context.command.right_drive
 
 
+def test_decoder_can_suppress_hybrid_freq_floor_with_forward_context(tmp_path: Path) -> None:
+    candidates_json = tmp_path / "candidates.json"
+    candidates_json.write_text(
+        json.dumps(
+            {
+                "selected_paired_cell_types": [
+                    {
+                        "candidate_label": "DNp103",
+                        "left_root_ids": [101],
+                        "right_root_ids": [201],
+                    },
+                    {
+                        "candidate_label": "DNae002",
+                        "left_root_ids": [301],
+                        "right_root_ids": [401],
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    decoder = MotorDecoder(
+        DecoderConfig(
+            command_mode="hybrid_multidrive",
+            population_candidates_json=str(candidates_json),
+            population_forward_cell_types=("DNp103",),
+            population_forward_scale_hz=50.0,
+            population_forward_weight=1.0,
+            forward_gain=0.8,
+            latent_freq_bias=0.8,
+            latent_freq_gain=0.3,
+            forward_context_cell_types=("DNae002",),
+            forward_context_scale_hz=20.0,
+            forward_context_freq_suppression_gain=0.5,
+            signal_smoothing_alpha=1.0,
+        )
+    )
+    low_context = decoder.decode(
+        {
+            101: 40.0,
+            201: 40.0,
+            301: 0.0,
+            401: 0.0,
+        }
+    )
+    decoder.reset()
+    high_context = decoder.decode(
+        {
+            101: 40.0,
+            201: 40.0,
+            301: 40.0,
+            401: 40.0,
+        }
+    )
+
+    assert isinstance(low_context.command, HybridDriveCommand)
+    assert isinstance(high_context.command, HybridDriveCommand)
+    assert low_context.neuron_rates["forward_context_signal"] == 0.0
+    assert high_context.neuron_rates["forward_context_signal"] > 0.9
+    assert high_context.command.left_freq_scale < low_context.command.left_freq_scale
+    assert high_context.command.right_freq_scale < low_context.command.right_freq_scale
+    assert high_context.neuron_rates["forward_context_level"] > 0.9
+
+
+def test_forward_context_zero_init_prevents_stale_baseline_saturation(tmp_path: Path) -> None:
+    library_json = tmp_path / "forward_context_library.json"
+    library_json.write_text(
+        json.dumps(
+            {
+                "forward_context_scale_hz": 5.0,
+                "selected_groups": [
+                    {
+                        "label": "T5a",
+                        "left_root_ids": [101],
+                        "right_root_ids": [201],
+                        "forward_weight": 1.0,
+                        "baseline_bilateral_hz": 68.0,
+                        "signal_mode": "motion_energy",
+                        "motion_threshold_hz": 0.0,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    decoder = MotorDecoder(
+        DecoderConfig(
+            command_mode="hybrid_multidrive",
+            latent_freq_bias=0.8,
+            latent_freq_gain=0.3,
+            forward_context_freq_suppression_gain=0.5,
+            forward_context_scale_hz=5.0,
+            forward_context_baseline_alpha=0.05,
+            forward_context_initial_baseline_mode="zero",
+            forward_context_baseline_update_steps=500,
+            forward_context_signal_library_json=str(library_json),
+        )
+    )
+    context = decoder.decode({101: 0.0, 201: 0.0})
+
+    assert context.neuron_rates["T5a_forward_context_baseline_hz"] == 0.0
+    assert context.neuron_rates["T5a_forward_context_bilateral_hz"] == 0.0
+    assert context.neuron_rates["forward_context_library_signal"] == 0.0
+    assert context.neuron_rates["forward_context_signal"] == 0.0
+    assert context.neuron_rates["forward_context_level"] == 0.0
+
+
+def test_forward_context_runtime_baseline_updates_then_freezes(tmp_path: Path) -> None:
+    library_json = tmp_path / "forward_context_library.json"
+    library_json.write_text(
+        json.dumps(
+            {
+                "forward_context_scale_hz": 5.0,
+                "selected_groups": [
+                    {
+                        "label": "T5a",
+                        "left_root_ids": [101],
+                        "right_root_ids": [201],
+                        "forward_weight": 1.0,
+                        "baseline_bilateral_hz": 68.0,
+                        "signal_mode": "motion_energy",
+                        "motion_threshold_hz": 0.0,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    decoder = MotorDecoder(
+        DecoderConfig(
+            command_mode="hybrid_multidrive",
+            forward_context_scale_hz=5.0,
+            forward_context_baseline_alpha=1.0,
+            forward_context_initial_baseline_mode="zero",
+            forward_context_baseline_update_steps=1,
+            forward_context_signal_library_json=str(library_json),
+        )
+    )
+
+    first = decoder.decode({101: 20.0, 201: 20.0})
+    second = decoder.decode({101: 20.0, 201: 20.0})
+    third = decoder.decode({101: 10.0, 201: 10.0})
+
+    assert first.neuron_rates["forward_context_baseline_update_count"] == 1.0
+    assert second.neuron_rates["T5a_forward_context_baseline_hz"] == 20.0
+    assert second.neuron_rates["forward_context_signal"] == 0.0
+    assert third.neuron_rates["T5a_forward_context_baseline_hz"] == 20.0
+    assert third.neuron_rates["forward_context_signal"] > 0.9
+
+
 def test_decoder_can_boost_turn_with_context_groups(tmp_path: Path) -> None:
     candidates_json = tmp_path / "candidates.json"
     candidates_json.write_text(

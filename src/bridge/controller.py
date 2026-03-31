@@ -149,17 +149,26 @@ class ClosedLoopBridge:
             "selected_turn_blend": float(selected_blend),
         }
 
-    def reset(self, seed: int = 0) -> None:
-        if hasattr(self.brain_backend, "reset"):
+    def reset(
+        self,
+        seed: int = 0,
+        *,
+        reset_brain: bool = True,
+        reset_decoder: bool = True,
+        reset_shadow_decoders: bool = True,
+        reset_brain_context: bool = True,
+        reset_visual_splice: bool = True,
+    ) -> None:
+        if reset_brain and hasattr(self.brain_backend, "reset"):
             self.brain_backend.reset(seed)
-        if hasattr(self.decoder, "reset"):
+        if reset_decoder and hasattr(self.decoder, "reset"):
             self.decoder.reset()
         for _, shadow_decoder in self.shadow_decoders:
-            if hasattr(shadow_decoder, "reset"):
+            if reset_shadow_decoders and hasattr(shadow_decoder, "reset"):
                 shadow_decoder.reset()
-        if hasattr(self.brain_context_injector, "reset"):
+        if reset_brain_context and hasattr(self.brain_context_injector, "reset"):
             self.brain_context_injector.reset()
-        if hasattr(self.visual_splice_injector, "reset"):
+        if reset_visual_splice and hasattr(self.visual_splice_injector, "reset"):
             self.visual_splice_injector.reset()
         self._previous_salience_diff = None
         self._previous_forward_salience = None

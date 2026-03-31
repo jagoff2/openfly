@@ -1,0 +1,316 @@
+{
+  "source_key": "shomar2025_dryad",
+  "title": "Shomar et al. 2025 visual-to-locomotor channel dataset",
+  "primary_url": "https://doi.org/10.5061/dryad.kkwh70sgw",
+  "metadata_url": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.kkwh70sgw",
+  "access": "public DOI-backed Dryad record",
+  "repository_kind": "dryad",
+  "resolved_landing_url": null,
+  "version_id": "398523",
+  "dataset_metadata": {
+    "_links": {
+      "self": {
+        "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.kkwh70sgw"
+      },
+      "stash:versions": {
+        "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.kkwh70sgw/versions"
+      },
+      "stash:version": {
+        "href": "/api/v2/versions/398523"
+      },
+      "stash:download": {
+        "href": "/api/v2/datasets/doi%3A10.5061%2Fdryad.kkwh70sgw/download"
+      },
+      "curies": [
+        {
+          "name": "stash",
+          "href": "https://github.com/datadryad/dryad-app/blob/main/documentation/apis/link_relations.md#{rel}",
+          "templated": "true"
+        }
+      ]
+    },
+    "identifier": "doi:10.5061/dryad.kkwh70sgw",
+    "id": 165464,
+    "storageSize": 214370930562,
+    "relatedPublicationISSN": "0960-9822",
+    "title": "Visual circuitry for distance estimation in Drosophila",
+    "authors": [
+      {
+        "firstName": "Joseph",
+        "lastName": "Shomar",
+        "email": "joseph.shomar@yale.edu",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "orcid": "0009-0000-9534-6263"
+      },
+      {
+        "firstName": "Elizabeth",
+        "lastName": "Wu",
+        "email": "elizabeth.wu@yale.edu",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "order": 1
+      },
+      {
+        "firstName": "Braedyn",
+        "lastName": "Au",
+        "email": "",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "order": 2
+      },
+      {
+        "firstName": "Kate",
+        "lastName": "Maier",
+        "email": "",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "order": 3
+      },
+      {
+        "firstName": "Baohua",
+        "lastName": "Zhou",
+        "email": "",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "order": 4
+      },
+      {
+        "firstName": "Natalia",
+        "lastName": "Matos",
+        "email": "",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "order": 5
+      },
+      {
+        "firstName": "Garrett",
+        "lastName": "Sager",
+        "email": "",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "order": 6
+      },
+      {
+        "firstName": "Gustavo",
+        "lastName": "Santana",
+        "email": "",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "order": 7
+      },
+      {
+        "firstName": "Ryosuke",
+        "lastName": "Tanaka",
+        "email": "",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "order": 8
+      },
+      {
+        "firstName": "Caitlin",
+        "lastName": "Gish",
+        "email": "",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "order": 9
+      },
+      {
+        "firstName": "Damon",
+        "lastName": "Clark",
+        "email": "damon.clark@yale.edu",
+        "affiliation": "Yale University",
+        "affiliationROR": "https://ror.org/03v76x132",
+        "affiliations": [
+          {
+            "name": "Yale University",
+            "ror_id": "https://ror.org/03v76x132"
+          }
+        ],
+        "orcid": "0000-0001-8487-700X",
+        "order": 10
+      }
+    ],
+    "abstract": "<p>This dataset contains all the processed neural imaging and behavioral time series data associated with the manuscript as submitted to Current Biology. All data corresponds to measurements from Drosophila, and is sub-divided into two distinct data structures corresponding to the different types of data (neural imaging and behavioral time series). Neural imaging data is contained in one Matlab struct, and the behavioral time series data is contained in a different Matlab struct, both of which have their fields and units described in the corresponding README. All the data is to be made publicly available as open-source, and all associated code for recreating analysis done within the manuscript is also provided here and in the corresponding GitHub repository. The behavior structure includes all locomotor data from a genetic silencing screen in which neural substrates were identified in the Drosophila visual system for their involvement (or lack thereof) in distance estimation behaviors. Meanwhile, the neural imaging structure includes all the calcium fluorescence data from two-photon microscopy of LC15 neurons which were identified as motion parallax detectors in the manuscript. The visual stimuli shown during these recordings consisted of particular combinations of foreground and background motion that elicited various degrees of parallax cues.</p>\n",
+    "funders": [
+      {
+        "organization": "National Eye Institute",
+        "identifierType": "ror",
+        "identifier": "https://ror.org/03wkg3b53",
+        "awardNumber": "EY026555",
+        "awardDescription": "R01",
+        "awardTitle": "",
+        "order": 0
+      }
+    ],
+    "keywords": [
+      "Drosophila",
+      "Neuroscience",
+      "Vision"
+    ],
+    "fieldOfScience": "Biological sciences",
+    "relatedWorks": [
+      {
+        "relationship": "preprint",
+        "identifierType": "DOI",
+        "identifier": "https://doi.org/10.1101/2024.12.25.630346"
+      },
+      {
+        "relationship": "software",
+        "identifierType": "URL",
+        "identifier": "https://github.com/ClarkLabCode/Gap_Crossing"
+      },
+      {
+        "relationship": "primary_article",
+        "identifierType": "DOI",
+        "identifier": "https://doi.org/10.1016/j.cub.2025.09.008"
+      }
+    ],
+    "versionNumber": 4,
+    "versionStatus": "submitted",
+    "curationStatus": "Published",
+    "versionChanges": "files_changed",
+    "publicationDate": "2025-09-29",
+    "lastModificationDate": "2025-09-29",
+    "visibility": "public",
+    "sharingLink": "http://datadryad.org/dataset/doi:10.5061/dryad.kkwh70sgw",
+    "changedFields": [
+      "abstract",
+      "funders",
+      [
+        {
+          "index": 0,
+          "award": "EY026555",
+          "desc": "R01"
+        }
+      ],
+      "related_identifiers",
+      [
+        {
+          "index": 1,
+          "id": "https://github.com/ClarkLabCode/Gap_Crossing",
+          "type": "software",
+          "relation": "isderivedfrom"
+        },
+        {
+          "index": 2,
+          "id": "https://doi.org/10.1016/j.cub.2025.09.008",
+          "type": "primary_article",
+          "relation": "iscitedby"
+        }
+      ],
+      "data_files"
+    ],
+    "license": "https://spdx.org/licenses/CC0-1.0.html",
+    "metrics": {
+      "views": 14,
+      "downloads": 2,
+      "citations": 2
+    }
+  },
+  "files": [
+    {
+      "name": "Behavior_Data.zip",
+      "size_bytes": 169007518163,
+      "description": "Dryad file",
+      "primary_download_url": "https://datadryad.org/api/v2/files/4379703/download",
+      "digest": "ddb5f7835c51f58ee73dec2a9f7e1fd1d7ba1f0f4cebac6822ac4f6d6ce24042"
+    },
+    {
+      "name": "Figure_Generation_Scripts.zip",
+      "size_bytes": 297024327,
+      "description": "Dryad file",
+      "primary_download_url": "https://datadryad.org/api/v2/files/4379707/download",
+      "digest": "73bf01c429a49d236c711ac55314bddb0aeec0fa946edc628343f18cb8903829"
+    },
+    {
+      "name": "LC15_Imaging_and_Behavior_Data.zip",
+      "size_bytes": 16323475239,
+      "description": "Dryad file",
+      "primary_download_url": "https://datadryad.org/api/v2/files/4379704/download",
+      "digest": "d7eebb78249a859e5238b6361a602ef221485202234f0b470277a3b3910b6cde"
+    },
+    {
+      "name": "LC15_Imaging_Data.zip",
+      "size_bytes": 28741714959,
+      "description": "Dryad file",
+      "primary_download_url": "https://datadryad.org/api/v2/files/4379705/download",
+      "digest": "6d6a6d9fd6d3b080887ca7123c4d26be7e02a28ab9d0ab8e0d4068734529ceb7"
+    },
+    {
+      "name": "Processed_Behav_Data_WS.mat",
+      "size_bytes": 1191471,
+      "description": "Dryad file",
+      "primary_download_url": "https://datadryad.org/api/v2/files/4379706/download",
+      "digest": "5d97edd711051eb973e6d6a69fabe43b3eed824338f5aa0faa47c5f92730e0ac"
+    },
+    {
+      "name": "README.md",
+      "size_bytes": 6403,
+      "description": "Dryad file",
+      "primary_download_url": "https://datadryad.org/api/v2/files/4379719/download",
+      "digest": "8717b127a3b01150e07d5639e6110e200a4beff71961174fb0b50966a160d90c"
+    }
+  ],
+  "access_checks": []
+}

@@ -1,0 +1,174 @@
+{
+  "variants": [
+    {
+      "variant": "aimon_spontaneous_fit_train_to_test_v1",
+      "force_forward_speed": 1.0,
+      "force_contact_force": 1.0,
+      "include_asymmetry_basis": true,
+      "include_global_features": true,
+      "include_regressor_feature": true,
+      "fit_basis_dim": 64,
+      "ridge_lambda": 0.001,
+      "held_out_test": {
+        "mean_pearson_r": 0.05643155762167529,
+        "mean_nrmse": 0.3328442890691765,
+        "mean_abs_error": 0.008563422909294868,
+        "mean_sign_agreement": 0.4688845976100877
+      },
+      "test_trials": {
+        "B1269_spontaneous_walk": {
+          "trace_count": 150,
+          "mean_pearson_r": 0.12376801935463026,
+          "mean_rmse": 0.009997939101380039,
+          "mean_nrmse": 0.28163797520543565,
+          "mean_abs_error": 0.007898760111862234,
+          "mean_sign_agreement": 0.4950980392156863
+        },
+        "B1269_forced_walk": {
+          "trace_count": 150,
+          "mean_pearson_r": -0.010904904111279692,
+          "mean_rmse": 0.013102485278261553,
+          "mean_nrmse": 0.3840506029329173,
+          "mean_abs_error": 0.009228085706727502,
+          "mean_sign_agreement": 0.4426711560044892
+        }
+      }
+    },
+    {
+      "variant": "aimon_spontaneous_fit_train_to_test_v2_basis16_ridge1e-2_noasym",
+      "force_forward_speed": 1.0,
+      "force_contact_force": 1.0,
+      "include_asymmetry_basis": false,
+      "include_global_features": true,
+      "include_regressor_feature": true,
+      "fit_basis_dim": 16,
+      "ridge_lambda": 0.01,
+      "held_out_test": {
+        "mean_pearson_r": 0.012218882516092665,
+        "mean_nrmse": 0.3309533486833851,
+        "mean_abs_error": 0.008487315854253365,
+        "mean_sign_agreement": 0.4605129728659141
+      },
+      "test_trials": {
+        "B1269_spontaneous_walk": {
+          "trace_count": 150,
+          "mean_pearson_r": 0.018378255921127396,
+          "mean_rmse": 0.012218606327488678,
+          "mean_nrmse": 0.3615730929226221,
+          "mean_abs_error": 0.008888772775222788,
+          "mean_sign_agreement": 0.4705882352941177
+        },
+        "B1269_forced_walk": {
+          "trace_count": 150,
+          "mean_pearson_r": 0.0060595091110579365,
+          "mean_rmse": 0.010599938940642314,
+          "mean_nrmse": 0.30033360444414814,
+          "mean_abs_error": 0.00808585893328394,
+          "mean_sign_agreement": 0.4504377104377105
+        }
+      }
+    },
+    {
+      "variant": "aimon_spontaneous_fit_train_to_test_v3_force2",
+      "force_forward_speed": 2.0,
+      "force_contact_force": 2.0,
+      "include_asymmetry_basis": true,
+      "include_global_features": true,
+      "include_regressor_feature": true,
+      "fit_basis_dim": 64,
+      "ridge_lambda": 0.001,
+      "held_out_test": {
+        "mean_pearson_r": 0.062038680183493414,
+        "mean_nrmse": 0.3116782947617359,
+        "mean_abs_error": 0.00820677079532309,
+        "mean_sign_agreement": 0.4659800620584934
+      },
+      "test_trials": {
+        "B1269_spontaneous_walk": {
+          "trace_count": 150,
+          "mean_pearson_r": 0.1371808478129951,
+          "mean_rmse": 0.009907812458637049,
+          "mean_nrmse": 0.27922404169094356,
+          "mean_abs_error": 0.00784985543862764,
+          "mean_sign_agreement": 0.49568627450980385
+        },
+        "B1269_forced_walk": {
+          "trace_count": 150,
+          "mean_pearson_r": -0.01310348744600829,
+          "mean_rmse": 0.01192587794121537,
+          "mean_nrmse": 0.3441325478325282,
+          "mean_abs_error": 0.008563686152018541,
+          "mean_sign_agreement": 0.4362738496071829
+        }
+      }
+    },
+    {
+      "variant": "aimon_spontaneous_fit_train_to_test_v4_contact2_forward1",
+      "force_forward_speed": 1.0,
+      "force_contact_force": 2.0,
+      "include_asymmetry_basis": true,
+      "include_global_features": true,
+      "include_regressor_feature": true,
+      "fit_basis_dim": 64,
+      "ridge_lambda": 0.001,
+      "held_out_test": {
+        "mean_pearson_r": 0.03852781587228656,
+        "mean_nrmse": 0.329335113354704,
+        "mean_abs_error": 0.008534946531049178,
+        "mean_sign_agreement": 0.4644213375585924
+      },
+      "test_trials": {
+        "B1269_spontaneous_walk": {
+          "trace_count": 150,
+          "mean_pearson_r": 0.10171612575496429,
+          "mean_rmse": 0.010050890552085,
+          "mean_nrmse": 0.28362238570297876,
+          "mean_abs_error": 0.007931524064313047,
+          "mean_sign_agreement": 0.4941176470588235
+        },
+        "B1269_forced_walk": {
+          "trace_count": 150,
+          "mean_pearson_r": -0.024660494010391165,
+          "mean_rmse": 0.012862871029494865,
+          "mean_nrmse": 0.37504784100642924,
+          "mean_abs_error": 0.00913836899778531,
+          "mean_sign_agreement": 0.43472502805836133
+        }
+      }
+    },
+    {
+      "variant": "aimon_spontaneous_fit_train_to_test_v5_forward2_contact1",
+      "force_forward_speed": 2.0,
+      "force_contact_force": 1.0,
+      "include_asymmetry_basis": true,
+      "include_global_features": true,
+      "include_regressor_feature": true,
+      "fit_basis_dim": 64,
+      "ridge_lambda": 0.001,
+      "held_out_test": {
+        "mean_pearson_r": 0.05654015310924413,
+        "mean_nrmse": 0.31553966705828607,
+        "mean_abs_error": 0.008242315843259776,
+        "mean_sign_agreement": 0.4723054070112893
+      },
+      "test_trials": {
+        "B1269_spontaneous_walk": {
+          "trace_count": 150,
+          "mean_pearson_r": 0.1195683749066437,
+          "mean_rmse": 0.009934060276468397,
+          "mean_nrmse": 0.28046287131573117,
+          "mean_abs_error": 0.007860621043810261,
+          "mean_sign_agreement": 0.4945098039215686
+        },
+        "B1269_forced_walk": {
+          "trace_count": 150,
+          "mean_pearson_r": -0.0064880686881554316,
+          "mean_rmse": 0.012123044826677885,
+          "mean_nrmse": 0.3506164628008409,
+          "mean_abs_error": 0.008624010642709292,
+          "mean_sign_agreement": 0.45010101010101
+        }
+      }
+    }
+  ]
+}

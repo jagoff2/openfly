@@ -22,18 +22,18 @@
 ## Best Current Configuration
 
 - Brain-only Torch benchmark: host Python, `cuda:1` if available
-- Production body plus vision plus closed loop: WSL `flysim-full`, `MUJOCO_GL=egl`, `force_cpu_vision: true`
+- Production body plus vision plus closed loop: WSL `flysim-full`, `MUJOCO_GL=egl`, `force_cpu_vision: false`
 - Benchmark and demo cadence: `body_timestep_s = 0.0001`, `control_interval_s = 0.002`, `video_stride = 5`
 
 ## Optimization Attempts Kept
 
 - Cached weight matrices under `outputs/cache/`
 - Separate `Brian2` env to avoid dependency churn in the production stack
-- CPU vision fallback in WSL to keep FlyVis stable on this hardware with current public wheels
+- `cu128` Torch wheels plus the repo-local FlyVis compat layer to keep the realistic-vision path on GPU in WSL
 
 ## Remaining Practical Optimizations
 
-1. Rerun the WSL production path once a public PyTorch wheel supports RTX 5060 Ti `sm_120`.
+1. Rerun the WSL production vision and full-stack benchmark suites under the new GPU FlyVis path.
 2. Investigate whether FlyGym camera playback or render throttling can remove the `time.sleep` hotspot without breaking artifact capture.
 3. Split benchmark mode from artifact-heavy demo mode more aggressively if a no-video performance-only path is needed.
 4. Reuse initialized realistic-vision state across sweep runs when exact reset parity is not required.

@@ -1,0 +1,114 @@
+brain:
+  backend: torch
+  completeness_path: external/fly-brain/data/2025_Completeness_783.csv
+  connectivity_path: external/fly-brain/data/2025_Connectivity_783.parquet
+  cache_dir: outputs/cache
+  device: cpu
+  dt_ms: 0.1
+  spontaneous_state:
+    mode: sparse_lognormal_latent_ou
+    active_fraction: 0.05
+    lognormal_mean_hz: 1.8
+    lognormal_sigma: 0.9
+    max_rate_hz: 9.0
+    voltage_jitter_std_mv: 0.5
+    latent_count: 12
+    latent_target_fraction: 0.01
+    latent_loading_std_hz: 1.4
+    latent_ou_tau_s: 3.0
+    latent_ou_sigma_hz: 1.2
+    family_key: auto
+    min_family_size_per_side: 2
+    max_family_size_per_side: 128
+    included_super_classes:
+      - central
+      - ascending
+      - visual_projection
+      - visual_centrifugal
+      - endocrine
+    bilateral_coupling: 0.995
+    family_rate_jitter_fraction: 0.04
+    neuron_rate_jitter_fraction: 0.015
+    antisymmetric_latent_fraction: 0.01
+body:
+  terrain_type: flat
+  target_fly_enabled: false
+  spawn_pos:
+    - -8.0
+    - 0.0
+    - 0.3
+  visual_speed_control:
+    enabled: true
+    mode: open_loop_drift
+    corridor_length_mm: 60.0
+    corridor_half_width_mm: 6.0
+    corridor_neck_half_width_mm: 2.5
+    corridor_neck_center_x_mm: 0.0
+    corridor_neck_half_length_mm: 10.0
+    wall_height_mm: 4.0
+    wall_thickness_mm: 0.35
+    stripe_width_mm: 1.5
+    stripe_wrap_margin_mm: 6.0
+    stimulus_start_s: 0.5
+    stimulus_end_s: 1.5
+    pre_scene_velocity_mm_s: 0.0
+    stimulus_scene_velocity_mm_s: -30.0
+brain_context:
+  mode: none
+visual_splice:
+  enabled: true
+  annotation_path: outputs/cache/flywire_annotation_supplement.tsv
+  spatial_mode: uv_grid
+  spatial_u_bins: 2
+  spatial_v_bins: 2
+  spatial_flip_v: true
+  spatial_mirror_u_by_side: true
+  spatial_cell_type_transforms_path: outputs/metrics/splice_celltype_alignment_recommended.json
+  min_roots_per_bin: 20
+  value_scale: 62.96215524698159
+  max_abs_current: 120.0
+  baseline_update_alpha: 0.0
+decoder:
+  forward_gain: 1.2
+  turn_gain: 0.65
+  signal_smoothing_alpha: 0.06
+  forward_asymmetry_scale_hz: 40.0
+  forward_asymmetry_turn_gain: 0.3
+  population_candidates_json: outputs/metrics/descending_readout_candidates_strict.json
+  population_forward_cell_types:
+    - DNp103
+    - DNp06
+    - DNp18
+    - DNp35
+  population_turn_cell_types:
+    - DNpe056
+    - DNp71
+    - DNpe040
+  population_forward_scale_hz: 60.0
+  population_turn_scale_hz: 25.0
+  population_forward_weight: 1.0
+  population_turn_weight: 0.75
+  monitor_candidates_json: outputs/metrics/jump_brain_driven_relay_monitor_candidates.json
+  turn_voltage_signal_library_json: outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_library.json
+  turn_voltage_weight: 0.3
+runtime:
+  seed: 0
+  duration_s: 2.0
+  body_timestep_s: 0.0001
+  control_interval_s: 0.002
+  initial_left_drive: 0.0
+  initial_right_drive: 0.0
+  force_cpu_vision: false
+  vision_payload_mode: fast
+  video_stride: 5
+  video_fps: 24
+  camera_mode: fixed_birdeye
+  visual_ablation_cell_types:
+    - T4a
+    - T4b
+    - T4c
+    - T4d
+    - T5a
+    - T5b
+    - T5c
+    - T5d

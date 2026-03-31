@@ -1,0 +1,122 @@
+brain:
+  backend: torch
+  completeness_path: external/fly-brain/data/2025_Completeness_783.csv
+  connectivity_path: external/fly-brain/data/2025_Connectivity_783.parquet
+  cache_dir: outputs/cache
+  device: cpu
+  dt_ms: 0.1
+  spontaneous_state:
+    mode: none
+    annotation_path: outputs/cache/flywire_annotation_supplement.tsv
+    family_key: auto
+    min_family_size_per_side: 2
+    max_family_size_per_side: 128
+    included_super_classes:
+      - central
+      - ascending
+      - visual_projection
+      - visual_centrifugal
+      - endocrine
+  backend_dynamics:
+    mode: grouped_glif_scaffold
+    spontaneous_source: endogenous
+    annotation_path: outputs/cache/flywire_annotation_supplement.tsv
+    group_key: super_class
+    neuromodulation_enabled: true
+    modulatory_group_names:
+      - endocrine
+    arousal_tau_ms: 500.0
+    exafference_tau_ms: 250.0
+    arousal_current_gain: 30.0
+    adaptation_mod_gain: 0.35
+    synaptic_mod_gain: 0.35
+    release_mod_gain: 0.35
+    default_group:
+      tau_mem_ms: 20.0
+      tau_adapt_ms: 80.0
+      adapt_a: 0.02
+      adapt_b: 1.5
+      noise_sigma: 55.0
+      noise_tau_ms: 8.0
+      release_mode: mixed
+      tau_release_ms: 10.0
+      tau_calcium_ms: 180.0
+      calcium_spike_gain: 1.0
+      calcium_release_gain: 0.35
+      calcium_adapt_gain: 0.20
+      calcium_release_feedback_gain: 0.08
+      release_v_half_mv: -50.0
+      release_slope_mv: 2.0
+      synaptic_gain_scale: 1.0
+      release_gain_scale: 1.0
+      neuromod_gain_scale: 1.0
+    groups:
+      central:
+        tau_mem_ms: 22.0
+        tau_adapt_ms: 90.0
+        adapt_a: 0.03
+        adapt_b: 1.8
+        noise_sigma: 60.0
+        release_mode: mixed
+        tau_release_ms: 12.0
+        tau_calcium_ms: 220.0
+        calcium_spike_gain: 1.1
+        calcium_release_gain: 0.40
+        calcium_adapt_gain: 0.24
+        calcium_release_feedback_gain: 0.10
+      ascending:
+        tau_mem_ms: 18.0
+        tau_adapt_ms: 70.0
+        adapt_a: 0.02
+        adapt_b: 1.2
+        noise_sigma: 50.0
+        release_mode: mixed
+        tau_release_ms: 8.0
+        tau_calcium_ms: 160.0
+        calcium_spike_gain: 0.9
+        calcium_release_gain: 0.30
+        calcium_adapt_gain: 0.16
+        calcium_release_feedback_gain: 0.06
+      visual_projection:
+        tau_mem_ms: 16.0
+        tau_adapt_ms: 60.0
+        adapt_a: 0.01
+        adapt_b: 0.8
+        noise_sigma: 45.0
+        release_mode: graded
+        tau_release_ms: 6.0
+        tau_calcium_ms: 110.0
+        calcium_spike_gain: 0.4
+        calcium_release_gain: 0.65
+        calcium_adapt_gain: 0.08
+        calcium_release_feedback_gain: 0.12
+        release_gain_scale: 1.1
+      visual_centrifugal:
+        tau_mem_ms: 18.0
+        tau_adapt_ms: 70.0
+        adapt_a: 0.015
+        adapt_b: 1.0
+        noise_sigma: 48.0
+        release_mode: graded
+        tau_release_ms: 7.0
+        tau_calcium_ms: 125.0
+        calcium_spike_gain: 0.5
+        calcium_release_gain: 0.60
+        calcium_adapt_gain: 0.10
+        calcium_release_feedback_gain: 0.11
+        release_gain_scale: 1.05
+      endocrine:
+        tau_mem_ms: 24.0
+        tau_adapt_ms: 120.0
+        adapt_a: 0.01
+        adapt_b: 0.6
+        noise_sigma: 35.0
+        release_mode: graded
+        tau_release_ms: 20.0
+        tau_calcium_ms: 320.0
+        calcium_spike_gain: 0.2
+        calcium_release_gain: 0.50
+        calcium_adapt_gain: 0.18
+        calcium_release_feedback_gain: 0.18
+        release_gain_scale: 1.2
+        neuromod_gain_scale: 1.4

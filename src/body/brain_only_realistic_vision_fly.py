@@ -6,6 +6,7 @@ import numpy as np
 
 from flygym.fly import Fly
 from flygym.examples.vision.realistic_vision import RealisticVisionFly
+from vision.flyvis_compat import configure_flyvis_device
 
 
 class BrainOnlyRealisticVisionFly(RealisticVisionFly):
@@ -16,6 +17,10 @@ class BrainOnlyRealisticVisionFly(RealisticVisionFly):
     brain-only motor path here, zero decoded drive must result in a neutral
     low-level action instead of locomotion from controller internals.
     """
+
+    def __init__(self, *args, force_cpu_vision: bool = False, **kwargs) -> None:
+        configure_flyvis_device(force_cpu=force_cpu_vision)
+        super().__init__(*args, **kwargs)
 
     def _zero_descending_drive(self, action: Any) -> bool:
         action_array = np.asarray(action, dtype=float).reshape(-1)

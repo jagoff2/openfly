@@ -1,0 +1,1080 @@
+{
+  "source_key": "schaffer2023_figshare",
+  "title": "The spatial and temporal structure of neural activity across the fly brain",
+  "primary_url": "https://doi.org/10.6084/m9.figshare.23749074",
+  "metadata_url": "https://api.figshare.com/v2/articles/23749074",
+  "access": "public DOI-backed Figshare record",
+  "repository_kind": "figshare",
+  "resolved_landing_url": "https://api.figshare.com/v2/articles/23749074",
+  "version_id": "23749074",
+  "dataset_metadata": {
+    "files": [
+      {
+        "id": 41686602,
+        "name": "2018_08_24_fly2_run2.nwb",
+        "size": 112438574,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686602",
+        "supplied_md5": "e5844d1afcf18e85d7db593f7fc83481",
+        "computed_md5": "e5844d1afcf18e85d7db593f7fc83481",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686605,
+        "name": "2018_08_24_fly3_run1.nwb",
+        "size": 86122400,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686605",
+        "supplied_md5": "cd49d2958282a7e6dd02ae00c9d7cb13",
+        "computed_md5": "cd49d2958282a7e6dd02ae00c9d7cb13",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686608,
+        "name": "2019_04_18_fly2.nwb",
+        "size": 122426176,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686608",
+        "supplied_md5": "0cf23ab4646ec226a22eda2157ce474d",
+        "computed_md5": "0cf23ab4646ec226a22eda2157ce474d",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686614,
+        "name": "2019_04_22_fly1.nwb",
+        "size": 152561586,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686614",
+        "supplied_md5": "9155e64c2cea3b36da85ad0454cbef96",
+        "computed_md5": "9155e64c2cea3b36da85ad0454cbef96",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686617,
+        "name": "2019_04_22_fly3.nwb",
+        "size": 153776672,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686617",
+        "supplied_md5": "f8fa31ed2432b26d2aa9dc5a392cd8ce",
+        "computed_md5": "f8fa31ed2432b26d2aa9dc5a392cd8ce",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686623,
+        "name": "2019_04_24_fly1.nwb",
+        "size": 125723370,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686623",
+        "supplied_md5": "87727eaa11545243e52bbf35619173e4",
+        "computed_md5": "87727eaa11545243e52bbf35619173e4",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686626,
+        "name": "2019_04_24_fly3.nwb",
+        "size": 195297864,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686626",
+        "supplied_md5": "aea4470f34812b371eb8f254912e340b",
+        "computed_md5": "aea4470f34812b371eb8f254912e340b",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686629,
+        "name": "2019_04_25_fly1.nwb",
+        "size": 85554908,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686629",
+        "supplied_md5": "4da7d507a7ff4201e812f4d3aa5c1b1d",
+        "computed_md5": "4da7d507a7ff4201e812f4d3aa5c1b1d",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686635,
+        "name": "2019_04_25_fly3.nwb",
+        "size": 173245086,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686635",
+        "supplied_md5": "78966dd9a768bfdb1de83ec8bf329509",
+        "computed_md5": "78966dd9a768bfdb1de83ec8bf329509",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686638,
+        "name": "2019_04_26_fly1.nwb",
+        "size": 122125518,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686638",
+        "supplied_md5": "95930fe1606d082258d9e6a11f661a24",
+        "computed_md5": "95930fe1606d082258d9e6a11f661a24",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686641,
+        "name": "2019_04_29_fly1.nwb",
+        "size": 115735054,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686641",
+        "supplied_md5": "ba8b431297de489bc2efcc003a607fc4",
+        "computed_md5": "ba8b431297de489bc2efcc003a607fc4",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686647,
+        "name": "2019_05_07_fly1.nwb",
+        "size": 138278372,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686647",
+        "supplied_md5": "56d1b7b5b374eaf27a47e5f170234a10",
+        "computed_md5": "56d1b7b5b374eaf27a47e5f170234a10",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686650,
+        "name": "2019_05_13_fly1.nwb",
+        "size": 11538843,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686650",
+        "supplied_md5": "7e5ca85d68d1264e6104ec3899473f5e",
+        "computed_md5": "7e5ca85d68d1264e6104ec3899473f5e",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686653,
+        "name": "2019_05_14_fly3.nwb",
+        "size": 17313580,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686653",
+        "supplied_md5": "7593ccda5e19a709b96d0f1f7e5ad2a6",
+        "computed_md5": "7593ccda5e19a709b96d0f1f7e5ad2a6",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686656,
+        "name": "2019_05_14_fly4.nwb",
+        "size": 12990710,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686656",
+        "supplied_md5": "75690e1c01b3e3e8f8638a34740cdd93",
+        "computed_md5": "75690e1c01b3e3e8f8638a34740cdd93",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686659,
+        "name": "2019_05_20_fly2.nwb",
+        "size": 16999138,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686659",
+        "supplied_md5": "4f6d6c60abf3b6240533d3f53444ed7d",
+        "computed_md5": "4f6d6c60abf3b6240533d3f53444ed7d",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686662,
+        "name": "2019_05_20_fly3.nwb",
+        "size": 18571213,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686662",
+        "supplied_md5": "db8b1b15960281bdb34794c5fe04ebab",
+        "computed_md5": "db8b1b15960281bdb34794c5fe04ebab",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686665,
+        "name": "2019_06_28_fly2.nwb",
+        "size": 159075790,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686665",
+        "supplied_md5": "738b5ac21472f07d2469ce0bb71b510d",
+        "computed_md5": "738b5ac21472f07d2469ce0bb71b510d",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686671,
+        "name": "2019_07_01_fly2.nwb",
+        "size": 143684190,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686671",
+        "supplied_md5": "ece22a319e61ee116e27c117ada5da97",
+        "computed_md5": "ece22a319e61ee116e27c117ada5da97",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686674,
+        "name": "2019_08_07_fly2.nwb",
+        "size": 73452936,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686674",
+        "supplied_md5": "f9d74fbed9e6f844ab34ecfdeb011ba3",
+        "computed_md5": "f9d74fbed9e6f844ab34ecfdeb011ba3",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686680,
+        "name": "2019_08_14_fly1.nwb",
+        "size": 274083160,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686680",
+        "supplied_md5": "bbe52e806de6063e7c472b3768f67df5",
+        "computed_md5": "bbe52e806de6063e7c472b3768f67df5",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686683,
+        "name": "2019_08_14_fly2.nwb",
+        "size": 92831360,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686683",
+        "supplied_md5": "70d9e72eb736283a7454123525a269a6",
+        "computed_md5": "70d9e72eb736283a7454123525a269a6",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686686,
+        "name": "2019_08_14_fly3_2.nwb",
+        "size": 63219124,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686686",
+        "supplied_md5": "3ebadc3ff4dc5c09fb1b3b7b06bab499",
+        "computed_md5": "3ebadc3ff4dc5c09fb1b3b7b06bab499",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686689,
+        "name": "2019_08_20_fly2.nwb",
+        "size": 129045900,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686689",
+        "supplied_md5": "a99a6b90497c998c6d8bc73fdb3b13f1",
+        "computed_md5": "a99a6b90497c998c6d8bc73fdb3b13f1",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686692,
+        "name": "2019_08_20_fly3.nwb",
+        "size": 142820214,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686692",
+        "supplied_md5": "02b3d9579c58f8e7a79c70e6bb576d91",
+        "computed_md5": "02b3d9579c58f8e7a79c70e6bb576d91",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686698,
+        "name": "2019_10_02_fly2.nwb",
+        "size": 205445408,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686698",
+        "supplied_md5": "1bde1125024141e4e484bb2aa2145706",
+        "computed_md5": "1bde1125024141e4e484bb2aa2145706",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686701,
+        "name": "2019_10_10_fly3.nwb",
+        "size": 201599206,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686701",
+        "supplied_md5": "123dc02850d48122a7fee370017e083c",
+        "computed_md5": "123dc02850d48122a7fee370017e083c",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686704,
+        "name": "2019_10_14_fly2.nwb",
+        "size": 117190278,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686704",
+        "supplied_md5": "e0ad3f61d5975fa2a8c10fe499e6c55f",
+        "computed_md5": "e0ad3f61d5975fa2a8c10fe499e6c55f",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686710,
+        "name": "2019_10_14_fly3.nwb",
+        "size": 133844376,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686710",
+        "supplied_md5": "519e8ac53a5b3743cd55f8ee7d8fa727",
+        "computed_md5": "519e8ac53a5b3743cd55f8ee7d8fa727",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686758,
+        "name": "2019_10_14_fly4.nwb",
+        "size": 197050822,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686758",
+        "supplied_md5": "1028adac3321eb062a99d4ec15206a34",
+        "computed_md5": "1028adac3321eb062a99d4ec15206a34",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686761,
+        "name": "2019_10_18_fly2.nwb",
+        "size": 102054354,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686761",
+        "supplied_md5": "d9891fad419fcf627dffd0baf18ef62f",
+        "computed_md5": "d9891fad419fcf627dffd0baf18ef62f",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686767,
+        "name": "2019_10_18_fly3.nwb",
+        "size": 160220944,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686767",
+        "supplied_md5": "255c7870bb01083203f035f7cad9e1d9",
+        "computed_md5": "255c7870bb01083203f035f7cad9e1d9",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686770,
+        "name": "2019_10_21_fly1.nwb",
+        "size": 117830060,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686770",
+        "supplied_md5": "dcdc13bf211ba80dbc025613201796ea",
+        "computed_md5": "dcdc13bf211ba80dbc025613201796ea",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686776,
+        "name": "2019_11_12_fly5.nwb",
+        "size": 15221964,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686776",
+        "supplied_md5": "93270b5990e8503a1906143177186a48",
+        "computed_md5": "93270b5990e8503a1906143177186a48",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686779,
+        "name": "2019_11_12_fly6.nwb",
+        "size": 19034023,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686779",
+        "supplied_md5": "dc502ef65dc29b747466f1b7e506110c",
+        "computed_md5": "dc502ef65dc29b747466f1b7e506110c",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686782,
+        "name": "2020_07_29_fly2.nwb",
+        "size": 13894942,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686782",
+        "supplied_md5": "790a065c2bb017b227527607b181aabc",
+        "computed_md5": "790a065c2bb017b227527607b181aabc",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686785,
+        "name": "2020_08_10_fly1.nwb",
+        "size": 15783662,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686785",
+        "supplied_md5": "0fbed6f490349b31f890f2c23508fa64",
+        "computed_md5": "0fbed6f490349b31f890f2c23508fa64",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686788,
+        "name": "2020_08_10_fly2.nwb",
+        "size": 13231433,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686788",
+        "supplied_md5": "11f8614462225cdff66b10e656ecabc4",
+        "computed_md5": "11f8614462225cdff66b10e656ecabc4",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686791,
+        "name": "2020_08_24_fly1.nwb",
+        "size": 11824691,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686791",
+        "supplied_md5": "647e7b3cdd61b288c630dcfc3a5da8e9",
+        "computed_md5": "647e7b3cdd61b288c630dcfc3a5da8e9",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686794,
+        "name": "2020_08_28_fly1.nwb",
+        "size": 12328330,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686794",
+        "supplied_md5": "a41ac1cfe49fdd7c04048372b0ba72c9",
+        "computed_md5": "a41ac1cfe49fdd7c04048372b0ba72c9",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686797,
+        "name": "2022_01_05_fly2.nwb",
+        "size": 5708249,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686797",
+        "supplied_md5": "9369c4822aa7fac83c8b113cd2d48f11",
+        "computed_md5": "9369c4822aa7fac83c8b113cd2d48f11",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686800,
+        "name": "2022_01_08_fly1.nwb",
+        "size": 3475661,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686800",
+        "supplied_md5": "408535c6d6a6431a439aeb83bef26b8d",
+        "computed_md5": "408535c6d6a6431a439aeb83bef26b8d",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686803,
+        "name": "2022_01_08_fly2.nwb",
+        "size": 5457965,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686803",
+        "supplied_md5": "f186c8c4ccbd00ffa29615bb886bdfa6",
+        "computed_md5": "f186c8c4ccbd00ffa29615bb886bdfa6",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686806,
+        "name": "2022_01_14_fly1.nwb",
+        "size": 4643461,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686806",
+        "supplied_md5": "05a775e7b271d4c9a7272ba0be67289f",
+        "computed_md5": "05a775e7b271d4c9a7272ba0be67289f",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686809,
+        "name": "2022_01_19_fly1.nwb",
+        "size": 3394673,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686809",
+        "supplied_md5": "953b050e8ff3868f81d3cbca76ee989b",
+        "computed_md5": "953b050e8ff3868f81d3cbca76ee989b",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686812,
+        "name": "2022_01_21_fly2.nwb",
+        "size": 4372089,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686812",
+        "supplied_md5": "a277a5b2595c7cd3309dda67d3d067f7",
+        "computed_md5": "a277a5b2595c7cd3309dda67d3d067f7",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 41686815,
+        "name": "2022_01_25_fly2.nwb",
+        "size": 3187313,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/41686815",
+        "supplied_md5": "aeaa35c366125dd55ffcc369174d7c0c",
+        "computed_md5": "aeaa35c366125dd55ffcc369174d7c0c",
+        "mimetype": "application/x-hdf"
+      },
+      {
+        "id": 42076350,
+        "name": "datasets_for_each_figure.xlsx",
+        "size": 10104,
+        "is_link_only": false,
+        "download_url": "https://ndownloader.figshare.com/files/42076350",
+        "supplied_md5": "8a1ca13e40d68ef1647a174046d90623",
+        "computed_md5": "8a1ca13e40d68ef1647a174046d90623",
+        "mimetype": "undefined"
+      }
+    ],
+    "folder_structure": {},
+    "authors": [
+      {
+        "id": 12495749,
+        "full_name": "Evan Schaffer",
+        "first_name": "Evan",
+        "last_name": "Schaffer",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": "0000-0002-8731-4939"
+      },
+      {
+        "id": 12495752,
+        "full_name": "Neeli Mishra",
+        "first_name": "Neeli",
+        "last_name": "Mishra",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": "0000-0002-2946-4445"
+      },
+      {
+        "id": 11467528,
+        "full_name": "Matthew R. Whiteway",
+        "first_name": "Matthew R.",
+        "last_name": "Whiteway",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": ""
+      },
+      {
+        "id": 3761983,
+        "full_name": "Wenze Li",
+        "first_name": "Wenze",
+        "last_name": "Li",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": ""
+      },
+      {
+        "id": 16648648,
+        "full_name": "Jason Freedman",
+        "first_name": "Jason",
+        "last_name": "Freedman",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": ""
+      },
+      {
+        "id": 16648652,
+        "full_name": "michelle vancura",
+        "first_name": "michelle",
+        "last_name": "vancura",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": ""
+      },
+      {
+        "id": 9469763,
+        "full_name": "Kripa Patel",
+        "first_name": "Kripa",
+        "last_name": "Patel",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": ""
+      },
+      {
+        "id": 16648654,
+        "full_name": "Venkatakaushik Voleti",
+        "first_name": "Venkatakaushik",
+        "last_name": "Voleti",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": ""
+      },
+      {
+        "id": 155009,
+        "full_name": "Liam Paninski",
+        "first_name": "Liam",
+        "last_name": "Paninski",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": ""
+      },
+      {
+        "id": 8704179,
+        "full_name": "Elizabeth M. C. Hillman",
+        "first_name": "Elizabeth M. C.",
+        "last_name": "Hillman",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": ""
+      },
+      {
+        "id": 162370,
+        "full_name": "L.F. Abbott",
+        "first_name": "L.F.",
+        "last_name": "Abbott",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": ""
+      },
+      {
+        "id": 12495755,
+        "full_name": "Richard Axel",
+        "first_name": "Richard",
+        "last_name": "Axel",
+        "is_active": false,
+        "url_name": "_",
+        "orcid_id": "0000-0002-3141-4076"
+      }
+    ],
+    "custom_fields": [
+      {
+        "name": "Research Data Support",
+        "value": "",
+        "settings": {
+          "validations": {
+            "min_length": 1,
+            "max_length": 250
+          },
+          "placeholder": "Complete where RDS data are part of RDS submission"
+        },
+        "field_type": "text",
+        "order": null,
+        "is_mandatory": false
+      },
+      {
+        "name": "Manuscript #",
+        "value": "",
+        "settings": {
+          "validations": {
+            "min_length": 1,
+            "max_length": 250
+          },
+          "placeholder": "Manuscript Identifier from eJP"
+        },
+        "field_type": "text",
+        "order": null,
+        "is_mandatory": false
+      }
+    ],
+    "figshare_url": "https://springernature.figshare.com/articles/dataset/Flygenvectors_The_spatial_and_temporal_structure_of_neural_activity_across_the_fly_brain/23749074",
+    "download_disabled": false,
+    "description": "SCAPE panneuronal imaging of adult drosophila behaving on a spherical treadmill, with corresponding tracked body points.",
+    "funding": null,
+    "funding_list": [],
+    "version": 1,
+    "status": "public",
+    "size": 4105715746,
+    "created_date": "2023-09-29T13:57:34Z",
+    "modified_date": "2023-11-17T08:08:54Z",
+    "is_public": true,
+    "is_confidential": false,
+    "is_metadata_record": false,
+    "confidential_reason": "",
+    "metadata_reason": "",
+    "license": {
+      "value": 1,
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "tags": [
+      "SCAPE",
+      "neural activities",
+      "Drosophila melanogaster adults"
+    ],
+    "keywords": [
+      "SCAPE",
+      "neural activities",
+      "Drosophila melanogaster adults"
+    ],
+    "categories": [
+      {
+        "id": 726,
+        "title": "Animal Neurobiology",
+        "parent_id": 48,
+        "path": "",
+        "source_id": "",
+        "taxonomy_id": 10
+      },
+      {
+        "id": 722,
+        "title": "Animal Behaviour",
+        "parent_id": 48,
+        "path": "",
+        "source_id": "",
+        "taxonomy_id": 10
+      },
+      {
+        "id": 11,
+        "title": "Behavioral Neuroscience",
+        "parent_id": 48,
+        "path": "",
+        "source_id": "",
+        "taxonomy_id": 10
+      },
+      {
+        "id": 135,
+        "title": "Computational  Biology",
+        "parent_id": 48,
+        "path": "",
+        "source_id": "",
+        "taxonomy_id": 10
+      }
+    ],
+    "references": [
+      "https://doi.org/10.1038/s41467-023-41261-2"
+    ],
+    "has_linked_file": false,
+    "citation": "Schaffer, Evan; Mishra, Neeli; Whiteway, Matthew R.; Li, Wenze; Freedman, Jason; vancura, michelle; et al. (2023). Flygenvectors: The spatial and temporal structure of neural activity across the fly brain. figshare. Dataset. https://doi.org/10.6084/m9.figshare.23749074.v1",
+    "related_materials": [
+      {
+        "id": 149851933,
+        "identifier": "10.1038/s41467-023-41261-2",
+        "title": "The spatial and temporal structure of neural activity across the fly brain",
+        "relation": "IsSupplementTo",
+        "identifier_type": "DOI",
+        "is_linkout": true,
+        "link": "https://doi.org/10.1038/s41467-023-41261-2"
+      }
+    ],
+    "is_embargoed": false,
+    "embargo_date": null,
+    "embargo_type": null,
+    "embargo_title": "",
+    "embargo_reason": "",
+    "embargo_options": [],
+    "id": 23749074,
+    "title": "Flygenvectors: The spatial and temporal structure of neural activity across the fly brain",
+    "doi": "10.6084/m9.figshare.23749074.v1",
+    "handle": "",
+    "url": "https://api.figshare.com/v2/articles/23749074",
+    "published_date": "2023-09-29T13:57:34Z",
+    "thumb": "",
+    "defined_type": 3,
+    "defined_type_name": "dataset",
+    "group_id": 2832,
+    "url_private_api": "https://api.figshare.com/v2/account/articles/23749074",
+    "url_public_api": "https://api.figshare.com/v2/articles/23749074",
+    "url_private_html": "https://figshare.com/account/articles/23749074",
+    "url_public_html": "https://springernature.figshare.com/articles/dataset/Flygenvectors_The_spatial_and_temporal_structure_of_neural_activity_across_the_fly_brain/23749074",
+    "timeline": {
+      "posted": "2023-09-29T13:57:34",
+      "firstOnline": "2023-09-29T13:57:34"
+    },
+    "resource_title": "The spatial and temporal structure of neural activity across the fly brain",
+    "resource_doi": "10.1038/s41467-023-41261-2"
+  },
+  "files": [
+    {
+      "name": "2018_08_24_fly2_run2.nwb",
+      "size_bytes": 112438574,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686602",
+      "digest": "e5844d1afcf18e85d7db593f7fc83481"
+    },
+    {
+      "name": "2018_08_24_fly3_run1.nwb",
+      "size_bytes": 86122400,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686605",
+      "digest": "cd49d2958282a7e6dd02ae00c9d7cb13"
+    },
+    {
+      "name": "2019_04_18_fly2.nwb",
+      "size_bytes": 122426176,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686608",
+      "digest": "0cf23ab4646ec226a22eda2157ce474d"
+    },
+    {
+      "name": "2019_04_22_fly1.nwb",
+      "size_bytes": 152561586,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686614",
+      "digest": "9155e64c2cea3b36da85ad0454cbef96"
+    },
+    {
+      "name": "2019_04_22_fly3.nwb",
+      "size_bytes": 153776672,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686617",
+      "digest": "f8fa31ed2432b26d2aa9dc5a392cd8ce"
+    },
+    {
+      "name": "2019_04_24_fly1.nwb",
+      "size_bytes": 125723370,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686623",
+      "digest": "87727eaa11545243e52bbf35619173e4"
+    },
+    {
+      "name": "2019_04_24_fly3.nwb",
+      "size_bytes": 195297864,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686626",
+      "digest": "aea4470f34812b371eb8f254912e340b"
+    },
+    {
+      "name": "2019_04_25_fly1.nwb",
+      "size_bytes": 85554908,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686629",
+      "digest": "4da7d507a7ff4201e812f4d3aa5c1b1d"
+    },
+    {
+      "name": "2019_04_25_fly3.nwb",
+      "size_bytes": 173245086,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686635",
+      "digest": "78966dd9a768bfdb1de83ec8bf329509"
+    },
+    {
+      "name": "2019_04_26_fly1.nwb",
+      "size_bytes": 122125518,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686638",
+      "digest": "95930fe1606d082258d9e6a11f661a24"
+    },
+    {
+      "name": "2019_04_29_fly1.nwb",
+      "size_bytes": 115735054,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686641",
+      "digest": "ba8b431297de489bc2efcc003a607fc4"
+    },
+    {
+      "name": "2019_05_07_fly1.nwb",
+      "size_bytes": 138278372,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686647",
+      "digest": "56d1b7b5b374eaf27a47e5f170234a10"
+    },
+    {
+      "name": "2019_05_13_fly1.nwb",
+      "size_bytes": 11538843,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686650",
+      "digest": "7e5ca85d68d1264e6104ec3899473f5e"
+    },
+    {
+      "name": "2019_05_14_fly3.nwb",
+      "size_bytes": 17313580,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686653",
+      "digest": "7593ccda5e19a709b96d0f1f7e5ad2a6"
+    },
+    {
+      "name": "2019_05_14_fly4.nwb",
+      "size_bytes": 12990710,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686656",
+      "digest": "75690e1c01b3e3e8f8638a34740cdd93"
+    },
+    {
+      "name": "2019_05_20_fly2.nwb",
+      "size_bytes": 16999138,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686659",
+      "digest": "4f6d6c60abf3b6240533d3f53444ed7d"
+    },
+    {
+      "name": "2019_05_20_fly3.nwb",
+      "size_bytes": 18571213,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686662",
+      "digest": "db8b1b15960281bdb34794c5fe04ebab"
+    },
+    {
+      "name": "2019_06_28_fly2.nwb",
+      "size_bytes": 159075790,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686665",
+      "digest": "738b5ac21472f07d2469ce0bb71b510d"
+    },
+    {
+      "name": "2019_07_01_fly2.nwb",
+      "size_bytes": 143684190,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686671",
+      "digest": "ece22a319e61ee116e27c117ada5da97"
+    },
+    {
+      "name": "2019_08_07_fly2.nwb",
+      "size_bytes": 73452936,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686674",
+      "digest": "f9d74fbed9e6f844ab34ecfdeb011ba3"
+    },
+    {
+      "name": "2019_08_14_fly1.nwb",
+      "size_bytes": 274083160,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686680",
+      "digest": "bbe52e806de6063e7c472b3768f67df5"
+    },
+    {
+      "name": "2019_08_14_fly2.nwb",
+      "size_bytes": 92831360,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686683",
+      "digest": "70d9e72eb736283a7454123525a269a6"
+    },
+    {
+      "name": "2019_08_14_fly3_2.nwb",
+      "size_bytes": 63219124,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686686",
+      "digest": "3ebadc3ff4dc5c09fb1b3b7b06bab499"
+    },
+    {
+      "name": "2019_08_20_fly2.nwb",
+      "size_bytes": 129045900,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686689",
+      "digest": "a99a6b90497c998c6d8bc73fdb3b13f1"
+    },
+    {
+      "name": "2019_08_20_fly3.nwb",
+      "size_bytes": 142820214,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686692",
+      "digest": "02b3d9579c58f8e7a79c70e6bb576d91"
+    },
+    {
+      "name": "2019_10_02_fly2.nwb",
+      "size_bytes": 205445408,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686698",
+      "digest": "1bde1125024141e4e484bb2aa2145706"
+    },
+    {
+      "name": "2019_10_10_fly3.nwb",
+      "size_bytes": 201599206,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686701",
+      "digest": "123dc02850d48122a7fee370017e083c"
+    },
+    {
+      "name": "2019_10_14_fly2.nwb",
+      "size_bytes": 117190278,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686704",
+      "digest": "e0ad3f61d5975fa2a8c10fe499e6c55f"
+    },
+    {
+      "name": "2019_10_14_fly3.nwb",
+      "size_bytes": 133844376,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686710",
+      "digest": "519e8ac53a5b3743cd55f8ee7d8fa727"
+    },
+    {
+      "name": "2019_10_14_fly4.nwb",
+      "size_bytes": 197050822,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686758",
+      "digest": "1028adac3321eb062a99d4ec15206a34"
+    },
+    {
+      "name": "2019_10_18_fly2.nwb",
+      "size_bytes": 102054354,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686761",
+      "digest": "d9891fad419fcf627dffd0baf18ef62f"
+    },
+    {
+      "name": "2019_10_18_fly3.nwb",
+      "size_bytes": 160220944,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686767",
+      "digest": "255c7870bb01083203f035f7cad9e1d9"
+    },
+    {
+      "name": "2019_10_21_fly1.nwb",
+      "size_bytes": 117830060,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686770",
+      "digest": "dcdc13bf211ba80dbc025613201796ea"
+    },
+    {
+      "name": "2019_11_12_fly5.nwb",
+      "size_bytes": 15221964,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686776",
+      "digest": "93270b5990e8503a1906143177186a48"
+    },
+    {
+      "name": "2019_11_12_fly6.nwb",
+      "size_bytes": 19034023,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686779",
+      "digest": "dc502ef65dc29b747466f1b7e506110c"
+    },
+    {
+      "name": "2020_07_29_fly2.nwb",
+      "size_bytes": 13894942,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686782",
+      "digest": "790a065c2bb017b227527607b181aabc"
+    },
+    {
+      "name": "2020_08_10_fly1.nwb",
+      "size_bytes": 15783662,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686785",
+      "digest": "0fbed6f490349b31f890f2c23508fa64"
+    },
+    {
+      "name": "2020_08_10_fly2.nwb",
+      "size_bytes": 13231433,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686788",
+      "digest": "11f8614462225cdff66b10e656ecabc4"
+    },
+    {
+      "name": "2020_08_24_fly1.nwb",
+      "size_bytes": 11824691,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686791",
+      "digest": "647e7b3cdd61b288c630dcfc3a5da8e9"
+    },
+    {
+      "name": "2020_08_28_fly1.nwb",
+      "size_bytes": 12328330,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686794",
+      "digest": "a41ac1cfe49fdd7c04048372b0ba72c9"
+    },
+    {
+      "name": "2022_01_05_fly2.nwb",
+      "size_bytes": 5708249,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686797",
+      "digest": "9369c4822aa7fac83c8b113cd2d48f11"
+    },
+    {
+      "name": "2022_01_08_fly1.nwb",
+      "size_bytes": 3475661,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686800",
+      "digest": "408535c6d6a6431a439aeb83bef26b8d"
+    },
+    {
+      "name": "2022_01_08_fly2.nwb",
+      "size_bytes": 5457965,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686803",
+      "digest": "f186c8c4ccbd00ffa29615bb886bdfa6"
+    },
+    {
+      "name": "2022_01_14_fly1.nwb",
+      "size_bytes": 4643461,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686806",
+      "digest": "05a775e7b271d4c9a7272ba0be67289f"
+    },
+    {
+      "name": "2022_01_19_fly1.nwb",
+      "size_bytes": 3394673,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686809",
+      "digest": "953b050e8ff3868f81d3cbca76ee989b"
+    },
+    {
+      "name": "2022_01_21_fly2.nwb",
+      "size_bytes": 4372089,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686812",
+      "digest": "a277a5b2595c7cd3309dda67d3d067f7"
+    },
+    {
+      "name": "2022_01_25_fly2.nwb",
+      "size_bytes": 3187313,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/41686815",
+      "digest": "aeaa35c366125dd55ffcc369174d7c0c"
+    },
+    {
+      "name": "datasets_for_each_figure.xlsx",
+      "size_bytes": 10104,
+      "description": "Figshare file",
+      "primary_download_url": "https://ndownloader.figshare.com/files/42076350",
+      "digest": "8a1ca13e40d68ef1647a174046d90623"
+    }
+  ],
+  "access_checks": []
+}

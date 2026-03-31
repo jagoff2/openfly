@@ -39,6 +39,17 @@ class TurnVoltageLatentGroup:
     super_class: str = "unknown"
 
 
+@dataclass(frozen=True)
+class ForwardContextLatentGroup:
+    label: str
+    left_root_ids: tuple[int, ...]
+    right_root_ids: tuple[int, ...]
+    forward_weight: float
+    baseline_bilateral_hz: float = 0.0
+    signal_mode: str = "signed_centered"
+    motion_threshold_hz: float = 0.0
+
+
 def _load_turn_voltage_groups(path: str | None) -> tuple[list[TurnVoltageLatentGroup], float | None]:
     if not path:
         return [], None
@@ -63,6 +74,32 @@ def _load_turn_voltage_groups(path: str | None) -> tuple[list[TurnVoltageLatentG
         )
     turn_scale_mv = payload.get("turn_scale_mv")
     return groups, None if turn_scale_mv is None else float(turn_scale_mv)
+
+
+def _load_forward_context_groups(path: str | None) -> list[ForwardContextLatentGroup]:
+    if not path:
+        return []
+    json_path = Path(path)
+    if not json_path.exists():
+        return []
+    payload = json.loads(json_path.read_text(encoding="utf-8"))
+    groups: list[ForwardContextLatentGroup] = []
+    for item in payload.get("selected_groups", []):
+        label = str(item.get("label", "")).strip()
+        if not label:
+            continue
+        groups.append(
+            ForwardContextLatentGroup(
+                label=label,
+                left_root_ids=tuple(int(root_id) for root_id in item.get("left_root_ids", [])),
+                right_root_ids=tuple(int(root_id) for root_id in item.get("right_root_ids", [])),
+                forward_weight=float(item.get("forward_weight", 0.0)),
+                baseline_bilateral_hz=float(item.get("baseline_bilateral_hz", 0.0)),
+                signal_mode=str(item.get("signal_mode", "signed_centered")),
+                motion_threshold_hz=float(item.get("motion_threshold_hz", 0.0)),
+            )
+        )
+    return groups
 
 
 @dataclass
@@ -109,6 +146,12 @@ class DecoderConfig:
     forward_context_mode: str = "blend"
     forward_context_blend: float = 0.0
     forward_context_boost: float = 0.0
+    forward_context_freq_suppression_gain: float = 0.0
+    forward_context_amp_suppression_gain: float = 0.0
+    forward_context_baseline_alpha: float = 0.0
+    forward_context_initial_baseline_mode: str = "library"
+    forward_context_baseline_update_steps: int | None = None
+    forward_context_signal_library_json: str | None = None
     turn_context_cell_types: tuple[str, ...] = ()
     turn_context_scale_hz: float = 20.0
     turn_context_mode: str = "bilateral"
@@ -172,6 +215,16 @@ class DecoderConfig:
             forward_context_mode=str(mapping.get("forward_context_mode", "blend")),
             forward_context_blend=float(mapping.get("forward_context_blend", 0.0)),
             forward_context_boost=float(mapping.get("forward_context_boost", 0.0)),
+            forward_context_freq_suppression_gain=float(mapping.get("forward_context_freq_suppression_gain", 0.0)),
+            forward_context_amp_suppression_gain=float(mapping.get("forward_context_amp_suppression_gain", 0.0)),
+            forward_context_baseline_alpha=float(mapping.get("forward_context_baseline_alpha", 0.0)),
+            forward_context_initial_baseline_mode=str(mapping.get("forward_context_initial_baseline_mode", "library")),
+            forward_context_baseline_update_steps=None
+            if mapping.get("forward_context_baseline_update_steps") is None
+            else int(mapping.get("forward_context_baseline_update_steps")),
+            forward_context_signal_library_json=None
+            if mapping.get("forward_context_signal_library_json") is None
+            else str(mapping.get("forward_context_signal_library_json")),
             turn_context_cell_types=tuple(str(value) for value in mapping.get("turn_context_cell_types", [])),
             turn_context_scale_hz=float(mapping.get("turn_context_scale_hz", 20.0)),
             turn_context_mode=str(mapping.get("turn_context_mode", "bilateral")),
@@ -207,9 +260,29 @@ class MotorDecoder:
         self.turn_voltage_groups, self._turn_voltage_library_scale_mv = _load_turn_voltage_groups(
             self.config.turn_voltage_signal_library_json
         )
+        self.forward_context_groups = _load_forward_context_groups(self.config.forward_context_signal_library_json)
         if not self.monitor_groups and self.population_groups:
             self.monitor_groups = {key: list(value) for key, value in self.population_groups.items()}
         self.reset()
+
+    @staticmethod
+    def _apply_forward_context_signal_mode(
+        centered_rate: float,
+        signal_mode: str,
+        threshold_hz: float,
+    ) -> float:
+        threshold_hz = max(0.0, float(threshold_hz))
+        mode = str(signal_mode or "signed_centered")
+        if mode == "motion_energy":
+            return max(0.0, abs(float(centered_rate)) - threshold_hz)
+        if mode == "positive_centered":
+            return max(0.0, float(centered_rate) - threshold_hz)
+        if mode == "negative_centered":
+            return max(0.0, -float(centered_rate) - threshold_hz)
+        magnitude = max(0.0, abs(float(centered_rate)) - threshold_hz)
+        if magnitude <= 0.0:
+            return 0.0
+        return float(np.copysign(magnitude, float(centered_rate)))
 
     def _load_motor_basis(self, path: str | None) -> tuple[dict[str, float], dict[str, float]]:
         if not path:
@@ -232,6 +305,12 @@ class MotorDecoder:
         self._forward_state = 0.0
         self._turn_state = 0.0
         self._reverse_state = 0.0
+        initial_mode = str(self.config.forward_context_initial_baseline_mode or "library").lower()
+        self._forward_context_group_baselines = {
+            group.label: 0.0 if initial_mode == "zero" else float(group.baseline_bilateral_hz)
+            for group in self.forward_context_groups
+        }
+        self._forward_context_baseline_update_count = 0
 
     def required_neuron_ids(self) -> list[int]:
         ids = {neuron_id for group in MOTOR_READOUT_IDS.values() for neuron_id in group}
@@ -240,6 +319,9 @@ class MotorDecoder:
         for root_ids in self.monitor_groups.values():
             ids.update(int(root_id) for root_id in root_ids)
         for group in self.turn_voltage_groups:
+            ids.update(int(root_id) for root_id in group.left_root_ids)
+            ids.update(int(root_id) for root_id in group.right_root_ids)
+        for group in self.forward_context_groups:
             ids.update(int(root_id) for root_id in group.left_root_ids)
             ids.update(int(root_id) for root_id in group.right_root_ids)
         return sorted(ids)
@@ -332,6 +414,68 @@ class MotorDecoder:
         debug["turn_voltage_scale_mv"] = float(turn_scale_mv)
         return turn_voltage_signal, debug
 
+    def _forward_context_signal_from_library(
+        self,
+        rates: Mapping[int, float],
+    ) -> tuple[float, dict[str, float]]:
+        if not self.forward_context_groups:
+            return 0.0, {
+                "forward_context_library_signal": 0.0,
+                "forward_context_group_count": 0.0,
+                "forward_context_total_weight": 0.0,
+            }
+        total_weight = 0.0
+        weighted_sum = 0.0
+        debug: dict[str, float] = {}
+        alpha = float(np.clip(self.config.forward_context_baseline_alpha, 0.0, 1.0))
+        update_limit = self.config.forward_context_baseline_update_steps
+        update_allowed = alpha > 0.0 and (
+            update_limit is None or self._forward_context_baseline_update_count < int(update_limit)
+        )
+        for group in self.forward_context_groups:
+            left_rate = self._mean_group_ids(rates, list(group.left_root_ids))
+            right_rate = self._mean_group_ids(rates, list(group.right_root_ids))
+            bilateral_rate = 0.5 * (left_rate + right_rate)
+            dynamic_baseline = float(
+                self._forward_context_group_baselines.get(group.label, float(group.baseline_bilateral_hz))
+            )
+            centered_rate = bilateral_rate - dynamic_baseline
+            transformed_rate = self._apply_forward_context_signal_mode(
+                centered_rate=centered_rate,
+                signal_mode=group.signal_mode,
+                threshold_hz=group.motion_threshold_hz,
+            )
+            weighted_sum += float(group.forward_weight) * transformed_rate
+            total_weight += abs(float(group.forward_weight))
+            debug[f"{group.label}_forward_context_left_hz"] = left_rate
+            debug[f"{group.label}_forward_context_right_hz"] = right_rate
+            debug[f"{group.label}_forward_context_bilateral_hz"] = bilateral_rate
+            debug[f"{group.label}_forward_context_baseline_hz"] = dynamic_baseline
+            debug[f"{group.label}_forward_context_centered_hz"] = centered_rate
+            debug[f"{group.label}_forward_context_signal_mode"] = str(group.signal_mode)
+            debug[f"{group.label}_forward_context_motion_threshold_hz"] = float(group.motion_threshold_hz)
+            debug[f"{group.label}_forward_context_transformed_hz"] = float(transformed_rate)
+            debug[f"{group.label}_forward_context_weight"] = float(group.forward_weight)
+            if update_allowed:
+                self._forward_context_group_baselines[group.label] = (
+                    (1.0 - alpha) * dynamic_baseline + alpha * bilateral_rate
+                )
+        if update_allowed:
+            self._forward_context_baseline_update_count += 1
+        scale_hz = max(float(self.config.forward_context_scale_hz), 1e-6)
+        library_signal = 0.0
+        if total_weight > 0.0:
+            library_signal = float(np.tanh((weighted_sum / total_weight) / scale_hz))
+        debug["forward_context_library_signal"] = float(library_signal)
+        debug["forward_context_group_count"] = float(len(self.forward_context_groups))
+        debug["forward_context_total_weight"] = float(total_weight)
+        debug["forward_context_baseline_update_count"] = float(self._forward_context_baseline_update_count)
+        debug["forward_context_baseline_update_steps"] = (
+            -1.0 if update_limit is None else float(int(update_limit))
+        )
+        debug["forward_context_initial_baseline_mode"] = str(self.config.forward_context_initial_baseline_mode)
+        return library_signal, debug
+
     def _weighted_population_side(self, rates: Mapping[int, float], group_weights: Mapping[str, float], side: str) -> float:
         if not group_weights:
             return 0.0
@@ -347,7 +491,14 @@ class MotorDecoder:
             total_weight += abs(float(weight))
         return weighted_sum / total_weight if total_weight > 0.0 else 0.0
 
-    def _command_from_states(self, forward_state: float, turn_state: float, reverse_state: float) -> tuple[BodyCommand | HybridDriveCommand, dict[str, float]]:
+    def _command_from_states(
+        self,
+        forward_state: float,
+        turn_state: float,
+        reverse_state: float,
+        *,
+        forward_context_signal: float = 0.0,
+    ) -> tuple[BodyCommand | HybridDriveCommand, dict[str, float]]:
         cfg = self.config
         turn_strength = abs(float(turn_state))
         base_drive = cfg.idle_drive + cfg.forward_gain * max(0.0, float(forward_state))
@@ -367,10 +518,13 @@ class MotorDecoder:
         if cfg.command_mode == "hybrid_multidrive":
             locomotor_level = max(0.0, float(forward_state))
             turn_level = float(turn_state)
+            forward_context_level = max(0.0, float(forward_context_signal))
             base_amp = cfg.forward_gain * locomotor_level
+            base_amp -= cfg.forward_context_amp_suppression_gain * forward_context_level
             left_amp = base_amp - cfg.latent_turn_amp_gain * turn_level
             right_amp = base_amp + cfg.latent_turn_amp_gain * turn_level
             base_freq_scale = cfg.latent_freq_bias + cfg.latent_freq_gain * locomotor_level
+            base_freq_scale -= cfg.forward_context_freq_suppression_gain * forward_context_level
             left_freq_scale = base_freq_scale - cfg.latent_turn_freq_gain * turn_level
             right_freq_scale = base_freq_scale + cfg.latent_turn_freq_gain * turn_level
             turn_priority = turn_strength * max(0.0, 1.0 - locomotor_level)
@@ -410,6 +564,7 @@ class MotorDecoder:
             latent_debug.update(
                 {
                     "locomotor_level": float(locomotor_level),
+                    "forward_context_level": float(forward_context_level),
                     "turn_strength": float(turn_strength),
                     "turn_priority": float(turn_priority),
                     "base_amp": float(base_amp),
@@ -446,6 +601,7 @@ class MotorDecoder:
             forward_state=self._forward_state,
             turn_state=float(promoted_turn_state),
             reverse_state=self._reverse_state,
+            forward_context_signal=0.0,
         )
         neuron_rates = deepcopy(base_readout.neuron_rates)
         neuron_rates.update(latent_debug)
@@ -490,7 +646,11 @@ class MotorDecoder:
         forward_context_left = self._mean_population_side(rates, cfg.forward_context_cell_types, "left")
         forward_context_right = self._mean_population_side(rates, cfg.forward_context_cell_types, "right")
         forward_context_bilateral = 0.5 * (forward_context_left + forward_context_right)
-        forward_context_signal = np.tanh(forward_context_bilateral / max(cfg.forward_context_scale_hz, 1e-6))
+        forward_context_cell_signal = np.tanh(forward_context_bilateral / max(cfg.forward_context_scale_hz, 1e-6))
+        forward_context_library_signal, forward_context_library_debug = self._forward_context_signal_from_library(rates)
+        forward_context_signal = float(
+            np.clip(float(forward_context_cell_signal) + float(forward_context_library_signal), -1.0, 1.0)
+        )
         turn_context_left = self._mean_population_side(rates, cfg.turn_context_cell_types, "left")
         turn_context_right = self._mean_population_side(rates, cfg.turn_context_cell_types, "right")
         turn_context_bilateral = 0.5 * (turn_context_left + turn_context_right)
@@ -543,6 +703,7 @@ class MotorDecoder:
             forward_state=self._forward_state,
             turn_state=self._turn_state,
             reverse_state=self._reverse_state,
+            forward_context_signal=forward_context_signal,
         )
         monitor_rates: dict[str, float] = {}
         for cell_type in self._monitor_cell_types():
@@ -570,6 +731,7 @@ class MotorDecoder:
                 "forward_context_left_hz": forward_context_left,
                 "forward_context_right_hz": forward_context_right,
                 "forward_context_bilateral_hz": float(forward_context_bilateral),
+                "forward_context_cell_signal": float(forward_context_cell_signal),
                 "forward_context_signal": float(forward_context_signal),
                 "turn_context_left_hz": turn_context_left,
                 "turn_context_right_hz": turn_context_right,
@@ -581,6 +743,7 @@ class MotorDecoder:
                 "population_forward_signal": float(population_forward_signal),
                 "dn_turn_signal": float(dn_turn_signal),
                 "population_turn_signal": float(population_turn_signal),
+                **forward_context_library_debug,
                 **turn_voltage_debug,
                 "forward_state": float(self._forward_state),
                 "turn_state": float(self._turn_state),

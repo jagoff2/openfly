@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 import json
-import os
+import sys
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 import pandas as pd
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SRC = REPO_ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
 
 
 def _normalize_scalar(value: Any) -> Any:
@@ -53,13 +58,11 @@ def _summarize_array(array: np.ndarray, max_items: int = 5) -> dict[str, Any]:
 
 
 def main() -> None:
-    os.environ.setdefault("CUDA_VISIBLE_DEVICES", "")
-
     import flyvis
-    import torch
     from flygym.examples.vision.vision_network import RealTimeVisionNetworkView
+    from vision.flyvis_compat import configure_flyvis_device
 
-    flyvis.device = torch.device("cpu")
+    configure_flyvis_device(force_cpu=False)
 
     output_path = Path("outputs/metrics/flyvis_overlap_inventory.json")
     output_path.parent.mkdir(parents=True, exist_ok=True)

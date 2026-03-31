@@ -26,6 +26,7 @@ It does all of the following:
 
 - a compact online feature extractor suitable for whole-brain stimulation
 - a body-runtime adapter that exposes realistic-vision activity every control window
+- a FlyVis device-compatibility layer that repairs the upstream FlyGym import-time CPU override and keeps the production path on the intended device
 - a CLI benchmark and demo path that proves the realistic-vision production route is the one being exercised
 
 ## Validation Status
@@ -40,4 +41,4 @@ Validated locally in WSL with real artifact output:
 
 ## Current Caveat
 
-The realistic-vision path is validated, but the current public WSL PyTorch wheel used by FlyVis does not support RTX 5060 Ti `sm_120`. The validated production configuration therefore hides GPUs from FlyVis with `force_cpu_vision: true` in `configs/flygym_realistic_vision.yaml`.
+The realistic-vision path is now GPU-capable in WSL on the local RTX 5060 Ti hardware after upgrading the Torch stack to `cu128` and repairing the upstream FlyGym device-reset side effect. The remaining caveat is that the historical benchmark tables in the repo were collected under the old CPU-fallback regime and still need to be refreshed under the new GPU path.

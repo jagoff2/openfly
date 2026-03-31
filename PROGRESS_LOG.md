@@ -4,6 +4,334 @@
 
 Ground truth source: `AGENTS.MD`
 
+## 2026-03-30 - Killed active WSL Schaffer job and completed T202/T203 endogenous backend slices
+
+1. What I did
+
+- Killed the active WSL/host Schaffer continuity fit job so the workspace was
+  no longer carrying a stale parity run:
+  - host process `2504`
+  - command: `scripts/run_schaffer_spontaneous_fit.py ... --output-dir outputs/metrics/schaffer_spontaneous_fit_2022_train4_test2_continuous`
+- Implemented `T202` in the production backend:
+  - added `backend_dynamics` config parsing and grouped parameter scaffolding
+  - split the old diagnostic surrogate from the new endogenous path
+- Implemented `T203`:
+  - added backend-internal adaptation current
+  - added backend-internal filtered intrinsic noise state
+  - wired both only into the `endogenous` spontaneous path
+
+2. What succeeded
+
+- The old spontaneous surrogate is now cleanly separable in code. It is no
+  longer silently tied to the future endogenous production path.
+- The endogenous path now has its first real internal state sources:
+  - `adaptation_current`
+  - `intrinsic_noise_state`
+- Focused validation passed:
+  - `python -m pytest tests/test_spontaneous_state_unit.py tests/test_brain_backend.py -q`
+  - `17 passed`
+
+3. Evidence
+
+- [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py)
+- [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py)
+- [test_spontaneous_state_unit.py](/G:/flysim/tests/test_spontaneous_state_unit.py)
+- [test_brain_backend.py](/G:/flysim/tests/test_brain_backend.py)
+- [endogenous_spontaneous_replacement_plan.md](/G:/flysim/docs/endogenous_spontaneous_replacement_plan.md)
+
+4. Notes
+
+- `T202` is now done.
+- `T203` is now done.
+- `T204` is now the active next slice.
+- The endogenous path is still incomplete. It now avoids dependence on
+  `background_rates`, but it is still spike-only in recurrence until graded
+  release lands.
+
+## 2026-03-30 - Completed T204 graded-release slice
+
+1. What I did
+
+- Added grouped graded-release state to the endogenous backend path.
+- Added `spiking` / `graded` / `mixed` release modes to grouped backend
+  dynamics.
+- Added endogenous graded recurrent current on top of the existing spike
+  recurrence.
+
+2. What succeeded
+
+- The endogenous backend now has a continuous signaling substrate beyond pure
+  spike-only recurrence.
+- Nonspiking release modes now produce a real graded release state under
+  depolarization, while pure spiking mode keeps that state at zero.
+- Focused validation passed:
+  - `python -m pytest tests/test_spontaneous_state_unit.py tests/test_brain_backend.py -q`
+  - `18 passed`
+
+3. Evidence
+
+- [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py)
+- [test_spontaneous_state_unit.py](/G:/flysim/tests/test_spontaneous_state_unit.py)
+- [test_brain_backend.py](/G:/flysim/tests/test_brain_backend.py)
+
+4. Next actions
+
+- Move to `T205`: multi-class synaptic heterogeneity in the production backend.
+
+## 2026-03-30 - Completed T205 and first T206 slice, then opened T207 tiny-readout mode
+
+1. What I did
+
+- Replaced the old single synaptic low-pass assumption in the production
+  backend with explicit synapse classes:
+  - `fast_exc`
+  - `slow_exc`
+  - `fast_inh`
+  - `slow_inh`
+  - `modulatory`
+- Added internal slow neuromodulatory state variables:
+  - `modulatory_arousal_state`
+  - `modulatory_exafference_state`
+- Wired those states to gate:
+  - endogenous current / excitability
+  - adaptation
+  - release and synaptic gain
+- Opened `T207` by adding a real `tiny` readout mode to both Aimon and
+  Schaffer parity lanes.
+
+2. What succeeded
+
+- The production backend now has multi-class synaptic heterogeneity rather than
+  one undifferentiated filtered recurrence path.
+- The endogenous path now has internal neuromodulatory state instead of relying
+  only on intrinsic noise, adaptation, and graded release.
+- The parity harness can now run with a deliberately tiny readout that keeps:
+  - globals
+  - covariates
+  - a capped number of bilateral features
+- Focused validation passed:
+  - `python -m pytest tests/test_aimon_spontaneous_fit.py tests/test_spontaneous_state_unit.py tests/test_brain_backend.py -q`
+  - `23 passed`
+
+3. Evidence
+
+- [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py)
+- [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+- [schaffer_spontaneous_fit.py](/G:/flysim/src/analysis/schaffer_spontaneous_fit.py)
+- [test_aimon_spontaneous_fit.py](/G:/flysim/tests/test_aimon_spontaneous_fit.py)
+- [test_spontaneous_state_unit.py](/G:/flysim/tests/test_spontaneous_state_unit.py)
+- [test_brain_backend.py](/G:/flysim/tests/test_brain_backend.py)
+
+4. Next actions
+
+- Run Aimon and Schaffer with the endogenous backend plus `tiny` readout mode.
+- Compare tiny-readout held-out fit against the richer readout to see whether
+  the backend is starting to carry the score.
+
+## 2026-03-30 - Exact endogenous replacement plan defined under the strict spontaneous-state rule
+
+1. What I did
+
+- Used sub-agent review plus local code inspection to define the exact
+  production path for replacing the current spontaneous-state surrogate.
+- Wrote the concrete replacement plan into a dedicated design note and split it
+  into new tracked execution tasks.
+
+2. What succeeded
+
+- The repo now has one explicit answer to "how do we meet the real goal under
+  the strict rule?":
+  - freeze the current surrogate as diagnostic-only
+  - replace it with an endogenous production backend built from:
+    - intrinsic cell dynamics
+    - graded transmission
+    - synaptic heterogeneity
+    - neuromodulatory state
+  - fit that backend to Aimon and Schaffer with a deliberately tiny readout
+  - only then resume downstream decoder / embodiment work
+- The exact production target and gates are now recorded in:
+  - [endogenous_spontaneous_replacement_plan.md](/G:/flysim/docs/endogenous_spontaneous_replacement_plan.md)
+- New tracked implementation tasks were added:
+  - `T202` to `T207`
+
+3. Key code-level finding
+
+- The current spontaneous surrogate is conclusively an input prior, not an
+  endogenous mechanism, because [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py)
+  still advances spontaneous state through `background_rates` and then injects
+  it via `_build_inputs()` into `self.rates`.
+
+4. Sub-agent synthesis
+
+- backend architecture review:
+  - minimum acceptable replacement is a mixed-mode generalized LIF backend with
+    adaptation, intrinsic filtered noise, graded release, multi-class synapses,
+    and internal modulatory states
+- data-identifiability review:
+  - Aimon and Schaffer are enough to constrain a mesoscale endogenous mechanism
+    if the head is kept tiny and the backend carries the fit
+- shortest-honest-path review:
+  - freeze all new downstream decoder / Creamer / embodiment tuning until the
+    endogenous backend clears neural-parity gates
+
+5. Evidence
+
+- [endogenous_spontaneous_replacement_plan.md](/G:/flysim/docs/endogenous_spontaneous_replacement_plan.md)
+- [TASKS.md](/G:/flysim/TASKS.md)
+- [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py)
+
+6. Next actions
+
+- Start `T202` in the production backend.
+- Keep the current surrogate branch diagnostic-only.
+
+## 2026-03-30 - Spontaneous-state acceptance bar made strict
+
+1. What I changed
+
+- Tightened the repo rule for spontaneous state so there is no ambiguity left.
+- Updated the task tracker and design/result docs to explicitly disqualify the
+  current structured-drive spontaneous regime as a final mechanism.
+
+2. What succeeded
+
+- The repo now states the hard constraint directly:
+  - acceptable spontaneous endogenous state must emerge from richer intrinsic
+    cell dynamics, graded transmission, synaptic heterogeneity, or
+    neuromodulatory state
+- The current structured background-drive / latent-drive regime is now labeled
+  diagnostic-only rather than merely "not yet ideal".
+- `T201` now reflects mandatory replacement work, not optional tightening.
+
+3. What failed or remains open
+
+- The current spontaneous backend still uses structured background drive, so it
+  remains outside the final acceptance set.
+- No replacement richer-endogenous spontaneous mechanism has been implemented
+  yet.
+
+4. Evidence
+
+- [TASKS.md](/G:/flysim/TASKS.md)
+- [spontaneous_state_backend_design.md](/G:/flysim/docs/spontaneous_state_backend_design.md)
+- [spontaneous_state_results.md](/G:/flysim/docs/spontaneous_state_results.md)
+- [ASSUMPTIONS_AND_GAPS.md](/G:/flysim/ASSUMPTIONS_AND_GAPS.md)
+- [public_neural_measurement_parity_program.md](/G:/flysim/docs/public_neural_measurement_parity_program.md)
+
+5. Next actions
+
+- Keep using the existing surrogate only for diagnosis while parity work
+  continues.
+- Treat final spontaneous-state acceptance as blocked on a richer endogenous
+  backend mechanism.
+
+## 2026-03-30 - Systemic parity mismatch narrowed to session continuity and imaging readout physics
+
+1. What I attempted
+
+- Reframed the parity problem away from one-off evaluator bugs and toward the systemic digital mismatch between the spontaneous model and living recordings.
+- Audited the Schaffer 2022 canonical timing structure instead of treating its exported intervals as independent trials.
+- Patched the Schaffer spontaneous-fit harness so one session can replay as one persistent neural state.
+- Added an optional shared imaging observation basis so Aimon and Schaffer fits no longer assume raw voltage projects instantaneously into `dff` / `dff_like` traces.
+
+2. What succeeded
+
+- Verified the Schaffer 2022 interval structure is exactly contiguous:
+  - `trial_000 29.6815 -> 299.9877 s`
+  - `trial_001 299.9877 -> 599.9753 s`
+  - `trial_002 599.9753 -> 899.9630 s`
+  - `trial_003 899.9630 -> 1199.9507 s`
+  - `trial_004 1199.9507 -> 1499.9384 s`
+  - `trial_005 1499.9384 -> 1799.9260 s`
+- This exposed a real digital mismatch in the old parity harness: it reset the spontaneous brain between intervals that are actually one continuous recording session.
+- Patched `src/analysis/schaffer_spontaneous_fit.py` and `scripts/run_schaffer_spontaneous_fit.py` to support continuity-preserving replay, including explicit session-key ordering, inter-interval gap stepping, and a `--no-preserve-session-state` control path.
+- Added test coverage for the continuity seam and kept the focused Schaffer suite green:
+  - `11 passed`
+- Confirmed a second systemic mismatch:
+  - Schaffer canonical modality is `roi_dff_timeseries`
+  - Aimon canonical traces are tagged `dff_like`
+  - the old fit path used an instantaneous linear voltage projection with no measurement model
+- Added a shared optional causal low-pass imaging observation basis:
+  - `src/analysis/imaging_observation_model.py`
+  - threaded into both Aimon and Schaffer replay scripts
+- Focused observation-model coverage passed:
+  - `12 passed`
+
+3. What failed
+
+- The corrected continuous Schaffer holdout is still running, so the size of the continuity effect is not known yet.
+- The first Aimon held-out rerun with the new imaging observation basis is also still running, so the size of the measurement-physics effect is not known yet.
+- Therefore the systemic root cause is narrowed but not yet fully ranked.
+
+4. Evidence paths
+
+- `outputs/derived/schaffer2023_nwb_canonical/schaffer2023_nwb_canonical_bundle.json`
+- `outputs/metrics/schaffer_spontaneous_fit_2022_train4_test2/schaffer_spontaneous_fit_summary.json`
+- `src/analysis/schaffer_spontaneous_fit.py`
+- `scripts/run_schaffer_spontaneous_fit.py`
+- `tests/test_schaffer_spontaneous_fit.py`
+- `src/analysis/imaging_observation_model.py`
+- `src/analysis/aimon_spontaneous_fit.py`
+- `tests/test_imaging_observation_model.py`
+
+5. Next actions
+
+- Finish the corrected continuity-preserving Schaffer holdout and compare it directly against the old broken-reset result.
+- Finish the Aimon held-out rerun with the imaging observation basis and compare it against `v3 force2`.
+- Rank the two systemic effects:
+  - missing persistent hidden-state semantics
+  - missing imaging measurement physics
+- Only after that, decide whether the remaining delta is mostly intrinsic dynamics, observation mapping, or both.
+
+## 2026-03-30 - LIF ceiling clarified and spontaneous-state honesty boundary tightened
+
+1. What I attempted
+
+- Assessed whether the current whole-brain LIF model itself is the main root
+  cause of the parity miss.
+- Audited the current spontaneous-state implementation against the repo's
+  no-hacks rule.
+
+2. What succeeded
+
+- Confirmed the production backend is an alpha-filtered, delayed, refractory
+  point-neuron LIF network with globally shared parameters rather than richer
+  graded or conductance-based physiology.
+- Recorded the current best verdict:
+  - LIF is a real ceiling for exact imaging-space physiological parity
+  - LIF does not currently look like the strongest blocker for the repo's
+    present parity failures
+- Recorded the stronger honesty clarification for spontaneous state:
+  - it is not a decoder-side hack
+  - it is not a body-side hack
+  - but it **is** still a backend-internal surrogate prior implemented as
+    structured background drive rather than emergent intrinsic physiology
+- Added the new follow-up task `T201` so this does not get silently normalized
+  as the final answer.
+
+3. What failed
+
+- I cannot honestly defend the current spontaneous-state mechanism as fully
+  clearing the strongest possible interpretation of the repo's no-hacks rule.
+- If that rule is taken to forbid exogenous brain priors, the current
+  spontaneous-state mechanism remains provisional and non-final.
+
+4. Evidence paths
+
+- `src/brain/pytorch_backend.py`
+- `docs/spontaneous_state_backend_design.md`
+- `ASSUMPTIONS_AND_GAPS.md`
+- `TASKS.md`
+
+5. Next actions
+
+- Keep testing the stronger current systemic mismatch candidates first:
+  - continuity
+  - imaging observation model
+- If those do not collapse the parity gap enough, replace or sharply constrain
+  the current spontaneous-state surrogate instead of pretending it is the final
+  physiological mechanism.
+
 
 
 ## 2026-03-08 - Phase 0 scouting and scaffold
@@ -98,6 +426,177 @@ Ground truth source: `AGENTS.MD`
 5. Next actions
 - Use the paper's `EPG -> FC2 -> PFL3 -> LAL` scaffold to define a more explicit brain-side heading / goal / steering latent for future embodied steering work.
 - Add a less punitive cue-jump assay that separates correct corrective steering from the physical difficulty of recapturing a continuously moving tangential target.
+
+## 2026-03-28 - Creamer 2018 visual speed-control review
+
+1. What I attempted
+- Read the local PDF `mmc4.pdf`.
+- Identified the paper and extracted its actual claims.
+- Compared those claims against the current living-branch architecture and repo artifacts.
+
+2. What succeeded
+- Confirmed `mmc4.pdf` is Creamer, Mano, Clark 2018, *Visual Control of Walking Speed in Drosophila*.
+- Wrote a claim-by-claim replication note at `docs/creamer2018_visual_speed_control_note.md`.
+- Added visual speed regulation / slowing near nearby objects to the canonical behavior target set in `docs/behavior_target_set.md`.
+- Recorded the verdict in `TASKS.md`.
+
+3. What failed
+- The current repo does not yet replicate the paper's controlled findings.
+- We do not yet run:
+  - open-loop visual speed-tuning sweeps
+  - the closed-loop gain-manipulation assay
+  - the hourglass nearby-object slowing assay
+  - `T4` / `T5` causal ablations
+  - the paper's multi-motion-detector model fit
+
+4. Evidence paths
+- `mmc4.pdf`
+- `docs/creamer2018_visual_speed_control_note.md`
+- `docs/behavior_target_set.md`
+
+5. Next actions
+- Treat visual translational-speed control as a separate grounded benchmark from steering / fixation.
+- Build the paper-style gain-stabilization and nearby-object slowing assays on top of the existing realistic-vision loop.
+- Add a `T4` / `T5` ablation path so the repo can test causal dependence rather than only architectural overlap.
+
+## 2026-03-29 - Public neural measurement parity registry, schema, and first staging lane
+
+1. What I attempted
+- Promoted the new top-level priority program from note-only status into code and staged artifacts.
+- Generalized the old Aimon-only spontaneous-data path into a broader public neural measurement registry.
+- Added a canonical matched-format schema and a first generic trace-parity harness.
+- Staged the first public metadata/manifests for Aimon, Schaffer, Ketkar, Dallmann, and Shomar.
+- Used all six available sub-agent slots for disjoint source research and harness prioritization.
+
+2. What succeeded
+- Added the source registry:
+  - `src/brain/public_neural_measurement_sources.py`
+- Added the generic manifest/staging layer:
+  - `src/analysis/public_neural_measurement_dataset.py`
+  - `scripts/fetch_public_neural_measurements.py`
+- Added the canonical schema:
+  - `src/analysis/public_neural_measurement_schema.py`
+  - `docs/public_neural_measurement_schema.md`
+- Added the first generic parity harness:
+  - `src/analysis/public_neural_measurement_harness.py`
+- Added the stage-status summarizer:
+  - `scripts/summarize_public_neural_measurement_status.py`
+- Focused coverage passed:
+  - `9 passed` on the new public-neural-measurement source/schema/dataset/harness slice.
+- Real staging artifacts now exist:
+  - Aimon full staging under `external/spontaneous/aimon2023_dryad`
+  - Schaffer article JSON, manifest, files table, and `datasets_for_each_figure.xlsx`
+  - Ketkar record JSON, manifest, and files table
+  - Dallmann Dryad dataset/versions/files metadata plus manifest/files table
+  - Shomar Dryad dataset/versions/files metadata plus manifest/files table
+- Canonical status output now exists:
+  - `outputs/metrics/public_neural_measurement_stage_status.json`
+  - `outputs/metrics/public_neural_measurement_stage_status.csv`
+
+3. What failed
+- The direct scripted Dryad raw-file path remains blocked for the new program:
+  - API download URLs return `401`
+  - direct `file_stream` URLs return `403`
+- Gruntman 2019 authoritative endpoints are identified, but the local manifest artifact is not staged yet.
+- The generic Python fetch path against some large external hosts was slower/less reliable than direct `curl`, so part of the staging work used explicit record-JSON pulls and local normalization rather than only the new fetch script.
+
+4. Evidence paths
+- `docs/public_neural_measurement_parity_program.md`
+- `docs/public_neural_measurement_schema.md`
+- `docs/public_neural_measurement_dataset_status.md`
+- `outputs/metrics/public_neural_measurement_stage_status.json`
+- `outputs/metrics/public_neural_measurement_aimon2023_dryad_manifest.json`
+- `outputs/metrics/public_neural_measurement_schaffer2023_figshare_manifest.json`
+- `outputs/metrics/public_neural_measurement_ketkar2022_zenodo_manifest.json`
+- `outputs/metrics/public_neural_measurement_dallmann2025_dryad_manifest.json`
+- `outputs/metrics/public_neural_measurement_shomar2025_dryad_manifest.json`
+
+5. Next actions
+- Stage the Gruntman 2019 collection/article manifests and the first figure zip.
+- Promote dataset-specific adapters for Aimon, Schaffer, Ketkar, and Dallmann.
+- Build the first open-loop replay harnesses against the spontaneous brain before returning to downstream decoder interpretation.
+
+## 2026-03-29 - First real canonical exports: Aimon whole-brain windows and Gruntman Figure 2 traces
+
+1. What I attempted
+- Validated and hardened the first Aimon canonical exporter against the already staged local Aimon source.
+- Fixed the exporter so `--max-experiments` counts surviving canonical experiments rather than stopping on invalid overlapping rows.
+- Added the first direct raw-trace adapter for Gruntman 2019 Figure 2 using the locally staged Janelia zip.
+- Exported both datasets into the canonical matched-format schema.
+
+2. What succeeded
+- Aimon canonical exporter is now real and test-covered:
+  - `src/analysis/aimon_canonical_dataset.py`
+  - `scripts/export_aimon_canonical_dataset.py`
+  - `tests/test_aimon_canonical_dataset.py`
+- Real Aimon canonical export now exists:
+  - `outputs/derived/aimon2023_canonical/aimon2023_canonical_summary.json`
+  - `outputs/derived/aimon2023_canonical/aimon2023_canonical_bundle.json`
+- Aimon result:
+  - `exported_experiment_count = 2`
+  - `trial_count = 4`
+  - surviving public experiments: `B350`, `B1269`
+- Gruntman Figure 2 canonical exporter is now real and test-covered:
+  - `src/analysis/gruntman_figure2_canonical_dataset.py`
+  - `scripts/export_gruntman_figure2_canonical_dataset.py`
+  - `tests/test_gruntman_figure2_canonical_dataset.py`
+- Real Gruntman Figure 2 canonical export now exists:
+  - `outputs/derived/gruntman2019_figure2_canonical/gruntman2019_figure2_canonical_summary.json`
+  - `outputs/derived/gruntman2019_figure2_canonical/gruntman2019_figure2_canonical_bundle.json`
+- Gruntman result:
+  - `trial_count = 514`
+  - `skipped_condition_count = 540`
+  - raw membrane-potential traces at `20 kHz`
+- Focused coverage passed:
+  - `4 passed` on the Aimon exporter/schema slice
+  - `3 passed` on the Gruntman exporter/schema slice
+- The stage-status artifact was refreshed after Gruntman staging:
+  - `outputs/metrics/public_neural_measurement_stage_status.json`
+
+3. What failed
+- Dryad raw-file delivery remains blocked for Dallmann and Shomar.
+- Schaffer and Ketkar still have staged metadata but not canonical exporters yet.
+- No spontaneous-brain replay/fitting run has been executed on the new canonical bundles yet.
+
+4. Evidence paths
+- `docs/public_neural_measurement_dataset_status.md`
+- `outputs/derived/aimon2023_canonical/aimon2023_canonical_summary.json`
+- `outputs/derived/gruntman2019_figure2_canonical/gruntman2019_figure2_canonical_summary.json`
+- `outputs/metrics/public_neural_measurement_stage_status.json`
+
+5. Next actions
+- Build the first Aimon replay/fitting harness against the spontaneous brain.
+- Add the next dataset-specific exporter after Aimon and Gruntman.
+- Keep downstream decoder/embodiment work frozen until the parity program starts producing measurement-match results.
+
+## 2026-03-29 - First targeted Aimon scoring harness
+
+1. What I attempted
+- Built the first dataset-specific scoring harness on top of the canonical Aimon export instead of stopping at file conversion.
+- Used the already-exported canonical bundle as the observed side and added a direct trial-matrix scoring path for future spontaneous-brain replay output.
+
+2. What succeeded
+- Added:
+  - `src/analysis/aimon_parity_harness.py`
+  - `tests/test_aimon_parity_harness.py`
+- Focused coverage passed:
+  - `4 passed` on the Aimon harness plus canonical-export regression slice
+- The parity program now has:
+  - staged public source
+  - canonical Aimon bundle
+  - trial-matrix scoring surface
+
+3. What failed
+- The spontaneous brain has not been connected into this harness yet, so there are still no real measurement-match scores from live simulated traces.
+
+4. Evidence paths
+- `src/analysis/aimon_parity_harness.py`
+- `tests/test_aimon_parity_harness.py`
+- `outputs/derived/aimon2023_canonical/aimon2023_canonical_bundle.json`
+
+5. Next actions
+- Connect spontaneous-brain replay/projection output into the Aimon harness.
+- Use that as the first real dataset-by-dataset parity optimization loop.
 
 ## 2026-03-08 - Bridge, tests, and first runnable artifacts
 
@@ -6961,3 +7460,2485 @@ Interpretation:
   subset instead of assuming every GoodICs row is a valid comparator row.
 - Keep the living-branch mesoscale bundle as the default spontaneous-state
   claim gate going forward.
+
+## 2026-03-28 12:10 Creamer Motion-Only Fix
+
+1. What I attempted
+- Diagnosed why the first embodied Creamer pilot barely changed under `T4/T5`
+  ablation.
+- Fixed the broken corridor camera path by pinning the Creamer configs back to
+  a fixed bird's-eye view and tightening the top-down framing around the
+  corridor center.
+- Added a motion-only assay branch that disables generic public visual salience
+  drive and restricts the visual splice to `T4/T5` cell types only.
+
+2. What succeeded
+- The first causal diagnosis is now explicit and evidence-backed:
+  - baseline pilot:
+    `outputs/creamer2018_pilot/flygym-demo-20260328-102823/summary.json`
+  - matched `T4/T5` ablation:
+    `outputs/creamer2018_pilot_t4t5_ablated/flygym-demo-20260328-113311/summary.json`
+  - ablation zeroed `flow_left/right`, but `speed_fold_change` barely moved:
+    `0.9369 -> 0.9343`
+- The assay camera is repaired. A direct frame check now shows the fly in frame:
+  - `outputs/creamer2018_camera_probe_fixed_birdeye_repaired/flygym-demo-20260328-115137/demo_frame_0001.png`
+- Added splice filtering and motion-only configs:
+  - `src/bridge/visual_splice.py`
+  - `configs/flygym_visual_speed_control_living_motion_only.yaml`
+  - `configs/flygym_visual_speed_control_living_motion_only_t4t5_ablated.yaml`
+- Added/updated tests:
+  - `tests/test_visual_splice.py`
+  - `tests/test_closed_loop_smoke.py`
+- Focused regression slice passed:
+  - `python -m pytest tests/test_visual_splice.py tests/test_closed_loop_smoke.py tests/test_visual_speed_control.py -q`
+  - result: `43 passed`
+
+3. What failed
+- The original Creamer pilot was scientifically confounded.
+- It still had two strong non-paper routes alive:
+  - public visual input driven by generic salience rather than motion flow
+  - broad non-motion visual splice injection
+
+4. Evidence
+- `docs/creamer2018_visual_speed_control_note.md`
+- `outputs/creamer2018_pilot/flygym-demo-20260328-102823/summary.json`
+- `outputs/creamer2018_pilot_t4t5_ablated/flygym-demo-20260328-113311/summary.json`
+- `outputs/creamer2018_camera_probe_fixed_birdeye_repaired/flygym-demo-20260328-115137/demo_frame_0001.png`
+
+5. Next actions
+- Finish the serialized motion-only living baseline run now active under
+  `outputs/creamer2018_motion_only/`.
+- Then run the matched motion-only `T4/T5` ablation.
+- Use that pair, not the old confounded pilot, as the first honest Creamer
+  causal replication check.
+
+## 2026-03-28 12:16 Creamer Motion-Only Pair Complete
+
+1. What I attempted
+- Ran the full matched `1.0 s` motion-only living baseline and matched
+  motion-only `T4/T5` ablation pair after disabling generic public salience
+  input and restricting the splice to `T4/T5` cell types only.
+
+2. What succeeded
+- Baseline motion-only run completed with full activation visualization:
+  - `outputs/creamer2018_motion_only/flygym-demo-20260328-115812/summary.json`
+- Matched motion-only `T4/T5` ablation completed with full activation
+  visualization:
+  - `outputs/creamer2018_motion_only_t4t5_ablated/flygym-demo-20260328-120740/summary.json`
+- The mechanism isolation worked:
+  - motion-only branch had `public_input_rates.vision_bilateral = 0.0`
+  - ablated branch had zero motion splice drive (`nonzero_root_count = 0`)
+
+3. What failed
+- The current Creamer claim is still falsified even on the motion-only branch.
+- Speed slowing barely changed:
+  - baseline `visual_speed_control_speed_fold_change = 0.9245`
+  - ablated `visual_speed_control_speed_fold_change = 0.9340`
+- So the present effect is still not an honest `T4/T5`-dependent brain result.
+
+4. Additional failure learned
+- The assay geometry itself is invalid in free-walking form.
+- Corridor occupancy analysis from the completed run logs:
+  - baseline inside-fraction: `0.28`
+  - ablated inside-fraction: `0.28`
+  - baseline final `|y|`: `21.12 mm`
+  - ablated final `|y|`: `21.37 mm`
+  - nominal corridor half-width: `6.0 mm`
+- So the fly rapidly leaves the corridor. The assay is not maintaining the
+  animal in the controlled visual geometry that the paper's result depends on.
+
+5. Evidence
+- `docs/creamer2018_visual_speed_control_note.md`
+- `outputs/creamer2018_motion_only/flygym-demo-20260328-115812/summary.json`
+- `outputs/creamer2018_motion_only_t4t5_ablated/flygym-demo-20260328-120740/summary.json`
+
+6. Next actions
+- Redesign the Creamer assay around a corridor-locked or treadmill-like
+  geometry before claiming anything further about visual speed control.
+- Do not spend more time gain-tuning the current free-walking corridor branch;
+  it is the wrong geometry for the claim.
+
+## 2026-03-28 12:46 Creamer Body Disappearance Root Cause Fixed
+
+1. What I attempted
+- Investigated the user-reported Creamer demo failure where the fly appeared
+  briefly and then vanished for the rest of the simulation.
+- Treated it as a body/render-state bug, not just a camera complaint.
+- Added explicit body-state logging to the FlyGym runtime and ran short real
+  WSL probes on the Creamer config before and after the fix.
+
+2. What succeeded
+- Identified a real physical failure in the broken probe:
+  - `outputs/creamer2018_body_visibility_probe_fixed/flygym-demo-20260328-123946/run.jsonl`
+  - body `position_z` started near `1.586 mm`, crossed below zero by cycle
+    `5`, and ended at `-499.112 mm`
+- Identified a second bug in parallel:
+  - the visual-speed-control path claimed `camera_mode: fixed_birdeye`, but
+    `src/body/flygym_runtime.py` was still forcing corridor runs onto a
+    tracked overhead camera parameter set
+- Fixed both:
+  - `src/body/flygym_runtime.py`
+    - corridor bird's-eye camera is now truly world-fixed
+    - body `position_z` is logged into `body_metadata.body_state`
+  - `src/body/visual_speed_control.py`
+    - `VisualSpeedStripeCorridorArena` now subclasses FlyGym `FlatTerrain`
+      instead of using a hand-rolled plane geom
+- Verified the repaired real WSL probe:
+  - `outputs/creamer2018_body_visibility_probe_fixed_floor/flygym-demo-20260328-124552/run.jsonl`
+  - no negative Z values
+  - body `position_z` stayed within `1.0498 .. 1.5862 mm`
+
+3. What failed
+- The Creamer scientific replication still is not valid.
+- Fixing body disappearance only resolves the runtime regression. It does not
+  solve the assay-design problem that the fly rapidly leaves the nominal
+  corridor and therefore is not in the paper's controlled visual geometry.
+
+4. Evidence
+- `src/body/flygym_runtime.py`
+- `src/body/visual_speed_control.py`
+- `tests/test_closed_loop_smoke.py`
+- `tests/test_visual_speed_control.py`
+- `outputs/creamer2018_body_visibility_probe_fixed/flygym-demo-20260328-123946/run.jsonl`
+- `outputs/creamer2018_body_visibility_probe_fixed_floor/flygym-demo-20260328-124552/run.jsonl`
+- `outputs/creamer2018_body_visibility_probe_fixed_floor/flygym-demo-20260328-124552/framecheck/frame_01.png`
+- `outputs/creamer2018_body_visibility_probe_fixed_floor/flygym-demo-20260328-124552/framecheck/frame_02.png`
+
+5. Next actions
+- Keep the fixed floor and fixed bird's-eye path as the Creamer visual baseline.
+- Continue `T164` as a scientific assay redesign problem, not a rendering bug.
+
+## 2026-03-28 13:42 Creamer Treadmill Geometry Resolved, Parity Still Fails
+
+1. What I attempted
+- Replaced the invalid free-walking corridor as the primary Creamer assay with
+  a treadmill-ball branch intended to approximate the paper's tethered ball
+  geometry.
+- Corrected treadmill speed measurement to preserve sign.
+- Lowered spawn height and switched the fly to `tripod` init pose so the legs
+  actually load the treadmill at reset.
+- Ran a short treadmill contact smoke, then a matched `1.2 s` motion-only
+  living baseline and `T4/T5` ablation pair.
+
+2. What succeeded
+- The treadmill-ball geometry is now mechanically valid enough to use as the
+  biologically plausible Creamer assay frame.
+- Contact / locomotion smoke completed stably:
+  - `outputs/creamer2018_treadmill_contact_smoke_tripod/flygym-demo-20260328-132147/summary.json`
+  - treadmill-measured pre-stimulus speed `192.85 mm/s`
+- Full `1.2 s` motion-only treadmill baseline completed:
+  - `outputs/creamer2018_treadmill_baseline_1p2s_tripod/flygym-demo-20260328-132636/summary.json`
+- Full `1.2 s` motion-only treadmill `T4/T5` ablation completed:
+  - `outputs/creamer2018_treadmill_ablation_1p2s_tripod/flygym-demo-20260328-133246/summary.json`
+- Wrote a compact assay verdict artifact:
+  - `outputs/metrics/creamer2018_treadmill_tripod_pair_summary.json`
+
+3. What failed
+- Creamer parity still fails even in the mechanically valid treadmill regime.
+- Wrong sign:
+  - baseline `pre_mean_forward_speed = 223.20 mm/s`
+  - baseline `stimulus_mean_forward_speed = 243.48 mm/s`
+  - baseline `speed_fold_change = 1.0909`
+  - so the branch speeds up under front-to-back scene motion instead of
+    slowing
+- No causal `T4/T5` dependence:
+  - baseline mean nonzero splice root count `~12217.6`
+  - ablated mean nonzero splice root count `0.0`
+  - but `speed_fold_change` barely moved:
+    - baseline `1.0908718`
+    - ablated `1.0907094`
+
+4. Important interpretation
+- On the treadmill-ball assay, world-frame displacement is not the relevant
+  speed measure.
+- The correct observable is treadmill-measured forward speed in the
+  `visual_speed_control_*` metrics.
+- So the near-zero world-frame `avg_forward_speed` in the summary is expected
+  and should not be used to judge Creamer parity.
+
+5. Evidence
+- `docs/creamer2018_visual_speed_control_note.md`
+- `configs/flygym_visual_speed_control_living_motion_only_treadmill.yaml`
+- `configs/flygym_visual_speed_control_living_motion_only_treadmill_t4t5_ablated.yaml`
+- `outputs/creamer2018_treadmill_contact_smoke_tripod/flygym-demo-20260328-132147/summary.json`
+- `outputs/creamer2018_treadmill_baseline_1p2s_tripod/flygym-demo-20260328-132636/summary.json`
+- `outputs/creamer2018_treadmill_ablation_1p2s_tripod/flygym-demo-20260328-133246/summary.json`
+- `outputs/metrics/creamer2018_treadmill_tripod_pair_summary.json`
+
+6. Next actions
+- Treat geometry as resolved for the current Creamer branch.
+- Diagnose the remaining wrong-sign, ablation-insensitive speed response.
+- Do not spend more time on corridor framing or camera work for this assay.
+
+## 2026-03-28 13:55 Creamer Treadmill Texture Confound Confirmed
+
+1. What I checked
+- Verified whether the treadmill ball itself is visually textured in the active
+  Creamer treadmill assay, rather than assuming it is a mechanically hidden
+  support object.
+
+2. What succeeded
+- Confirmed the active treadmill arena subclasses FlyGym's upstream
+  `flygym.arena.tethered.Ball`.
+- Confirmed upstream `Ball` creates the treadmill sphere with a visible
+  checker texture and material:
+  - `external/flygym/flygym/arena/tethered.py`
+- Recorded the confound in the Creamer note and task tracker.
+
+3. What failed
+- This does not rescue the current parity result.
+- The ball texture is a legitimate visual contaminant, but it cannot by itself
+  explain the unchanged baseline-vs-ablation phenotype because the matched
+  `T4/T5` ablation eliminates the intended motion splice drive while the speed
+  effect remains essentially unchanged.
+
+4. Evidence
+- `external/flygym/flygym/arena/tethered.py`
+- `docs/creamer2018_visual_speed_control_note.md`
+- `outputs/metrics/creamer2018_treadmill_tripod_pair_summary.json`
+
+5. Next actions
+- Treat the checker-textured treadmill as a real assay confound that must be
+  neutralized or hidden in future Creamer runs.
+- Keep the main diagnosis focused on the deeper wrong-sign, ablation-insensitive
+  control path, because that problem remains even after acknowledging the ball
+  texture issue.
+
+## 2026-03-28 14:10 Creamer Treadmill Texture Issue Fixed
+
+1. What I attempted
+- Removed the treadmill sphere as a visual contaminant from the fly's own
+  realistic-vision render path without changing treadmill mechanics.
+
+2. What succeeded
+- Implemented a FlyGym-native fix in
+  `src/body/visual_speed_control.py`:
+  - `VisualSpeedBallTreadmillArena.pre_visual_render_hook(...)`
+  - `VisualSpeedBallTreadmillArena.post_visual_render_hook(...)`
+- The treadmill sphere is now hidden only during the fly's eye render and
+  restored immediately afterward.
+- Added a unit test covering the hook behavior in
+  `tests/test_visual_speed_control.py`.
+- Focused regression slice passed:
+  - `python -m pytest tests/test_visual_speed_control.py tests/test_closed_loop_smoke.py -q`
+  - `50 passed`
+
+3. What failed
+- I did not yet rerun the real treadmill baseline / ablation pair after this
+  fix, so there is no new behavioral parity claim from this slice alone.
+
+4. Evidence
+- `src/body/visual_speed_control.py`
+- `tests/test_visual_speed_control.py`
+- `docs/creamer2018_visual_speed_control_note.md`
+
+5. Next actions
+- Rerun the Creamer treadmill baseline / ablation pair with the treadmill ball
+  now hidden from the fly's visual input.
+- Re-evaluate whether the wrong-sign and ablation-insensitive phenotype
+  persists once the ball texture confound is removed.
+
+## 2026-03-28 18:15 Creamer Open-Loop Semantics Fixed
+
+1. What I attempted
+- Verified the rendered treadmill motion sign against the bird's-eye demo and
+  corrected the treadmill `open_loop_drift` implementation so it no longer
+  subtracts virtual-track self-motion from the imposed scene motion.
+
+2. What succeeded
+- Verified that the fly faces toward positive image-x in the bird's-eye view,
+  so negative scene motion corresponds to stripes moving from the fly's front
+  toward its back.
+- Replaced ambiguous `ftb` / `btf` labels with explicit
+  `front_to_back` / `back_to_front` labels in
+  `src/body/visual_speed_control.py`.
+- Preserved backward compatibility for the old config aliases.
+- Fixed the treadmill open-loop retinal-slip semantics:
+  - treadmill `open_loop_drift` now leaves the scene independent of
+    treadmill walking
+  - treadmill closed-loop and hourglass modes still use track-relative motion
+- Exposed `retinal_slip_*` as first-class metrics in
+  `src/analysis/visual_speed_control_metrics.py`
+- Updated the Creamer runner defaults to a much smaller open-loop sweep range
+  in `scripts/run_creamer2018_replication.py`
+- Added focused tests for the new sign labels and treadmill open-loop
+  semantics.
+- Focused regression passed:
+  - `python -m pytest tests/test_visual_speed_control.py tests/test_closed_loop_smoke.py -q`
+  - `53 passed`
+
+3. What failed
+- Fixing the huge retinal-slip bug did not rescue parity by itself.
+
+4. Evidence
+- `src/body/visual_speed_control.py`
+- `src/analysis/visual_speed_control_metrics.py`
+- `scripts/run_creamer2018_replication.py`
+- `tests/test_visual_speed_control.py`
+
+5. Next actions
+- Run a reduced low-slip treadmill open-loop calibration and compare it against
+  a stationary-scene control before rerunning any more matched baseline /
+  ablation pairs.
+
+## 2026-03-28 18:35 Creamer Parity Mismatch Diagnosed
+
+1. What I attempted
+- Ran corrected low-slip treadmill open-loop controls and a stationary-scene
+  control to determine whether the apparent speed effect was actually caused
+  by visual motion.
+
+2. What succeeded
+- Completed corrected low-slip front-to-back runs at:
+  - `-8 mm/s`
+  - `-4 mm/s`
+- Completed a corrected stationary open-loop control at:
+  - `0 mm/s`
+- Established the central diagnosis:
+  - `speed_fold_change` stays at about `1.091` for `-8`, `-4`, and `0 mm/s`
+  - the same apparent effect also survives `T4/T5` ablation
+- Wrote the compact diagnosis artifact:
+  - `outputs/metrics/creamer2018_parity_mismatch_diagnosis.json`
+- Updated the Creamer note and task tracker to record that the current assay is
+  reading an endogenous treadmill locomotor ramp rather than a real
+  visual-speed-control effect.
+
+3. What failed
+- The corrected assay still does not show a valid Creamer-like visual-speed
+  phenotype.
+- A further matched baseline / ablation rerun on the same simple pre-vs-stim
+  fold metric would not be interpretable.
+
+4. Evidence
+- `outputs/creamer2018_treadmill_baseline_1p2s_tripod_ballhidden_slow_sweep/open_loop/flygym-demo-20260328-180808/summary.json`
+- `outputs/creamer2018_treadmill_baseline_1p2s_tripod_ballhidden_slow_sweep/open_loop/flygym-demo-20260328-181336/summary.json`
+- `outputs/creamer2018_treadmill_stationary_control_1p2s/open_loop/flygym-demo-20260328-182539/summary.json`
+- `outputs/metrics/creamer2018_parity_mismatch_diagnosis.json`
+- `docs/creamer2018_visual_speed_control_note.md`
+
+5. Next actions
+- Redesign the Creamer assay to subtract or state-match the living branch's
+  endogenous treadmill locomotor ramp before using pre-vs-stim speed metrics
+  as parity evidence.
+- Do not rerun the matched baseline / `T4/T5` ablation pair until that assay
+  redesign is in place.
+
+## 2026-03-29 00:20 Creamer Interleaved-Block Reassessment
+
+1. What I attempted
+- Replaced the old single pre-vs-stim treadmill scoring with an interleaved
+  block assay containing stationary, front-to-back motion, counterphase
+  flicker, back-to-front motion, and a repeated front-to-back block.
+- Added matched living and `T4/T5`-ablated treadmill configs for that block
+  assay.
+- Ran the new matched `>= 1.0 s` pair and inspected the raw block means from
+  the run logs.
+
+2. What succeeded
+- Added the new assay/config infrastructure:
+  - `src/body/visual_speed_control.py`
+  - `src/analysis/visual_speed_control_metrics.py`
+  - `scripts/run_creamer2018_replication.py`
+  - `configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks.yaml`
+  - `configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks_t4t5_ablated.yaml`
+- Focused validation passed:
+  - `python -m pytest tests/test_visual_speed_control.py tests/test_closed_loop_smoke.py -q`
+  - `59 passed, 1 warning`
+- Completed the matched pair:
+  - baseline `outputs/creamer2018_interleaved_blocks_baseline/flygym-demo-20260328-234658/summary.json`
+  - ablated `outputs/creamer2018_interleaved_blocks_t4t5_ablated/flygym-demo-20260328-235424/summary.json`
+- Proved the assay is now scientifically cleaner:
+  - motion and counterphase flicker are no longer equivalent in the scoring
+  - the ablation really does zero the motion splice inside the assay
+
+3. What failed
+- The pair still does not establish Creamer parity.
+- The main apparent front-to-back effect survives ablation almost unchanged:
+  - baseline `front_to_back_delta_forward_speed_mean = +20.2946 mm/s`
+  - ablated `front_to_back_delta_forward_speed_mean = +20.3096 mm/s`
+- Raw block means show why:
+  - first stationary block is only about `205.6 mm/s`
+  - first front-to-back block jumps to about `244.2 mm/s`
+  - all later stationary, flicker, and motion blocks sit near the same
+    `244.2 .. 244.3 mm/s` plateau
+- So the remaining false effect is now concentrated in the first post-startup
+  motion block and is still dominated by the living branch's endogenous
+  treadmill ramp.
+
+4. Evidence
+- `outputs/creamer2018_interleaved_blocks_baseline/flygym-demo-20260328-234658/summary.json`
+- `outputs/creamer2018_interleaved_blocks_baseline/flygym-demo-20260328-234658/run.jsonl`
+- `outputs/creamer2018_interleaved_blocks_t4t5_ablated/flygym-demo-20260328-235424/summary.json`
+- `outputs/creamer2018_interleaved_blocks_t4t5_ablated/flygym-demo-20260328-235424/run.jsonl`
+- `docs/creamer2018_visual_speed_control_note.md`
+
+5. Next actions
+- Add a warmup stationary period before any scored block.
+- Repeat motion and flicker blocks after the locomotor plateau is reached.
+- Judge Creamer parity only on post-warmup repeated comparisons under matched
+  living / ablated conditions.
+
+## 2026-03-29 00:42 Disconnected Brain Hot-Start Tested
+
+1. What I attempted
+- Implemented a real brain-only warmup path in the runtime:
+  - reset brain once
+  - advance the brain alone for several seconds
+  - reset decoder / visual splice / bridge state only
+  - start the body run without a second brain reset
+- Added dedicated Creamer warmstart configs for baseline and matched `T4/T5`
+  ablation.
+- Ran the warmed baseline and warmed ablation pair at `2.0 s`.
+
+2. What succeeded
+- Added hot-start support in:
+  - `src/runtime/closed_loop.py`
+  - `src/bridge/controller.py`
+- Added dedicated configs:
+  - `configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks_warmstart.yaml`
+  - `configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks_warmstart_t4t5_ablated.yaml`
+- Added regression coverage and kept the focused suite green:
+  - `python -m pytest tests/test_closed_loop_smoke.py tests/test_visual_speed_control.py -q`
+  - `62 passed`
+- Completed the real warmed pair:
+  - baseline `outputs/creamer2018_interleaved_blocks_warmstart_baseline/flygym-demo-20260329-002146/summary.json`
+  - ablated `outputs/creamer2018_interleaved_blocks_warmstart_t4t5_ablated/flygym-demo-20260329-003000/summary.json`
+
+3. What failed
+- The hot-start did not remove the startup contamination for the Creamer assay.
+- It actually pushed the branch into a much faster locomotor regime:
+  - first stationary block about `618 mm/s`
+  - later plateau about `733 mm/s`
+- The matched `T4/T5` ablation still left the apparent front-to-back effect
+  essentially unchanged:
+  - baseline `front_to_back_delta_forward_speed_mean = 57.8557 mm/s`
+  - ablated `front_to_back_delta_forward_speed_mean = 57.8194 mm/s`
+- So the disconnected warmup does not rescue Creamer parity. It exposes that
+  the current embodied decoder/body path interprets the warmed spontaneous brain
+  as a strong locomotor command before the visual assay can become decisive.
+
+4. Evidence
+- `src/runtime/closed_loop.py`
+- `src/bridge/controller.py`
+- `configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks_warmstart.yaml`
+- `configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks_warmstart_t4t5_ablated.yaml`
+- `outputs/creamer2018_interleaved_blocks_warmstart_baseline/flygym-demo-20260329-002146/summary.json`
+- `outputs/creamer2018_interleaved_blocks_warmstart_baseline/flygym-demo-20260329-002146/run.jsonl`
+- `outputs/creamer2018_interleaved_blocks_warmstart_t4t5_ablated/flygym-demo-20260329-003000/summary.json`
+- `outputs/creamer2018_interleaved_blocks_warmstart_t4t5_ablated/flygym-demo-20260329-003000/run.jsonl`
+
+5. Next actions
+- Keep the hot-start path as a diagnostic tool, not as a promoted Creamer fix.
+- Move to an embodied warmup-aware repeated-block assay where early blocks are
+  unscored and only post-plateau motion/flicker comparisons count.
+- Treat the current dominant issue as a decoder/body locomotor-attractor
+  problem, not merely a cold-start brain problem.
+
+## 2026-03-29 01:02 Creamer Checked Against The Non-Spontaneous Reference Branch
+
+1. What I attempted
+- Identified the last strong non-spontaneous target branch as the reference
+  decoder/body regime:
+  - `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn.yaml`
+- Built a matched pair of Creamer interleaved-block treadmill configs that use
+  that non-spontaneous branch's decoder library and no spontaneous-state block.
+- Ran the matched non-spontaneous baseline and `T4/T5` ablation pair and
+  compared them against the spontaneous and hot-start Creamer runs.
+
+2. What succeeded
+- Added the reference assay configs:
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks.yaml`
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_t4t5_ablated.yaml`
+- Kept the focused suite green:
+  - `python -m pytest tests/test_closed_loop_smoke.py tests/test_visual_speed_control.py -q`
+  - `64 passed`
+- Completed the matched pair:
+  - baseline `outputs/creamer2018_known_good_nonspont_baseline/flygym-demo-20260329-004611/summary.json`
+  - ablated `outputs/creamer2018_known_good_nonspont_t4t5_ablated/flygym-demo-20260329-005447/summary.json`
+- Wrote a compact comparison artifact across spontaneous / hot-start /
+  non-spontaneous runs:
+  - `outputs/metrics/creamer_systemic_branch_comparison.json`
+  - `outputs/metrics/creamer_systemic_branch_comparison.csv`
+
+3. What failed
+- The non-spontaneous reference branch still fails the Creamer translational
+  speed criterion under matched `T4/T5` ablation:
+  - baseline `front_to_back_delta_forward_speed_mean = 12.0611 mm/s`
+  - ablated `front_to_back_delta_forward_speed_mean = 12.0887 mm/s`
+- So the Creamer mismatch predates spontaneous state and cannot be blamed only
+  on the living spontaneous branch.
+
+4. Evidence
+- `outputs/creamer2018_known_good_nonspont_baseline/flygym-demo-20260329-004611/summary.json`
+- `outputs/creamer2018_known_good_nonspont_baseline/flygym-demo-20260329-004611/run.jsonl`
+- `outputs/creamer2018_known_good_nonspont_t4t5_ablated/flygym-demo-20260329-005447/summary.json`
+- `outputs/creamer2018_known_good_nonspont_t4t5_ablated/flygym-demo-20260329-005447/run.jsonl`
+- `outputs/metrics/creamer_systemic_branch_comparison.csv`
+- `docs/creamer2018_visual_speed_control_note.md`
+
+5. Next actions
+- Treat the failure as a two-part problem:
+  - spontaneous-state methodology amplifies the treadmill locomotor attractor
+  - the older decoder/body mapping already lacks a proper motion-driven
+    translational speed-control channel
+- Inspect the descending readout / motor mapping next, because the
+  non-spontaneous branch still shows `T4/T5` effects on steering structure
+  while failing to express a separate speed-control behavior.
+
+## 2026-03-29 00:05 FlyVis `sm_120` GPU Enablement Resolved
+
+1. What I attempted
+- Audited the live WSL FlyVis stack to determine whether the blocker was still
+  a Torch wheel issue, a FlyVis issue, or a repo/runtime integration issue.
+- Upgraded the primary WSL environment from `cu126` to `cu128`.
+- Reproduced the actual FlyVis GPU failure path and then repaired the
+  upstream-FlyGym import-time device reset inside the repo runtime.
+
+2. What succeeded
+- Confirmed the old failure mode exactly:
+  - `torch 2.10.0+cu126`
+  - CUDA visible
+  - any CUDA tensor failed with `no kernel image is available for execution on the device`
+- Upgraded the full-stack env to:
+  - `torch 2.10.0+cu128`
+  - `torchvision 0.25.0+cu128`
+- Added `src/vision/flyvis_compat.py` to resynchronize:
+  - `flyvis.device`
+  - Torch default device
+  - already-loaded FlyVis submodules that cached `device`
+- Wired that compatibility layer into:
+  - `src/body/flygym_runtime.py`
+  - `src/body/brain_only_realistic_vision_fly.py`
+  - the main FlyVis probe / overlap scripts
+- Added a reproducible GPU smoke:
+  - `scripts/check_flyvis_gpu.py`
+  - `outputs/profiling/flyvis_gpu_sm120_check.json`
+- Proved both layers now use GPU:
+  - standalone pretrained FlyVis network output on `cuda:0`
+  - repo runtime smoke with `vision_parameter_device = cuda:0`
+- Flipped the key production/current-work configs off the historical
+  `force_cpu_vision: true` workaround.
+- Focused validation passed:
+  - `python -m pytest tests/test_flyvis_compat.py tests/test_body_wrapper_unit.py tests/test_realistic_vision_path.py tests/test_closed_loop_smoke.py -q`
+  - `48 passed`
+
+3. What failed
+- The first post-upgrade FlyVis init still failed because importing
+  `flygym.examples.vision` reset `flyvis.device` back to CPU while some FlyVis
+  modules had already cached `device = cuda`.
+- That failure was resolved by the repo-local compat layer rather than by
+  additional package upgrades.
+
+4. Evidence
+- `outputs/profiling/flyvis_gpu_sm120_check.json`
+- `docs/flyvis_sm120_enablement.md`
+- `src/vision/flyvis_compat.py`
+- `scripts/check_flyvis_gpu.py`
+- `environment/requirements-full.txt`
+
+5. Next actions
+- Rerun the realistic-vision and full-stack benchmark tables under the new GPU
+  FlyVis path, because the historical perf tables in the repo are still
+  CPU-fallback measurements.
+- Revisit `T015` with an actual dual-GPU production evaluation now that the
+  single-GPU `sm_120` blocker is gone.
+
+## 2026-03-29 01:31 Creamer Split Diagnosed As Both Spontaneous And Decoder/Body
+
+1. What I attempted
+- Compared the Creamer treadmill block assay against the last strong
+  non-spontaneous target branch.
+- Built a reusable decoder-diagnosis analysis path to compare blockwise
+  treadmill speed, decoder forward-state terms, turn-state terms, and splice
+  activity under matched `T4/T5` ablation.
+- Used an independent sub-agent review to sanity-check whether the endogenous
+  spontaneous activations are biologically plausible enough to blame directly.
+
+2. What succeeded
+- Added reproducible analysis tooling:
+  - `src/analysis/creamer_diagnosis.py`
+  - `scripts/analyze_creamer_systemic_issue.py`
+  - `tests/test_creamer_diagnosis.py`
+- Generated mechanism-level artifacts:
+  - `outputs/metrics/creamer_known_good_nonspont_decoder_diagnosis.json`
+  - `outputs/metrics/creamer_known_good_nonspont_decoder_diagnosis.csv`
+  - `outputs/metrics/creamer_spontaneous_decoder_diagnosis.json`
+  - `outputs/metrics/creamer_spontaneous_decoder_diagnosis.csv`
+- Focused validation passed:
+  - `python -m pytest tests/test_creamer_diagnosis.py tests/test_closed_loop_smoke.py tests/test_visual_speed_control.py -q`
+  - `68 passed`
+- Resolved the split:
+  - in the non-spontaneous branch, the first front-to-back treadmill speed
+    delta survives ablation almost perfectly:
+    - baseline `+23.4059 mm/s`
+    - ablated `+23.4156 mm/s`
+  - but the decoder forward-signal delta does not:
+    - baseline `+0.0717`
+    - ablated `-0.0151`
+  - while the steering-side turn-voltage signal still shows a real
+    motion-sensitive effect:
+    - baseline `-0.1681`
+    - ablated `~0`
+- This means the deeper Creamer failure is already in the descending
+  decode/body mapping, while the spontaneous branch then amplifies it by
+  collapsing the assay into a stronger locomotor/turn attractor.
+- Found the first concrete code seam behind that diagnosis:
+  - the Creamer configs are still on decoder `command_mode = two_drive`
+  - in `src/body/connectome_turning_fly.py`, the legacy two-drive compatibility
+    path maps any active command to fixed `left/right_freq_scale = 1.0` and
+    fixed correction gains
+  - so the treadmill assay is still being driven through a coarse left/right
+    drive abstraction instead of a true separate locomotor latent interface
+
+3. What failed
+- The current branch still does not express a distinct `T4/T5`-dependent
+  translational speed-control channel, so there is still no honest Creamer
+  parity claim.
+
+4. Evidence
+- `outputs/metrics/creamer_known_good_nonspont_decoder_diagnosis.json`
+- `outputs/metrics/creamer_spontaneous_decoder_diagnosis.json`
+- `docs/creamer2018_visual_speed_control_note.md`
+- `outputs/creamer2018_known_good_nonspont_baseline/flygym-demo-20260329-004611/run.jsonl`
+- `outputs/creamer2018_known_good_nonspont_t4t5_ablated/flygym-demo-20260329-005447/run.jsonl`
+
+5. Next actions
+- Inspect the descending motor readout and treadmill speed-measurement path to
+  explain why treadmill forward-speed is decoupled from the decoder forward
+  channel.
+- Keep the spontaneous-state question separate: treat it as an amplifier of the
+  failure, not the original source of the translational-speed mismatch.
+
+## 2026-03-29 01:54 Creamer Fix Direction Recorded Before Corrected Pair Completes
+
+1. What I attempted
+- Preserved the current control-path diagnosis before the next corrected
+  non-spontaneous run finishes.
+- Switched the main Creamer treadmill-block configs off the broken legacy
+  two-drive path and onto:
+  - `decoder.command_mode: hybrid_multidrive`
+  - `runtime.control_mode: hybrid_multidrive`
+- Added an embodied stationary warmup window by prepending four stationary
+  warmup blocks before the scored interleaved block sequence.
+- Updated config tests so those structural fixes stay locked in.
+- Started the corrected non-spontaneous baseline run at:
+  - `outputs/creamer2018_known_good_nonspont_multidrive_warm_baseline/`
+
+2. What succeeded
+- The Creamer block-assay configs are no longer using the structurally wrong
+  legacy motor path.
+- The assay now has an embodied warmup stage before the scored motion blocks.
+- Focused validation passed after the config/test updates:
+  - `python -m pytest tests/test_closed_loop_smoke.py tests/test_visual_speed_control.py tests/test_creamer_diagnosis.py -q`
+  - `68 passed`
+- Independent sub-agent synthesis added an important refinement:
+  - the repo already has working `hybrid_multidrive` patterns
+  - the default hybrid family is still relatively turn-heavy
+  - the more conservative VNC-style hybrid settings preserve locomotor
+    frequency more cleanly and are the right next retune target if the current
+    corrected pair still shows steering bleed into treadmill speed
+
+3. What failed
+- No new behavioral verdict yet. The corrected non-spontaneous baseline run is
+  still in progress and has intentionally not been interrupted.
+
+4. Evidence
+- `docs/creamer2018_visual_speed_control_note.md`
+- `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks.yaml`
+- `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_t4t5_ablated.yaml`
+- `configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks.yaml`
+- `configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks_t4t5_ablated.yaml`
+- `outputs/creamer2018_known_good_nonspont_multidrive_warm_baseline/`
+
+5. Next actions
+- Let the corrected non-spontaneous baseline finish.
+- Run the matched corrected `T4/T5` ablation pair.
+- Re-score whether the false front-to-back speed delta now tracks the decoder
+  forward channel more honestly.
+- Only if needed after that, retune toward the more conservative weaker-turn
+  hybrid latent mix.
+
+## 2026-03-29 02:06 Creamer Objective Tightened
+
+1. What I recorded
+- The success condition for this workstream is now explicit:
+  the brain and descending decoder path must reproduce the Creamer-style
+  walking-speed phenotype in the same treadmill evaluation setup, not merely
+  remove assay artifacts.
+
+2. Current state
+- The corrected multidrive+warmup non-spontaneous run removed the old false
+  front-to-back speed jump.
+- But it did not yet produce the target behavior.
+- So the current state is still partial: the assay is cleaner, but genuine
+  motion-driven speed control has not yet emerged.
+
+3. Evidence
+- `TASKS.md`
+- `docs/creamer2018_visual_speed_control_note.md`
+- `outputs/creamer2018_known_good_nonspont_multidrive_warm_baseline/flygym-demo-20260329-012116/summary.json`
+
+4. Next actions
+- Keep pushing on the control path itself until the treadmill assay shows the
+  correct Creamer phenotype through the brain and descending decoder stack.
+
+## 2026-03-29 02:31 Creamer Corrected Ablation Completed And Body Response Map Added
+
+1. What I attempted
+- Finished the corrected non-spontaneous matched `T4/T5` ablation pair under
+  the artifact-free treadmill assay:
+  - `hybrid_multidrive`
+  - embodied stationary warmup
+  - same interleaved stationary / motion / flicker blocks
+- Added a new blockwise monitor-ranking tool to identify bilateral
+  motion-sensitive forward-context candidates from the corrected pair.
+- Added a direct treadmill `HybridDriveCommand` response-map probe to measure
+  how the body/controller actually converts symmetric amplitude/frequency
+  latents into treadmill forward speed.
+- Started the next experimental Creamer branch:
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_vnclite.yaml`
+  - same assay, but weaker VNC-style turn couplings, faster within-block
+    smoothing, no extra turn-voltage steering bleed, and fitted-basis forward
+    readout.
+
+2. What succeeded
+- The corrected ablation pair is now complete and clean.
+- The startup artifact is still gone under ablation.
+- The pair-level diagnosis and forward-context candidate artifacts are now
+  written to:
+  - `outputs/metrics/creamer_known_good_nonspont_multidrive_warm_decoder_diagnosis.json`
+  - `outputs/metrics/creamer_known_good_nonspont_multidrive_warm_forward_context_candidates.json`
+- The new analysis/test additions passed:
+  - `tests/test_creamer_forward_context.py`
+  - `tests/test_treadmill_hybrid_response.py`
+- The direct treadmill response map completed and proved the body path is not
+  simply insensitive. It is highly nonlinear:
+  - `0.1 amp / 0.8 freq -> ~119 mm/s`
+  - `0.1 amp / 1.0 freq -> ~733 mm/s`
+  - `0.3 amp / 1.2 freq -> ~1209 mm/s`
+  - `0.5 amp / 1.0 freq -> ~-245 mm/s`
+  Evidence:
+  - `outputs/metrics/treadmill_hybrid_response_map.json`
+
+3. What failed
+- The corrected pair still does not show real Creamer slowing.
+- Baseline:
+  - `front_to_back_delta_forward_speed_mean = -0.00834 mm/s`
+- Ablated:
+  - `front_to_back_delta_forward_speed_mean = -0.00279 mm/s`
+- So the assay is now honest but still behaviorally empty with respect to the
+  target phenotype.
+- The first pass at forward-context candidates is still weak. The monitored
+  bilateral groups are not yet giving a clean, stable, motion-specific,
+  flicker-weak suppressor signal.
+
+4. Evidence
+- `outputs/creamer2018_known_good_nonspont_multidrive_warm_baseline/flygym-demo-20260329-012116/summary.json`
+- `outputs/creamer2018_known_good_nonspont_multidrive_warm_t4t5_ablated/flygym-demo-20260329-014240/summary.json`
+- `outputs/metrics/creamer_known_good_nonspont_multidrive_warm_decoder_diagnosis.json`
+- `outputs/metrics/creamer_known_good_nonspont_multidrive_warm_forward_context_candidates.json`
+- `outputs/metrics/treadmill_hybrid_response_map.json`
+- `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_vnclite.yaml`
+- `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_vnclite_t4t5_ablated.yaml`
+
+5. Next actions
+- Let the `vnclite` non-spontaneous baseline finish.
+- Decide from that run whether the remaining gap is mainly steering bleed,
+  operating-point placement in the hybrid locomotor latents, or missing
+  bilateral motion-suppression signal.
+- If `vnclite` still shows no slowing, add a baseline-centered bilateral
+  forward-context path rather than trying to squeeze Creamer through absolute
+  rate boosts.
+
+## 2026-03-29 02:52 Centered Forward-Context Seam Added, First Vnclite Run Rejected Early
+
+1. What I attempted
+- Added a new baseline-centered bilateral forward-context library to the
+  decoder so Creamer-like motion suppression can be expressed as
+  motion-minus-stationary brain activity rather than absolute bilateral rate.
+- Added the builder script for that library:
+  - `scripts/build_creamer_forward_context_library.py`
+- Created the first operating-point retune branch:
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_vnclite.yaml`
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_vnclite_t4t5_ablated.yaml`
+- Ran the `vnclite` baseline long enough to see whether weaker turn bleed plus
+  faster within-block response was enough by itself.
+
+2. What succeeded
+- The centered forward-context code path is now in
+  `src/bridge/decoder.py`.
+- New focused regression passed:
+  - `tests/test_centered_forward_context.py`
+  - `tests/test_creamer_forward_context.py`
+  - `tests/test_treadmill_hybrid_response.py`
+- The `vnclite` configs load and run through mock closed-loop smoke.
+
+3. What failed
+- The first `vnclite` baseline was a fast negative result.
+- By the time the live log reached block 9, the treadmill baseline had already
+  ramped to about `672 mm/s`, with almost no front-to-back suppression:
+  - `baseline_a forward_speed ~= 671.96 mm/s`
+  - `motion_ftb_a forward_speed ~= 671.62 mm/s`
+- So that retune moved the operating point in the wrong direction and still did
+  not create the Creamer phenotype.
+- I stopped the run once that was clear instead of wasting more wall time on a
+  bad branch.
+
+4. Evidence
+- `src/bridge/decoder.py`
+- `scripts/build_creamer_forward_context_library.py`
+- `tests/test_centered_forward_context.py`
+- `outputs/creamer2018_known_good_nonspont_multidrive_warm_vnclite_baseline/flygym-demo-20260329-020007/run.jsonl`
+- `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_vnclite.yaml`
+
+5. Next actions
+- Build the first centered forward-context library from the corrected
+  non-spontaneous pair.
+- Pair that with a monitor cohort specifically chosen for translational
+  suppression, not generic locomotor context.
+- Re-run the non-spontaneous baseline under that new centered-suppression
+  decoder path before spending more time on the living branch.
+
+## 2026-03-29 03:34 Creamer Relay Monitor Cohort Built, Gain Retune Rejected
+
+1. What I attempted
+- Tried a lower-speed operating-point retune:
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_lowspeed_a.yaml`
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_lowspeed_b.yaml`
+- Built a Creamer-specific bilateral relay monitor panel from the FlyWire annotation supplement:
+  - `outputs/metrics/creamer_relay_monitor_families.csv`
+  - `outputs/metrics/creamer_relay_monitor_candidates.json`
+- Started the first real relay-monitored baseline run:
+  - `outputs/creamer2018_known_good_nonspont_creamer_relay_monitored_baseline/`
+
+2. What succeeded
+- The low-speed retune proved the next bottleneck is not just the hybrid body
+  operating point.
+- The new Creamer relay monitor panel built correctly and includes the intended
+  upstream controls and relay families:
+  - `L1/L2/L3`
+  - `T4a/T4b/T4c/T4d`
+  - `T5a/T5b/T5c/T5d`
+  - `LT43/LT57/LT59/LPT30/LPT51/LPT52/LPT57/LTe11/LTe14/LTe62/MTe14/LCe03/MeLp1/VCH`
+  - `CL294/CB0828/CB1492/CB3516`
+- The live relay-monitored baseline immediately produced meaningful monitor data.
+  Early log rows already show nonzero bilateral `T5a/T5b/T5c/T5d` rates, which
+  the old descending-only monitor set could not expose.
+
+3. What failed
+- The low-speed retune `A` still collapsed into the same locomotor attractor.
+- Even with lower nominal amplitude/frequency settings, the standard
+  population-forward readout saturated and drove treadmill speed back to about
+  `690 mm/s` during warmup.
+- So gain retuning on the standard DN-forward readout is not enough by itself.
+
+4. Evidence
+- `outputs/creamer2018_known_good_nonspont_lowspeed_a_baseline/flygym-demo-20260329-022620/run.jsonl`
+- `outputs/metrics/creamer_relay_monitor_candidates.json`
+- `outputs/creamer2018_known_good_nonspont_creamer_relay_monitored_baseline/flygym-demo-20260329-023140/run.jsonl`
+
+5. Next actions
+- Finish the matched relay-monitored baseline / `T4/T5` ablation pair.
+- Rank bilateral motion-speed candidates against front-to-back motion, flicker,
+  and `T4/T5` ablation.
+- Rebuild the forward-context library from the relay panel instead of the old
+  descending-only DN panel.
+
+## 2026-03-29 03:12 Signed Relay Creamer Forward Context Built From Real Pair
+
+1. What I attempted
+- Let the real relay-monitored non-spontaneous baseline finish:
+  - `outputs/creamer2018_known_good_nonspont_creamer_relay_monitored_baseline/flygym-demo-20260329-023140/summary.json`
+- Let the matched real `T4/T5` ablation finish far enough for full-log analysis:
+  - `outputs/creamer2018_known_good_nonspont_creamer_relay_monitored_t4t5_ablated/flygym-demo-20260329-024403/run.jsonl`
+- Reworked the Creamer forward-context candidate analysis so it no longer
+  assumes the speed signal must appear as a positive rate increase.
+- Built the first signed relay forward-context libraries and the next
+  VNC-lite-style Creamer configs:
+  - `outputs/metrics/creamer_relay_forward_context_candidates.json`
+  - `outputs/metrics/creamer_relay_forward_context_candidates.csv`
+  - `outputs/metrics/creamer_relay_forward_context_library_v1.json`
+  - `outputs/metrics/creamer_relay_forward_context_library_v2_vch005.json`
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_relay_forward_context_vnclite.yaml`
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_relay_forward_context_vnclite_t4t5_ablated.yaml`
+
+2. What succeeded
+- The real relay pair confirms the corrected assay is still a clean null on the
+  current decoder path:
+  - baseline `front_to_back_delta_forward_speed_mean = -0.0084 mm/s`
+  - ablated `front_to_back_delta_forward_speed_mean = -0.0028 mm/s`
+- The signed relay analysis is informative and materially different from the
+  older DN-centered path.
+- The strongest signed bilateral motion suppressor in the real pair is `VCH`:
+  - `signed_ablation_component_hz = -33.37`
+- Smaller signed bilateral motion components also appear in:
+  - `T5b`, `T5c`, `LPT30`, `T5a`, `T5d`, `T4d`
+- The forward-context scorer now preserves signed motion modulation and rewards:
+  - real motion in both directions
+  - weak flicker response
+  - `T4/T5` dependence
+- Focused validation passed after the scorer/builder/config updates:
+  - `52 passed`
+
+3. What failed
+- A naive signed library with full `VCH` weight is too flicker-contaminated.
+- Offline replay over the finished baseline log shows:
+  - with the first full signed library and `boost = -0.6`
+  - `front_to_back` and `back_to_front` both suppress forward signal
+  - but flicker also shifts the forward signal in the wrong direction
+- So the next branch still needs a constrained `VCH` contribution rather than
+  the raw full-weight relay table.
+
+4. Evidence
+- `outputs/creamer2018_known_good_nonspont_creamer_relay_monitored_baseline/flygym-demo-20260329-023140/summary.json`
+- `outputs/creamer2018_known_good_nonspont_creamer_relay_monitored_t4t5_ablated/flygym-demo-20260329-024403/run.jsonl`
+- `outputs/metrics/creamer_relay_forward_context_candidates.csv`
+- `outputs/metrics/creamer_relay_forward_context_library_v1.json`
+- `outputs/metrics/creamer_relay_forward_context_library_v2_vch005.json`
+
+5. Next actions
+- Run the new signed relay-forward VNC-lite baseline:
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_relay_forward_context_vnclite.yaml`
+- If it shows real slowing under motion, run the matched ablation config
+  immediately.
+- Judge parity only on the same treadmill block assay:
+  - motion should slow walking speed
+  - flicker should be much weaker
+  - `T4/T5` ablation should remove the slowing
+
+## 2026-03-29 04:24 Signed Relay Branch Produces First Partial Creamer Effect, Body Frequency Cliff Proven
+
+1. What I attempted
+- Ran the real signed relay-forward branch and its matched `T4/T5` ablation:
+  - baseline `outputs/creamer2018_known_good_nonspont_creamer_relay_forward_context_vnclite_baseline/flygym-demo-20260329-030703/summary.json`
+  - ablated `outputs/creamer2018_known_good_nonspont_creamer_relay_forward_context_vnclite_t4t5_ablated/flygym-demo-20260329-032136/summary.json`
+- Probed the treadmill body operating point directly with a tiny response map:
+  - `outputs/metrics/treadmill_hybrid_response_map_tiny.json`
+  - `outputs/metrics/treadmill_hybrid_response_map_tiny.csv`
+- Swept zero-amplitude frequency operating points to find the locomotor cliff:
+  - `outputs/metrics/treadmill_hybrid_response_map_freqgate.json`
+  - `outputs/metrics/treadmill_hybrid_response_map_freqgate.csv`
+
+2. What succeeded
+- The signed relay branch produced the first real partial Creamer-like effect in
+  the same treadmill assay:
+  - baseline `front_to_back_delta_forward_speed_mean = -0.4688 mm/s`
+  - matched ablation `front_to_back_delta_forward_speed_mean = +0.0271 mm/s`
+- The effect remained flicker-weak enough to be worth pursuing:
+  - baseline `counterphase_flicker_delta_forward_speed_mean = +0.0367 mm/s`
+- The direct treadmill probe finally proved the next systemic blocker:
+  - with `amp = 0.0` and `freq = 0.9`, treadmill speed is still `~693 mm/s`
+  - with `amp = 0.0` and `freq = 0.7..0.85`, treadmill speed stays around
+    `226..248 mm/s`
+- That means the body path has a hard locomotor-frequency cliff near
+  `base_freq_scale = 0.9`. The prior high-speed Creamer branches were trapped on
+  that cliff.
+
+3. What failed
+- The signed relay branch still was not parity:
+  - treadmill speed stayed around `679 mm/s`
+  - `back_to_front` remained wrong-sign and essentially ablation-insensitive
+- So the branch proved a real motion-sensitive signal exists, but it also proved
+  the operating point was still wrong for a faithful translational speed assay.
+
+4. Evidence
+- `outputs/creamer2018_known_good_nonspont_creamer_relay_forward_context_vnclite_baseline/flygym-demo-20260329-030703/summary.json`
+- `outputs/creamer2018_known_good_nonspont_creamer_relay_forward_context_vnclite_t4t5_ablated/flygym-demo-20260329-032136/summary.json`
+- `outputs/metrics/treadmill_hybrid_response_map_tiny.json`
+- `outputs/metrics/treadmill_hybrid_response_map_freqgate.json`
+
+5. Next actions
+- Keep the Creamer body path below the `freq ~= 0.9` cliff.
+- Rebuild the forward-speed library in that safe regime instead of reusing
+  weights learned from the old high-speed branch.
+
+## 2026-03-29 04:42 Safe Frequency-Gated Motion-Energy Branch Eliminates Body Cliff But Loses Motion Contrast
+
+1. What I attempted
+- Added motion-energy forward-context modes and adaptive baseline support to the
+  decoder:
+  - `src/bridge/decoder.py`
+- Built the first motion-energy relay library:
+  - `outputs/metrics/creamer_relay_motion_energy_library_v1.json`
+- Ran a high-speed motion-energy branch:
+  - `outputs/creamer2018_known_good_nonspont_creamer_motion_energy_mid_baseline/flygym-demo-20260329-033539/summary.json`
+- Then ran a frequency-gated safe-regime branch:
+  - `outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_baseline/flygym-demo-20260329-040936/summary.json`
+
+2. What succeeded
+- The safe `freqgate` branch fixed the pathological locomotor operating point:
+  - `spontaneous_locomotion_mean_forward_speed = 225.3 mm/s`
+- The decoder/body stack can now hold a sane treadmill regime without hacks by
+  using:
+  - `latent_freq_bias = 0.68`
+  - `latent_freq_gain = 0.35`
+  - adaptive forward-context baseline
+- Focused validation passed after the decoder changes:
+  - `10 passed`
+
+3. What failed
+- The current motion-energy library was learned from the wrong regime and became
+  almost constant across scored blocks once the body was in the safe regime:
+  - `front_to_back_delta_forward_speed_mean = -0.0068 mm/s`
+  - `counterphase_flicker_delta_forward_speed_mean = -0.0049 mm/s`
+  - `back_to_front_delta_forward_speed_mean = -0.0033 mm/s`
+- Log inspection showed the forward-context signal stayed near `0.977..0.979`
+  across stationary, flicker, and motion blocks, so the signal library no
+  longer discriminates the actual assay conditions in the safe regime.
+
+4. Evidence
+- `outputs/metrics/creamer_relay_motion_energy_library_v1.json`
+- `outputs/creamer2018_known_good_nonspont_creamer_motion_energy_mid_baseline/flygym-demo-20260329-033539/run.jsonl`
+- `outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_baseline/flygym-demo-20260329-040936/summary.json`
+
+5. Next actions
+- Run a matched safe-regime relay-monitored baseline / `T4/T5` ablation pair.
+- Rebuild the motion-energy forward-context library from those safe-regime logs.
+- Rerun the matched safe-regime baseline / ablation pair with the rebuilt
+  library and score against the same Creamer treadmill criteria.
+
+## 2026-03-29 - Creamer frequency-floor suppression seam and narrow safe library
+
+1. What I attempted
+
+- Re-read the safe-regime Creamer outputs and the hybrid decoder/body path to
+  explain why a strong bilateral motion-suppression signal still failed to
+  change treadmill forward speed materially.
+- Sent two read-only sub-agent inspections in parallel:
+  - decoder/body operating-point diagnosis
+  - biological plausibility review of the current safe-regime relay candidate set
+- Added a new hybrid-decoder seam so bilateral forward-context can suppress the
+  locomotor frequency floor directly, not just the forward scalar.
+- Rebuilt the safe-regime motion-energy library on the narrower first-wave
+  suppressor set `T5a + tiny VCH`.
+- Wired a new matched safe-regime baseline / `T4/T5` ablation pair on that
+  decoder seam and launched the corrected baseline run.
+
+2. What succeeded
+
+- The code-level failure seam is now explicit and fixed in code:
+  - `src/bridge/decoder.py`
+  - new config fields:
+    - `forward_context_freq_suppression_gain`
+    - `forward_context_amp_suppression_gain`
+- Focused validation passed for the new seam:
+  - `tests/test_bridge_unit.py`
+  - `tests/test_closed_loop_smoke.py`
+  - `tests/test_centered_forward_context.py`
+  - `tests/test_creamer_forward_context.py`
+- The biologically narrower safe library now exists:
+  - `outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_vch002.json`
+- The matched configs now exist and are smoke-tested:
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress.yaml`
+  - `configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_t4t5_ablated.yaml`
+
+3. What failed
+
+- The old safe-regime library branches still did not produce Creamer slowing,
+  even after entering the sane treadmill regime.
+- The sub-agent plausibility review corrected an older local assumption:
+  in the safe-regime candidate table, `T5a` is the cleanest direct bilateral
+  suppressor, while `VCH` remains plausible but must stay heavily capped due to
+  flicker contamination. The older broader `T5b/T5c/LPT30` emphasis is no
+  longer the best current first-wave choice.
+
+4. Evidence
+
+- `src/bridge/decoder.py`
+- `tests/test_bridge_unit.py`
+- `tests/test_closed_loop_smoke.py`
+- `outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_vch002.json`
+- `outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_baseline/flygym-demo-20260329-054759/run.jsonl`
+
+5. Next actions
+
+- Let the corrected narrow-library baseline finish.
+- Score the real block metrics:
+  - `front_to_back`
+  - `back_to_front`
+  - `counterphase_flicker`
+- If baseline shows genuine motion-specific slowing, run the matched
+  `T4/T5`-ablation pair immediately.
+- If it is still null, adjust only the safe decoder/library operating point,
+  not the assay.
+
+## 2026-03-29 - Narrow `T5a + tiny VCH` baseline failed, turn-lite safe branch prepared
+
+1. What I attempted
+
+- Finished the first full safe-regime baseline using:
+  - the new decoder-side locomotor-frequency suppression seam
+  - the narrowed `T5a + tiny VCH` motion-energy library
+  - the same interleaved-block Creamer treadmill assay
+- Read the finished baseline metrics and judged whether it was worth spending
+  the matched ablation run.
+- Prepared the next operating-point branch that keeps the same library and
+  frequency-floor suppression seam but weakens turn-heavy hybrid settings.
+
+2. What succeeded
+
+- The run stayed in a sane treadmill regime and produced the full metric set:
+  - [metrics.csv](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_baseline/flygym-demo-20260329-054759/metrics.csv)
+- The narrow-library branch was an honest test:
+  - no assay change
+  - no controller/body shortcut
+  - same public Creamer-style block schedule
+- The next turn-lite safe branch is already wired and smoke-tested:
+  - [baseline config](/G:/flysim/configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_turnlite.yaml)
+  - [ablated config](/G:/flysim/configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_turnlite_t4t5_ablated.yaml)
+
+3. What failed
+
+- The first narrow-library baseline is not Creamer parity.
+- It sped up under both real motion directions and also under flicker:
+  - `front_to_back_delta_forward_speed_mean = +0.0267 mm/s`
+  - `counterphase_flicker_delta_forward_speed_mean = +0.0831 mm/s`
+  - `back_to_front_delta_forward_speed_mean = +0.0920 mm/s`
+- The branch is therefore not worth a matched ablation run in its current form.
+- The most likely remaining miss is still turn-to-speed coupling:
+  - spontaneous locomotion stayed strongly left-dominant
+  - `front_to_back_delta_abs_turn_signal_mean = -0.0400`
+  - so motion-linked turn changes are still confounding translational speed
+
+4. Evidence
+
+- [metrics.csv](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_baseline/flygym-demo-20260329-054759/metrics.csv)
+- [decoder.py](/G:/flysim/src/bridge/decoder.py)
+- [test_bridge_unit.py](/G:/flysim/tests/test_bridge_unit.py)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+
+5. Next actions
+
+- Run the prepared turn-lite safe baseline immediately.
+- Only if that baseline shows real motion-specific slowing will the matched
+  `T4/T5` ablation run be launched.
+
+## 2026-03-29 06:17 Creamer Turn-Lite `T5a + Tiny VCH` Safe Branch Failed
+
+1. What I attempted
+
+- Let the prepared turn-lite safe baseline finish on the same corrected
+  treadmill assay and the same decoder-side frequency-floor suppression seam:
+  - [turn-lite baseline config](/G:/flysim/configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_turnlite.yaml)
+- Read the scored output instead of relaunching or changing the assay.
+- Killed the leftover postprocessing once the scored metrics were on disk so the
+  next heavy run could start cleanly.
+
+2. What succeeded
+
+- The branch stayed in a sane treadmill regime instead of falling back onto the
+  old pathological `~679 mm/s` cliff:
+  - [metrics.csv](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_turnlite_baseline/flygym-demo-20260329-060349/metrics.csv)
+- The test was still honest:
+  - same public Creamer-style block schedule
+  - same decoder-side bilateral suppression seam
+  - no controller/body shortcut
+- The next stricter fallback is already prepared and smoke-tested:
+  - [baseline config](/G:/flysim/configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite.yaml)
+  - [ablated config](/G:/flysim/configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_t4t5_ablated.yaml)
+
+3. What failed
+
+- This is still not Creamer parity.
+- It speeds up under both motion directions and still slightly under flicker:
+  - `front_to_back_delta_forward_speed_mean = +0.0209 mm/s`
+  - `counterphase_flicker_delta_forward_speed_mean = +0.0051 mm/s`
+  - `back_to_front_delta_forward_speed_mean = +0.0353 mm/s`
+- So the `T5a + tiny VCH` library remains contaminated for this branch family,
+  even after moving to the turn-lite hybrid settings.
+- This branch is not worth a matched ablation run.
+
+4. Evidence
+
+- [metrics.csv](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_turnlite_baseline/flygym-demo-20260329-060349/metrics.csv)
+- [creamer2018_visual_speed_control_note.md](/G:/flysim/docs/creamer2018_visual_speed_control_note.md)
+- [TASKS.md](/G:/flysim/TASKS.md)
+
+5. Next actions
+
+- Launch the prepared `T5a`-only turn-lite baseline immediately.
+- Only if that baseline produces real motion-specific slowing with flicker below
+  motion will the matched `T4/T5` ablation run be launched.
+
+## 2026-03-29 06:26 Creamer Stale-Baseline Saturation Bug Found And Fixed
+
+1. What I attempted
+
+- Inspected the finished turn-lite `T5a + tiny VCH` run at the raw motor-readout
+  field level instead of trusting only the block deltas.
+- Verified whether the bilateral forward-context seam was actually measuring
+  motion-specific activity or had become pinned by a stale learned baseline.
+- Patched the decoder so Creamer forward-context baselines can bootstrap from
+  the current run's warmup window and then freeze before scored blocks.
+
+2. What succeeded
+
+- The bug is real and now explicit.
+- On the finished turn-lite run:
+  - `T5a_forward_context_bilateral_hz = 0.0`
+  - `VCH_forward_context_bilateral_hz = 0.0`
+  - `T5a_forward_context_baseline_hz = 68.1316`
+  - `VCH_forward_context_baseline_hz = 147.7956`
+  - `forward_context_library_signal ~= 1.0`
+  in `warmup_a`
+- That means the old motion-energy seam was treating “no spikes” as maximal
+  motion energy before the scored blocks even started.
+- The decoder now supports:
+  - `forward_context_initial_baseline_mode`
+  - `forward_context_baseline_update_steps`
+- The active `T5a`-only turn-lite configs now use:
+  - `forward_context_initial_baseline_mode: zero`
+  - `forward_context_baseline_alpha: 0.05`
+  - `forward_context_baseline_update_steps: 500`
+- Focused validation passed:
+  - `4 passed`
+
+3. What failed
+
+- The earlier turn-lite `T5a + tiny VCH` result is no longer valid as a final
+  comparator because the forward-context seam was saturated from startup.
+- It remains useful only as evidence that the stale-baseline design was wrong.
+
+4. Evidence
+
+- [decoder.py](/G:/flysim/src/bridge/decoder.py)
+- [test_bridge_unit.py](/G:/flysim/tests/test_bridge_unit.py)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+- [run.jsonl](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_turnlite_baseline/flygym-demo-20260329-060349/run.jsonl)
+
+5. Next actions
+
+- Relaunch the corrected `T5a`-only turn-lite baseline immediately.
+- Only if the corrected baseline shows real motion-specific slowing with flicker
+  lower than motion will the matched `T4/T5` ablation run be launched.
+
+## 2026-03-29 06:37 Corrected `T5a`-Only Baseline Still Fails Creamer
+
+1. What I attempted
+
+- Reran the `T5a`-only turn-lite baseline after fixing the stale-baseline
+  forward-context bug.
+- Verified at `warmup_a` that the fix was truly live:
+  - `T5a_forward_context_baseline_hz = 0.0`
+  - `forward_context_signal = 0.0`
+- Let the corrected branch run through the same full Creamer treadmill assay and
+  read the scored output.
+
+2. What succeeded
+
+- The seam fix worked exactly as intended.
+- The rerun is the first valid `T5a`-only baseline in this branch family.
+- The branch remained fully within the same public treadmill evaluation setup:
+  - no assay rewrite
+  - no controller/body shortcut
+  - no metric reinterpretation
+
+3. What failed
+
+- The corrected `T5a`-only branch still does not replicate Creamer.
+- Scored result:
+  - `front_to_back_delta_forward_speed_mean = -0.0033 mm/s`
+  - `counterphase_flicker_delta_forward_speed_mean = +0.0593 mm/s`
+  - `back_to_front_delta_forward_speed_mean = +0.4009 mm/s`
+- So front-to-back motion is effectively flat, flicker is positive, and
+  back-to-front motion strongly speeds the fly up. That is still the wrong
+  phenotype.
+- The rerun also exposed the next real blocker clearly:
+  - `pre_mean_forward_speed = 547.7 mm/s`
+  - `stimulus_mean_forward_speed = 564.1 mm/s`
+- So the embodied locomotor operating point is too fast even before visual-speed
+  control is applied. There is not enough clean room left for a small bilateral
+  suppressor to create real Creamer-style slowing.
+
+4. Evidence
+
+- [metrics.csv](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_baseline_rerun/flygym-demo-20260329-062600/metrics.csv)
+- [decoder.py](/G:/flysim/src/bridge/decoder.py)
+- [test_bridge_unit.py](/G:/flysim/tests/test_bridge_unit.py)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+
+5. Next actions
+
+- Refit the embodied locomotor operating point downward in the same treadmill
+  eval setup before testing more Creamer suppressor libraries.
+- Move the bilateral suppressor source downstream of single `T5` subtypes, with
+  `LPT30` as the leading next relay candidate.
+- Only run a matched `T4/T5` ablation again once a baseline branch shows real
+  motion-specific slowing with flicker clearly lower than motion.
+
+## 2026-03-29 06:46 Creamer Low-Forward Operating-Point Branch Prepared
+
+1. What I attempted
+
+- Confirmed that the raw treadmill body path itself is still sane at low
+  symmetric hybrid frequency on the current turn-lite settings.
+- Prepared the next full Creamer baseline as a low-forward operating-point
+  branch rather than another suppressor-library swap.
+
+2. What succeeded
+
+- The direct body response map on the current turn-lite branch shows:
+  - `freq_scale = 0.55 -> 252.99 mm/s`
+  - `freq_scale = 0.60 -> 252.27 mm/s`
+  - `freq_scale = 0.65 -> 232.94 mm/s`
+  - `freq_scale = 0.70 -> 226.02 mm/s`
+  - artifact: [treadmill_hybrid_response_map_t5a_only_turnlite.json](/G:/flysim/outputs/metrics/treadmill_hybrid_response_map_t5a_only_turnlite.json)
+- That means the body floor is not the main source of the `~548 mm/s` Creamer
+  baseline. The overfast regime is coming from decoder-produced forward command.
+- I staged the next configs:
+  - [baseline config](/G:/flysim/configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward.yaml)
+  - [ablated config](/G:/flysim/configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_t4t5_ablated.yaml)
+- Focused config smoke passed:
+  - `4 passed`
+
+3. What failed
+
+- The amplitude-sensitivity map was still too slow to hold on the critical path,
+  so I killed it once the lower-forward full branch was ready.
+
+4. Evidence
+
+- [treadmill_hybrid_response_map_t5a_only_turnlite.json](/G:/flysim/outputs/metrics/treadmill_hybrid_response_map_t5a_only_turnlite.json)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+
+5. Next actions
+
+- Let the low-forward full baseline finish.
+- If it finally produces real motion-specific slowing with flicker below motion,
+  launch the matched `T4/T5` ablation immediately.
+- If not, keep the lowered locomotor operating point and move the suppressor
+  library downstream to `LPT30`.
+
+## 2026-03-29 07:05 Low-Forward `T5a` Baseline Reached The Right Speed Regime But Stayed Null
+
+1. What I attempted
+
+- Let the low-forward `T5a`-only turn-lite Creamer baseline run long enough to
+  establish whether lowering the forward operating point alone could reveal a
+  real motion-specific slowing effect.
+- Read the result directly from the raw `run.jsonl` because the benchmark
+  process never finalized its usual `metrics.csv` / `summary.json` outputs.
+
+2. What succeeded
+
+- The branch finally entered a sane treadmill operating point.
+- Streaming the raw block states from
+  [run.jsonl](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_baseline/flygym-demo-20260329-064715/run.jsonl)
+  gave:
+  - `warmup_a = 150.45 mm/s`
+  - `warmup_b = 230.41 mm/s`
+  - `warmup_c = 230.41 mm/s`
+  - `warmup_d = 230.40 mm/s`
+  - scored baseline mean `= 230.40 mm/s`
+- So the operating-point retune did exactly what it was supposed to do: remove
+  the old `~548 mm/s` overfast regime.
+
+3. What failed
+
+- Even in that corrected locomotor regime, the `T5a` suppressor still did not
+  produce the Creamer phenotype:
+  - `motion_ftb_a delta = +0.00010 mm/s`
+  - `motion_ftb_b delta = +0.01813 mm/s`
+  - `flicker delta = -0.01643 mm/s`
+  - `motion_btf delta = +0.02545 mm/s`
+- That is an honest null. It is not worth spending a matched ablation on this
+  branch.
+- The benchmark process itself also failed to finalize cleanly, so the result
+  had to be recovered from the live log and the stuck WSL launcher was killed
+  afterward.
+
+4. Evidence
+
+- [run.jsonl](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_baseline/flygym-demo-20260329-064715/run.jsonl)
+- [TASKS.md](/G:/flysim/TASKS.md)
+- [creamer2018_visual_speed_control_note.md](/G:/flysim/docs/creamer2018_visual_speed_control_note.md)
+
+5. Next actions
+
+- Do not run the `T4/T5` ablation for the low-forward `T5a` branch.
+- Keep the corrected seam and lowered locomotor operating point.
+- Pivot the suppressor library downstream to the prepared low-forward `LPT30`
+  branch and test that baseline next.
+
+## 2026-03-29 07:20 Low-Forward `LPT30` Failed Early, Multi-Channel `T5` Pool Became The Main Creamer Hypothesis
+
+1. What I attempted
+
+- Ran the prepared low-forward `LPT30` baseline in the same corrected treadmill
+  regime, but streamed the raw log live so the branch could be killed early if
+  it was already clearly wrong.
+- Reused a read-only sub-agent to review the local safe-regime candidate table
+  and the Creamer paper logic after both low-forward single-path branches were
+  available.
+- Built the first staged signed-combo library at
+  [creamer_relay_signed_combo_library_freqgate_safe_t5a_t4c.json](/G:/flysim/outputs/metrics/creamer_relay_signed_combo_library_freqgate_safe_t5a_t4c.json)
+  and prepared the paired configs that test it in the same low-forward
+  treadmill assay.
+
+2. What succeeded
+
+- The low-forward `LPT30` branch reached the same sane locomotor regime as the
+  corrected `T5a` branch, so the operating-point fix remained intact.
+- The early scored `LPT30` blocks were enough to classify the branch without
+  spending a full paired run:
+  - `baseline_mean = 229.08 mm/s`
+  - `motion_ftb_a delta = +0.02577 mm/s`
+  - `flicker delta = +0.02398 mm/s`
+- The read-only review sharpened the biological constraint: the next honest
+  Creamer decoder should be a pooled multi-channel `T5` motion-energy
+  suppressor, not another lone later relay.
+- Smoke coverage was added for the staged signed-combo `T5a + T4c` configs.
+
+3. What failed
+
+- `LPT30` was not a promotable downstream suppressor in the corrected assay.
+  It was already wrong-sign and flicker-positive by the first scored blocks, so
+  there was no reason to waste a matched `T4/T5` ablation on it.
+- That means both sane-regime single-path branches are now falsified:
+  - `T5a` alone is honest but null
+  - `LPT30` alone is early wrong-sign and flicker-positive
+
+4. Evidence
+
+- [run.jsonl](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_lpt30_only_speedsuppress_turnlite_lowforward_baseline/flygym-demo-20260329-070406/run.jsonl)
+- [creamer_relay_forward_context_candidates_freqgate_safe.csv](/G:/flysim/outputs/metrics/creamer_relay_forward_context_candidates_freqgate_safe.csv)
+- [creamer_relay_signed_combo_library_freqgate_safe_t5a_t4c.json](/G:/flysim/outputs/metrics/creamer_relay_signed_combo_library_freqgate_safe_t5a_t4c.json)
+- [TASKS.md](/G:/flysim/TASKS.md)
+- [creamer2018_visual_speed_control_note.md](/G:/flysim/docs/creamer2018_visual_speed_control_note.md)
+
+5. Next actions
+
+- Treat a pooled multi-channel `T5` suppressor as the main biologically
+  plausible decoder target.
+- Use the already-wired `T5a + T4c` signed-combo branch only as a quick
+  intermediate flicker-cancel test.
+- Only spend a matched ablation on a branch that first shows front-to-back
+  suppression with flicker clearly smaller than motion inside the corrected
+  low-forward treadmill regime.
+
+## 2026-03-29 07:45 Multi-Channel `T5` Pool Exposed An Embodied Assay-Stability Problem
+
+1. What I attempted
+
+- Built the first explicit multi-channel `T5` motion-energy pool with direct
+  per-channel weights from the safe-regime candidate table.
+- Ran a first suppressive pooled `T5abc` baseline in the same corrected
+  low-forward treadmill assay.
+- Compared its live warmup motor-readout fields directly against the clean
+  low-forward `T5a` baseline at the same cycle index.
+
+2. What succeeded
+
+- The pooled-library tooling is now in place:
+  - builder supports explicit per-channel weights
+  - pooled `T5abc` configs exist
+  - smoke coverage exists for the new config pair
+- The new live comparison found a stronger blocker than “that library is still
+  wrong.”
+
+3. What failed
+
+- The first `T5abc` pool variants still did not produce a valid Creamer branch.
+- More importantly, the run comparison exposed embodied assay instability:
+  - clean low-forward `T5a`, cycle `60`
+    - `speed = 232.05 mm/s`
+    - `left/right_drive = 0.15933 / 0.15638`
+    - `left/right_freq = 0.17827 / 0.17749`
+  - suppressive `T5abc`, cycle `60`
+    - `speed = 655.83 mm/s`
+    - `left/right_drive = 0.14769 / 0.14474`
+    - `left/right_freq = 0.17819 / 0.17740`
+- So two runs with nearly identical decoder commands and nearly identical
+  latent frequency scales can still produce a `~3x` difference in the
+  treadmill forward-speed readout.
+
+4. Evidence
+
+- [T5a low-forward run](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_baseline/flygym-demo-20260329-064715/run.jsonl)
+- [T5abc pooled run](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5abc_pool_lowforward_baseline/flygym-demo-20260329-073650/run.jsonl)
+- [pooled library](/G:/flysim/outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5abc_pool_suppressive.json)
+- [TASKS.md](/G:/flysim/TASKS.md)
+- [creamer2018_visual_speed_control_note.md](/G:/flysim/docs/creamer2018_visual_speed_control_note.md)
+
+5. Next actions
+
+- Treat treadmill-gait stabilization as a first-class Creamer blocker, not just
+  a nuisance.
+- Keep the biologically plausible library search going, but do not trust small
+  speed deltas until the embodied pre-scored gait state is made more
+  reproducible across matched runs.
+
+## 2026-03-29 07:55 Creamer Demo Visuals Themselves Are Still Invalid
+
+1. What was learned
+
+- Direct visual inspection of the Creamer demos shows the striped background can
+  still scream past the fly at an obviously non-biological scale.
+- That means the current failure is not only in abstract metrics. The rendered
+  scene itself is invalid as a Creamer analogue in some of these runs.
+
+2. Why this is real
+
+- The nominal scene drift is small (`4 mm/s`), but the rendered scene speed is
+  dominated by treadmill/self-motion once the branch falls into a fast gait
+  state.
+- We already measured low-forward runs with treadmill forward speed around
+  `230 mm/s`, and unstable pooled runs around `650 mm/s`, which is fully
+  consistent with the user's report that the bars visually scream past the fly.
+
+3. Consequence
+
+- Any Creamer claim from runs that visually fail this scene-speed sanity check
+  is invalid, even before looking at the motion-vs-flicker metric table.
+- A hard visual-validity gate is now required before any further baseline /
+  ablation result can count as evidence.
+
+## 2026-03-29 11:55 Very-Slow Scene Probe On The Best Stable Creamer Branch
+
+1. What I attempted
+
+- Took the current most stable low-forward Creamer branch
+  (`T5a`-only turn-lite low-forward) and created a very-slow scene variant with
+  `front_to_back = -0.5 mm/s` and `back_to_front = +0.5 mm/s`.
+- Ran the full `2.0 s` flygym treadmill probe and waited for the finished
+  summary artifact.
+
+2. What succeeded
+
+- The branch stayed in the sane low-forward operating point:
+  - `warmup_a = 150.45 mm/s`
+  - `warmup_b = 230.44 mm/s`
+  - `warmup_c = 230.42 mm/s`
+  - `warmup_d = 230.42 mm/s`
+- The first front-to-back effect became slightly negative instead of null:
+  - `front_to_back_delta_forward_speed_mean = -0.02275 mm/s`
+
+3. What failed
+
+- Flicker is still not separated correctly:
+  - `counterphase_flicker_delta_forward_speed_mean = +0.03806 mm/s`
+- More importantly, slowing the nominal scene drift did **not** fix the actual
+  visual-validity problem:
+  - `scene_speed_abs_mean_mm_s = 0.25`
+  - but `effective_visual_speed_abs_mean_mm_s = 230.65`
+  - and `retinal_slip_abs_mean_mm_s = 230.65`
+- So the fly's own treadmill/self-motion still dominates the retinal slip by
+  about three orders of magnitude relative to the imposed scene drift.
+
+4. Evidence
+
+- [summary.json](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_veryslow_baseline/flygym-demo-20260329-114620/summary.json)
+- [activation_side_by_side.mp4](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_veryslow_baseline/flygym-demo-20260329-114620/activation_side_by_side.mp4)
+- [demo.mp4](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_veryslow_baseline/flygym-demo-20260329-114620/demo.mp4)
+
+5. Next actions
+
+- Do not interpret nominal scene speed alone as the true stimulus intensity.
+- Keep the rendered-scene validity gate.
+- The next Creamer fix must reduce effective retinal slip seen by the fly, not
+  just reduce the configured wall drift.
+
+## 2026-03-29 12:20 Synced Scene Probe Fixed Retinal-Slip Semantics
+
+1. What I attempted
+
+- Implemented synced interleaved treadmill blocks in
+  [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py) so the
+  bar scene can match the fly's own treadmill speed first and then apply only a
+  small signed offset.
+- Added focused tests for those semantics in
+  [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+  and a config smoke in [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py).
+- Created the new synced low-forward `T5a` config at
+  [flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_synced_veryslow.yaml](/G:/flysim/configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_synced_veryslow.yaml).
+- Ran the synced baseline under the real WSL `flysim-full` micromamba env and
+  stopped it once the first scored front-to-back block had completed, because
+  that was enough to judge the requested scene semantics.
+
+2. What succeeded
+
+- Focused tests passed: `4 passed`.
+- The synced scene semantics are correct in the live run:
+  - `baseline_a`: speed `645.153 mm/s`, retinal slip `0.0 mm/s`, scene speed `645.151 mm/s`
+  - `motion_ftb_a`: speed `645.287 mm/s`, retinal slip `-0.5 mm/s`, scene speed `644.787 mm/s`
+  - `baseline_b`: speed `645.244 mm/s`, retinal slip `0.0 mm/s`, scene speed `645.244 mm/s`
+- This is the first Creamer treadmill probe where the scored blocks are truly
+  synchronized to the fly's own treadmill speed and the imposed front-to-back
+  stimulus is a real small retinal-slip perturbation instead of a mislabeled
+  high-slip scene.
+
+3. What failed
+
+- The branch still did not show Creamer-like slowing in that corrected assay.
+- The first synced front-to-back block was slightly wrong-sign:
+  - `front_to_back_delta_forward_speed_mean = +0.13418 mm/s`
+- The embodied locomotor regime remained extremely fast at about `645 mm/s`,
+  so even after the retinal-slip semantics were fixed, the current
+  brain/decoder/body path did not convert clean front-to-back motion into
+  slowing.
+
+4. Evidence
+
+- [run.jsonl](/G:/flysim/outputs/creamer2018_known_good_nonspont_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_synced_veryslow_baseline/flygym-demo-20260329-120615/run.jsonl)
+- [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py)
+- [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+
+5. Next actions
+
+- Treat the scene-synchronization request as resolved.
+- Stop blaming scene semantics for the current Creamer miss on this branch.
+- Push the next iteration into the actual remaining blocker:
+  biologically plausible brain/decoder/body control that slows under clean
+  front-to-back retinal motion in the same synced treadmill assay.
+
+## 2026-03-29 12:45 Sub-Agent Blocker Review And Public Recording Fit Targets
+
+1. What I attempted
+
+- Used all six sub-agent slots in parallel for two jobs:
+  - blocker diagnosis on the current Creamer branch
+  - public living-fly recording / dataset search for fitting targets
+- Kept the work read-only and used the results to build a concrete next-step
+  plan rather than more blind gain sweeps.
+
+2. What succeeded
+
+- The blocker diagnosis converged cleanly across the code/artifact reviews:
+  - the dominant blocker is the **high-speed embodied treadmill attractor**
+    rather than scene semantics
+  - the current `T5a` forward-context signal is weak and not specific enough,
+    but the deeper problem is that once the branch sits near `~645 mm/s`, the
+    body path responds only weakly to changes in the bilateral frequency-floor
+    suppressor
+- The strongest public recording targets are now explicit and ranked in
+  [creamer_recording_fit_targets.md](/G:/flysim/docs/creamer_recording_fit_targets.md):
+  - **Aimon 2023 Dryad** and **Schaffer 2023 Figshare** for living-brain /
+    locomotor-state fitting
+  - **Ketkar 2022 Zenodo** and **Gruntman 2019 Figshare** for early visual
+    motion channels
+  - **Shomar 2025 Dryad** for downstream visual-to-locomotor channels
+  - **Dallmann 2025 Dryad** for treadmill proprioceptive / feedback realism
+  - **Creamer 2018** remains the behavioral scorecard, not the best public raw
+    fit source
+- Added two new tracker tasks:
+  - `T188`: same-state replay falsifier for the high-speed attractor
+  - `T189`: public-data fitting stack for the living / Creamer workstream
+
+3. What failed
+
+- I still do **not** have evidence for a public raw trace repository directly
+  attached to Creamer 2018 itself.
+- So the fitting program has to use adjacent public recordings plus Creamer as
+  the behavioral acceptance target.
+
+4. Evidence
+
+- [creamer_recording_fit_targets.md](/G:/flysim/docs/creamer_recording_fit_targets.md)
+- [creamer2018_visual_speed_control_note.md](/G:/flysim/docs/creamer2018_visual_speed_control_note.md)
+- [TASKS.md](/G:/flysim/TASKS.md)
+
+5. Next actions
+
+- Run `T188` before any further large Creamer sweep.
+- Start `T189` so the living branch and motion pathway stop being tuned only by
+  local assay outcomes.
+
+## 2026-03-29 13:05 Priority Override To Public Neural Measurement Parity
+
+1. What I attempted
+
+- Recorded the user's new top-level directive as the repo priority:
+  public neural measurement parity on the spontaneous brain now supersedes all
+  downstream Creamer / decoder / embodiment work.
+- Preserved the current chat state, including the latest synced-probe result,
+  blocker diagnosis, and sub-agent dataset findings, in repo files intended to
+  survive compaction.
+
+2. What succeeded
+
+- Added the priority override to [TASKS.md](/G:/flysim/TASKS.md).
+- Created the new program note:
+  [public_neural_measurement_parity_program.md](/G:/flysim/docs/public_neural_measurement_parity_program.md)
+- Added new top-priority tasks:
+  - `T190`: freeze downstream work and promote the parity program
+  - `T191`: obtain and stage the public datasets
+  - `T192`: define canonical matched-format schema
+  - `T193`: build or reuse targeted fitting harnesses
+  - `T194`: force the spontaneous brain to match public measurements dataset by
+    dataset
+- Preserved the latest blocker and dataset context in:
+  - [public_neural_measurement_parity_program.md](/G:/flysim/docs/public_neural_measurement_parity_program.md)
+  - [creamer_recording_fit_targets.md](/G:/flysim/docs/creamer_recording_fit_targets.md)
+  - [creamer2018_visual_speed_control_note.md](/G:/flysim/docs/creamer2018_visual_speed_control_note.md)
+  - [context.md](/G:/flysim/context.md) still needed an update at this point and remains part of the preserved-state set
+
+3. What failed
+
+- The datasets are not yet staged locally in this slice.
+- This slice was for priority freeze and context preservation first, because
+  the chat context was at risk of compaction.
+
+4. Evidence
+
+- [TASKS.md](/G:/flysim/TASKS.md)
+- [public_neural_measurement_parity_program.md](/G:/flysim/docs/public_neural_measurement_parity_program.md)
+- [creamer_recording_fit_targets.md](/G:/flysim/docs/creamer_recording_fit_targets.md)
+
+5. Next actions
+
+- Start `T191` immediately.
+- Use the spontaneous brain only for this program unless a dataset-specific
+  harness requires an isolated comparator branch.
+
+## 2026-03-29 14:05 First Real Aimon Spontaneous-Brain Fit Pilot
+
+1. What I attempted
+
+- Implemented the first actual spontaneous-brain replay/projection harness
+  against a public living-fly neural dataset rather than stopping at canonical
+  export and generic scoring.
+- Used the staged Aimon 2023 canonical bundle plus the living spontaneous
+  branch to run a real B1269 pilot.
+
+2. What succeeded
+
+- Added the new replay/projection module:
+  [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+- Added the CLI runner:
+  [run_aimon_spontaneous_fit.py](/G:/flysim/scripts/run_aimon_spontaneous_fit.py)
+- Extended the Aimon harness to preserve the metadata needed for replay:
+  `split`, `stimulus`, and `behavior_paths`
+- Fixed the generic trace scorer to ignore non-finite public samples instead of
+  contaminating aggregate metrics with `NaN`
+- Added focused tests:
+  - [test_aimon_parity_harness.py](/G:/flysim/tests/test_aimon_parity_harness.py)
+  - [test_aimon_spontaneous_fit.py](/G:/flysim/tests/test_aimon_spontaneous_fit.py)
+- Completed the first real live fit artifact:
+  [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_b1269_pilot_v2/aimon_spontaneous_fit_summary.json)
+- Main same-dataset pilot result on `B1269_spontaneous_walk` and
+  `B1269_forced_walk`:
+  - `aggregate.mean_pearson_r = 0.8909`
+  - `aggregate.mean_nrmse = 0.0661`
+  - `aggregate.mean_abs_error = 0.00173`
+  - `aggregate.mean_sign_agreement = 0.8571`
+
+3. What failed
+
+- This is not a held-out parity result yet.
+- The first pilot fit and scored on the same short B1269 pair, so it proves the
+  path is live but does not yet prove generalization.
+
+4. Evidence
+
+- [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+- [run_aimon_spontaneous_fit.py](/G:/flysim/scripts/run_aimon_spontaneous_fit.py)
+- [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_b1269_pilot_v2/aimon_spontaneous_fit_summary.json)
+- [test_aimon_spontaneous_fit.py](/G:/flysim/tests/test_aimon_spontaneous_fit.py)
+
+5. Next actions
+
+- Run the first held-out Aimon fit on the canonical train/test split.
+- Use that result to define the first parameter sweep on mechanosensory forcing,
+  basis options, and projection regularization.
+- Keep all downstream decoder and embodiment interpretation subordinate to this
+  parity lane.
+
+## 2026-03-29 16:35 First Held-Out Aimon Boundary And First Schaffer NWB Canonical Export
+
+1. What I attempted
+
+- Ran the first honest held-out Aimon spontaneous-brain fit:
+  - fit on canonical `train`
+  - score on held-out canonical `test`
+- Staged and inspected the first real Schaffer NWB session, then built a first
+  canonical exporter around the actual NWB layout rather than metadata alone.
+
+2. What succeeded
+
+- Held-out Aimon run completed:
+  [aimon_spontaneous_fit_train_to_test_v1](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v1/aimon_spontaneous_fit_summary.json)
+- The held-out result is now explicit:
+  - fit trials:
+    - `B350_spontaneous_walk`
+    - `B350_forced_walk`
+  - aggregate over all four trials:
+    - `mean_pearson_r = 0.1456`
+    - `mean_nrmse = 0.2462`
+    - `mean_abs_error = 0.00608`
+    - `mean_sign_agreement = 0.5279`
+  - held-out `test` mean:
+    - `mean_pearson_r = 0.0564`
+    - `mean_nrmse = 0.3328`
+    - `mean_abs_error = 0.00856`
+    - `mean_sign_agreement = 0.4689`
+- Added the first Schaffer NWB canonical exporter:
+  - [schaffer_nwb_canonical_dataset.py](/G:/flysim/src/analysis/schaffer_nwb_canonical_dataset.py)
+  - [export_schaffer_nwb_canonical_dataset.py](/G:/flysim/scripts/export_schaffer_nwb_canonical_dataset.py)
+  - [test_schaffer_nwb_canonical_dataset.py](/G:/flysim/tests/test_schaffer_nwb_canonical_dataset.py)
+- Staged the first real Schaffer NWB source:
+  - [2022_01_08_fly1.nwb](/G:/flysim/external/neural_measurements/schaffer2023_figshare/2022_01_08_fly1.nwb)
+- Exported the first real Schaffer canonical bundle:
+  [schaffer2023_nwb_canonical_summary.json](/G:/flysim/outputs/derived/schaffer2023_nwb_canonical/schaffer2023_nwb_canonical_summary.json)
+  - `staged_session_count = 1`
+  - `trial_count = 6`
+  - aligned ROI `Df/F`, ball motion, behavioral-state arrays
+
+3. What failed
+
+- The first held-out Aimon result is not close to parity.
+- The same-dataset B1269 pilot was strong, but generalization to held-out
+  `B1269` after fitting on `B350` is weak, especially for forced walk.
+
+4. Evidence
+
+- [aimon_spontaneous_fit_train_to_test_v1](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v1/aimon_spontaneous_fit_summary.json)
+- [aimon_spontaneous_fit_b1269_pilot_v2](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_b1269_pilot_v2/aimon_spontaneous_fit_summary.json)
+- [schaffer_nwb_canonical_dataset.py](/G:/flysim/src/analysis/schaffer_nwb_canonical_dataset.py)
+- [schaffer2023_nwb_canonical_summary.json](/G:/flysim/outputs/derived/schaffer2023_nwb_canonical/schaffer2023_nwb_canonical_summary.json)
+
+5. Next actions
+
+- Run the first targeted held-out Aimon optimization sweep.
+- Keep the optimization target on held-out Aimon metrics, not same-dataset fit.
+- Expand Schaffer staging beyond one NWB session once the exporter seam is
+  confirmed stable.
+
+## 2026-03-29 17:05 Aimon Held-Out Sweep Comparison And Schaffer Score Harness
+
+1. What I attempted
+
+- Ran two targeted held-out Aimon optimization variants after the first
+  train-on-`B350`, test-on-`B1269` boundary:
+  - reduced-capacity regularized variant without asymmetry basis
+  - stronger mechanosensory forcing variant with both forcing channels doubled
+- Added a direct Schaffer canonical parity harness so staged NWB intervals can be
+  loaded and scored in the same style as Aimon.
+
+2. What succeeded
+
+- Completed the second and third held-out Aimon variants:
+  - [v2 reduced basis no asymmetry](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v2_basis16_ridge1e-2_noasym/aimon_spontaneous_fit_summary.json)
+  - [v3 force2](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v3_force2/aimon_spontaneous_fit_summary.json)
+- Materialized a comparison artifact:
+  - [aimon_spontaneous_fit_variant_comparison.json](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_variant_comparison.json)
+- Held-out `B1269` means now compare as:
+  - `v1`: `pearson_r = 0.0564`, `nrmse = 0.3328`, `abs_error = 0.00856`, `sign = 0.4689`
+  - `v2`: `pearson_r = 0.0122`, `nrmse = 0.3310`, `abs_error = 0.00849`, `sign = 0.4605`
+  - `v3`: `pearson_r = 0.0620`, `nrmse = 0.3117`, `abs_error = 0.00821`, `sign = 0.4660`
+- Interpretation:
+  - reduced capacity and no asymmetry did not solve held-out Aimon
+  - stronger mechanosensory forcing is the first real held-out improvement
+  - the weak slice remains held-out `B1269_forced_walk`, not spontaneous walk
+- Added and validated the Schaffer score harness:
+  - [schaffer_parity_harness.py](/G:/flysim/src/analysis/schaffer_parity_harness.py)
+  - [test_schaffer_parity_harness.py](/G:/flysim/tests/test_schaffer_parity_harness.py)
+  - focused validation: `6 passed`
+
+3. What failed
+
+- The improved `v3` Aimon result is still weak. It is an optimization step, not
+  parity.
+- Sign agreement on held-out `B1269` remains poor even when aggregate error
+  improves.
+
+4. Evidence
+
+- [aimon_spontaneous_fit_train_to_test_v2_basis16_ridge1e-2_noasym](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v2_basis16_ridge1e-2_noasym/aimon_spontaneous_fit_summary.json)
+- [aimon_spontaneous_fit_train_to_test_v3_force2](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v3_force2/aimon_spontaneous_fit_summary.json)
+- [aimon_spontaneous_fit_variant_comparison.json](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_variant_comparison.json)
+- [schaffer_parity_harness.py](/G:/flysim/src/analysis/schaffer_parity_harness.py)
+
+5. Next actions
+
+- Separate `force_contact_force` from `force_forward_speed` in the next held-out
+  Aimon sweep point and target the weak forced-walk slice directly.
+- Use the new Schaffer harness to prepare the first spontaneous-brain matched
+  scoring run on the staged NWB interval bundle.
+
+## 2026-03-29 17:25 Aimon Contact Split Falsified And First Live Schaffer Fit Started
+
+1. What I attempted
+
+- Continued the held-out Aimon forcing sweep by isolating the contact channel:
+  - `force_contact_force = 2.0`
+  - `force_forward_speed = 1.0`
+- Added the first backend-connected Schaffer spontaneous-fit path and launched a
+  one-trial pilot on the staged NWB bundle.
+
+2. What succeeded
+
+- Added the first live Schaffer spontaneous-fit code path:
+  - [schaffer_spontaneous_fit.py](/G:/flysim/src/analysis/schaffer_spontaneous_fit.py)
+  - [run_schaffer_spontaneous_fit.py](/G:/flysim/scripts/run_schaffer_spontaneous_fit.py)
+  - [test_schaffer_spontaneous_fit.py](/G:/flysim/tests/test_schaffer_spontaneous_fit.py)
+- Focused Schaffer validation passed:
+  - `9 passed`
+- The contact-dominant Aimon held-out run completed:
+  - [v4 contact2/forward1](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v4_contact2_forward1/aimon_spontaneous_fit_summary.json)
+- Held-out `B1269_*` means for `v4`:
+  - `mean_pearson_r = 0.0385`
+  - `mean_nrmse = 0.3293`
+  - `mean_abs_error = 0.00853`
+  - `mean_sign_agreement = 0.4644`
+
+3. What failed
+
+- The contact-only gain split did not preserve the `v3 force2` improvement.
+- That falsifies contact amplification by itself as the main reason `v3`
+  improved held-out Aimon.
+
+4. Evidence
+
+- [v4 contact2/forward1](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v4_contact2_forward1/aimon_spontaneous_fit_summary.json)
+- [schaffer_spontaneous_fit.py](/G:/flysim/src/analysis/schaffer_spontaneous_fit.py)
+- [run_schaffer_spontaneous_fit.py](/G:/flysim/scripts/run_schaffer_spontaneous_fit.py)
+
+5. Next actions
+
+- Finish the complementary `forward2/contact1` Aimon run, because it is now the
+  decisive test of whether the useful `v3` gain came mainly from forward
+  mechanosensory forcing.
+- Finish the one-trial live Schaffer pilot and use it to decide whether the new
+  NWB fit path is stable enough for larger interval sweeps.
+
+## 2026-03-29 18:05 Aimon Forward Split Result
+
+1. What I attempted
+
+- Ran the complementary held-out Aimon forcing split:
+  - `force_forward_speed = 2.0`
+  - `force_contact_force = 1.0`
+
+2. What succeeded
+
+- Completed:
+  - [v5 forward2/contact1](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v5_forward2_contact1/aimon_spontaneous_fit_summary.json)
+- Held-out `B1269_*` means for `v5`:
+  - `mean_pearson_r = 0.0565`
+  - `mean_nrmse = 0.3155`
+  - `mean_abs_error = 0.00824`
+  - `mean_sign_agreement = 0.4723`
+- Current Aimon sweep read:
+  - `v3 force2` remains best overall on correlation and error
+  - `v5 forward2/contact1` is close on error and is now the best held-out sign
+    agreement point
+  - `v4 contact2/forward1` was the clear negative result
+
+3. What failed
+
+- The forward-only split did not beat `v3 force2` outright.
+- So the current gain is not explained by pure forward forcing alone either.
+
+4. Evidence
+
+- [v3 force2](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v3_force2/aimon_spontaneous_fit_summary.json)
+- [v4 contact2/forward1](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v4_contact2_forward1/aimon_spontaneous_fit_summary.json)
+- [v5 forward2/contact1](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v5_forward2_contact1/aimon_spontaneous_fit_summary.json)
+- [variant comparison](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_variant_comparison.json)
+
+5. Next actions
+
+- Keep the Aimon search centered on forward-dominant mechanosensory forcing,
+  because contact-only was clearly wrong and forward-only recovered most of the
+  useful gain.
+- Finish the live Schaffer pilot and use it to open the second dataset-specific
+  parity lane with a real backend run.
+
+## 2026-03-29 20:35 Three-Session Schaffer Bundle And Aimon Interpolation Point
+
+1. What I attempted
+
+- Refreshed the Schaffer Figshare manifest through the real API path, then
+  staged two additional NWB sessions:
+  - `2018_08_24_fly3_run1.nwb`
+  - `2019_04_25_fly1.nwb`
+- Rebuilt the Schaffer canonical bundle from the staged NWBs.
+- Ran one more Aimon interpolation point between `v3 force2` and
+  `v5 forward2/contact1`.
+- Added an explicit same-session guard and `fit_trial_id` support to the
+  Schaffer fit path so interval holdouts can be run honestly.
+
+2. What succeeded
+
+- Schaffer staging succeeded with verified digests:
+  - [2018_08_24_fly3_run1.nwb](/G:/flysim/external/neural_measurements/schaffer2023_figshare/2018_08_24_fly3_run1.nwb)
+  - [2019_04_25_fly1.nwb](/G:/flysim/external/neural_measurements/schaffer2023_figshare/2019_04_25_fly1.nwb)
+- Rebuilt Schaffer canonical bundle:
+  - [schaffer2023_nwb_canonical_summary.json](/G:/flysim/outputs/derived/schaffer2023_nwb_canonical/schaffer2023_nwb_canonical_summary.json)
+  - current result:
+    - `staged_session_count = 3`
+    - `exported_session_count = 3`
+    - `trial_count = 9`
+- Added the Schaffer same-session fit guard and explicit fit-trial selector:
+  - [schaffer_spontaneous_fit.py](/G:/flysim/src/analysis/schaffer_spontaneous_fit.py)
+  - [run_schaffer_spontaneous_fit.py](/G:/flysim/scripts/run_schaffer_spontaneous_fit.py)
+  - focused validation: `11 passed`
+- Completed Aimon `v6 forward2/contact1.5`:
+  - [v6 summary](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v6_forward2_contact1p5/aimon_spontaneous_fit_summary.json)
+  - held-out `B1269_*` means:
+    - `mean_pearson_r = 0.0563`
+    - `mean_nrmse = 0.3144`
+    - `mean_abs_error = 0.00824`
+    - `mean_sign_agreement = 0.4665`
+
+3. What failed
+
+- `v6` did not beat `v3 force2` on error/correlation.
+- `v6` did not beat `v5 forward2/contact1` on sign agreement.
+- So it is an interpolation point, not a new frontier.
+
+4. Evidence
+
+- [public_neural_measurement_schaffer2023_figshare_manifest.json](/G:/flysim/outputs/metrics/public_neural_measurement_schaffer2023_figshare_manifest.json)
+- [schaffer2023_nwb_canonical_summary.json](/G:/flysim/outputs/derived/schaffer2023_nwb_canonical/schaffer2023_nwb_canonical_summary.json)
+- [v6 summary](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v6_forward2_contact1p5/aimon_spontaneous_fit_summary.json)
+- [variant comparison](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_variant_comparison.json)
+
+5. Next actions
+
+- Finish the first within-session Schaffer interval holdout on the rebuilt 2022
+  session.
+- Keep the Aimon forcing search forward-dominant, because the new interpolation
+  point still supports that read.
+
+## 2026-03-30 - Endogenous tiny-readout parity runner hardened
+
+1. What I attempted
+
+- Hardened the Aimon and Schaffer parity runners so they create their output
+  directories and write immediate run-manifest / run-status artifacts at launch,
+  instead of appearing dead until the fit summary is emitted at the end.
+- Reused the existing live endogenous Aimon fit session instead of opening more
+  long-lived shells, because the unified exec process ceiling is already tight.
+
+2. What succeeded
+
+- Patched:
+  - [run_aimon_spontaneous_fit.py](/G:/flysim/scripts/run_aimon_spontaneous_fit.py)
+  - [run_schaffer_spontaneous_fit.py](/G:/flysim/scripts/run_schaffer_spontaneous_fit.py)
+- New behavior:
+  - create `output_dir` immediately
+  - write `fit_run_manifest.json`
+  - write `fit_run_status.json` with `running`
+  - update status to `completed` or `failed` at exit
+- Added regression coverage:
+  - [test_fit_runner_manifests.py](/G:/flysim/tests/test_fit_runner_manifests.py)
+- Focused validation passed:
+  - `python -m pytest tests/test_fit_runner_manifests.py tests/test_aimon_spontaneous_fit.py tests/test_schaffer_spontaneous_fit.py -q`
+  - `12 passed in 1.77s`
+
+3. What failed
+
+- The currently running endogenous Aimon fit predates this runner hardening, so
+  it still does not have an early manifest/status directory on disk.
+- The live run is not hung, but it is still in long backend replay / fit work
+  without intermediate writeout.
+
+4. Evidence
+
+- Live host process:
+  - `PID 26508`
+  - `CPU 236.61`
+  - `WS_MB 1385.8`
+- Existing live session:
+  - unified exec session `54672`
+- Patched runner files:
+  - [run_aimon_spontaneous_fit.py](/G:/flysim/scripts/run_aimon_spontaneous_fit.py)
+  - [run_schaffer_spontaneous_fit.py](/G:/flysim/scripts/run_schaffer_spontaneous_fit.py)
+- New test:
+  - [test_fit_runner_manifests.py](/G:/flysim/tests/test_fit_runner_manifests.py)
+
+5. Next actions
+
+- Keep polling the live endogenous Aimon fit until it writes
+  [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v1/aimon_spontaneous_fit_summary.json)
+  or fails.
+- Once that result lands, compare it directly against the old surrogate-based
+  Aimon fronts and then launch the matching endogenous tiny-readout Schaffer
+  run with the hardened runner path.
+
+## 2026-03-30 - Fixed endogenous parity harness seam and relaunched admissible Aimon run
+
+1. What I attempted
+
+- Audited the live endogenous Aimon tiny-readout run after the runner hardening.
+- Traced the backend-construction seam inside
+  [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+  and checked whether the parity harness was actually forwarding
+  `brain.backend_dynamics` into [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py).
+
+2. What succeeded
+
+- Found a real blocking bug: the fit helper was instantiating
+  [WholeBrainTorchBackend](/G:/flysim/src/brain/pytorch_backend.py) with
+  `spontaneous_state`, but **not** with `backend_dynamics`.
+- Patched [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+  so `build_backend_from_config()` now passes `brain.backend_dynamics`.
+- Added regression coverage in
+  [test_aimon_spontaneous_fit.py](/G:/flysim/tests/test_aimon_spontaneous_fit.py)
+  asserting that [brain_endogenous_public_parity.yaml](/G:/flysim/configs/brain_endogenous_public_parity.yaml)
+  actually selects the endogenous path and disables the diagnostic surrogate.
+- Focused validation passed:
+  - `python -m pytest tests/test_aimon_spontaneous_fit.py tests/test_fit_runner_manifests.py tests/test_schaffer_spontaneous_fit.py -q`
+  - `13 passed, 1 warning in 2.60s`
+- Killed the invalid live run:
+  - host PID `26508`
+- Relaunched the corrected admissible run:
+  - unified exec session `37856`
+  - live host PID `15472`
+  - output root:
+    [aimon_endogenous_tiny_v1](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v1)
+- Verified immediate runner artifacts now exist:
+  - [fit_run_manifest.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v1/fit_run_manifest.json)
+  - [fit_run_status.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v1/fit_run_status.json)
+
+3. What failed
+
+- The first endogenous Aimon tiny-readout run was invalid and had to be discarded.
+- It would have wasted more wall time if left alive, because it was not actually
+  exercising the new endogenous production backend.
+
+4. Evidence
+
+- Fixed seam:
+  - [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+- Regression:
+  - [test_aimon_spontaneous_fit.py](/G:/flysim/tests/test_aimon_spontaneous_fit.py)
+- Live corrected run artifacts:
+  - [fit_run_manifest.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v1/fit_run_manifest.json)
+  - [fit_run_status.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v1/fit_run_status.json)
+
+5. Next actions
+
+- Wait for the corrected endogenous Aimon run to finish and score it against the
+  old surrogate-based Aimon frontier.
+- Then launch the matching endogenous tiny-readout Schaffer run using the same
+  hardened runner semantics.
+
+## 2026-03-30 - Corrected endogenous Aimon tiny-readout result landed
+
+1. What I attempted
+
+- Waited for the corrected admissible endogenous Aimon tiny-readout run to
+  finish after the `backend_dynamics` seam fix.
+- Extracted the true held-out `B1269_*` trial aggregates and compared them
+  directly against the prior surrogate-front Aimon runs.
+
+2. What succeeded
+
+- The corrected run completed cleanly:
+  - [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v1/aimon_spontaneous_fit_summary.json)
+- Aggregate over all four trials:
+  - `mean_pearson_r = 0.02833`
+  - `mean_nrmse = 0.21538`
+  - `mean_abs_error = 0.00559`
+  - `mean_sign_agreement = 0.48035`
+- Per-trial highlights:
+  - `B350_spontaneous_walk`: `pearson = 0.1420`, `nrmse = 0.1318`
+  - `B350_forced_walk`: `pearson = 0.1221`, `nrmse = 0.1920`
+  - `B1269_spontaneous_walk`: `pearson = -0.1395`, `nrmse = 0.2778`
+  - `B1269_forced_walk`: `pearson = -0.01135`, `nrmse = 0.2599`
+- True held-out `B1269_*` mean for the endogenous tiny backend:
+  - `pearson = -0.0754`
+  - `nrmse = 0.2688`
+  - `abs_error = 0.00750`
+  - `sign_agreement = 0.4221`
+
+3. What failed
+
+- The endogenous tiny backend did **not** beat the surrogate Aimon fronts on
+  held-out correlation or sign agreement.
+- Comparison against old held-out `B1269_*` means:
+  - `v3 force2`: `pearson = 0.0620`, `nrmse = 0.3117`, `abs_error = 0.00821`, `sign = 0.4660`
+  - `v7 force2 + obs_tau=0.5`: `pearson = 0.0410`, `nrmse = 0.2904`, `abs_error = 0.00778`, `sign = 0.4672`
+  - `endogenous tiny v1`: `pearson = -0.0754`, `nrmse = 0.2688`, `abs_error = 0.00750`, `sign = 0.4221`
+- So the new endogenous backend plus tiny readout improved amplitude/error but
+  currently lost temporal alignment and sign consistency on held-out Aimon.
+
+4. Evidence
+
+- Corrected run result:
+  - [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v1/aimon_spontaneous_fit_summary.json)
+- Prior surrogate fronts:
+  - [v3 force2](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v3_force2/aimon_spontaneous_fit_summary.json)
+  - [v7 force2 obs0p5](/G:/flysim/outputs/metrics/aimon_spontaneous_fit_train_to_test_v7_force2_obs0p5/aimon_spontaneous_fit_summary.json)
+
+5. Next actions
+
+- Launch the matching endogenous tiny-readout Schaffer run.
+- Use the Aimon result to decide whether the next endogenous adjustment should
+  target temporal structure / continuity rather than amplitude suppression.
+
+## 2026-03-30 - Temporal structure promoted to top priority and calcium-memory slice added
+
+1. What I attempted
+
+- Treated the recurring parity miss as a temporal-structure failure, not an
+  amplitude-fit failure.
+- Added a new endogenous backend slice aimed specifically at slow internal
+  memory with no surrogate forcing.
+
+2. What succeeded
+
+- Patched [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py) with a
+  new intracellular calcium-like state:
+  - `tau_calcium_ms`
+  - `calcium_spike_gain`
+  - `calcium_release_gain`
+  - `calcium_adapt_gain`
+  - `calcium_release_feedback_gain`
+- The new state is driven only by:
+  - spikes
+  - graded release
+- It now feeds back into:
+  - endogenous adaptation current
+  - graded recurrent release gain
+  - modulatory drive readout
+- Enabled nonzero calcium-memory parameters in
+  [brain_endogenous_public_parity.yaml](/G:/flysim/configs/brain_endogenous_public_parity.yaml)
+  with slower endocrine / central timescales and faster visual timescales.
+- Added coverage in
+  [test_spontaneous_state_unit.py](/G:/flysim/tests/test_spontaneous_state_unit.py)
+  and kept the fit seam test green.
+- Focused validation passed:
+  - `python -m pytest tests/test_spontaneous_state_unit.py tests/test_brain_backend.py tests/test_aimon_spontaneous_fit.py -q`
+  - `25 passed, 1 warning`
+
+3. What failed
+
+- Nothing failed at the implementation slice after the final test adjustment.
+- The earlier endogenous Aimon result still stands as the baseline to beat:
+  held-out `B1269_*` temporal correlation is still poor.
+
+4. Evidence
+
+- Backend:
+  - [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py)
+- Config:
+  - [brain_endogenous_public_parity.yaml](/G:/flysim/configs/brain_endogenous_public_parity.yaml)
+- Tests:
+  - [test_spontaneous_state_unit.py](/G:/flysim/tests/test_spontaneous_state_unit.py)
+  - [test_aimon_spontaneous_fit.py](/G:/flysim/tests/test_aimon_spontaneous_fit.py)
+
+5. Next actions
+
+- Rerun endogenous Aimon tiny-readout parity on the calcium-memory backend.
+- Then run the matching endogenous Schaffer tiny-readout parity path.
+
+## 2026-03-30 - Calcium-memory Aimon rerun completed and Schaffer temporal run launched
+
+1. What I attempted
+
+- Ran the first Aimon tiny-readout parity rerun on the calcium-memory endogenous
+  backend.
+- Immediately launched the matching Schaffer tiny-readout run on the same
+  updated backend once the Aimon result landed.
+
+2. What succeeded
+
+- Aimon calcium-memory rerun completed:
+  - [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v2_calcium/aimon_spontaneous_fit_summary.json)
+- Aggregate over all four Aimon trials:
+  - `mean_pearson_r = 0.04736`
+  - `mean_nrmse = 0.21788`
+  - `mean_abs_error = 0.00563`
+  - `mean_sign_agreement = 0.49298`
+- True held-out `B1269_*` mean:
+  - `pearson = -0.05162`
+  - `nrmse = 0.27447`
+  - `abs_error = 0.00761`
+  - `sign_agreement = 0.43051`
+- Relative to the first endogenous tiny run:
+  - `pearson`: `-0.0754 -> -0.0516` better
+  - `sign_agreement`: `0.4221 -> 0.4305` better
+  - `nrmse`: `0.2688 -> 0.2745` worse
+  - `abs_error`: `0.00750 -> 0.00761` slightly worse
+- Matching Schaffer run launched:
+  - output root: [schaffer_endogenous_tiny_v1_calcium](/G:/flysim/outputs/metrics/schaffer_endogenous_tiny_v1_calcium)
+  - live runner session: `21983`
+  - immediate artifacts exist:
+    - [fit_run_manifest.json](/G:/flysim/outputs/metrics/schaffer_endogenous_tiny_v1_calcium/fit_run_manifest.json)
+    - [fit_run_status.json](/G:/flysim/outputs/metrics/schaffer_endogenous_tiny_v1_calcium/fit_run_status.json)
+
+3. What failed
+
+- The calcium-memory slice did not solve Aimon held-out temporal structure.
+- It improved correlation/sign modestly but did not cross zero-mean held-out
+  correlation and did not beat the surrogate observation-model frontier.
+
+4. Evidence
+
+- Aimon calcium-memory result:
+  - [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v2_calcium/aimon_spontaneous_fit_summary.json)
+- Prior endogenous baseline:
+  - [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v1/aimon_spontaneous_fit_summary.json)
+- Live Schaffer temporal run root:
+  - [schaffer_endogenous_tiny_v1_calcium](/G:/flysim/outputs/metrics/schaffer_endogenous_tiny_v1_calcium)
+
+5. Next actions
+
+- Wait for the Schaffer calcium-memory run to finish.
+- Use the Schaffer result to decide whether the next temporal slice should
+  emphasize session-scale modulatory memory or recurrent slow inhibition.
+
+## 2026-03-30 - Applied agent-guided temporal harness fixes and relaunched Schaffer
+
+1. What I attempted
+
+- Used the first completed sub-agent findings to patch the parity harness
+  itself, not just the backend.
+- Focused on two temporal bottlenecks:
+  - tiny-readout temporal information loss
+  - Schaffer interval-boundary observation reset
+
+2. What succeeded
+
+- Aimon/Schaffer tiny mode no longer keeps the first few bilateral families in
+  alphabetical order. It now:
+  - ranks bilateral family bases on the fit split by temporal energy
+  - keeps the selected families' raw and observation-basis rows together
+- Schaffer observation filtering is now session-continuous when
+  `preserve_state_within_session` is enabled:
+  - feature rows are concatenated in absolute session time
+  - causal observation low-pass is applied once on the stitched stream
+  - rows are then split back to interval reports
+- New tests passed:
+  - `python -m pytest tests/test_aimon_spontaneous_fit.py tests/test_schaffer_spontaneous_fit.py tests/test_fit_runner_manifests.py -q`
+  - `15 passed, 1 warning in 2.76s`
+- The stale Schaffer run launched before these fixes was killed:
+  - `PID 21860`
+- Relaunched corrected Schaffer temporal run:
+  - session `7400`
+  - output root:
+    [schaffer_endogenous_tiny_v1_calcium](/G:/flysim/outputs/metrics/schaffer_endogenous_tiny_v1_calcium)
+
+3. What failed
+
+- Nothing failed in the harness patch slice after the final validation.
+- The improved Aimon calcium-memory result still does not solve the held-out
+  temporal miss by itself.
+
+4. Evidence
+
+- Harness code:
+  - [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+  - [schaffer_spontaneous_fit.py](/G:/flysim/src/analysis/schaffer_spontaneous_fit.py)
+- Tests:
+  - [test_aimon_spontaneous_fit.py](/G:/flysim/tests/test_aimon_spontaneous_fit.py)
+  - [test_schaffer_spontaneous_fit.py](/G:/flysim/tests/test_schaffer_spontaneous_fit.py)
+- Live relaunched Schaffer run artifacts:
+  - [fit_run_manifest.json](/G:/flysim/outputs/metrics/schaffer_endogenous_tiny_v1_calcium/fit_run_manifest.json)
+  - [fit_run_status.json](/G:/flysim/outputs/metrics/schaffer_endogenous_tiny_v1_calcium/fit_run_status.json)
+
+5. Next actions
+
+- Let the corrected Schaffer run finish.
+- Use that result to decide whether the next backend temporal step should be
+  real routed slow synaptic pathways or stronger session-scale modulatory
+  memory.
+
+## 2026-03-30 - Implemented true routed recurrent pathways in the backend
+
+1. What I attempted
+
+- Treated the stubborn temporal miss as evidence that the recurrent core was
+  still too collapsed.
+- Replaced pooled recurrent class inputs with routed pathways inside
+  [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py).
+
+2. What succeeded
+
+- Implemented true source-routed recurrent classes:
+  - spikes now feed fast excitatory / inhibitory classes
+  - graded release now feeds slow excitatory / inhibitory classes
+  - modulatory populations now feed a separate slow modulatory class
+  - routing is determined by source-group release modes and modulatory-group
+    membership
+- Added routed source masks and summary signals:
+  - `routed_fast_source_fraction`
+  - `routed_slow_source_fraction`
+  - `routed_modulatory_source_fraction`
+- Preserved the old model-forward path as a fallback, but the endogenous backend
+  now uses explicit `class_inputs` built from routed sources.
+- Added regression coverage:
+  - [test_brain_backend.py](/G:/flysim/tests/test_brain_backend.py)
+  - [test_spontaneous_state_unit.py](/G:/flysim/tests/test_spontaneous_state_unit.py)
+- Focused validation passed:
+  - `python -m pytest tests/test_brain_backend.py tests/test_spontaneous_state_unit.py tests/test_aimon_spontaneous_fit.py tests/test_schaffer_spontaneous_fit.py -q`
+  - `36 passed, 1 warning in 12.91s`
+
+3. What failed
+
+- The Schaffer run that had been started before this backend routing change is
+  no longer admissible for temporal diagnosis and was already stopped.
+
+4. Evidence
+
+- Backend:
+  - [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py)
+- Tests:
+  - [test_brain_backend.py](/G:/flysim/tests/test_brain_backend.py)
+  - [test_spontaneous_state_unit.py](/G:/flysim/tests/test_spontaneous_state_unit.py)
+
+5. Next actions
+
+- Rerun endogenous Aimon tiny-readout parity on the routed backend.
+- Then rerun Schaffer on the routed backend after the new Aimon read lands.
+
+## 2026-03-30 - Routed endogenous Aimon rerun completed and crossed back above zero correlation
+
+1. What I attempted
+
+- Finished the first Aimon parity rerun on the routed recurrent backend after:
+  - intracellular calcium-like memory
+  - fit-based tiny feature selection
+  - session-continuous observation filtering
+  - true source-routed recurrent classes
+
+2. What succeeded
+
+- The routed backend materially improved the held-out Aimon temporal read.
+- Held-out `B1269_*` mean from
+  [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v3_routed/aimon_spontaneous_fit_summary.json):
+  - `pearson = +0.0065`
+  - `nrmse = 0.2685`
+  - `abs_error = 0.00750`
+  - `sign = 0.4551`
+- Relative to prior endogenous runs:
+  - `v1`:
+    - `pearson = -0.0754`
+    - `nrmse = 0.2688`
+    - `abs_error = 0.00750`
+    - `sign = 0.4221`
+  - `v2 calcium`:
+    - `pearson = -0.0516`
+    - `nrmse = 0.2745`
+    - `abs_error = 0.00761`
+    - `sign = 0.4305`
+- This is the first endogenous Aimon run that gets held-out correlation back
+  above zero without reintroducing surrogate drive.
+- The routed/tiny fit now uses `22` features instead of `18`, which confirms the
+  harness is preserving more of the temporal family structure instead of
+  collapsing it away.
+
+3. What failed
+
+- Temporal parity is still not acceptable.
+- The routed backend improved direction and sign consistency, but the held-out
+  temporal correlation is still far too weak to count as a resolution.
+
+4. Evidence
+
+- Routed result:
+  - [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v3_routed/aimon_spontaneous_fit_summary.json)
+- Prior endogenous references:
+  - [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v1/aimon_spontaneous_fit_summary.json)
+  - [aimon_spontaneous_fit_summary.json](/G:/flysim/outputs/metrics/aimon_endogenous_tiny_v2_calcium/aimon_spontaneous_fit_summary.json)
+
+5. Next actions
+
+- Launch the matching routed Schaffer rerun on the corrected harness.
+- Use Schaffer to decide whether routed recurrent classes are enough or whether
+  the next no-hack temporal slice must add even richer distributed slow-path
+  state inside the backend.

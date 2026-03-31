@@ -83,6 +83,79 @@ Those alternatives either inject control too close to the actuator boundary or
 condition the startup logic on task context. The current candidate lives inside
 the brain state itself and is applied equally before any target-specific event.
 
+## Honesty Boundary Clarification
+
+The current spontaneous-state mechanism is **not** emergent intrinsic
+physiology in the strong sense.
+
+It is a backend-internal surrogate that injects structured background drive
+into the public whole-brain LIF network:
+
+- sparse tonic background Poisson-rate occupancy
+- low-rank OU-like family-structured latent drive
+- optional reset-time voltage jitter
+
+So the honest label is:
+
+- not a decoder-side hack
+- not a body-side hack
+- not a task-conditioned behavior shortcut
+- but **yes**, still a brain-side surrogate prior rather than a fully emergent
+  intrinsic physiological mechanism
+
+That distinction matters.
+
+Why it was still useful:
+
+- it broke the absorbing silent fixed point in the public LIF backend
+- it created a measurable living regime for matched `target` / `no_target`
+  controls
+- it helped separate "dead cold start" failures from downstream splice / decode
+  / body failures
+
+Why it is **not** sufficient as a final answer:
+
+- the structured ongoing activity is injected as background drive
+- it does not arise from richer cell-intrinsic, synaptic, graded, or
+  neuromodulatory dynamics
+- if the repo's no-hacks rule is interpreted to forbid exogenous internal
+  priors as well as decoder/body shortcuts, this mechanism does **not** clear
+  the final honesty bar
+
+So the correct current status is:
+
+- acceptable only as a bounded backend-side diagnostic surrogate
+- unacceptable as the final claimed mechanism of spontaneous adult fly-brain
+  physiology
+- explicitly disqualified from promotion under the repo's current
+  spontaneous-state hard rule
+
+## Current Hard Constraint
+
+The current repo rule is stricter than the earlier wording in this note.
+
+The only acceptable spontaneous endogenous state is one that emerges from:
+
+- richer intrinsic cell dynamics
+- graded transmission
+- synaptic heterogeneity
+- neuromodulatory state
+
+That means the current structured-drive candidate is no longer merely "not yet
+ideal". It is explicitly outside the final acceptance set.
+
+Allowed status of the current candidate:
+
+- diagnostic-only
+- mesoscale-regime probe
+- downstream-failure isolator
+
+Disallowed status of the current candidate:
+
+- production spontaneous-brain branch
+- final parity claim
+- final explanation of living endogenous fly-brain activity
+
 ## Current Config Surface
 
 The new experimental config surface under `brain.spontaneous_state` is:
@@ -160,12 +233,15 @@ The current candidate still has major biological limits:
 - no explicit homologous left/right pairing in the latent modes
 - no connectome-derived compartment-specific neuromodulatory model
 - no specialized persistent internal-state subcircuit
+- no emergent intrinsic spontaneous dynamics; ongoing activity is still driven
+  by structured background input rather than richer endogenous cell/synapse
+  physiology
 - seed-to-seed sensitivity remains high
 - spontaneous motor-side lateral bias still appears in some seeds
 - no matched embodied `target` / `no_target` / `zero_brain` validation yet
 
 So the correct current label is:
 
-- brain-side endogenous-state pilot
+- brain-side diagnostic spontaneous-state pilot
 - partial success on bounded ongoing activity
-- not yet promotable as a production embodiment branch
+- not promotable as a production embodiment branch under the current hard rule

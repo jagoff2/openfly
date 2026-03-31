@@ -274,6 +274,485 @@ def test_target_jump_brain_latent_turn_spontaneous_config_enables_backend_state_
     assert "shadow_decoders" not in config
     assert "steering_promotion" not in config
 
+
+def test_creamer_treadmill_motion_only_config_uses_ball_contact_spawn_height() -> None:
+    config = load_config("configs/flygym_visual_speed_control_living_motion_only_treadmill.yaml")
+
+    assert config["body"]["visual_speed_control"]["geometry"] == "treadmill_ball"
+    assert config["body"]["fly_init_pose"] == "tripod"
+    assert tuple(config["body"]["spawn_pos"]) == (0.0, 0.0, 0.3)
+
+
+def test_creamer_treadmill_motion_only_t4_t5_ablation_config_uses_ball_contact_spawn_height() -> None:
+    config = load_config("configs/flygym_visual_speed_control_living_motion_only_treadmill_t4t5_ablated.yaml")
+
+    assert config["body"]["visual_speed_control"]["geometry"] == "treadmill_ball"
+    assert config["body"]["fly_init_pose"] == "tripod"
+    assert tuple(config["body"]["spawn_pos"]) == (0.0, 0.0, 0.3)
+
+
+def test_creamer_motion_only_config_disables_generic_visual_pool_and_filters_splice_to_t4_t5() -> None:
+    config = load_config("configs/flygym_visual_speed_control_living_motion_only.yaml")
+
+    assert config["runtime"]["camera_mode"] == "fixed_birdeye"
+    assert config["body"]["target_fly_enabled"] is False
+    assert config["body"]["visual_speed_control"]["mode"] == "open_loop_drift"
+    assert config["encoder"]["visual_gain_hz"] == 0.0
+    assert config["visual_splice"]["include_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_only_t4_t5_ablation_config_keeps_same_motion_assay_and_zeros_t4_t5() -> None:
+    config = load_config("configs/flygym_visual_speed_control_living_motion_only_t4t5_ablated.yaml")
+
+    assert config["runtime"]["camera_mode"] == "fixed_birdeye"
+    assert config["encoder"]["visual_gain_hz"] == 0.0
+    assert config["visual_splice"]["include_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_treadmill_motion_only_config_uses_treadmill_geometry() -> None:
+    config = load_config("configs/flygym_visual_speed_control_living_motion_only_treadmill.yaml")
+
+    assert config["runtime"]["camera_mode"] == "fixed_birdeye"
+    assert config["body"]["fly_init_pose"] == "tripod"
+    assert config["body"]["spawn_pos"] == [0.0, 0.0, 0.3]
+    assert config["body"]["visual_speed_control"]["geometry"] == "treadmill_ball"
+    assert config["encoder"]["visual_gain_hz"] == 0.0
+
+
+def test_creamer_treadmill_motion_only_t4_t5_ablation_config_uses_treadmill_geometry() -> None:
+    config = load_config("configs/flygym_visual_speed_control_living_motion_only_treadmill_t4t5_ablated.yaml")
+
+    assert config["body"]["fly_init_pose"] == "tripod"
+    assert config["body"]["spawn_pos"] == [0.0, 0.0, 0.3]
+    assert config["body"]["visual_speed_control"]["geometry"] == "treadmill_ball"
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_treadmill_block_assay_config_uses_interleaved_blocks() -> None:
+    config = load_config("configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks.yaml")
+
+    assert config["body"]["visual_speed_control"]["mode"] == "interleaved_blocks"
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert config["body"]["visual_speed_control"]["block_schedule"][0]["label"] == "warmup_a"
+    assert config["body"]["visual_speed_control"]["block_schedule"][4]["label"] == "baseline_a"
+    assert config["body"]["visual_speed_control"]["block_schedule"][5]["kind"] == "front_to_back"
+    assert config["body"]["visual_speed_control"]["block_schedule"][7]["kind"] == "counterphase_flicker"
+    assert config["decoder"]["command_mode"] == "hybrid_multidrive"
+    assert config["runtime"]["control_mode"] == "hybrid_multidrive"
+    assert config["runtime"]["duration_s"] == 3.0
+
+
+def test_creamer_treadmill_block_assay_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks_t4t5_ablated.yaml")
+
+    assert config["body"]["visual_speed_control"]["mode"] == "interleaved_blocks"
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert config["decoder"]["command_mode"] == "hybrid_multidrive"
+    assert config["runtime"]["control_mode"] == "hybrid_multidrive"
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_treadmill_block_assay_warmstart_config_enables_brain_warmup() -> None:
+    config = load_config("configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks_warmstart.yaml")
+
+    assert config["body"]["visual_speed_control"]["mode"] == "interleaved_blocks"
+    assert config["runtime"]["brain_warmup_seconds"] == 5.0
+    assert config["runtime"]["brain_warmup_chunk_steps"] == 1000
+
+
+def test_creamer_treadmill_block_assay_warmstart_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_living_motion_only_treadmill_blocks_warmstart_t4t5_ablated.yaml")
+
+    assert config["body"]["visual_speed_control"]["mode"] == "interleaved_blocks"
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 8
+    assert config["runtime"]["brain_warmup_seconds"] == 5.0
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_nonspontaneous_treadmill_block_assay_config_uses_nonspontaneous_latent_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_nonspontaneous_motion_only_treadmill_blocks.yaml")
+
+    assert config["body"]["visual_speed_control"]["mode"] == "interleaved_blocks"
+    assert "spontaneous_state" not in config["brain"]
+    assert config["decoder"]["turn_voltage_signal_library_json"] == "outputs/metrics/jump_brain_driven_turn_latent_2s_library_strict.json"
+
+
+def test_creamer_nonspontaneous_treadmill_block_assay_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_nonspontaneous_motion_only_treadmill_blocks_t4t5_ablated.yaml")
+
+    assert config["body"]["visual_speed_control"]["mode"] == "interleaved_blocks"
+    assert "spontaneous_state" not in config["brain"]
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_known_good_nonspont_block_assay_uses_nonspont_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert "spontaneous_state" not in config["brain"]
+    assert config["body"]["visual_speed_control"]["mode"] == "interleaved_blocks"
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert config["decoder"]["command_mode"] == "hybrid_multidrive"
+    assert config["runtime"]["control_mode"] == "hybrid_multidrive"
+    assert decoder.config.turn_voltage_signal_library_json == "outputs/metrics/jump_brain_driven_turn_latent_2s_library_strict.json"
+
+
+def test_creamer_known_good_nonspont_block_assay_ablation_keeps_same_decoder() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert "spontaneous_state" not in config["brain"]
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert config["decoder"]["command_mode"] == "hybrid_multidrive"
+    assert config["runtime"]["control_mode"] == "hybrid_multidrive"
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+    assert decoder.config.turn_voltage_signal_library_json == "outputs/metrics/jump_brain_driven_turn_latent_2s_library_strict.json"
+
+
+def test_creamer_relay_forward_context_vnclite_config_uses_signed_forward_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_relay_forward_context_vnclite.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert config["body"]["visual_speed_control"]["mode"] == "interleaved_blocks"
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_mode == "boost"
+    assert decoder.config.forward_context_boost == -0.6
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_forward_context_library_v2_vch005.json"
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/creamer_relay_monitor_candidates.json"
+    assert decoder.config.turn_voltage_weight == 0.0
+
+
+def test_creamer_relay_forward_context_vnclite_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_relay_forward_context_vnclite_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert config["visual_splice"]["ablate_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_forward_context_library_v2_vch005.json"
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/creamer_relay_monitor_candidates.json"
+
+
+def test_creamer_motion_energy_mid_config_uses_motion_energy_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_mid.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_mode == "boost"
+    assert decoder.config.forward_context_boost == -0.8
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_v1.json"
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/creamer_relay_monitor_candidates.json"
+    assert decoder.config.turn_voltage_weight == 0.0
+
+
+def test_creamer_motion_energy_mid_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_mid_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert config["visual_splice"]["include_cell_types"] == []
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_v1.json"
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/creamer_relay_monitor_candidates.json"
+
+
+def test_creamer_motion_energy_freqgate_config_uses_adaptive_baseline_and_lower_freq_bias() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_v1.json"
+    assert decoder.config.forward_context_baseline_alpha == 0.002
+    assert decoder.config.latent_freq_bias == 0.68
+    assert decoder.config.latent_freq_gain == 0.35
+
+
+def test_creamer_motion_energy_freqgate_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert config["visual_splice"]["include_cell_types"] == []
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_v1.json"
+    assert decoder.config.forward_context_baseline_alpha == 0.002
+
+
+def test_creamer_relay_monitored_freqgate_config_stays_below_old_body_cliff() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_relay_monitored_freqgate.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/creamer_relay_monitor_candidates.json"
+    assert decoder.config.latent_freq_bias == 0.68
+    assert decoder.config.latent_freq_gain == 0.35
+    assert decoder.config.turn_voltage_weight == 0.0
+
+
+def test_creamer_relay_monitored_freqgate_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_relay_monitored_freqgate_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.monitor_candidates_json == "outputs/metrics/creamer_relay_monitor_candidates.json"
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_energy_freqgate_safe_config_uses_safe_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe.json"
+    assert decoder.config.forward_context_baseline_alpha == 0.002
+    assert decoder.config.latent_freq_bias == 0.68
+    assert decoder.config.latent_freq_gain == 0.35
+
+
+def test_creamer_motion_energy_freqgate_safe_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe.json"
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_energy_freqgate_safe_vch002_config_uses_capped_vch_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_vch002.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_vch002.json"
+    assert decoder.config.forward_context_baseline_alpha == 0.002
+
+
+def test_creamer_motion_energy_freqgate_safe_vch002_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_vch002_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_vch002.json"
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_energy_freqgate_safe_vch005_config_uses_capped_vch_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_vch005.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_vch005.json"
+    assert decoder.config.forward_context_baseline_alpha == 0.002
+
+
+def test_creamer_motion_energy_freqgate_safe_vch005_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_vch005_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_vch005.json"
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_config_uses_freq_suppression() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_vch002.json"
+    assert decoder.config.forward_context_boost == 0.0
+    assert decoder.config.forward_context_freq_suppression_gain == 0.35
+    assert decoder.config.forward_context_baseline_alpha == 0.01
+
+
+def test_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_vch002.json"
+    assert decoder.config.forward_context_freq_suppression_gain == 0.35
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_turnlite_config_uses_turnlite_hybrid_settings() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_turnlite.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_vch002.json"
+    assert decoder.config.turn_gain == 0.3
+    assert decoder.config.latent_turn_amp_gain == 0.15
+    assert decoder.config.latent_turn_freq_gain == 0.08
+    assert decoder.config.forward_context_freq_suppression_gain == 0.5
+
+
+def test_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_turnlite_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_vch002_speedsuppress_turnlite_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.turn_gain == 0.3
+    assert decoder.config.forward_context_freq_suppression_gain == 0.5
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_config_uses_t5a_only_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_only.json"
+    assert decoder.config.turn_gain == 0.3
+    assert decoder.config.forward_context_freq_suppression_gain == 0.5
+    assert decoder.config.forward_context_initial_baseline_mode == "zero"
+    assert decoder.config.forward_context_baseline_update_steps == 500
+
+
+def test_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_only.json"
+    assert decoder.config.turn_gain == 0.3
+    assert decoder.config.forward_context_initial_baseline_mode == "zero"
+    assert decoder.config.forward_context_baseline_update_steps == 500
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_config_uses_lower_forward_operating_point() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_only.json"
+    assert decoder.config.forward_gain == 0.6
+    assert decoder.config.population_forward_weight == 0.5
+    assert decoder.config.latent_freq_bias == 0.62
+    assert decoder.config.latent_freq_gain == 0.22
+
+
+def test_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_only.json"
+    assert decoder.config.forward_gain == 0.6
+    assert decoder.config.population_forward_weight == 0.5
+    assert decoder.config.latent_freq_bias == 0.62
+    assert decoder.config.latent_freq_gain == 0.22
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_energy_freqgate_safe_lpt30_only_speedsuppress_turnlite_lowforward_config_uses_lpt30_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_lpt30_only_speedsuppress_turnlite_lowforward.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_lpt30_only.json"
+    assert decoder.config.forward_gain == 0.6
+    assert decoder.config.population_forward_weight == 0.5
+    assert decoder.config.latent_freq_bias == 0.62
+    assert decoder.config.latent_freq_gain == 0.22
+
+
+def test_creamer_motion_energy_freqgate_safe_lpt30_only_speedsuppress_turnlite_lowforward_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_lpt30_only_speedsuppress_turnlite_lowforward_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_lpt30_only.json"
+    assert decoder.config.forward_gain == 0.6
+    assert decoder.config.population_forward_weight == 0.5
+    assert decoder.config.latent_freq_bias == 0.62
+    assert decoder.config.latent_freq_gain == 0.22
+    assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_signed_combo_freqgate_safe_t5a_t4c_lowforward_config_uses_signed_combo_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_signed_combo_freqgate_safe_t5a_t4c_lowforward.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_signed_combo_library_freqgate_safe_t5a_t4c.json"
+    assert decoder.config.forward_gain == 0.6
+    assert decoder.config.population_forward_weight == 0.5
+    assert decoder.config.latent_freq_bias == 0.62
+    assert decoder.config.latent_freq_gain == 0.22
+
+
+def test_creamer_signed_combo_freqgate_safe_t5a_t4c_lowforward_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_signed_combo_freqgate_safe_t5a_t4c_lowforward_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_signed_combo_library_freqgate_safe_t5a_t4c.json"
+    assert decoder.config.forward_gain == 0.6
+    assert decoder.config.population_forward_weight == 0.5
+    assert decoder.config.latent_freq_bias == 0.62
+    assert decoder.config.latent_freq_gain == 0.22
+    assert config["body"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_energy_freqgate_safe_t5abc_pool_lowforward_config_uses_t5_pool_library() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5abc_pool_lowforward.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5abc_pool_suppressive.json"
+    assert decoder.config.forward_gain == 0.6
+    assert decoder.config.population_forward_weight == 0.5
+    assert decoder.config.latent_freq_bias == 0.62
+    assert decoder.config.latent_freq_gain == 0.22
+
+
+def test_creamer_motion_energy_freqgate_safe_t5abc_pool_lowforward_ablation_config_keeps_same_schedule() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5abc_pool_lowforward_t4t5_ablated.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5abc_pool_suppressive.json"
+    assert decoder.config.forward_gain == 0.6
+    assert decoder.config.population_forward_weight == 0.5
+    assert decoder.config.latent_freq_bias == 0.62
+    assert decoder.config.latent_freq_gain == 0.22
+    assert config["body"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_veryslow_config_uses_half_mm_s_blocks() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_veryslow.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    schedule = config["body"]["visual_speed_control"]["block_schedule"]
+    signed_speeds = [float(item["scene_velocity_mm_s"]) for item in schedule if "scene_velocity_mm_s" in item]
+
+    assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
+    assert signed_speeds == [-0.5, 0.5, -0.5]
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_only.json"
+    assert decoder.config.forward_gain == 0.6
+    assert decoder.config.population_forward_weight == 0.5
+    assert decoder.config.latent_freq_bias == 0.62
+    assert decoder.config.latent_freq_gain == 0.22
+
+
+def test_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_synced_veryslow_config_syncs_background_to_fly_speed() -> None:
+    config = load_config("configs/flygym_visual_speed_control_known_good_nonspont_motion_only_treadmill_blocks_creamer_motion_energy_freqgate_safe_t5a_only_speedsuppress_turnlite_lowforward_synced_veryslow.yaml")
+    decoder = MotorDecoder(DecoderConfig.from_mapping(config.get("decoder")))
+
+    schedule = config["body"]["visual_speed_control"]["block_schedule"]
+    motion_offsets = [float(item["scene_velocity_offset_mm_s"]) for item in schedule if "scene_velocity_offset_mm_s" in item]
+
+    assert len(schedule) == 12
+    assert all(bool(item.get("sync_to_fly_speed", False)) for item in schedule)
+    assert all(float(item.get("gain", 999.0)) == 0.0 for item in schedule)
+    assert motion_offsets == [-0.5, 0.5, -0.5]
+    assert decoder.config.forward_context_signal_library_json == "outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_only.json"
+    assert decoder.config.forward_gain == 0.6
+    assert decoder.config.population_forward_weight == 0.5
+    assert decoder.config.latent_freq_bias == 0.62
+    assert decoder.config.latent_freq_gain == 0.22
+
+
 def test_closed_loop_smoke_logs_vnc_structural_decoder_fields(tmp_path: Path) -> None:
     config = deepcopy(load_config("configs/mock_vnc_structural_spec_exit_nerve.yaml"))
     config.setdefault("brain", {})["backend"] = "mock"
@@ -320,6 +799,34 @@ def test_build_body_runtime_passes_camera_mode_to_flygym_runtime(tmp_path: Path,
     assert isinstance(runtime, FakeFlyGymRuntime)
     assert captured["camera_mode"] == "follow_yaw"
     assert captured["target_schedule"] == [{"kind": "jump", "time_s": 0.5, "delta_phase_rad": 1.0472}]
+
+
+def test_build_body_runtime_passes_visual_speed_camera_mode_to_flygym_runtime(tmp_path: Path, monkeypatch) -> None:
+    import body.flygym_runtime as flygym_runtime_module
+
+    captured: dict[str, object] = {}
+
+    class FakeFlyGymRuntime:
+        def __init__(self, **kwargs) -> None:
+            captured.update(kwargs)
+
+    monkeypatch.setattr(flygym_runtime_module, "FlyGymRealisticVisionRuntime", FakeFlyGymRuntime)
+    config = deepcopy(load_config("configs/flygym_visual_speed_control_living.yaml"))
+    runtime = build_body_runtime("flygym", config, tmp_path)
+
+    assert isinstance(runtime, FakeFlyGymRuntime)
+    assert captured["camera_mode"] == "fixed_birdeye"
+    assert bool(captured["visual_speed_control"]["enabled"]) is True
+
+
+def test_visual_speed_camera_uses_world_fixed_birdeye_parameters() -> None:
+    from body.flygym_runtime import FlyGymRealisticVisionRuntime
+
+    params = FlyGymRealisticVisionRuntime.corridor_birdeye_camera_parameters()
+
+    assert params["mode"] == "fixed"
+    assert tuple(params["pos"]) == (0, 0, 120)
+    assert tuple(params["euler"]) == (0, 0, 0)
 
 
 def test_closed_loop_smoke_writes_partial_metrics_on_runtime_failure(tmp_path: Path, monkeypatch) -> None:
@@ -371,6 +878,95 @@ def test_closed_loop_smoke_writes_partial_metrics_on_runtime_failure(tmp_path: P
     assert summary["metrics"]["failure_type"] == "RuntimeError"
     assert "forced failure" in summary["metrics"]["failure_message"]
     assert "RuntimeError" in metrics_text
+
+
+def test_closed_loop_smoke_brain_warmup_advances_backend_without_second_reset(tmp_path: Path, monkeypatch) -> None:
+    class FakeBackend:
+        dt_ms = 1.0
+
+        def __init__(self) -> None:
+            self.reset_calls = 0
+            self.step_calls: list[int] = []
+
+        def reset(self, seed: int | None = None) -> None:
+            del seed
+            self.reset_calls += 1
+
+        def step(
+            self,
+            sensor_pool_rates: dict[str, float],
+            num_steps: int = 1,
+            direct_input_rates_hz: dict[int, float] | None = None,
+            direct_current_by_id: dict[int, float] | None = None,
+        ) -> dict[int, float]:
+            del sensor_pool_rates, direct_input_rates_hz, direct_current_by_id
+            self.step_calls.append(int(num_steps))
+            return {}
+
+        def state_summary(self) -> dict[str, float]:
+            return {"background_mean_rate_hz": 0.5}
+
+        @property
+        def device_name(self) -> str:
+            return "fake"
+
+    class TinyRuntime:
+        timestep = 0.01
+
+        def __init__(self) -> None:
+            self.sim_time = 0.0
+
+        def reset(self, seed: int = 0) -> BodyObservation:
+            del seed
+            self.sim_time = 0.0
+            return BodyObservation(
+                sim_time=0.0,
+                position_xy=(0.0, 0.0),
+                yaw=0.0,
+                forward_speed=0.0,
+                yaw_rate=0.0,
+                contact_force=0.0,
+                realistic_vision={},
+                metadata={},
+            )
+
+        def step(self, command: BodyCommand, num_substeps: int) -> BodyObservation:
+            del command, num_substeps
+            self.sim_time += 0.02
+            return BodyObservation(
+                sim_time=self.sim_time,
+                position_xy=(0.0, 0.0),
+                yaw=0.0,
+                forward_speed=0.0,
+                yaw_rate=0.0,
+                contact_force=0.0,
+                realistic_vision={},
+                metadata={},
+            )
+
+        def render_frame(self) -> Any:
+            return None
+
+        def close(self) -> None:
+            return None
+
+    backend = FakeBackend()
+    monkeypatch.setattr("runtime.closed_loop.build_brain_backend", lambda mode, config: backend)
+    monkeypatch.setattr("runtime.closed_loop.build_body_runtime", lambda mode, config, run_dir: TinyRuntime())
+    config = deepcopy(load_config("configs/mock_demo.yaml"))
+    config.setdefault("runtime", {})["brain_warmup_seconds"] = 0.05
+    config["runtime"]["brain_warmup_chunk_steps"] = 7
+    config.setdefault("brain", {})["dt_ms"] = 1.0
+    summary = run_closed_loop(config, mode="mock", duration_s=0.1, output_root=tmp_path)
+
+    assert backend.reset_calls == 1
+    assert backend.step_calls[0] == 7
+    assert sum(backend.step_calls[:8]) == 50
+    assert backend.step_calls[7] == 1
+    assert summary["brain_warmup"]["enabled"] == 1.0
+    assert summary["brain_warmup"]["warmup_steps"] == 50.0
+    assert summary["metrics"]["brain_warmup_enabled"] == 1.0
+    assert summary["metrics"]["brain_warmup_seconds"] == 0.05
 
 
 def test_closed_loop_smoke_logs_brain_backend_state(tmp_path: Path, monkeypatch) -> None:

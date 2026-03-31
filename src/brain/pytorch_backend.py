@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 import pickle
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from time import perf_counter
 from typing import Any, Mapping
@@ -27,6 +27,176 @@ MODEL_PARAMS = {
     "scalePoisson": 250.0,
     "wScale": 0.275,
 }
+
+DEFAULT_SYNAPSE_CLASSES: tuple[dict[str, float | str], ...] = (
+    {"name": "fast_exc", "tau_ms": 5.0, "gain": 1.0},
+    {"name": "slow_exc", "tau_ms": 25.0, "gain": 0.35},
+    {"name": "fast_inh", "tau_ms": 10.0, "gain": -1.0},
+    {"name": "slow_inh", "tau_ms": 50.0, "gain": -0.5},
+    {"name": "modulatory", "tau_ms": 200.0, "gain": 0.2},
+)
+
+
+@dataclass(frozen=True)
+class BackendDynamicsGroupConfig:
+    tau_syn_fast_ms: float = MODEL_PARAMS["tauSyn"]
+    tau_delay_ms: float = MODEL_PARAMS["tDelay"]
+    v0_mv: float = MODEL_PARAMS["v0"]
+    v_reset_mv: float = MODEL_PARAMS["vReset"]
+    v_rest_mv: float = MODEL_PARAMS["vRest"]
+    v_threshold_mv: float = MODEL_PARAMS["vThreshold"]
+    tau_mem_ms: float = MODEL_PARAMS["tauMem"]
+    tau_refrac_ms: float = MODEL_PARAMS["tRefrac"]
+    scale_poisson: float = MODEL_PARAMS["scalePoisson"]
+    w_scale: float = MODEL_PARAMS["wScale"]
+    tau_adapt_ms: float = 80.0
+    adapt_a: float = 0.0
+    adapt_b: float = 0.0
+    noise_sigma: float = 0.0
+    noise_tau_ms: float = 10.0
+    release_mode: str = "spiking"
+    tau_release_ms: float = 8.0
+    release_v_half_mv: float = -50.0
+    release_slope_mv: float = 2.0
+    tau_calcium_ms: float = 150.0
+    calcium_spike_gain: float = 0.0
+    calcium_release_gain: float = 0.0
+    calcium_adapt_gain: float = 0.0
+    calcium_release_feedback_gain: float = 0.0
+    synaptic_gain_scale: float = 1.0
+    release_gain_scale: float = 1.0
+    neuromod_gain_scale: float = 1.0
+
+    @classmethod
+    def from_mapping(
+        cls,
+        mapping: Mapping[str, Any] | None,
+        *,
+        base: "BackendDynamicsGroupConfig" | None = None,
+    ) -> "BackendDynamicsGroupConfig":
+        mapping = dict(mapping or {})
+        base = base or cls()
+        release_mode = str(mapping.get("release_mode", base.release_mode))
+        if release_mode not in {"spiking", "graded", "mixed"}:
+            raise ValueError(
+                f"Unsupported backend_dynamics release_mode={release_mode!r}; "
+                "expected 'spiking', 'graded', or 'mixed'"
+            )
+        return cls(
+            tau_syn_fast_ms=float(mapping.get("tau_syn_fast_ms", base.tau_syn_fast_ms)),
+            tau_delay_ms=float(mapping.get("tau_delay_ms", base.tau_delay_ms)),
+            v0_mv=float(mapping.get("v0_mv", base.v0_mv)),
+            v_reset_mv=float(mapping.get("v_reset_mv", base.v_reset_mv)),
+            v_rest_mv=float(mapping.get("v_rest_mv", base.v_rest_mv)),
+            v_threshold_mv=float(mapping.get("v_threshold_mv", base.v_threshold_mv)),
+            tau_mem_ms=float(mapping.get("tau_mem_ms", base.tau_mem_ms)),
+            tau_refrac_ms=float(mapping.get("tau_refrac_ms", base.tau_refrac_ms)),
+            scale_poisson=float(mapping.get("scale_poisson", base.scale_poisson)),
+            w_scale=float(mapping.get("w_scale", base.w_scale)),
+            tau_adapt_ms=float(mapping.get("tau_adapt_ms", base.tau_adapt_ms)),
+            adapt_a=float(mapping.get("adapt_a", base.adapt_a)),
+            adapt_b=float(mapping.get("adapt_b", base.adapt_b)),
+            noise_sigma=float(mapping.get("noise_sigma", base.noise_sigma)),
+            noise_tau_ms=float(mapping.get("noise_tau_ms", base.noise_tau_ms)),
+            release_mode=release_mode,
+            tau_release_ms=float(mapping.get("tau_release_ms", base.tau_release_ms)),
+            release_v_half_mv=float(mapping.get("release_v_half_mv", base.release_v_half_mv)),
+            release_slope_mv=float(mapping.get("release_slope_mv", base.release_slope_mv)),
+            tau_calcium_ms=float(mapping.get("tau_calcium_ms", base.tau_calcium_ms)),
+            calcium_spike_gain=float(mapping.get("calcium_spike_gain", base.calcium_spike_gain)),
+            calcium_release_gain=float(mapping.get("calcium_release_gain", base.calcium_release_gain)),
+            calcium_adapt_gain=float(mapping.get("calcium_adapt_gain", base.calcium_adapt_gain)),
+            calcium_release_feedback_gain=float(
+                mapping.get("calcium_release_feedback_gain", base.calcium_release_feedback_gain)
+            ),
+            synaptic_gain_scale=float(mapping.get("synaptic_gain_scale", base.synaptic_gain_scale)),
+            release_gain_scale=float(mapping.get("release_gain_scale", base.release_gain_scale)),
+            neuromod_gain_scale=float(mapping.get("neuromod_gain_scale", base.neuromod_gain_scale)),
+        )
+
+    def to_model_params(self) -> dict[str, float]:
+        return {
+            "tauSyn": self.tau_syn_fast_ms,
+            "tDelay": self.tau_delay_ms,
+            "v0": self.v0_mv,
+            "vReset": self.v_reset_mv,
+            "vRest": self.v_rest_mv,
+            "vThreshold": self.v_threshold_mv,
+            "tauMem": self.tau_mem_ms,
+            "tRefrac": self.tau_refrac_ms,
+            "scalePoisson": self.scale_poisson,
+            "wScale": self.w_scale,
+        }
+
+
+@dataclass(frozen=True)
+class BackendDynamicsGroup:
+    name: str
+    indices: tuple[int, ...]
+    config: BackendDynamicsGroupConfig
+
+
+@dataclass(frozen=True)
+class BackendDynamicsConfig:
+    mode: str = "legacy_lif"
+    spontaneous_source: str = "diagnostic_surrogate"
+    annotation_path: str = "outputs/cache/flywire_annotation_supplement.tsv"
+    group_key: str = "super_class"
+    neuromodulation_enabled: bool = False
+    modulatory_group_names: tuple[str, ...] = ("endocrine", "dopamine", "serotonin", "octopamine", "tyramine")
+    arousal_tau_ms: float = 500.0
+    exafference_tau_ms: float = 250.0
+    arousal_current_gain: float = 40.0
+    adaptation_mod_gain: float = 0.5
+    synaptic_mod_gain: float = 0.5
+    release_mod_gain: float = 0.5
+    default_group: BackendDynamicsGroupConfig = field(default_factory=BackendDynamicsGroupConfig)
+    groups: dict[str, BackendDynamicsGroupConfig] = field(default_factory=dict)
+
+    @classmethod
+    def from_mapping(cls, mapping: Mapping[str, Any] | None) -> "BackendDynamicsConfig":
+        mapping = dict(mapping or {})
+        default_group = BackendDynamicsGroupConfig.from_mapping(mapping.get("default_group"))
+        raw_groups = dict(mapping.get("groups", {}) or {})
+        groups = {
+            str(name): BackendDynamicsGroupConfig.from_mapping(group_mapping, base=default_group)
+            for name, group_mapping in raw_groups.items()
+        }
+        mode = str(mapping.get("mode", "legacy_lif"))
+        spontaneous_source = str(mapping.get("spontaneous_source", "diagnostic_surrogate"))
+        if mode not in {"legacy_lif", "grouped_glif_scaffold"}:
+            raise ValueError(
+                f"Unsupported backend_dynamics.mode={mode!r}; expected 'legacy_lif' or 'grouped_glif_scaffold'"
+            )
+        if spontaneous_source not in {"diagnostic_surrogate", "endogenous"}:
+            raise ValueError(
+                "Unsupported backend_dynamics.spontaneous_source="
+                f"{spontaneous_source!r}; expected 'diagnostic_surrogate' or 'endogenous'"
+            )
+        return cls(
+            mode=mode,
+            spontaneous_source=spontaneous_source,
+            annotation_path=str(mapping.get("annotation_path", "outputs/cache/flywire_annotation_supplement.tsv")),
+            group_key=str(mapping.get("group_key", "super_class")),
+            neuromodulation_enabled=bool(mapping.get("neuromodulation_enabled", False)),
+            modulatory_group_names=tuple(str(value).lower() for value in mapping.get("modulatory_group_names", ("endocrine", "dopamine", "serotonin", "octopamine", "tyramine"))),
+            arousal_tau_ms=float(mapping.get("arousal_tau_ms", 500.0)),
+            exafference_tau_ms=float(mapping.get("exafference_tau_ms", 250.0)),
+            arousal_current_gain=float(mapping.get("arousal_current_gain", 40.0)),
+            adaptation_mod_gain=float(mapping.get("adaptation_mod_gain", 0.5)),
+            synaptic_mod_gain=float(mapping.get("synaptic_mod_gain", 0.5)),
+            release_mod_gain=float(mapping.get("release_mod_gain", 0.5)),
+            default_group=default_group,
+            groups=groups,
+        )
+
+    @property
+    def use_diagnostic_surrogate(self) -> bool:
+        return self.spontaneous_source == "diagnostic_surrogate"
+
+    @property
+    def endogenous_path_selected(self) -> bool:
+        return self.spontaneous_source == "endogenous"
 
 
 @dataclass(frozen=True)
@@ -124,22 +294,54 @@ class PoissonSpikeGenerator(nn.Module):
 class AlphaSynapse(nn.Module):
     def __init__(self, batch: int, size: int, dt_ms: float, params: dict[str, float], device: str) -> None:
         super().__init__()
-        self.time_factor = dt_ms / params["tauSyn"]
         self.steps_delay = int(params["tDelay"] / dt_ms)
         self.batch = batch
         self.size = size
         self.device = device
+        class_specs = tuple(params.get("synapse_classes", DEFAULT_SYNAPSE_CLASSES))
+        self.class_names = [str(spec.get("name", f"class_{idx}")) for idx, spec in enumerate(class_specs)]
+        self.class_time_factors = torch.tensor(
+            [dt_ms / max(float(spec.get("tau_ms", params["tauSyn"])), dt_ms) for spec in class_specs],
+            dtype=torch.float32,
+            device=device,
+        )
+        self.class_gains = torch.tensor(
+            [float(spec.get("gain", 1.0)) for spec in class_specs],
+            dtype=torch.float32,
+            device=device,
+        )
+        self.class_conductance = torch.zeros((len(self.class_names), batch, size), device=self.device)
+        self.class_delay_buffer = torch.zeros((len(self.class_names), batch, self.steps_delay + 1, size), device=self.device)
 
     def state_init(self) -> tuple[torch.Tensor, torch.Tensor]:
+        self.class_conductance.zero_()
+        self.class_delay_buffer.zero_()
         conductance = torch.zeros(self.batch, self.size, device=self.device)
         delay_buffer = torch.zeros(self.batch, self.steps_delay + 1, self.size, device=self.device)
         return conductance, delay_buffer
 
-    def forward(self, input_current: torch.Tensor, conductance: torch.Tensor, delay_buffer: torch.Tensor, refrac_mask: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        conductance_new = conductance * (1.0 - self.time_factor) + delay_buffer[:, 0, :] * refrac_mask
-        delay_buffer = torch.roll(delay_buffer, shifts=-1, dims=1)
-        delay_buffer[:, -1, :] = input_current
-        return conductance_new, delay_buffer
+    def forward(self, class_inputs: torch.Tensor, refrac_mask: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        refrac_mask = refrac_mask.unsqueeze(0)
+        decay = (1.0 - self.class_time_factors).view(-1, 1, 1)
+        delayed = self.class_delay_buffer[:, :, 0, :] * refrac_mask
+        self.class_conductance = self.class_conductance * decay + delayed
+        self.class_delay_buffer = torch.roll(self.class_delay_buffer, shifts=-1, dims=2)
+        self.class_delay_buffer[:, :, -1, :] = class_inputs
+        conductance_new = torch.sum(
+            self.class_conductance * self.class_gains.view(-1, 1, 1),
+            dim=0,
+        )
+        aggregate_delay_buffer = torch.sum(self.class_delay_buffer * self.class_gains.view(-1, 1, 1, 1), dim=0)
+        return conductance_new, aggregate_delay_buffer
+
+    def apply_spike_reset(self, spikes: torch.Tensor) -> None:
+        self.class_conductance = self.class_conductance * (1.0 - spikes.unsqueeze(0))
+
+    def class_state_summary(self) -> dict[str, float]:
+        return {
+            name: float(self.class_conductance[idx].abs().mean().detach().cpu().item())
+            for idx, name in enumerate(self.class_names)
+        }
 
 class LIFNeuron(nn.Module):
     def __init__(self, batch: int, size: int, dt_ms: float, params: dict[str, float], device: str) -> None:
@@ -177,12 +379,17 @@ class AlphaLIF(nn.Module):
         refrac = self.steps_refrac + torch.zeros_like(v)
         return conductance, delay_buffer, spikes, v, refrac
 
-    def forward(self, input_current: torch.Tensor, conductance: torch.Tensor, delay_buffer: torch.Tensor, spikes: torch.Tensor, v: torch.Tensor, refrac: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    def forward(self, class_inputs: torch.Tensor, conductance: torch.Tensor, delay_buffer: torch.Tensor, spikes: torch.Tensor, v: torch.Tensor, refrac: torch.Tensor, direct_current: torch.Tensor | None = None) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         refrac = refrac * (1.0 - spikes)
         refrac = refrac + 1.0
-        conductance_new, delay_buffer = self.synapse(input_current, conductance, delay_buffer, (refrac > self.steps_refrac).float())
-        spikes, v_new = self.neuron(conductance, v)
-        conductance_new = conductance_new - (conductance_new * spikes).detach()
+        conductance_new, delay_buffer = self.synapse(class_inputs, (refrac > self.steps_refrac).float())
+        neuron_input = conductance_new if direct_current is None else (conductance_new + direct_current)
+        spikes, v_new = self.neuron(neuron_input, v)
+        self.synapse.apply_spike_reset(spikes)
+        conductance_new = torch.sum(
+            self.synapse.class_conductance * self.synapse.class_gains.view(-1, 1, 1),
+            dim=0,
+        )
         return conductance_new, delay_buffer, spikes, v_new, refrac
 
 class TorchWholeBrainModel(nn.Module):
@@ -205,13 +412,29 @@ class TorchWholeBrainModel(nn.Module):
         v: torch.Tensor,
         refrac: torch.Tensor,
         external_current: torch.Tensor | None = None,
+        modulatory_current: torch.Tensor | None = None,
+        class_inputs: torch.Tensor | None = None,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-        spikes_input = self.poisson(rates_hz)
-        weighted_spikes = torch.matmul(spikes, self.weights.transpose(0, 1))
-        total_current = self.scale * (spikes_input + weighted_spikes)
-        if external_current is not None:
-            total_current = total_current + external_current
-        return self.neurons(total_current, conductance, delay_buffer, spikes, v, refrac)
+        if class_inputs is None:
+            spikes_input = self.poisson(rates_hz)
+            weighted_spikes = torch.matmul(spikes, self.weights.transpose(0, 1))
+            recurrent_exc = torch.relu(weighted_spikes)
+            recurrent_inh = torch.relu(-weighted_spikes)
+            class_inputs = torch.stack(
+                (
+                    spikes_input + recurrent_exc,
+                    recurrent_exc,
+                    recurrent_inh,
+                    recurrent_inh,
+                    torch.relu(modulatory_current) if modulatory_current is not None else torch.zeros_like(rates_hz),
+                ),
+                dim=0,
+            )
+            class_inputs = self.scale * class_inputs
+        return self.neurons(class_inputs, conductance, delay_buffer, spikes, v, refrac, direct_current=external_current)
+
+    def synapse_class_summary(self) -> dict[str, float]:
+        return self.neurons.synapse.class_state_summary()
 
 @dataclass
 class WholeBrainTorchBackend:
@@ -221,6 +444,7 @@ class WholeBrainTorchBackend:
     device: str = "cuda:0"
     dt_ms: float = 0.1
     spontaneous_state: SpontaneousStateConfig | Mapping[str, Any] | None = None
+    backend_dynamics: BackendDynamicsConfig | Mapping[str, Any] | None = None
 
     def __post_init__(self) -> None:
         self.completeness_path = Path(self.completeness_path)
@@ -231,10 +455,15 @@ class WholeBrainTorchBackend:
             self.device = "cpu"
         if not isinstance(self.spontaneous_state, SpontaneousStateConfig):
             self.spontaneous_state = SpontaneousStateConfig.from_mapping(self.spontaneous_state)
+        if not isinstance(self.backend_dynamics, BackendDynamicsConfig):
+            self.backend_dynamics = BackendDynamicsConfig.from_mapping(self.backend_dynamics)
         self.flyid_to_index, self.index_to_flyid = self._load_hash_tables()
         self.spontaneous_family_groups = self._load_spontaneous_family_groups()
+        self.backend_dynamics_groups = self._load_backend_dynamics_groups()
         self.weights = self._load_weights().to(device=self.device)
-        self.model = TorchWholeBrainModel(self.weights.shape[0], self.dt_ms, MODEL_PARAMS, self.weights, self.device)
+        self.model_params = self.backend_dynamics.default_group.to_model_params()
+        self.model = TorchWholeBrainModel(self.weights.shape[0], self.dt_ms, self.model_params, self.weights, self.device)
+        self._build_backend_dynamics_tensors()
         self.sensor_pool_indices = {name: self._ids_to_indices(ids) for name, ids in PUBLIC_INPUT_IDS.items()}
         monitored_ids = sorted({neuron_id for ids in MOTOR_READOUT_IDS.values() for neuron_id in ids})
         self.set_monitored_ids(monitored_ids)
@@ -243,6 +472,12 @@ class WholeBrainTorchBackend:
         self.background_rates = torch.zeros_like(self.rates)
         self.background_latent_state = torch.zeros((1, 0), device=self.device)
         self.background_latent_loadings = torch.zeros((0, self.weights.shape[0]), device=self.device)
+        self.adaptation_current = torch.zeros_like(self.rates)
+        self.intrinsic_noise_state = torch.zeros_like(self.rates)
+        self.graded_release_state = torch.zeros_like(self.rates)
+        self.intracellular_calcium_state = torch.zeros_like(self.rates)
+        self.modulatory_arousal_state = torch.zeros((1, 1), device=self.device)
+        self.modulatory_exafference_state = torch.zeros((1, 1), device=self.device)
         self.reset()
 
     @property
@@ -367,6 +602,253 @@ class WholeBrainTorchBackend:
             for group in self.spontaneous_family_groups
         ]
 
+    def _resolve_backend_group_labels(self, annotation_table: pd.DataFrame) -> pd.Series:
+        key = str(self.backend_dynamics.group_key).lower()
+        available_columns = {
+            "super_class": "super_class",
+            "cell_class": "cell_class",
+            "cell_sub_class": "cell_sub_class",
+            "cell_type": "cell_type",
+            "hemibrain_type": "hemibrain_type",
+            "side": "side",
+        }
+        if key == "auto":
+            for candidate in ("super_class", "cell_class", "cell_sub_class", "cell_type", "hemibrain_type", "side"):
+                if candidate in annotation_table.columns:
+                    series = annotation_table[candidate].fillna("").astype(str)
+                    if bool((series.str.len() > 0).any()):
+                        return series
+            return pd.Series(["default"] * len(annotation_table), index=annotation_table.index, dtype=object)
+        if key not in available_columns:
+            raise ValueError(
+                f"Unsupported backend_dynamics.group_key={self.backend_dynamics.group_key!r}; "
+                "expected one of auto, super_class, cell_class, cell_sub_class, cell_type, hemibrain_type, side"
+            )
+        column = available_columns[key]
+        if column not in annotation_table.columns:
+            return pd.Series(["default"] * len(annotation_table), index=annotation_table.index, dtype=object)
+        labels = annotation_table[column].fillna("").astype(str)
+        return labels.where(labels.str.len() > 0, "default")
+
+    def _load_backend_dynamics_groups(self) -> list[BackendDynamicsGroup]:
+        cfg = self.backend_dynamics
+        annotation_path = Path(str(cfg.annotation_path))
+        size = len(self.flyid_to_index)
+        default_group = BackendDynamicsGroup(name="default", indices=tuple(range(size)), config=cfg.default_group)
+        if size == 0 or not annotation_path.exists():
+            return [default_group]
+        try:
+            annotation_table = load_flywire_annotation_table(annotation_path)
+        except Exception:
+            return [default_group]
+        annotation_table = annotation_table[annotation_table["root_id"].isin(self.flyid_to_index)].copy()
+        if annotation_table.empty:
+            return [default_group]
+        annotation_table["group_label"] = self._resolve_backend_group_labels(annotation_table)
+        groups: list[BackendDynamicsGroup] = []
+        assigned_indices: set[int] = set()
+        for label, group_df in annotation_table.groupby("group_label", sort=True):
+            indices = tuple(
+                sorted(
+                    {
+                        self.flyid_to_index[int(root_id)]
+                        for root_id in group_df["root_id"].tolist()
+                        if int(root_id) in self.flyid_to_index
+                    }
+                )
+            )
+            if not indices:
+                continue
+            assigned_indices.update(indices)
+            group_cfg = cfg.groups.get(str(label), cfg.default_group)
+            groups.append(BackendDynamicsGroup(name=str(label), indices=indices, config=group_cfg))
+        unassigned = tuple(sorted(set(range(size)) - assigned_indices))
+        if unassigned:
+            groups.append(BackendDynamicsGroup(name="default", indices=unassigned, config=cfg.default_group))
+        return groups or [default_group]
+
+    def backend_dynamics_catalog(self) -> list[dict[str, object]]:
+        return [
+            {
+                "name": str(group.name),
+                "count": int(len(group.indices)),
+                "release_mode": str(group.config.release_mode),
+                "tau_mem_ms": float(group.config.tau_mem_ms),
+                "tau_adapt_ms": float(group.config.tau_adapt_ms),
+                "noise_sigma": float(group.config.noise_sigma),
+                "tau_release_ms": float(group.config.tau_release_ms),
+                "tau_calcium_ms": float(group.config.tau_calcium_ms),
+                "calcium_spike_gain": float(group.config.calcium_spike_gain),
+                "calcium_release_gain": float(group.config.calcium_release_gain),
+                "calcium_adapt_gain": float(group.config.calcium_adapt_gain),
+                "calcium_release_feedback_gain": float(group.config.calcium_release_feedback_gain),
+            }
+            for group in self.backend_dynamics_groups
+        ]
+
+    def _build_backend_dynamics_tensors(self) -> None:
+        size = self.weights.shape[0]
+
+        def _tensor_for(field_name: str, fallback: float) -> torch.Tensor:
+            values = torch.full((1, size), float(fallback), device=self.device)
+            for group in self.backend_dynamics_groups:
+                if not group.indices:
+                    continue
+                values[:, list(group.indices)] = float(getattr(group.config, field_name))
+            return values
+
+        default_group = self.backend_dynamics.default_group
+        self.group_v_rest_mv = _tensor_for("v_rest_mv", default_group.v_rest_mv)
+        self.group_tau_adapt_ms = _tensor_for("tau_adapt_ms", default_group.tau_adapt_ms)
+        self.group_adapt_a = _tensor_for("adapt_a", default_group.adapt_a)
+        self.group_adapt_b = _tensor_for("adapt_b", default_group.adapt_b)
+        self.group_noise_sigma = _tensor_for("noise_sigma", default_group.noise_sigma)
+        self.group_noise_tau_ms = _tensor_for("noise_tau_ms", default_group.noise_tau_ms)
+        self.group_tau_release_ms = _tensor_for("tau_release_ms", default_group.tau_release_ms)
+        self.group_release_v_half_mv = _tensor_for("release_v_half_mv", default_group.release_v_half_mv)
+        self.group_release_slope_mv = _tensor_for("release_slope_mv", default_group.release_slope_mv)
+        self.group_tau_calcium_ms = _tensor_for("tau_calcium_ms", default_group.tau_calcium_ms)
+        self.group_calcium_spike_gain = _tensor_for("calcium_spike_gain", default_group.calcium_spike_gain)
+        self.group_calcium_release_gain = _tensor_for("calcium_release_gain", default_group.calcium_release_gain)
+        self.group_calcium_adapt_gain = _tensor_for("calcium_adapt_gain", default_group.calcium_adapt_gain)
+        self.group_calcium_release_feedback_gain = _tensor_for(
+            "calcium_release_feedback_gain",
+            default_group.calcium_release_feedback_gain,
+        )
+        self.group_release_gain_scale = _tensor_for("release_gain_scale", default_group.release_gain_scale)
+        self.group_synaptic_gain_scale = _tensor_for("synaptic_gain_scale", default_group.synaptic_gain_scale)
+        self.group_neuromod_gain_scale = _tensor_for("neuromod_gain_scale", default_group.neuromod_gain_scale)
+        self.group_release_active_mask = torch.zeros((1, size), device=self.device)
+        self.group_spike_recurrent_mask = torch.zeros((1, size), device=self.device)
+        self.group_graded_recurrent_mask = torch.zeros((1, size), device=self.device)
+        self.modulatory_population_mask = torch.zeros((1, size), device=self.device)
+        modulatory_names = {value for value in self.backend_dynamics.modulatory_group_names if value}
+        for group in self.backend_dynamics_groups:
+            if not group.indices:
+                continue
+            is_modulatory_group = str(group.name).lower() in modulatory_names
+            spike_active = group.config.release_mode in {"spiking", "mixed"} and not is_modulatory_group
+            graded_active = group.config.release_mode in {"graded", "mixed"} and not is_modulatory_group
+            release_active = group.config.release_mode in {"graded", "mixed"}
+            self.group_release_active_mask[:, list(group.indices)] = 1.0 if release_active else 0.0
+            self.group_spike_recurrent_mask[:, list(group.indices)] = 1.0 if spike_active else 0.0
+            self.group_graded_recurrent_mask[:, list(group.indices)] = 1.0 if graded_active else 0.0
+            self.modulatory_population_mask[:, list(group.indices)] = 1.0 if is_modulatory_group else 0.0
+        if float(self.modulatory_population_mask.max().detach().cpu().item()) <= 0.0 and self.backend_dynamics.neuromodulation_enabled:
+            self.modulatory_population_mask = self.group_release_active_mask.clone()
+
+    def _advance_endogenous_intrinsic_current(self) -> torch.Tensor | None:
+        if not self.backend_dynamics.endogenous_path_selected:
+            return None
+        tau_noise_ms = torch.clamp(self.group_noise_tau_ms, min=max(self.dt_ms, 1e-6))
+        decay = torch.exp(torch.full_like(tau_noise_ms, -self.dt_ms) / tau_noise_ms)
+        noise_scale = self.group_noise_sigma * torch.sqrt(torch.clamp(1.0 - decay * decay, min=0.0))
+        self.intrinsic_noise_state = decay * self.intrinsic_noise_state + noise_scale * torch.randn_like(self.intrinsic_noise_state)
+        neuromod_current = None
+        if self.backend_dynamics.neuromodulation_enabled:
+            neuromod_current = (
+                self.modulatory_arousal_state * self.group_neuromod_gain_scale * float(self.backend_dynamics.arousal_current_gain)
+            )
+        total = self.intrinsic_noise_state - self.adaptation_current
+        return total if neuromod_current is None else (total + neuromod_current)
+
+    def _update_endogenous_intrinsic_state(self) -> None:
+        if not self.backend_dynamics.endogenous_path_selected:
+            return
+        tau_adapt_ms = torch.clamp(self.group_tau_adapt_ms, min=max(self.dt_ms, 1e-6))
+        decay = torch.exp(torch.full_like(tau_adapt_ms, -self.dt_ms) / tau_adapt_ms)
+        voltage_drive = torch.relu(self.v - self.group_v_rest_mv)
+        modulation = 1.0
+        if self.backend_dynamics.neuromodulation_enabled:
+            modulation = 1.0 + self.modulatory_arousal_state * self.group_neuromod_gain_scale * float(self.backend_dynamics.adaptation_mod_gain)
+        calcium_drive = self.group_calcium_adapt_gain * self.intracellular_calcium_state * modulation
+        self.adaptation_current = (
+            decay * self.adaptation_current
+            + (1.0 - decay) * (self.group_adapt_a * voltage_drive * modulation + calcium_drive)
+            + self.spikes * self.group_adapt_b * modulation
+        )
+
+    def _routed_release_gain_terms(self) -> tuple[torch.Tensor, torch.Tensor]:
+        release_gain = self.group_release_gain_scale
+        syn_gain = self.group_synaptic_gain_scale
+        calcium_feedback = 1.0 + self.group_calcium_release_feedback_gain * self.intracellular_calcium_state
+        release_gain = release_gain * calcium_feedback
+        if self.backend_dynamics.neuromodulation_enabled:
+            release_gain = release_gain * (
+                1.0 + self.modulatory_exafference_state * self.group_neuromod_gain_scale * float(self.backend_dynamics.release_mod_gain)
+            )
+            syn_gain = syn_gain * (
+                1.0 + self.modulatory_exafference_state * self.group_neuromod_gain_scale * float(self.backend_dynamics.synaptic_mod_gain)
+            )
+        return release_gain, syn_gain
+
+    def _build_routed_recurrent_class_inputs(self, rates_hz: torch.Tensor) -> torch.Tensor | None:
+        if not self.backend_dynamics.endogenous_path_selected:
+            return None
+        spikes_input = self.model.poisson(rates_hz)
+        weighted_fast = torch.matmul(self.spikes * self.group_spike_recurrent_mask, self.weights.transpose(0, 1))
+        release_gain, syn_gain = self._routed_release_gain_terms()
+        weighted_slow = torch.matmul(
+            self.graded_release_state * self.group_graded_recurrent_mask * release_gain * syn_gain,
+            self.weights.transpose(0, 1),
+        )
+        modulatory_source = torch.clamp(self.graded_release_state + self.intracellular_calcium_state, min=0.0)
+        weighted_modulatory = torch.matmul(
+            modulatory_source * self.modulatory_population_mask * release_gain * syn_gain,
+            self.weights.transpose(0, 1),
+        )
+        class_inputs = torch.stack(
+            (
+                spikes_input + torch.relu(weighted_fast),
+                torch.relu(weighted_slow),
+                torch.relu(-weighted_fast),
+                torch.relu(-weighted_slow),
+                torch.relu(weighted_modulatory),
+            ),
+            dim=0,
+        )
+        return self.model.scale * class_inputs
+
+    def _update_graded_release_state(self) -> None:
+        if not self.backend_dynamics.endogenous_path_selected:
+            return
+        tau_release_ms = torch.clamp(self.group_tau_release_ms, min=max(self.dt_ms, 1e-6))
+        decay = torch.exp(torch.full_like(tau_release_ms, -self.dt_ms) / tau_release_ms)
+        slope = torch.clamp(self.group_release_slope_mv.abs(), min=1e-6)
+        target = torch.sigmoid((self.v - self.group_release_v_half_mv) / slope) * self.group_release_active_mask
+        self.graded_release_state = decay * self.graded_release_state + (1.0 - decay) * target
+
+    def _update_intracellular_calcium_state(self) -> None:
+        if not self.backend_dynamics.endogenous_path_selected:
+            return
+        tau_calcium_ms = torch.clamp(self.group_tau_calcium_ms, min=max(self.dt_ms, 1e-6))
+        decay = torch.exp(torch.full_like(tau_calcium_ms, -self.dt_ms) / tau_calcium_ms)
+        drive = self.spikes * self.group_calcium_spike_gain + self.graded_release_state * self.group_calcium_release_gain
+        self.intracellular_calcium_state = decay * self.intracellular_calcium_state + (1.0 - decay) * drive
+
+    def _update_neuromodulatory_state(self) -> None:
+        if not self.backend_dynamics.endogenous_path_selected or not self.backend_dynamics.neuromodulation_enabled:
+            return
+        mask_sum = torch.clamp(self.modulatory_population_mask.sum(), min=1.0)
+        modulatory_source = torch.clamp(self.graded_release_state + self.intracellular_calcium_state, min=0.0)
+        drive = (modulatory_source * self.modulatory_population_mask).sum(dim=1, keepdim=True) / mask_sum
+
+        def _advance_scalar_state(state: torch.Tensor, tau_ms: float, target: torch.Tensor) -> torch.Tensor:
+            tau_ms = max(float(tau_ms), self.dt_ms)
+            decay = math.exp(-self.dt_ms / tau_ms)
+            return decay * state + (1.0 - decay) * target
+
+        self.modulatory_arousal_state = _advance_scalar_state(
+            self.modulatory_arousal_state,
+            self.backend_dynamics.arousal_tau_ms,
+            drive,
+        )
+        self.modulatory_exafference_state = _advance_scalar_state(
+            self.modulatory_exafference_state,
+            self.backend_dynamics.exafference_tau_ms,
+            drive,
+        )
+
     def _ids_to_indices(self, ids: list[int]) -> list[int]:
         return [self.flyid_to_index[int(neuron_id)] for neuron_id in ids if int(neuron_id) in self.flyid_to_index]
 
@@ -376,20 +858,27 @@ class WholeBrainTorchBackend:
             if self.device.startswith("cuda"):
                 torch.cuda.manual_seed_all(seed)
         self.conductance, self.delay_buffer, self.spikes, self.v, self.refrac = self.model.state_init()
+        self.adaptation_current.zero_()
+        self.intrinsic_noise_state.zero_()
+        self.graded_release_state.zero_()
+        self.intracellular_calcium_state.zero_()
+        self.modulatory_arousal_state.zero_()
+        self.modulatory_exafference_state.zero_()
         self.tonic_background_rates.zero_()
         self.background_rates.zero_()
         cfg = self.spontaneous_state
-        if cfg.tonic_enabled:
+        if self.backend_dynamics.use_diagnostic_surrogate and cfg.tonic_enabled:
             self.tonic_background_rates = self._sample_tonic_background_rates()
-        if cfg.latent_enabled:
+        if self.backend_dynamics.use_diagnostic_surrogate and cfg.latent_enabled:
             latent_count = max(1, int(cfg.latent_count))
             self.background_latent_loadings = self._sample_latent_loadings(latent_count)
             self.background_latent_state = float(cfg.latent_ou_sigma_hz) * torch.randn((1, latent_count), device=self.device)
         else:
             self.background_latent_state = torch.zeros((1, 0), device=self.device)
             self.background_latent_loadings = torch.zeros((0, self.background_rates.shape[1]), device=self.device)
-        self._refresh_background_rates()
-        if float(cfg.voltage_jitter_std_mv) > 0.0:
+        if self.backend_dynamics.use_diagnostic_surrogate:
+            self._refresh_background_rates()
+        if self.backend_dynamics.use_diagnostic_surrogate and float(cfg.voltage_jitter_std_mv) > 0.0:
             self.v = self.v + float(cfg.voltage_jitter_std_mv) * torch.randn_like(self.v)
 
     def _sample_tonic_background_rates(self) -> torch.Tensor:
@@ -503,7 +992,7 @@ class WholeBrainTorchBackend:
         window_steps: int,
     ) -> tuple[torch.Tensor, torch.Tensor | None]:
         self.rates.zero_()
-        if self.spontaneous_state.enabled:
+        if self.backend_dynamics.use_diagnostic_surrogate and self.spontaneous_state.enabled:
             self._advance_background_state(window_steps)
             self.rates += self.background_rates
         public_input_rates = collapse_sensor_pool_rates(dict(sensor_pool_rates))
@@ -534,6 +1023,13 @@ class WholeBrainTorchBackend:
         latent_std_hz = float(self.background_latent_state.std(unbiased=False).detach().cpu().item()) if self.background_latent_state.numel() else 0.0
         background_mean_hz = float(self.background_rates.mean().detach().cpu().item())
         background_active_fraction = float((self.background_rates > 0.0).float().mean().detach().cpu().item())
+        adaptation_mean_abs = float(self.adaptation_current.abs().mean().detach().cpu().item())
+        noise_mean_abs = float(self.intrinsic_noise_state.abs().mean().detach().cpu().item())
+        graded_release_mean = float(self.graded_release_state.mean().detach().cpu().item())
+        intracellular_calcium_mean = float(self.intracellular_calcium_state.mean().detach().cpu().item())
+        synapse_class_summary = self.model.synapse_class_summary()
+        modulatory_arousal_mean = float(self.modulatory_arousal_state.mean().detach().cpu().item())
+        modulatory_exafference_mean = float(self.modulatory_exafference_state.mean().detach().cpu().item())
         return {
             "global_spike_fraction": spike_fraction,
             "global_mean_voltage": mean_voltage,
@@ -547,6 +1043,26 @@ class WholeBrainTorchBackend:
             "background_family_group_count": float(len(self.spontaneous_family_groups)),
             "background_structured_family_mode": float(1.0 if bool(self.spontaneous_family_groups) else 0.0),
             "background_super_class_filter_active": float(1.0 if bool(self.spontaneous_state.included_super_classes) else 0.0),
+            "intrinsic_adaptation_mean_abs": adaptation_mean_abs,
+            "intrinsic_noise_mean_abs": noise_mean_abs,
+            "graded_release_mean": graded_release_mean,
+            "intracellular_calcium_mean": intracellular_calcium_mean,
+            "synapse_fast_exc_mean_abs": float(synapse_class_summary.get("fast_exc", 0.0)),
+            "synapse_slow_exc_mean_abs": float(synapse_class_summary.get("slow_exc", 0.0)),
+            "synapse_fast_inh_mean_abs": float(synapse_class_summary.get("fast_inh", 0.0)),
+            "synapse_slow_inh_mean_abs": float(synapse_class_summary.get("slow_inh", 0.0)),
+            "synapse_modulatory_mean_abs": float(synapse_class_summary.get("modulatory", 0.0)),
+            "modulatory_arousal_mean": modulatory_arousal_mean,
+            "modulatory_exafference_mean": modulatory_exafference_mean,
+            "routed_fast_source_fraction": float(self.group_spike_recurrent_mask.mean().detach().cpu().item()),
+            "routed_slow_source_fraction": float(self.group_graded_recurrent_mask.mean().detach().cpu().item()),
+            "routed_modulatory_source_fraction": float(self.modulatory_population_mask.mean().detach().cpu().item()),
+            "backend_dynamics_group_count": float(len(self.backend_dynamics_groups)),
+            "backend_dynamics_grouped_mode_active": float(1.0 if self.backend_dynamics.mode == "grouped_glif_scaffold" else 0.0),
+            "diagnostic_spontaneous_surrogate_active": float(
+                1.0 if self.backend_dynamics.use_diagnostic_surrogate and self.spontaneous_state.enabled else 0.0
+            ),
+            "endogenous_spontaneous_path_selected": float(1.0 if self.backend_dynamics.endogenous_path_selected else 0.0),
         }
 
     def _run_steps(
@@ -568,6 +1084,11 @@ class WholeBrainTorchBackend:
         voltage_sums = torch.zeros(len(self.monitored_ids), device=self.device) if collect_state else None
         conductance_sums = torch.zeros(len(self.monitored_ids), device=self.device) if collect_state else None
         for _ in range(max(1, int(num_steps))):
+            step_external_current = external_current
+            intrinsic_current = self._advance_endogenous_intrinsic_current()
+            if intrinsic_current is not None:
+                step_external_current = intrinsic_current if step_external_current is None else (step_external_current + intrinsic_current)
+            routed_class_inputs = self._build_routed_recurrent_class_inputs(rates)
             self.conductance, self.delay_buffer, self.spikes, self.v, self.refrac = self.model(
                 rates,
                 self.conductance,
@@ -575,8 +1096,13 @@ class WholeBrainTorchBackend:
                 self.spikes,
                 self.v,
                 self.refrac,
-                external_current=external_current,
+                external_current=step_external_current,
+                class_inputs=routed_class_inputs,
             )
+            self._update_endogenous_intrinsic_state()
+            self._update_graded_release_state()
+            self._update_intracellular_calcium_state()
+            self._update_neuromodulatory_state()
             spike_counts += self.spikes[0, self.monitored_indices]
             if collect_state and voltage_sums is not None and conductance_sums is not None:
                 voltage_sums += self.v[0, self.monitored_indices]

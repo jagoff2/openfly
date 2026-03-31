@@ -10,6 +10,7 @@ import numpy as np
 import yaml
 
 from analysis.behavior_metrics import compute_behavior_metrics, flatten_behavior_metrics, load_run_records
+from analysis.visual_speed_control_metrics import compute_visual_speed_control_metrics, flatten_visual_speed_control_metrics
 from brain.public_ids import collapse_sensor_pool_rates
 from body.interfaces import BodyCommand
 from body.mock_body import MockEmbodiedRuntime
@@ -54,6 +55,10 @@ def build_body_runtime(mode: str, config: dict, run_dir: Path):
         vision_payload_mode=str(vision_payload_mode),
         control_mode=str(config["runtime"].get("control_mode", "legacy_2drive")),
         camera_mode=str(config["runtime"].get("camera_mode", "fixed_birdeye")),
+        spawn_pos=tuple(config["body"].get("spawn_pos", (0.0, 0.0, 0.3))),
+        fly_init_pose=str(config["body"].get("fly_init_pose", "stretch")),
+        visual_speed_control=config["body"].get("visual_speed_control"),
+        visual_ablation_cell_types=tuple(config["runtime"].get("visual_ablation_cell_types", ())),
     )
 
 
@@ -72,6 +77,7 @@ def build_brain_backend(mode: str, config: dict):
         device=config["brain"].get("device", "cuda:0"),
         dt_ms=float(config["brain"].get("dt_ms", 0.1)),
         spontaneous_state=config["brain"].get("spontaneous_state"),
+        backend_dynamics=config["brain"].get("backend_dynamics"),
     )
 
 
@@ -122,6 +128,47 @@ def _legacy_drive_summary(command) -> tuple[float, float]:
     return float(log_dict.get("left_drive", 0.0)), float(log_dict.get("right_drive", 0.0))
 
 
+def _warm_start_brain_backend(config: dict, bridge: ClosedLoopBridge) -> dict[str, float]:
+    runtime_cfg = config.get("runtime", {})
+    warmup_seconds = float(runtime_cfg.get("brain_warmup_seconds", 0.0) or 0.0)
+    if warmup_seconds <= 0.0:
+        return {
+            "enabled": 0.0,
+            "warmup_seconds": 0.0,
+            "warmup_steps": 0.0,
+            "chunks": 0.0,
+        }
+    brain_dt_ms = float(config["brain"].get("dt_ms", 0.1))
+    total_steps = max(1, int(round((warmup_seconds * 1000.0) / max(brain_dt_ms, 1e-9))))
+    chunk_steps = max(1, int(runtime_cfg.get("brain_warmup_chunk_steps", 1000)))
+    if hasattr(bridge, "reset"):
+        bridge.reset(seed=int(runtime_cfg.get("seed", 0)), reset_brain=True)
+    completed_steps = 0
+    chunks = 0
+    while completed_steps < total_steps:
+        step_count = min(chunk_steps, total_steps - completed_steps)
+        bridge.brain_backend.step({}, num_steps=step_count, direct_input_rates_hz={}, direct_current_by_id={})
+        completed_steps += step_count
+        chunks += 1
+    warm_state = bridge.brain_backend.state_summary() if hasattr(bridge.brain_backend, "state_summary") else {}
+    if hasattr(bridge, "reset"):
+        bridge.reset(
+            seed=int(runtime_cfg.get("seed", 0)),
+            reset_brain=False,
+            reset_decoder=True,
+            reset_shadow_decoders=True,
+            reset_brain_context=True,
+            reset_visual_splice=True,
+        )
+    return {
+        "enabled": 1.0,
+        "warmup_seconds": float(warmup_seconds),
+        "warmup_steps": float(total_steps),
+        "chunks": float(chunks),
+        **{f"final_{key}": float(value) for key, value in warm_state.items()},
+    }
+
+
 def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, output_root: str | Path = "outputs") -> dict:
     runtime_cfg = config["runtime"]
     control_interval_s = float(runtime_cfg["control_interval_s"])
@@ -130,7 +177,9 @@ def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, ou
     body_runtime = build_body_runtime(mode, config, run_dir)
     brain_backend = build_brain_backend(mode, config)
     bridge = build_bridge(config, brain_backend)
-    bridge.reset(seed=int(runtime_cfg.get("seed", 0)))
+    brain_warmup_summary = _warm_start_brain_backend(config, bridge)
+    if not bool(brain_warmup_summary.get("enabled", 0.0)):
+        bridge.reset(seed=int(runtime_cfg.get("seed", 0)))
     observation = body_runtime.reset(seed=int(runtime_cfg.get("seed", 0)))
     activation_capture, activation_status = ActivationCaptureSession.try_create(
         config=config,
@@ -215,10 +264,16 @@ def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, ou
                 "stable": 0.0 if failure_type else metrics.get("stable", 1.0),
                 "failure_type": failure_type,
                 "failure_message": failure_message,
+                "brain_warmup_enabled": float(brain_warmup_summary.get("enabled", 0.0)),
+                "brain_warmup_seconds": float(brain_warmup_summary.get("warmup_seconds", 0.0)),
+                "brain_warmup_steps": float(brain_warmup_summary.get("warmup_steps", 0.0)),
             }
         )
-        behavior_metrics = compute_behavior_metrics(load_run_records(log_path))
+        records = load_run_records(log_path)
+        behavior_metrics = compute_behavior_metrics(records)
+        visual_speed_metrics = compute_visual_speed_control_metrics(records)
         metrics.update(flatten_behavior_metrics(behavior_metrics))
+        metrics.update(flatten_visual_speed_control_metrics(visual_speed_metrics))
     metrics_path = run_dir / "metrics.csv"
     write_metrics_csv(metrics_path, metrics)
     save_trajectory_plot(run_dir / "trajectory.png", trajectory_arr)
@@ -231,6 +286,8 @@ def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, ou
         "log_path": str(log_path),
         "metrics": metrics,
         "behavior_metrics": behavior_metrics,
+        "visual_speed_control_metrics": visual_speed_metrics,
+        "brain_warmup": brain_warmup_summary,
     }
     if activation_capture is not None:
         summary["activation_visualization"] = activation_capture.finalize(metrics=metrics)

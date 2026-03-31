@@ -124,7 +124,7 @@ The system now satisfies the module-level reconstruction gate: brain-only, body-
 | Realistic vision only | `cpu` | `0.020 s` | `22.644 s` | `0.000883x` |
 | Full legacy closed loop | `cpu` | `0.098 s` | `125.350 s` | `0.000782x` |
 
-The bottleneck is unambiguous: realistic vision dominates runtime. The validated WSL path remains CPU-bound for FlyVis because the public WSL wheels do not yet support RTX 5060 Ti `sm_120`. That is a performance limitation, not an architectural ambiguity.
+The bottleneck is unambiguous: realistic vision dominates runtime. The benchmark table above is historical CPU-fallback data. FlyVis GPU execution on RTX 5060 Ti `sm_120` now works locally in WSL after upgrading to `cu128` and repairing the upstream FlyGym device reset, but the vision and full-stack benchmark tables still need to be rerun under that new path.
 
 ### 5.2 The minimal public-anchor bridge failed for structural reasons
 
@@ -341,7 +341,7 @@ Fifth, the spontaneous-state program has now cleared an embodied mesoscale-valid
 
 Sixth, the public forced-vs-spontaneous comparator is now executable but only partial. It is evidence-producing, not missing, yet the surviving public overlap subset is too small and mixed to support a strong parity claim.
 
-Seventh, realistic vision remains performance-limited on this hardware in WSL because public wheels do not support `sm_120`.
+Seventh, the benchmark/perf sections still include historical CPU-fallback realistic-vision measurements and need a fresh GPU-vision rerun.
 
 ## 8. Methods
 

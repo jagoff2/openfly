@@ -1237,3 +1237,714 @@ The most important tactical distinction to carry forward is:
   refinement path,
 - and do not lose the exact-vs-inferred neuron mapping boundary when reasoning
   about future improvements.
+
+## March 29, 2026 priority override and compaction handoff
+
+This section supersedes the older tactical guidance above for the immediate next
+phase.
+
+### New top-level priority
+
+The repo's highest-priority work is now:
+
+- **public neural measurement parity on the spontaneous / living brain**
+
+That means:
+
+- obtain public real-fly neural measurement datasets
+- convert them into canonical matched format
+- drive the spontaneous brain under the same public conditions
+- force model outputs to match the public measurements as closely as possible
+
+Until that program has real traction, downstream Creamer / decoder /
+embodiment work should not be the primary focus.
+
+### Latest critical findings to preserve
+
+1. **Synced Creamer scene semantics are now correct**
+- The treadmill scene can now sync to fly speed and apply only a small signed
+  offset.
+- In the latest synced probe:
+  - `baseline_a`: speed `645.153 mm/s`, slip `0.0 mm/s`
+  - `motion_ftb_a`: speed `645.287 mm/s`, slip `-0.5 mm/s`
+  - `baseline_b`: speed `645.244 mm/s`, slip `0.0 mm/s`
+- So the scene-validity ambiguity is materially reduced.
+
+2. **The remaining Creamer blocker is now more likely embodied response**
+- Even with honest `-0.5 mm/s` front-to-back retinal slip, the branch did not
+  slow and the first delta was slightly wrong-sign (`+0.13418 mm/s`).
+- Independent blocker reviews converged on:
+  - high-speed embodied treadmill attractor
+  - weak coupling between bilateral frequency-floor suppression and treadmill
+    speed once the branch sits near `~645 mm/s`
+
+3. **Best next blocker test already identified**
+- Run same-state replay forks from the start of `baseline_a`:
+  - observed baseline latent stream
+  - observed motion latent stream
+  - stronger bilateral frequency-suppressed latent stream
+- This is the cleanest falsifier for whether the body is effectively ignoring
+  those changes once it enters the fast locomotor regime.
+
+4. **Public fit targets are now explicit**
+- Highest-value dataset stack:
+  - Aimon 2023 Dryad
+  - Schaffer 2023 Figshare
+  - Ketkar 2022 Zenodo
+  - Gruntman 2019 Figshare
+  - Shomar 2025 Dryad
+  - Dallmann 2025 Dryad
+- Creamer 2018 remains the behavioral scorecard, not the best raw fit source.
+
+### Immediate file map for the next session
+
+Read these first:
+
+1. [public_neural_measurement_parity_program.md](/G:/flysim/docs/public_neural_measurement_parity_program.md)
+2. [creamer_recording_fit_targets.md](/G:/flysim/docs/creamer_recording_fit_targets.md)
+3. [creamer2018_visual_speed_control_note.md](/G:/flysim/docs/creamer2018_visual_speed_control_note.md)
+4. [TASKS.md](/G:/flysim/TASKS.md)
+5. [PROGRESS_LOG.md](/G:/flysim/PROGRESS_LOG.md)
+
+### Immediate next tasks
+
+- `T191`: obtain and stage the public datasets
+- `T192`: define the canonical matched-format neural measurement schema
+- `T193`: build targeted fitting harnesses
+- `T194`: force spontaneous-brain parity against public measurements
+
+## March 29, 2026 public neural measurement parity implementation state
+
+The new top-priority program is no longer just a note. It now has code,
+artifacts, and staged public metadata.
+
+New code:
+
+- `src/brain/public_neural_measurement_sources.py`
+- `src/analysis/public_neural_measurement_dataset.py`
+- `src/analysis/public_neural_measurement_schema.py`
+- `src/analysis/public_neural_measurement_harness.py`
+- `scripts/fetch_public_neural_measurements.py`
+- `scripts/summarize_public_neural_measurement_status.py`
+
+Focused tests now pass:
+
+- `tests/test_public_neural_measurement_sources.py`
+- `tests/test_public_neural_measurement_schema.py`
+- `tests/test_public_neural_measurement_dataset.py`
+- `tests/test_public_neural_measurement_harness.py`
+
+Current staged status:
+
+- Aimon 2023:
+  - fully staged raw source under `external/spontaneous/aimon2023_dryad`
+- Schaffer 2023:
+  - article JSON, manifest, files table, and `datasets_for_each_figure.xlsx`
+  - root: `external/neural_measurements/schaffer2023_figshare`
+- Ketkar 2022:
+  - Zenodo record JSON, manifest, files table
+  - root: `external/neural_measurements/ketkar2022_zenodo`
+- Dallmann 2025:
+  - Dryad dataset metadata, versions, file inventory, manifest, files table
+  - root: `external/neural_measurements/dallmann2025_dryad`
+- Shomar 2025:
+  - Dryad dataset metadata, versions, file inventory, manifest, files table
+  - root: `external/neural_measurements/shomar2025_dryad`
+- Gruntman 2019:
+  - authoritative collection/article endpoints identified by sub-agent
+  - local manifest artifact not staged yet
+
+Canonical status artifact:
+
+- `outputs/metrics/public_neural_measurement_stage_status.json`
+
+Current blocker:
+
+- hostile Dryad raw-file delivery still blocks scripted raw staging for Dallmann
+  and Shomar:
+  - direct API download path returns `401`
+  - direct `file_stream` path returns `403`
+
+Most important next actions:
+
+1. stage Gruntman manifest plus first figure zip
+2. build dataset-specific adapters for Aimon, Schaffer, Ketkar, Dallmann
+3. build the first open-loop replay harnesses against the spontaneous brain
+
+## March 29, 2026 first real canonical exports
+
+The parity program is now past metadata-only staging.
+
+Two real canonical matched-format exports now exist:
+
+1. **Aimon 2023 canonical bundle**
+- code:
+  - `src/analysis/aimon_canonical_dataset.py`
+  - `scripts/export_aimon_canonical_dataset.py`
+  - `tests/test_aimon_canonical_dataset.py`
+- artifacts:
+  - `outputs/derived/aimon2023_canonical/aimon2023_canonical_summary.json`
+  - `outputs/derived/aimon2023_canonical/aimon2023_canonical_bundle.json`
+- current result:
+  - `2` exported experiments
+  - `4` trials
+  - surviving public experiments are `B350` and `B1269`
+  - overlapping public rows `B1037` and `B378` are dropped
+
+2. **Gruntman 2019 Figure 2 canonical bundle**
+- code:
+  - `src/analysis/gruntman_figure2_canonical_dataset.py`
+  - `scripts/export_gruntman_figure2_canonical_dataset.py`
+  - `tests/test_gruntman_figure2_canonical_dataset.py`
+- artifacts:
+  - `outputs/derived/gruntman2019_figure2_canonical/gruntman2019_figure2_canonical_summary.json`
+  - `outputs/derived/gruntman2019_figure2_canonical/gruntman2019_figure2_canonical_bundle.json`
+- current result:
+  - `514` trials
+  - `540` skipped empty conditions
+  - raw membrane-potential traces sampled at `20 kHz`
+
+Updated staging status:
+
+- `outputs/metrics/public_neural_measurement_stage_status.json`
+
+Current next-action order is now:
+
+1. build the first Aimon replay/fitting harness against the spontaneous brain
+2. add the next dataset-specific exporter after Aimon/Gruntman
+3. do not resume decoder/embodiment-first work until the parity program yields actual measurement-match results
+
+### Additional March 29, 2026 harness state
+
+The first dataset-specific scoring harness now exists:
+
+- `src/analysis/aimon_parity_harness.py`
+- `tests/test_aimon_parity_harness.py`
+
+What it does:
+
+- loads the canonical Aimon bundle
+- loads canonical trial matrices and timebases
+- scores a simulated trial matrix against an observed Aimon trial using the
+  generic trace-parity metrics
+
+What it does **not** do yet:
+
+- it does not yet run the spontaneous brain itself
+- it does not yet project brain activity into Aimon region-component space
+
+So the immediate tactical gap is now narrower:
+
+- not “build the first Aimon harness”
+- but “connect spontaneous-brain replay/projection outputs into the now-existing
+  Aimon harness and optimize against those scores”
+
+## March 29, 2026 first real spontaneous-brain measurement fit
+
+The public neural measurement parity lane is now producing real model-vs-public
+measurement scores.
+
+New code:
+
+- `src/analysis/aimon_spontaneous_fit.py`
+- `scripts/run_aimon_spontaneous_fit.py`
+- `tests/test_aimon_spontaneous_fit.py`
+
+Supporting updates:
+
+- `src/analysis/aimon_parity_harness.py`
+  - now preserves `split`, `stimulus`, and `behavior_paths`
+- `src/analysis/public_neural_measurement_harness.py`
+  - now masks non-finite samples before computing trace metrics
+
+Real pilot artifact:
+
+- `outputs/metrics/aimon_spontaneous_fit_b1269_pilot_v2/aimon_spontaneous_fit_summary.json`
+
+What the pilot actually did:
+
+- used the living spontaneous branch from
+  `configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_jump_brain_latent_turn_spontaneous_refit.yaml`
+- replayed canonical Aimon trials against the backend
+- used the bilateral family voltage basis from the spontaneous mesoscale
+  validator
+- used encoder-based symmetric mechanosensory forcing for `forced_walk`
+- fit a reduced linear projection into Aimon trace space
+
+Current result:
+
+- same-dataset fit on:
+  - `B1269_spontaneous_walk`
+  - `B1269_forced_walk`
+- aggregate:
+  - `mean_pearson_r = 0.890881`
+  - `mean_nrmse = 0.0660805`
+  - `mean_abs_error = 0.00172981`
+  - `mean_sign_agreement = 0.857058`
+
+Important honesty boundary:
+
+- this is not held-out parity yet
+- it proves the spontaneous-brain replay/projection path is live on real public
+  neural measurements
+- the next honest boundary is held-out Aimon generalization on the canonical
+  train/test split
+
+Immediate next tasks after this state:
+
+1. update trackers to move `T194` into active execution
+2. run held-out Aimon fit
+3. use that result to define the first forcing/basis/regularization sweep
+4. then extend the same program to Schaffer, Ketkar, Dallmann, and Shomar
+
+## March 29, 2026 held-out Aimon boundary and Schaffer NWB exporter
+
+The next honest boundary after the B1269 same-dataset pilot is now crossed.
+
+Held-out Aimon artifact:
+
+- `outputs/metrics/aimon_spontaneous_fit_train_to_test_v1/aimon_spontaneous_fit_summary.json`
+
+What it did:
+
+- fit on canonical `train`:
+  - `B350_spontaneous_walk`
+  - `B350_forced_walk`
+- scored on held-out canonical `test`:
+  - `B1269_spontaneous_walk`
+  - `B1269_forced_walk`
+
+Current result:
+
+- aggregate over all four trials:
+  - `mean_pearson_r = 0.145559`
+  - `mean_nrmse = 0.246243`
+  - `mean_abs_error = 0.00607705`
+  - `mean_sign_agreement = 0.527894`
+- held-out `test` mean:
+  - `mean_pearson_r = 0.0564316`
+  - `mean_nrmse = 0.332844`
+  - `mean_abs_error = 0.00856342`
+  - `mean_sign_agreement = 0.468885`
+
+Interpretation:
+
+- the same-dataset B1269 pilot proved the path was live
+- the held-out boundary proves current generalization is weak
+- the next active work is targeted held-out optimization, not more
+  same-dataset fitting
+
+Second live substrate:
+
+- staged first real Schaffer NWB:
+  - `external/neural_measurements/schaffer2023_figshare/2022_01_08_fly1.nwb`
+- added canonical exporter:
+  - `src/analysis/schaffer_nwb_canonical_dataset.py`
+  - `scripts/export_schaffer_nwb_canonical_dataset.py`
+  - `tests/test_schaffer_nwb_canonical_dataset.py`
+- exported first canonical Schaffer bundle:
+  - `outputs/derived/schaffer2023_nwb_canonical/schaffer2023_nwb_canonical_summary.json`
+  - result: `1` staged session, `6` interval trials, aligned ROI `Df/F`, ball
+    motion, and `6`-channel behavioral state
+
+Immediate next tasks from this state:
+
+1. run first targeted held-out Aimon optimization sweep
+2. expand Schaffer staging beyond one NWB file
+3. keep downstream decoder and embodiment work subordinate
+
+## March 29, 2026 first held-out Aimon sweep comparison and Schaffer score seam
+
+The first three held-out Aimon sweep points are now real enough to change the
+search strategy.
+
+Evidence:
+
+- `outputs/metrics/aimon_spontaneous_fit_train_to_test_v1/aimon_spontaneous_fit_summary.json`
+- `outputs/metrics/aimon_spontaneous_fit_train_to_test_v2_basis16_ridge1e-2_noasym/aimon_spontaneous_fit_summary.json`
+- `outputs/metrics/aimon_spontaneous_fit_train_to_test_v3_force2/aimon_spontaneous_fit_summary.json`
+- `outputs/metrics/aimon_spontaneous_fit_variant_comparison.json`
+
+Held-out `B1269_*` means:
+
+- `v1` baseline:
+  - `mean_pearson_r = 0.0564316`
+  - `mean_nrmse = 0.332844`
+  - `mean_abs_error = 0.00856342`
+  - `mean_sign_agreement = 0.468885`
+- `v2` reduced basis and no asymmetry basis:
+  - `mean_pearson_r = 0.0122189`
+  - `mean_nrmse = 0.330953`
+  - `mean_abs_error = 0.00848732`
+  - `mean_sign_agreement = 0.460513`
+- `v3` doubled mechanosensory forcing:
+  - `mean_pearson_r = 0.0620387`
+  - `mean_nrmse = 0.311678`
+  - `mean_abs_error = 0.00820677`
+  - `mean_sign_agreement = 0.465980`
+
+Interpretation:
+
+- reduced projection capacity is not the main missing ingredient
+- stronger mechanosensory forcing is the first change that improved held-out
+  Aimon in a meaningful way
+- the improvement is still small and does not solve the weak held-out forced
+  walk slice
+- next narrow Aimon axis is separating `force_contact_force` from
+  `force_forward_speed`
+
+Second substrate update:
+
+- added `src/analysis/schaffer_parity_harness.py`
+- added `tests/test_schaffer_parity_harness.py`
+- focused validation passed: `6 passed`
+
+Meaning:
+
+- Schaffer is no longer only a canonical exporter
+- there is now a direct matched-format score seam for staged NWB intervals
+
+Active run at this state:
+
+- `outputs/metrics/aimon_spontaneous_fit_train_to_test_v4_contact2_forward1`
+- purpose: isolate contact-dominant mechanosensory forcing after the first
+  useful force-2 result
+
+## March 29, 2026 contact split negative result and first live Schaffer fit
+
+The next Aimon split result is now known.
+
+Artifact:
+
+- `outputs/metrics/aimon_spontaneous_fit_train_to_test_v4_contact2_forward1/aimon_spontaneous_fit_summary.json`
+
+Held-out `B1269_*` means:
+
+- `mean_pearson_r = 0.0385278`
+- `mean_nrmse = 0.329335`
+- `mean_abs_error = 0.00853495`
+- `mean_sign_agreement = 0.464421`
+
+Interpretation:
+
+- the useful `v3 force2` gain does not come from contact amplification alone
+- contact-dominant forcing regressed against `v3`
+- the decisive complementary Aimon run is now:
+  - `outputs/metrics/aimon_spontaneous_fit_train_to_test_v5_forward2_contact1`
+
+Second live substrate progress:
+
+- added:
+  - `src/analysis/schaffer_spontaneous_fit.py`
+  - `scripts/run_schaffer_spontaneous_fit.py`
+  - `tests/test_schaffer_spontaneous_fit.py`
+- focused validation passed: `9 passed`
+- first live Schaffer pilot now running at:
+  - `outputs/metrics/schaffer_spontaneous_fit_pilot_trial000`
+
+Immediate next reads after this state:
+
+1. poll `v5 forward2/contact1`
+2. poll `schaffer_spontaneous_fit_pilot_trial000`
+3. update the Aimon variant comparison with `v4` and `v5`
+4. decide whether forward-dominant forcing or a Schaffer-derived covariate path
+   is the next highest-yield parity axis
+
+## March 29, 2026 forward split result
+
+The complementary Aimon forward split is now complete.
+
+Artifact:
+
+- `outputs/metrics/aimon_spontaneous_fit_train_to_test_v5_forward2_contact1/aimon_spontaneous_fit_summary.json`
+
+Held-out `B1269_*` means:
+
+- `mean_pearson_r = 0.0565402`
+- `mean_nrmse = 0.315540`
+- `mean_abs_error = 0.00824232`
+- `mean_sign_agreement = 0.472305`
+
+Current Aimon sweep interpretation:
+
+- `v3 force2` remains best overall on correlation and error
+- `v5 forward2/contact1` is nearly as good on error and best on held-out sign
+  agreement
+- `v4 contact2/forward1` was the clear negative result
+- useful forcing contribution therefore leans more toward forward-speed drive
+  than contact alone
+- weak slice still concentrates in held-out `B1269_forced_walk`
+
+Still active:
+
+- `outputs/metrics/schaffer_spontaneous_fit_pilot_trial000`
+
+## March 29, 2026 Schaffer expanded beyond one session
+
+Schaffer is now materially more real as a parity substrate.
+
+New staged files:
+
+- `external/neural_measurements/schaffer2023_figshare/2018_08_24_fly3_run1.nwb`
+- `external/neural_measurements/schaffer2023_figshare/2019_04_25_fly1.nwb`
+
+Rebuilt canonical bundle:
+
+- `outputs/derived/schaffer2023_nwb_canonical/schaffer2023_nwb_canonical_summary.json`
+- current result:
+  - `staged_session_count = 3`
+  - `exported_session_count = 3`
+  - `trial_count = 9`
+
+Important constraint discovered:
+
+- Schaffer sessions do not share one ROI output space
+- current ROI counts:
+  - `2018_08_24_fly3_run1.nwb`: `2170`
+  - `2019_04_25_fly1.nwb`: `1006`
+  - `2022_01_08_fly1.nwb`: `2`
+- so honest fitting must stay within one session unless a cross-session ROI
+  mapping is built
+
+Code updates:
+
+- `src/analysis/schaffer_spontaneous_fit.py`
+  - explicit same-session trace-count guard
+  - `fit_trial_id` support for within-session holdouts
+- `tests/test_schaffer_spontaneous_fit.py`
+  - focused validation now `11 passed`
+
+First live Schaffer backend result:
+
+- `outputs/metrics/schaffer_spontaneous_fit_pilot_trial000/schaffer_spontaneous_fit_summary.json`
+- same-trial result:
+  - `mean_pearson_r = 0.150623`
+  - `mean_nrmse = 0.194200`
+  - `mean_abs_error = 0.00181258`
+  - `mean_sign_agreement = 0.563755`
+
+Current active Schaffer run:
+
+- `outputs/metrics/schaffer_spontaneous_fit_2022_train4_test2`
+- fit:
+  - `2022_01_08_fly1_trial_000`
+  - `2022_01_08_fly1_trial_001`
+  - `2022_01_08_fly1_trial_002`
+  - `2022_01_08_fly1_trial_003`
+- held out:
+  - `2022_01_08_fly1_trial_004`
+  - `2022_01_08_fly1_trial_005`
+
+## March 30, 2026 spontaneous-state hard rule tightened
+
+The repo's spontaneous-state acceptance bar is now explicit:
+
+- the only acceptable spontaneous endogenous state is one that emerges from:
+  - richer intrinsic cell dynamics
+  - graded transmission
+  - synaptic heterogeneity
+  - neuromodulatory state
+
+Consequences:
+
+- the current structured background-drive / latent-drive spontaneous regime is
+  still useful diagnostically
+- but it is explicitly disqualified as the final spontaneous mechanism
+- any parity progress achieved with that surrogate is diagnostic evidence only
+- `T201` is mandatory replacement work, not optional cleanup
+
+## March 30, 2026 exact endogenous replacement path defined
+
+The exact path to the real goal is now fixed in:
+
+- `docs/endogenous_spontaneous_replacement_plan.md`
+
+Execution order:
+
+1. freeze the current structured-drive spontaneous branch as diagnostic-only
+2. implement a production backend with:
+   - intrinsic cell dynamics
+   - graded transmission
+   - synaptic heterogeneity
+   - neuromodulatory state
+3. fit that backend against Aimon and Schaffer with a deliberately tiny
+   readout so the backend, not the head, carries the score
+4. only then return to decoder / Creamer / embodiment work
+
+Tracked tasks:
+
+- `T202` to `T207`
+
+## March 30, 2026 systemic digital-real mismatch narrowed beyond simple eval bugs
+
+Two stronger digital mismatches are now explicit.
+
+1. **Session continuity mismatch**
+
+- The exported Schaffer 2022 intervals are contiguous windows from one
+  continuous session, not six independent trials:
+  - `000 29.6815 -> 299.9877 s`
+  - `001 299.9877 -> 599.9753 s`
+  - `002 599.9753 -> 899.9630 s`
+  - `003 899.9630 -> 1199.9507 s`
+  - `004 1199.9507 -> 1499.9384 s`
+  - `005 1499.9384 -> 1799.9260 s`
+- The old Schaffer holdout harness reset the spontaneous brain between those
+  contiguous intervals.
+- This is now treated as a real digital mismatch, not a minor evaluator bug.
+- The continuity-preserving replay seam is now in:
+  - `src/analysis/schaffer_spontaneous_fit.py`
+  - `scripts/run_schaffer_spontaneous_fit.py`
+  - `tests/test_schaffer_spontaneous_fit.py`
+- Corrected rerun path:
+  - `outputs/metrics/schaffer_spontaneous_fit_2022_train4_test2_continuous`
+
+2. **Imaging observation-model mismatch**
+
+- Schaffer targets are `roi_dff_timeseries`.
+- Aimon canonical traces are tagged `dff_like`.
+- The old parity harness used an instantaneous linear projection from digital
+  voltage features into imaging-space traces.
+- That is now treated as a second systemic digital mismatch.
+- The optional shared causal low-pass observation basis now exists in:
+  - `src/analysis/imaging_observation_model.py`
+- It is threaded into both parity lanes:
+  - `src/analysis/aimon_spontaneous_fit.py`
+  - `src/analysis/schaffer_spontaneous_fit.py`
+  - `scripts/run_aimon_spontaneous_fit.py`
+  - `scripts/run_schaffer_spontaneous_fit.py`
+  - `tests/test_imaging_observation_model.py`
+- Active held-out probe:
+  - `outputs/metrics/aimon_spontaneous_fit_train_to_test_v7_force2_obs0p5`
+
+Current read:
+
+- the parity miss is no longer best described as "probably chemistry"
+- the strongest concrete mismatches now under test are:
+  - missing persistent hidden-state semantics
+  - missing imaging measurement physics
+
+Latest endogenous-backend state:
+
+- The strict spontaneous-state rule is now hard: diagnostic surrogate drive is
+  disqualified as a final spontaneous mechanism.
+- Completed backend replacement slices:
+  - grouped intrinsic-dynamics scaffolding and split diagnostic vs endogenous path
+  - adaptation current and intrinsic filtered noise
+  - graded release with `spiking` / `graded` / `mixed` modes
+  - multi-class synaptic heterogeneity
+  - internal arousal/exafference neuromodulatory states
+- The first backend-first public-parity gate is `T207`: fit Aimon and Schaffer
+  with a deliberately `tiny` readout so the backend, not a large head, carries
+  the held-out score.
+
+Important seam fixed on 2026-03-30:
+
+- The first endogenous Aimon tiny-readout run was invalid.
+- Root cause: `src/analysis/aimon_spontaneous_fit.py` instantiated
+  `WholeBrainTorchBackend` without forwarding `brain.backend_dynamics`, so the
+  supposed endogenous parity run was not actually using the new endogenous
+  backend path.
+- Fix:
+  - `src/analysis/aimon_spontaneous_fit.py` now passes `backend_dynamics`
+  - `tests/test_aimon_spontaneous_fit.py` asserts the endogenous path is
+    selected under `configs/brain_endogenous_public_parity.yaml`
+- The invalid live run was killed and relaunched correctly.
+
+Current admissible live run:
+
+- output root:
+  - `outputs/metrics/schaffer_endogenous_tiny_v1_calcium`
+- live artifacts already present:
+  - `outputs/metrics/schaffer_endogenous_tiny_v1_calcium/fit_run_manifest.json`
+  - `outputs/metrics/schaffer_endogenous_tiny_v1_calcium/fit_run_status.json`
+- current live exec session:
+  - `21983`
+
+Latest Aimon temporal-structure read:
+
+- First endogenous tiny backend result:
+  - held-out `B1269_*` mean:
+    - `pearson = -0.0754`
+    - `nrmse = 0.2688`
+    - `abs_error = 0.00750`
+    - `sign = 0.4221`
+- Calcium-memory endogenous rerun:
+  - `outputs/metrics/aimon_endogenous_tiny_v2_calcium/aimon_spontaneous_fit_summary.json`
+  - held-out `B1269_*` mean:
+    - `pearson = -0.0516`
+    - `nrmse = 0.2745`
+    - `abs_error = 0.00761`
+    - `sign = 0.4305`
+- Interpretation:
+  - intracellular slow memory modestly improved held-out correlation and sign
+  - it did not solve the temporal-structure gap
+  - next discriminant is Schaffer on the same calcium-memory backend
+
+Latest harness fixes for temporal structure:
+
+- Tiny-readout path is no longer arbitrary:
+  - Aimon/Schaffer now choose bilateral family bases from the fit split by
+    temporal energy, not by family ordering
+  - selected bilateral families retain their observation-basis rows, not just
+    raw rows
+- Schaffer observation filtering is now session-continuous:
+  - when `preserve_state_within_session` is enabled, feature rows are
+    concatenated in absolute session time
+  - causal low-pass observation basis is applied once on the stitched stream
+  - rows are then split back into interval reports
+
+Current admissible live run:
+
+- output root:
+  - `outputs/metrics/schaffer_endogenous_tiny_v1_calcium`
+- live artifacts already present:
+  - `outputs/metrics/schaffer_endogenous_tiny_v1_calcium/fit_run_manifest.json`
+  - `outputs/metrics/schaffer_endogenous_tiny_v1_calcium/fit_run_status.json`
+- current live exec session:
+  - `7400`
+
+## March 30, 2026 routed recurrent backend produced the first endogenous held-out Aimon improvement above zero correlation
+
+Latest admissible endogenous Aimon progression on held-out `B1269_*`:
+
+- `v1`:
+  - `pearson = -0.0754`
+  - `nrmse = 0.2688`
+  - `abs_error = 0.00750`
+  - `sign = 0.4221`
+- `v2 calcium`:
+  - `pearson = -0.0516`
+  - `nrmse = 0.2745`
+  - `abs_error = 0.00761`
+  - `sign = 0.4305`
+- `v3 routed`:
+  - `pearson = +0.0065`
+  - `nrmse = 0.2685`
+  - `abs_error = 0.00750`
+  - `sign = 0.4551`
+
+Result:
+
+- routed recurrent pathways are the first endogenous backend change that pushed
+  held-out Aimon correlation back above zero
+- the gain is still small, so temporal parity is not solved
+- but this is the strongest evidence so far that the stubborn temporal miss is
+  in the routed recurrent core, not just in readout amplitude scaling
+
+Important implication:
+
+- calcium-like intracellular memory helped, but only modestly
+- the stronger win came after replacing pooled recurrent classes with:
+  - spike-routed fast pathways
+  - graded-release-routed slow pathways
+  - separate slow modulatory routing
+- that makes true routed slow-path dynamics the current highest-confidence
+  no-hack mechanism direction
+
+Next admissible run:
+
+- rerun Schaffer on the routed backend with the corrected session-continuous
+  observation harness
+- recommended output root:
+  - `outputs/metrics/schaffer_endogenous_tiny_v2_routed`

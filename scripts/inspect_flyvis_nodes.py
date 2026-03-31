@@ -1,12 +1,22 @@
 from __future__ import annotations
 
 import json
+import sys
+from pathlib import Path
 
 import flyvis
 from flygym.examples.vision import RealTimeVisionNetworkView
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SRC = REPO_ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
+from vision.flyvis_compat import configure_flyvis_device
+
 
 def main() -> None:
+    configure_flyvis_device(force_cpu=False)
     net_view = RealTimeVisionNetworkView(str(flyvis.results_dir / "flow/0000/000"))
     network = net_view.init_network(chkpt="best_chkpt")
     conn = network.connectome

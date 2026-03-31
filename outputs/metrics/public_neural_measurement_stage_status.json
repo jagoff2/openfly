@@ -1,0 +1,74 @@
+[
+  {
+    "source_key": "aimon2023_dryad",
+    "repository_kind": "dryad",
+    "manifest_exists": true,
+    "access_report_exists": true,
+    "dataset_root_exists": true,
+    "manifest_file_count": 5,
+    "staged_file_count": 5,
+    "dataset_root": "external\\spontaneous\\aimon2023_dryad",
+    "local_summary_exists": true,
+    "metadata_only": false
+  },
+  {
+    "source_key": "schaffer2023_figshare",
+    "repository_kind": "figshare",
+    "manifest_exists": true,
+    "access_report_exists": true,
+    "dataset_root_exists": true,
+    "manifest_file_count": 48,
+    "staged_file_count": 2,
+    "dataset_root": "external\\neural_measurements\\schaffer2023_figshare",
+    "local_summary_exists": true,
+    "metadata_only": false
+  },
+  {
+    "source_key": "ketkar2022_zenodo",
+    "repository_kind": "zenodo",
+    "manifest_exists": true,
+    "access_report_exists": true,
+    "dataset_root_exists": true,
+    "manifest_file_count": 1,
+    "staged_file_count": 0,
+    "dataset_root": "external\\neural_measurements\\ketkar2022_zenodo",
+    "local_summary_exists": true,
+    "metadata_only": true
+  },
+  {
+    "source_key": "gruntman2019_janelia",
+    "repository_kind": "janelia",
+    "manifest_exists": true,
+    "access_report_exists": true,
+    "dataset_root_exists": true,
+    "manifest_file_count": 2,
+    "staged_file_count": 1,
+    "dataset_root": "external\\neural_measurements\\gruntman2019_janelia",
+    "local_summary_exists": true,
+    "metadata_only": false
+  },
+  {
+    "source_key": "shomar2025_dryad",
+    "repository_kind": "dryad",
+    "manifest_exists": true,
+    "access_report_exists": true,
+    "dataset_root_exists": true,
+    "manifest_file_count": 6,
+    "staged_file_count": 0,
+    "dataset_root": "external\\neural_measurements\\shomar2025_dryad",
+    "local_summary_exists": true,
+    "metadata_only": true
+  },
+  {
+    "source_key": "dallmann2025_dryad",
+    "repository_kind": "dryad",
+    "manifest_exists": true,
+    "access_report_exists": true,
+    "dataset_root_exists": true,
+    "manifest_file_count": 20,
+    "staged_file_count": 0,
+    "dataset_root": "external\\neural_measurements\\dallmann2025_dryad",
+    "local_summary_exists": true,
+    "metadata_only": true
+  }
+]

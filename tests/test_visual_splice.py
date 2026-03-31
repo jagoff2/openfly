@@ -68,3 +68,36 @@ def test_visual_splice_initializes_baseline_then_emits_signed_current(tmp_path: 
     assert info1["nonzero_root_count"] > 0
     assert any(value < 0.0 for value in currents1.values())
     assert any(value > 0.0 for value in currents1.values())
+
+
+def test_visual_splice_include_cell_types_filters_overlap_groups(tmp_path: Path) -> None:
+    annotation_path = tmp_path / "annot.tsv"
+    _write_annotation(annotation_path)
+    cache = FlyVisConnectomeCache(
+        node_types=np.asarray(["TmY14", "TmY14", "T5d", "T5d"], dtype=object),
+        node_u=np.asarray([0.0, 1.0, 0.0, 1.0], dtype=float),
+        node_v=np.asarray([0.0, 0.0, 1.0, 1.0], dtype=float),
+    )
+    injector = VisualSpliceInjector(
+        VisualSpliceConfig(
+            enabled=True,
+            annotation_path=str(annotation_path),
+            include_cell_types=("T5d",),
+            spatial_mode="axis1d",
+            spatial_bins=1,
+            min_roots_per_side=1,
+            value_scale=10.0,
+            max_abs_current=5.0,
+        )
+    )
+    baseline = np.ones((2, 4), dtype=float)
+    injector.build(_obs(baseline, cache))
+    current = baseline.copy()
+    current[:, 0:2] = 2.0
+    currents, info = injector.build(_obs(current, cache))
+    assert info["nonzero_root_count"] == 0
+
+    current[:, 2:4] = 0.5
+    currents, info = injector.build(_obs(current, cache))
+    assert info["nonzero_root_count"] == 4
+    assert set(currents) == {5, 6, 7, 8}

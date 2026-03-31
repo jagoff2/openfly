@@ -7,8 +7,6 @@ import os
 import sys
 from pathlib import Path
 
-os.environ.setdefault("CUDA_VISIBLE_DEVICES", "")
-
 import matplotlib.pyplot as plt
 import numpy as np
 from torch import Tensor
@@ -21,6 +19,7 @@ from flygym.examples.vision import RealTimeVisionNetworkView, RetinaMapper
 from flygym.vision import Retina
 
 from brain.public_ids import DEFAULT_FLOW_CELLS, DEFAULT_TRACKING_CELLS
+from vision.flyvis_compat import configure_flyvis_device
 from vision.lateralized_probe import (
     build_body_side_mask,
     build_body_side_stimuli,
@@ -48,6 +47,7 @@ def _build_layer_indices(network) -> dict[str, np.ndarray]:
 
 
 def _prepare_network(vision_network_dir: str | None):
+    configure_flyvis_device(force_cpu=False)
     retina = Retina()
     retina_mapper = RetinaMapper(retina=retina)
     if vision_network_dir is None:

@@ -36,6 +36,8 @@ class FlyVisConnectomeCache:
 class VisualSpliceConfig:
     enabled: bool = False
     annotation_path: str = "outputs/cache/flywire_annotation_supplement.tsv"
+    include_cell_types: tuple[str, ...] = ()
+    exclude_cell_types: tuple[str, ...] = ()
     spatial_mode: str = "axis1d"
     spatial_bins: int = 4
     spatial_u_bins: int = 2
@@ -57,6 +59,8 @@ class VisualSpliceConfig:
         return cls(
             enabled=bool(mapping.get("enabled", False)),
             annotation_path=str(mapping.get("annotation_path", "outputs/cache/flywire_annotation_supplement.tsv")),
+            include_cell_types=tuple(str(value) for value in mapping.get("include_cell_types", ()) or ()),
+            exclude_cell_types=tuple(str(value) for value in mapping.get("exclude_cell_types", ()) or ()),
             spatial_mode=str(mapping.get("spatial_mode", "axis1d")),
             spatial_bins=int(mapping.get("spatial_bins", 4)),
             spatial_u_bins=int(mapping.get("spatial_u_bins", 2)),
@@ -146,6 +150,12 @@ class VisualSpliceInjector:
             raise ValueError("visual splice requires observation.realistic_vision_splice_cache; use fast vision payload mode")
         annotation_table = load_flywire_annotation_table(Path(self.config.annotation_path))
         overlap_types = find_exact_cell_type_overlap(sorted(set(str(v) for v in vision_cache.node_types.tolist())), annotation_table)
+        include_cell_types = {str(cell_type) for cell_type in self.config.include_cell_types}
+        exclude_cell_types = {str(cell_type) for cell_type in self.config.exclude_cell_types}
+        if include_cell_types:
+            overlap_types = [cell_type for cell_type in overlap_types if cell_type in include_cell_types]
+        if exclude_cell_types:
+            overlap_types = [cell_type for cell_type in overlap_types if cell_type not in exclude_cell_types]
         if self.config.spatial_mode == "uv_grid":
             cell_type_transforms = self._load_cell_type_transforms()
             overlap_groups = build_spatial_grid_overlap_groups(

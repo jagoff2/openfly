@@ -83,7 +83,7 @@ runtime:
   control_interval_s: 0.002
   initial_left_drive: 0.0
   initial_right_drive: 0.0
-  force_cpu_vision: true
+  force_cpu_vision: false
   vision_payload_mode: fast
   video_stride: 5
   video_fps: 24

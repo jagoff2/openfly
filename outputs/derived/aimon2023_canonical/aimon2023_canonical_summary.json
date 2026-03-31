@@ -1,0 +1,35 @@
+{
+  "dataset_key": "aimon2023_dryad",
+  "dataset_root": "G:\\flysim\\external\\spontaneous\\aimon2023_dryad",
+  "bundle_path": "G:\\flysim\\outputs\\derived\\aimon2023_canonical\\aimon2023_canonical_bundle.json",
+  "exported_experiment_count": 2,
+  "trial_count": 4,
+  "exported_rows": [
+    {
+      "exp_id": "B350",
+      "split": "train",
+      "region_member": "Additional_data/FunctionallyDefinedAnatomicalRegions/B350_150FuncRegionsTS.mat",
+      "region_source": "additional_data",
+      "trace_count": 150,
+      "time_count": 4996
+    },
+    {
+      "exp_id": "B1269",
+      "split": "test",
+      "region_member": "Additional_data/FunctionallyDefinedAnatomicalRegions/B1269_150FuncRegionsTS.mat",
+      "region_source": "additional_data",
+      "trace_count": 150,
+      "time_count": 536
+    }
+  ],
+  "dropped_experiments": [
+    {
+      "exp_id": "B1037",
+      "reason": "overlapping_walk_forced_windows"
+    },
+    {
+      "exp_id": "B378",
+      "reason": "overlapping_walk_forced_windows"
+    }
+  ]
+}

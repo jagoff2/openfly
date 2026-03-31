@@ -26,24 +26,27 @@ Run from the Windows host at `G:\flysim`:
 3. The public FlyVis model weights were not present after package install, so `scripts/bootstrap_env.sh` now runs `flyvis download-pretrained`.
 4. The Brian2 comparison env needed `setuptools<81` because the public code still imports `pkg_resources`.
 5. The checked-out public `external/fly-brain` code needed local compatibility patches for the current Brian2 API and benchmark CSV column naming.
-6. The production WSL config needed CPU vision fallback because the public WSL PyTorch wheel does not support local `sm_120` GPUs.
+6. FlyVis on `sm_120` needed two fixes before GPU execution worked in WSL:
+   - upgrade the Torch stack from `cu126` to `cu128`
+   - repair the upstream FlyGym vision import path that reset `flyvis.device` back to CPU
 
 ## Validated Outcomes
 
 - `scripts/bootstrap_wsl.sh` completes successfully.
 - `scripts/bootstrap_env.sh` creates both required environments successfully.
-- `scripts/check_cuda.sh` in `flysim-full` reports that CUDA is visible in WSL, but the installed public wheel warns that RTX 5060 Ti `sm_120` is unsupported.
+- `scripts/check_cuda.sh` in `flysim-full` reports CUDA visibility, compute capability, and a successful CUDA tensor smoke on the RTX 5060 Ti.
 - `scripts/check_mujoco.sh` in `flysim-full` imports `mujoco`, `dm_control`, and `flygym` successfully.
-- Real FlyGym realistic-vision runs now work locally in WSL with `force_cpu_vision: true`.
+- `scripts/check_flyvis_gpu.py` proves that both the pretrained FlyVis network and the repo's `FlyGymRealisticVisionRuntime` use `cuda:0` when `force_cpu_vision: false`.
+- Real FlyGym realistic-vision runs now work locally in WSL without the old forced CPU fallback.
 - Host smoke tests pass.
 
-## Current Production Limitation
+## Current Production Path
 
 The validated production path is:
 
 - WSL `flysim-full`
 - `MUJOCO_GL=egl`
 - `configs/flygym_realistic_vision.yaml`
-- `runtime.force_cpu_vision: true`
+- `runtime.force_cpu_vision: false`
 
-This is required because the current public WSL PyTorch wheel for FlyVis does not provide support for RTX 5060 Ti `sm_120`. Once a public wheel supports that architecture, the first follow-up experiment should be a true GPU vision rerun with the same benchmark scripts.
+The remaining limitation is not basic GPU compatibility anymore. The remaining limitation is that the historical realistic-vision benchmark tables were gathered under the old CPU fallback and still need to be rerun under the new GPU-capable path.

@@ -1,0 +1,7 @@
+source_key,repository_kind,manifest_exists,access_report_exists,dataset_root_exists,manifest_file_count,staged_file_count,dataset_root,local_summary_exists,metadata_only
+aimon2023_dryad,dryad,True,True,True,5,5,external\spontaneous\aimon2023_dryad,True,False
+schaffer2023_figshare,figshare,True,True,True,48,2,external\neural_measurements\schaffer2023_figshare,True,False
+ketkar2022_zenodo,zenodo,True,True,True,1,0,external\neural_measurements\ketkar2022_zenodo,True,True
+gruntman2019_janelia,janelia,True,True,True,2,1,external\neural_measurements\gruntman2019_janelia,True,False
+shomar2025_dryad,dryad,True,True,True,6,0,external\neural_measurements\shomar2025_dryad,True,True
+dallmann2025_dryad,dryad,True,True,True,20,0,external\neural_measurements\dallmann2025_dryad,True,True

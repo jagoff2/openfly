@@ -1,0 +1,46 @@
+{
+  "torch_version": "2.10.0+cu128",
+  "torch_cuda_version": "12.8",
+  "flyvis_version": "1.1.2",
+  "flyvis_device": "cuda",
+  "patched_modules": [
+    "flyvis.network.initialization",
+    "flyvis.task.decoder",
+    "flyvis"
+  ],
+  "vision_network_dir": "/root/.local/share/mamba/envs/flysim-full/lib/python3.10/site-packages/flyvis/data/results/flow/0000/000",
+  "output_device": "cuda:0",
+  "output_shape": [
+    2,
+    45669
+  ],
+  "output_mean": 0.7383292317390442,
+  "elapsed_s": 2.5242621898651123,
+  "device_count": 2,
+  "devices": [
+    {
+      "index": 0,
+      "name": "NVIDIA GeForce RTX 5060 Ti",
+      "compute_capability": "12.0"
+    },
+    {
+      "index": 1,
+      "name": "NVIDIA GeForce RTX 5060 Ti",
+      "compute_capability": "12.0"
+    }
+  ],
+  "runtime_smoke": {
+    "elapsed_s": 5.055008411407471,
+    "flyvis_device_info": {
+      "device": "cuda",
+      "patched_modules": [
+        "flyvis.network.initialization",
+        "flyvis.task.decoder",
+        "flyvis"
+      ]
+    },
+    "vision_parameter_device": "cuda:0",
+    "vision_payload_mode": "fast",
+    "has_nn_activities_arr": true
+  }
+}

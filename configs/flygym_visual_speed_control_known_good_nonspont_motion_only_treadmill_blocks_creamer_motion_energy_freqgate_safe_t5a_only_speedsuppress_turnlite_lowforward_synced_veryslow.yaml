@@ -1,0 +1,165 @@
+brain:
+  backend: torch
+  completeness_path: external/fly-brain/data/2025_Completeness_783.csv
+  connectivity_path: external/fly-brain/data/2025_Connectivity_783.parquet
+  cache_dir: outputs/cache
+  device: cuda:1
+  dt_ms: 0.1
+body:
+  terrain_type: flat
+  target_fly_enabled: false
+  fly_init_pose: tripod
+  spawn_pos:
+    - 0.0
+    - 0.0
+    - 0.3
+  visual_speed_control:
+    enabled: true
+    geometry: treadmill_ball
+    mode: interleaved_blocks
+    corridor_length_mm: 60.0
+    corridor_half_width_mm: 6.0
+    corridor_neck_half_width_mm: 2.5
+    corridor_neck_center_x_mm: 0.0
+    corridor_neck_half_length_mm: 10.0
+    wall_height_mm: 4.0
+    wall_thickness_mm: 0.35
+    stripe_width_mm: 3.0
+    stripe_wrap_margin_mm: 6.0
+    block_duration_s: 0.25
+    counterphase_flicker_hz: 4.0
+    block_schedule:
+      - kind: stationary
+        label: warmup_a
+        sync_to_fly_speed: true
+        gain: 0.0
+      - kind: stationary
+        label: warmup_b
+        sync_to_fly_speed: true
+        gain: 0.0
+      - kind: stationary
+        label: warmup_c
+        sync_to_fly_speed: true
+        gain: 0.0
+      - kind: stationary
+        label: warmup_d
+        sync_to_fly_speed: true
+        gain: 0.0
+      - kind: stationary
+        label: baseline_a
+        sync_to_fly_speed: true
+        gain: 0.0
+      - kind: front_to_back
+        label: motion_ftb_a
+        sync_to_fly_speed: true
+        gain: 0.0
+        scene_velocity_offset_mm_s: -0.5
+      - kind: stationary
+        label: baseline_b
+        sync_to_fly_speed: true
+        gain: 0.0
+      - kind: counterphase_flicker
+        label: flicker
+        sync_to_fly_speed: true
+        gain: 0.0
+        flicker_hz: 4.0
+      - kind: stationary
+        label: baseline_c
+        sync_to_fly_speed: true
+        gain: 0.0
+      - kind: back_to_front
+        label: motion_btf
+        sync_to_fly_speed: true
+        gain: 0.0
+        scene_velocity_offset_mm_s: 0.5
+      - kind: stationary
+        label: baseline_d
+        sync_to_fly_speed: true
+        gain: 0.0
+      - kind: front_to_back
+        label: motion_ftb_b
+        sync_to_fly_speed: true
+        gain: 0.0
+        scene_velocity_offset_mm_s: -0.5
+encoder:
+  visual_gain_hz: 0.0
+brain_context:
+  mode: none
+visual_splice:
+  enabled: true
+  annotation_path: outputs/cache/flywire_annotation_supplement.tsv
+  include_cell_types:
+    - T4a
+    - T4b
+    - T4c
+    - T4d
+    - T5a
+    - T5b
+    - T5c
+    - T5d
+  spatial_mode: uv_grid
+  spatial_u_bins: 2
+  spatial_v_bins: 2
+  spatial_flip_v: true
+  spatial_mirror_u_by_side: true
+  spatial_cell_type_transforms_path: outputs/metrics/splice_celltype_alignment_recommended.json
+  min_roots_per_bin: 20
+  value_scale: 62.96215524698159
+  max_abs_current: 120.0
+  baseline_update_alpha: 0.0
+decoder:
+  command_mode: hybrid_multidrive
+  forward_gain: 0.6
+  turn_gain: 0.3
+  signal_smoothing_alpha: 0.15
+  forward_asymmetry_scale_hz: 40.0
+  forward_asymmetry_turn_gain: 0.0
+  latent_freq_bias: 0.62
+  latent_freq_gain: 0.22
+  latent_turn_amp_gain: 0.15
+  latent_turn_freq_gain: 0.08
+  latent_retraction_base: 1.0
+  latent_stumbling_base: 1.0
+  latent_retraction_turn_gain: 0.2
+  latent_stumbling_turn_gain: 0.3
+  latent_retraction_reverse_gain: 0.4
+  latent_stumbling_reverse_gain: 0.75
+  population_candidates_json: outputs/metrics/descending_readout_candidates_strict.json
+  motor_basis_json: outputs/metrics/neck_output_motor_basis.json
+  population_forward_cell_types:
+    - DNp103
+    - DNp06
+    - DNp18
+    - DNp35
+  population_turn_cell_types:
+    - DNpe056
+    - DNp71
+    - DNpe040
+  population_forward_scale_hz: 60.0
+  population_turn_scale_hz: 25.0
+  population_forward_weight: 0.5
+  population_turn_weight: 0.4
+  forward_context_mode: boost
+  forward_context_boost: 0.0
+  forward_context_freq_suppression_gain: 0.5
+  forward_context_amp_suppression_gain: 0.0
+  forward_context_scale_hz: 5.0
+  forward_context_baseline_alpha: 0.05
+  forward_context_initial_baseline_mode: zero
+  forward_context_baseline_update_steps: 500
+  forward_context_signal_library_json: outputs/metrics/creamer_relay_motion_energy_library_freqgate_safe_t5a_only.json
+  monitor_candidates_json: outputs/metrics/creamer_relay_monitor_candidates.json
+  turn_voltage_weight: 0.0
+runtime:
+  seed: 0
+  duration_s: 3.0
+  body_timestep_s: 0.0001
+  control_interval_s: 0.002
+  initial_left_drive: 0.0
+  initial_right_drive: 0.0
+  force_cpu_vision: false
+  vision_payload_mode: fast
+  control_mode: hybrid_multidrive
+  video_stride: 5
+  video_fps: 24
+  camera_mode: fixed_birdeye
