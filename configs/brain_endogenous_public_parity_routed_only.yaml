@@ -48,9 +48,9 @@ brain:
       tau_context_exc_ms: 140.0
       tau_context_inh_ms: 260.0
       tau_context_mod_ms: 700.0
-      context_exc_gain: 0.18
-      context_inh_gain: 0.22
-      context_mod_gain: 0.10
+      context_exc_gain: 0.0
+      context_inh_gain: 0.0
+      context_mod_gain: 0.0
       release_v_half_mv: -50.0
       release_slope_mv: 2.0
       synaptic_gain_scale: 1.0
@@ -73,9 +73,9 @@ brain:
         tau_context_exc_ms: 190.0
         tau_context_inh_ms: 340.0
         tau_context_mod_ms: 850.0
-        context_exc_gain: 0.28
-        context_inh_gain: 0.34
-        context_mod_gain: 0.14
+        context_exc_gain: 0.0
+        context_inh_gain: 0.0
+        context_mod_gain: 0.0
       ascending:
         tau_mem_ms: 18.0
         tau_adapt_ms: 70.0
@@ -92,9 +92,9 @@ brain:
         tau_context_exc_ms: 120.0
         tau_context_inh_ms: 210.0
         tau_context_mod_ms: 520.0
-        context_exc_gain: 0.16
-        context_inh_gain: 0.20
-        context_mod_gain: 0.08
+        context_exc_gain: 0.0
+        context_inh_gain: 0.0
+        context_mod_gain: 0.0
       visual_projection:
         tau_mem_ms: 16.0
         tau_adapt_ms: 60.0
@@ -111,9 +111,9 @@ brain:
         tau_context_exc_ms: 90.0
         tau_context_inh_ms: 140.0
         tau_context_mod_ms: 320.0
-        context_exc_gain: 0.10
-        context_inh_gain: 0.12
-        context_mod_gain: 0.05
+        context_exc_gain: 0.0
+        context_inh_gain: 0.0
+        context_mod_gain: 0.0
         release_gain_scale: 1.1
       visual_centrifugal:
         tau_mem_ms: 18.0
@@ -131,9 +131,9 @@ brain:
         tau_context_exc_ms: 105.0
         tau_context_inh_ms: 170.0
         tau_context_mod_ms: 400.0
-        context_exc_gain: 0.12
-        context_inh_gain: 0.14
-        context_mod_gain: 0.06
+        context_exc_gain: 0.0
+        context_inh_gain: 0.0
+        context_mod_gain: 0.0
         release_gain_scale: 1.05
       endocrine:
         tau_mem_ms: 24.0
@@ -151,9 +151,9 @@ brain:
         tau_context_exc_ms: 260.0
         tau_context_inh_ms: 420.0
         tau_context_mod_ms: 950.0
-        context_exc_gain: 0.12
-        context_inh_gain: 0.16
-        context_mod_gain: 0.28
+        context_exc_gain: 0.0
+        context_inh_gain: 0.0
+        context_mod_gain: 0.0
         release_gain_scale: 1.2
         neuromod_gain_scale: 1.4
 encoder:

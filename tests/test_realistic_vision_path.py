@@ -68,6 +68,61 @@ def test_realistic_vision_extractor_prefers_precomputed_fast_features() -> None:
     assert np.isclose(features.flow_right, 0.4)
 
 
+def test_realistic_vision_extractor_tracks_temporal_features_from_observation_history() -> None:
+    extractor = RealisticVisionFeatureExtractor()
+    obs0 = BodyObservation(
+        sim_time=0.0,
+        position_xy=(0.0, 0.0),
+        yaw=0.0,
+        forward_speed=0.0,
+        yaw_rate=0.0,
+        contact_force=0.0,
+        realistic_vision_features=VisionFeatures(0.2, 0.2, 0.0, 0.0).to_dict(),
+        vision_payload_mode="fast",
+    )
+    obs1 = BodyObservation(
+        sim_time=0.01,
+        position_xy=(0.0, 0.0),
+        yaw=0.0,
+        forward_speed=0.0,
+        yaw_rate=0.0,
+        contact_force=0.0,
+        realistic_vision_features=VisionFeatures(0.2, 0.6, 0.0, 0.0).to_dict(),
+        vision_payload_mode="fast",
+    )
+
+    first = extractor.extract_observation(obs0)
+    second = extractor.extract_observation(obs1)
+
+    assert first.balance_velocity == 0.0
+    assert second.balance_velocity > 0.0
+    assert second.forward_salience_velocity > 0.0
+    assert second.looming_evidence > 0.0
+    assert second.receding_evidence == 0.0
+
+
+def test_realistic_vision_extractor_reset_clears_temporal_history() -> None:
+    extractor = RealisticVisionFeatureExtractor()
+    obs = BodyObservation(
+        sim_time=0.02,
+        position_xy=(0.0, 0.0),
+        yaw=0.0,
+        forward_speed=0.0,
+        yaw_rate=0.0,
+        contact_force=0.0,
+        realistic_vision_features=VisionFeatures(0.2, 0.6, 0.0, 0.0).to_dict(),
+        vision_payload_mode="fast",
+    )
+
+    extractor.extract_observation(obs)
+    extractor.reset()
+    reset_features = extractor.extract_observation(obs)
+
+    assert reset_features.balance_velocity == 0.0
+    assert reset_features.forward_salience_velocity == 0.0
+    assert reset_features.looming_evidence == 0.0
+
+
 def test_fast_and_legacy_control_outputs_match_exactly_for_same_input() -> None:
     extractor = RealisticVisionFeatureExtractor(tracking_cells=["T2", "Tm1"], flow_cells=["T4a", "T5a"])
     nn_mapping = {

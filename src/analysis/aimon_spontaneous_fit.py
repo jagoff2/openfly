@@ -18,8 +18,11 @@ from analysis.imaging_observation_model import (
     augment_feature_matrix_with_observation_basis,
     normalize_observation_taus,
 )
+from analysis.public_body_feedback import (
+    public_body_feedback_from_aimon_regressor,
+    public_body_observation_from_channels,
+)
 from analysis.spontaneous_mesoscale_validation import FamilySideGroup, build_family_side_groups
-from body.interfaces import BodyObservation
 from brain.pytorch_backend import WholeBrainTorchBackend
 from bridge.encoder import EncoderConfig, SensoryEncoder
 from vision.feature_extractor import VisionFeatures
@@ -64,6 +67,14 @@ class ReducedLinearProjection:
     output_dim: int
     feature_names: tuple[str, ...]
     fit_trial_ids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class TrialExecutionPlan:
+    trial_id: str
+    source_trial_id: str
+    reset_state: bool
+    seed: int
 
 
 def load_brain_config(path: str | Path) -> dict[str, Any]:
@@ -180,10 +191,65 @@ def _global_feature_names() -> tuple[str, ...]:
         "global::spike_fraction",
         "global::mean_voltage",
         "global::voltage_std",
+        "global::mean_conductance",
+        "global::conductance_std",
         "global::background_mean_rate_hz",
         "global::background_active_fraction",
         "global::background_latent_mean_abs_hz",
+        "global::background_latent_std_hz",
+        "global::intrinsic_adaptation_mean_abs",
+        "global::intrinsic_noise_mean_abs",
+        "global::graded_release_mean",
+        "global::intracellular_calcium_mean",
+        "global::distributed_context_exc_mean",
+        "global::distributed_context_inh_mean",
+        "global::distributed_context_mod_mean",
+        "global::synapse_fast_exc_mean_abs",
+        "global::synapse_slow_exc_mean_abs",
+        "global::synapse_fast_inh_mean_abs",
+        "global::synapse_slow_inh_mean_abs",
+        "global::synapse_modulatory_mean_abs",
+        "global::modulatory_arousal_mean",
+        "global::modulatory_exafference_mean",
+        "global::public_exafference_target_mean",
     )
+
+
+def _trial_source_id(trial: AimonCanonicalTrialData) -> str:
+    return str(trial.metadata.get("source_trial_id", trial.trial_id))
+
+
+def build_trial_execution_plan(
+    trials: Sequence[AimonCanonicalTrialData],
+    *,
+    base_seed: int,
+    preserve_continuity_by_source_trial: bool = False,
+) -> list[TrialExecutionPlan]:
+    plans: list[TrialExecutionPlan] = []
+    previous_source_id: str | None = None
+    previous_stop_index: int | None = None
+    sequence_index = -1
+    for trial in trials:
+        source_trial_id = _trial_source_id(trial)
+        reset_state = True
+        if preserve_continuity_by_source_trial and source_trial_id == previous_source_id:
+            current_start = trial.metadata.get("window_start_index")
+            if current_start is not None and previous_stop_index is not None and int(current_start) == int(previous_stop_index):
+                reset_state = False
+        if reset_state:
+            sequence_index += 1
+        plans.append(
+            TrialExecutionPlan(
+                trial_id=str(trial.trial_id),
+                source_trial_id=source_trial_id,
+                reset_state=bool(reset_state),
+                seed=int(base_seed + sequence_index),
+            )
+        )
+        previous_source_id = source_trial_id
+        previous_stop = trial.metadata.get("window_stop_index")
+        previous_stop_index = int(previous_stop) if previous_stop is not None else None
+    return plans
 
 
 def _current_feature_vector(
@@ -208,9 +274,27 @@ def _current_feature_vector(
                     float(summary["global_spike_fraction"]),
                     float(summary["global_mean_voltage"]),
                     float(summary["global_voltage_std"]),
+                    float(summary["global_mean_conductance"]),
+                    float(summary["global_conductance_std"]),
                     float(summary["background_mean_rate_hz"]),
                     float(summary["background_active_fraction"]),
                     float(summary["background_latent_mean_abs_hz"]),
+                    float(summary["background_latent_std_hz"]),
+                    float(summary["intrinsic_adaptation_mean_abs"]),
+                    float(summary["intrinsic_noise_mean_abs"]),
+                    float(summary["graded_release_mean"]),
+                    float(summary["intracellular_calcium_mean"]),
+                    float(summary["distributed_context_exc_mean"]),
+                    float(summary["distributed_context_inh_mean"]),
+                    float(summary["distributed_context_mod_mean"]),
+                    float(summary["synapse_fast_exc_mean_abs"]),
+                    float(summary["synapse_slow_exc_mean_abs"]),
+                    float(summary["synapse_fast_inh_mean_abs"]),
+                    float(summary["synapse_slow_inh_mean_abs"]),
+                    float(summary["synapse_modulatory_mean_abs"]),
+                    float(summary["modulatory_arousal_mean"]),
+                    float(summary["modulatory_exafference_mean"]),
+                    float(summary["public_exafference_target_mean"]),
                 ],
                 dtype=torch.float32,
                 device=backend.device,
@@ -325,46 +409,124 @@ def _zero_vision() -> VisionFeatures:
 
 
 def _trial_regressor_values(trial: AimonCanonicalTrialData) -> np.ndarray:
-    if trial.behavior_context != "forced_walk":
-        return np.zeros_like(trial.timebase_s, dtype=np.float32)
+    if "window_regressor_values" in trial.metadata:
+        values = np.asarray(trial.metadata["window_regressor_values"], dtype=np.float32).reshape(-1)
+        if values.size == trial.timebase_s.size:
+            return values.astype(np.float32, copy=False)
+        if values.size == 0:
+            return np.zeros_like(trial.timebase_s, dtype=np.float32)
+        source_time = np.linspace(0.0, 1.0, values.size, dtype=np.float32)
+        target_time = np.linspace(0.0, 1.0, trial.timebase_s.size, dtype=np.float32)
+        return np.interp(target_time, source_time, values).astype(np.float32)
     regressor_path = trial.behavior_paths.get("walk_regressor_path")
     if not regressor_path:
-        return np.ones_like(trial.timebase_s, dtype=np.float32)
+        return np.zeros_like(trial.timebase_s, dtype=np.float32)
     regressor = np.asarray(np.load(regressor_path), dtype=np.float32).reshape(-1)
+    if regressor.size == 0:
+        return np.zeros_like(trial.timebase_s, dtype=np.float32)
     parameters = dict(trial.stimulus.get("parameters", {}))
     start = max(0, int(parameters.get("window_start", 0)))
-    stop = min(regressor.size, int(parameters.get("window_stop", regressor.size)))
-    if stop <= start:
-        return np.ones_like(trial.timebase_s, dtype=np.float32)
-    sliced = regressor[start:stop]
-    if sliced.size == trial.timebase_s.size:
-        values = sliced
+    stop = int(parameters.get("window_stop", regressor.size))
+    if regressor.size == trial.timebase_s.size:
+        sliced = regressor
+    elif 0 <= start < stop <= regressor.size:
+        sliced = regressor[start:stop]
     else:
-        target_time = np.linspace(0.0, 1.0, trial.timebase_s.size, dtype=np.float32)
-        source_time = np.linspace(0.0, 1.0, sliced.size, dtype=np.float32)
-        values = np.interp(target_time, source_time, sliced).astype(np.float32)
-    values = np.abs(values).astype(np.float32, copy=False)
-    max_abs = float(np.max(values)) if values.size else 0.0
-    if max_abs <= 1e-6:
-        return np.zeros_like(values, dtype=np.float32)
-    return (values / max_abs).astype(np.float32)
+        sliced = regressor
+    if sliced.size == trial.timebase_s.size:
+        return sliced.astype(np.float32, copy=False)
+    if sliced.size == 1:
+        return np.full_like(trial.timebase_s, float(sliced[0]), dtype=np.float32)
+    target_time = np.linspace(0.0, 1.0, trial.timebase_s.size, dtype=np.float32)
+    source_time = np.linspace(0.0, 1.0, sliced.size, dtype=np.float32)
+    return np.interp(target_time, source_time, sliced).astype(np.float32)
+
+
+def split_aimon_trial_into_windows(
+    trial: AimonCanonicalTrialData,
+    *,
+    window_count: int,
+    include_window_indices: Sequence[int] = (),
+    fit_window_indices: Sequence[int] = (),
+    test_window_indices: Sequence[int] = (),
+) -> list[AimonCanonicalTrialData]:
+    count = max(1, int(window_count))
+    timebase = np.asarray(trial.timebase_s, dtype=np.float32).reshape(-1)
+    matrix = np.asarray(trial.matrix, dtype=np.float32)
+    if matrix.ndim != 2:
+        raise ValueError("Aimon trial matrix must be 2D")
+    if matrix.shape[1] != timebase.size:
+        raise ValueError("Aimon trial matrix/timebase length mismatch")
+    regressor_values = _trial_regressor_values(trial)
+    include_set = {int(value) for value in include_window_indices}
+    fit_set = {int(value) for value in fit_window_indices}
+    test_set = {int(value) for value in test_window_indices}
+    bounds = np.linspace(0, timebase.size, count + 1, dtype=np.int64)
+    rows: list[AimonCanonicalTrialData] = []
+    for window_index, (start, stop) in enumerate(zip(bounds[:-1], bounds[1:])):
+        if include_set and window_index not in include_set:
+            continue
+        start_i = int(start)
+        stop_i = int(stop)
+        if stop_i <= start_i:
+            continue
+        if fit_set:
+            split = "train" if window_index in fit_set else "test"
+        elif test_set:
+            split = "test" if window_index in test_set else "train"
+        else:
+            split = "train" if window_index < max(1, count - 1) else "test"
+        window_timebase = timebase[start_i:stop_i].astype(np.float32, copy=False)
+        window_timebase = window_timebase - float(window_timebase[0])
+        metadata = dict(trial.metadata)
+        metadata.update(
+            {
+                "source_trial_id": str(trial.trial_id),
+                "window_index": int(window_index),
+                "window_count": int(count),
+                "window_start_index": int(start_i),
+                "window_stop_index": int(stop_i),
+                "window_regressor_values": regressor_values[start_i:stop_i].astype(np.float32, copy=False),
+            }
+        )
+        rows.append(
+            AimonCanonicalTrialData(
+                trial_id=f"{trial.trial_id}__win_{window_index:02d}",
+                split=split,
+                behavior_context=str(trial.behavior_context),
+                matrix=matrix[:, start_i:stop_i].astype(np.float32, copy=False),
+                timebase_s=window_timebase,
+                stimulus=dict(trial.stimulus),
+                behavior_paths=dict(trial.behavior_paths),
+                metadata=metadata,
+            )
+        )
+    if not rows:
+        raise ValueError("Window split produced no Aimon trials")
+    return rows
 
 
 def _sensor_pool_rates_from_regressor_value(
     encoder: SensoryEncoder,
     *,
     sim_time_s: float,
-    regressor_value: float,
+    timebase_s: np.ndarray,
+    regressor_values: np.ndarray,
+    sample_index: int,
     force_forward_speed: float,
     force_contact_force: float,
 ) -> dict[str, float]:
-    observation = BodyObservation(
-        sim_time=float(sim_time_s),
-        position_xy=(0.0, 0.0),
-        yaw=0.0,
-        forward_speed=float(max(0.0, regressor_value) * max(0.0, force_forward_speed)),
-        yaw_rate=0.0,
-        contact_force=float(max(0.0, regressor_value) * max(0.0, force_contact_force)),
+    channels = public_body_feedback_from_aimon_regressor(
+        timebase_s=np.asarray(timebase_s, dtype=np.float32),
+        regressor_values=np.asarray(regressor_values, dtype=np.float32),
+        sample_index=int(sample_index),
+        forward_speed_scale=float(force_forward_speed),
+        contact_force_scale=float(force_contact_force),
+    )
+    observation = public_body_observation_from_channels(
+        sim_time_s=float(sim_time_s),
+        channels=channels,
+        metadata={"public_feedback_source": "aimon_regressor"},
     )
     return encoder.encode(observation, _zero_vision()).pool_rates
 
@@ -377,15 +539,17 @@ def simulate_trial_feature_matrix(
     encoder: SensoryEncoder,
     warmup_s: float,
     seed: int,
+    reset_state: bool,
     force_forward_speed: float,
     force_contact_force: float,
     include_global_features: bool,
     include_regressor_feature: bool,
 ) -> dict[str, Any]:
-    backend.reset(seed=int(seed))
-    warmup_steps = int(round(float(warmup_s) * 1000.0 / float(backend.dt_ms)))
-    if warmup_steps > 0:
-        backend.step({}, num_steps=warmup_steps)
+    if reset_state:
+        backend.reset(seed=int(seed))
+        warmup_steps = int(round(float(warmup_s) * 1000.0 / float(backend.dt_ms)))
+        if warmup_steps > 0:
+            backend.step({}, num_steps=warmup_steps)
     timebase_s = np.asarray(trial.timebase_s, dtype=np.float32).reshape(-1)
     regressor_values = _trial_regressor_values(trial)
     feature_names = _feature_name_list(
@@ -400,13 +564,14 @@ def simulate_trial_feature_matrix(
         if sample_index > 0:
             delta_s = max(0.0, current_time_s - last_time_s)
             num_steps = max(1, int(round(delta_s * 1000.0 / float(backend.dt_ms))))
-            regressor_value = float(regressor_values[sample_index - 1]) if sample_index - 1 < regressor_values.size else 0.0
             pool_rates = _sensor_pool_rates_from_regressor_value(
                 encoder,
                 sim_time_s=last_time_s,
-                regressor_value=regressor_value,
-                force_forward_speed=force_forward_speed if trial.behavior_context == "forced_walk" else 0.0,
-                force_contact_force=force_contact_force if trial.behavior_context == "forced_walk" else 0.0,
+                timebase_s=timebase_s,
+                regressor_values=regressor_values,
+                sample_index=sample_index - 1,
+                force_forward_speed=force_forward_speed,
+                force_contact_force=force_contact_force,
             )
             backend.step(pool_rates, num_steps=num_steps)
         feature_matrix[:, sample_index] = _current_feature_vector(
@@ -439,27 +604,42 @@ def fit_reduced_linear_projection(
 ) -> ReducedLinearProjection:
     if not feature_matrices or not observed_matrices:
         raise ValueError("feature_matrices and observed_matrices must be non-empty")
-    x_rows = np.concatenate([matrix.T for matrix in feature_matrices], axis=0).astype(np.float32)
-    y_rows = np.concatenate([matrix.T for matrix in observed_matrices], axis=0).astype(np.float32)
+    x_rows = np.concatenate([matrix.T for matrix in feature_matrices], axis=0).astype(np.float64)
+    y_rows = np.concatenate([matrix.T for matrix in observed_matrices], axis=0).astype(np.float64)
     if x_rows.shape[0] != y_rows.shape[0]:
         raise ValueError("feature and observed sample counts must match")
-    feature_mean = x_rows.mean(axis=0)
-    feature_scale = x_rows.std(axis=0)
-    feature_scale = np.where(feature_scale > 1e-6, feature_scale, 1.0).astype(np.float32)
-    x_norm = ((x_rows - feature_mean) / feature_scale).astype(np.float32)
-    _, singular_values, vt = np.linalg.svd(x_norm, full_matrices=False)
+    x_rows = np.nan_to_num(x_rows, nan=0.0, posinf=0.0, neginf=0.0)
+    y_rows = np.nan_to_num(y_rows, nan=0.0, posinf=0.0, neginf=0.0)
+    feature_mean = x_rows.mean(axis=0, dtype=np.float64)
+    feature_scale = x_rows.std(axis=0, dtype=np.float64)
+    feature_scale = np.where(np.isfinite(feature_scale) & (feature_scale > 1e-6), feature_scale, 1.0)
+    x_norm = np.nan_to_num((x_rows - feature_mean) / feature_scale, nan=0.0, posinf=0.0, neginf=0.0)
+    try:
+        _, singular_values, vt = np.linalg.svd(x_norm, full_matrices=False)
+    except np.linalg.LinAlgError:
+        covariance = np.nan_to_num(x_norm.T @ x_norm, nan=0.0, posinf=0.0, neginf=0.0)
+        eigenvalues, eigenvectors = np.linalg.eigh(covariance)
+        order = np.argsort(eigenvalues)[::-1]
+        eigenvalues = np.clip(eigenvalues[order], a_min=0.0, a_max=None)
+        singular_values = np.sqrt(eigenvalues)
+        vt = eigenvectors[:, order].T
     keep_dim = max(1, min(int(max_basis_dim), int(vt.shape[0]), int(np.count_nonzero(singular_values > 1e-6)) or 1))
-    components = vt[:keep_dim].astype(np.float32)
-    reduced = x_norm @ components.T
-    design = np.concatenate([np.ones((reduced.shape[0], 1), dtype=np.float32), reduced], axis=1)
+    components = vt[:keep_dim].astype(np.float64)
+    reduced = np.nan_to_num(x_norm @ components.T, nan=0.0, posinf=0.0, neginf=0.0)
+    design = np.concatenate([np.ones((reduced.shape[0], 1), dtype=np.float64), reduced], axis=1)
     gram = design.T @ design
-    penalty = np.eye(gram.shape[0], dtype=np.float32) * float(ridge_lambda)
+    penalty = np.eye(gram.shape[0], dtype=np.float64) * float(ridge_lambda)
     penalty[0, 0] = 0.0
-    beta = np.linalg.solve(gram + penalty, design.T @ y_rows).astype(np.float32)
+    rhs = design.T @ y_rows
+    try:
+        beta = np.linalg.solve(gram + penalty, rhs)
+    except np.linalg.LinAlgError:
+        beta, *_ = np.linalg.lstsq(gram + penalty, rhs, rcond=None)
+    beta = np.nan_to_num(beta, nan=0.0, posinf=0.0, neginf=0.0).astype(np.float32)
     return ReducedLinearProjection(
         feature_mean=feature_mean.astype(np.float32),
         feature_scale=feature_scale.astype(np.float32),
-        projection_components=components,
+        projection_components=components.astype(np.float32),
         beta=beta,
         max_basis_dim=int(keep_dim),
         ridge_lambda=float(ridge_lambda),
@@ -471,11 +651,11 @@ def fit_reduced_linear_projection(
 
 def apply_reduced_linear_projection(model: ReducedLinearProjection, feature_matrix: np.ndarray) -> np.ndarray:
     features = np.asarray(feature_matrix, dtype=np.float32)
-    x_rows = features.T
-    x_norm = (x_rows - model.feature_mean) / model.feature_scale
-    reduced = x_norm @ model.projection_components.T
+    x_rows = np.nan_to_num(features.T.astype(np.float64), nan=0.0, posinf=0.0, neginf=0.0)
+    x_norm = np.nan_to_num((x_rows - model.feature_mean) / model.feature_scale, nan=0.0, posinf=0.0, neginf=0.0)
+    reduced = np.nan_to_num(x_norm @ model.projection_components.T, nan=0.0, posinf=0.0, neginf=0.0)
     design = np.concatenate([np.ones((reduced.shape[0], 1), dtype=np.float32), reduced], axis=1)
-    predicted = design @ model.beta
+    predicted = np.nan_to_num(design @ model.beta, nan=0.0, posinf=0.0, neginf=0.0)
     return predicted.T.astype(np.float32, copy=False)
 
 
@@ -486,6 +666,8 @@ def run_aimon_spontaneous_fit(
     output_dir: str | Path,
     trial_id_allowlist: Sequence[str] | None = None,
     fit_splits: Sequence[str] | None = None,
+    trial_data_override: Sequence[AimonCanonicalTrialData] | None = None,
+    preserve_continuity_by_source_trial: bool = False,
 ) -> dict[str, Any]:
     backend, config = build_backend_from_config(replay_config.brain_config_path, device_override=replay_config.device)
     encoder_cfg = EncoderConfig.from_mapping(config.get("encoder"))
@@ -497,7 +679,7 @@ def run_aimon_spontaneous_fit(
         max_family_size_per_side=replay_config.max_family_size_per_side,
         include_asymmetry_basis=replay_config.include_asymmetry_basis,
     )
-    trials = load_aimon_canonical_trial_data(bundle_path)
+    trials = list(trial_data_override) if trial_data_override is not None else load_aimon_canonical_trial_data(bundle_path)
     allow = {str(value) for value in (trial_id_allowlist or [])}
     if allow:
         trials = [trial for trial in trials if trial.trial_id in allow]
@@ -505,15 +687,21 @@ def run_aimon_spontaneous_fit(
         raise ValueError("No Aimon trials available for spontaneous fit")
     observation_taus_s = normalize_observation_taus(replay_config.observation_taus_s)
     fit_split_set = {str(value) for value in (fit_splits or ("train",))}
+    execution_plan = build_trial_execution_plan(
+        trials,
+        base_seed=int(replay_config.seed),
+        preserve_continuity_by_source_trial=bool(preserve_continuity_by_source_trial),
+    )
     feature_rows: list[dict[str, Any]] = []
-    for trial_index, trial in enumerate(trials):
+    for trial, plan in zip(trials, execution_plan):
         row = simulate_trial_feature_matrix(
             backend,
             basis,
             trial,
             encoder=encoder,
             warmup_s=float(replay_config.warmup_s),
-            seed=int(replay_config.seed + trial_index),
+            seed=int(plan.seed),
+            reset_state=bool(plan.reset_state),
             force_forward_speed=float(replay_config.force_forward_speed),
             force_contact_force=float(replay_config.force_contact_force),
             include_global_features=bool(replay_config.include_global_features),
@@ -616,6 +804,16 @@ def run_aimon_spontaneous_fit(
         "family_group_count": len(basis.groups),
         "feature_count": len(feature_names),
         "fit_trial_ids": list(model.fit_trial_ids),
+        "preserve_continuity_by_source_trial": bool(preserve_continuity_by_source_trial),
+        "execution_plan": [
+            {
+                "trial_id": plan.trial_id,
+                "source_trial_id": plan.source_trial_id,
+                "reset_state": bool(plan.reset_state),
+                "seed": int(plan.seed),
+            }
+            for plan in execution_plan
+        ],
         "fit_basis_dim": int(model.max_basis_dim),
         "ridge_lambda": float(model.ridge_lambda),
         "aggregate": aggregate_summary,

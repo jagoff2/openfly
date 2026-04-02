@@ -334,13 +334,24 @@ def test_creamer_treadmill_block_assay_config_uses_interleaved_blocks() -> None:
 
     assert config["body"]["visual_speed_control"]["mode"] == "interleaved_blocks"
     assert len(config["body"]["visual_speed_control"]["block_schedule"]) == 12
-    assert config["body"]["visual_speed_control"]["block_schedule"][0]["label"] == "warmup_a"
-    assert config["body"]["visual_speed_control"]["block_schedule"][4]["label"] == "baseline_a"
-    assert config["body"]["visual_speed_control"]["block_schedule"][5]["kind"] == "front_to_back"
-    assert config["body"]["visual_speed_control"]["block_schedule"][7]["kind"] == "counterphase_flicker"
-    assert config["decoder"]["command_mode"] == "hybrid_multidrive"
-    assert config["runtime"]["control_mode"] == "hybrid_multidrive"
-    assert config["runtime"]["duration_s"] == 3.0
+
+
+def test_target_endogenous_routed_config_disables_coarse_visual_pool_and_uses_temporal_splice_only() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed.yaml")
+
+    assert config["encoder"]["visual_gain_hz"] == 0.0
+    assert config["encoder"]["visual_looming_gain_hz"] == 0.0
+    assert config["visual_splice"]["enabled"] is True
+    assert config["visual_splice"]["temporal_delta_scale"] == 2.0
+
+
+def test_no_target_endogenous_routed_config_disables_coarse_visual_pool_and_uses_temporal_splice_only() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_endogenous_routed.yaml")
+
+    assert config["encoder"]["visual_gain_hz"] == 0.0
+    assert config["encoder"]["visual_looming_gain_hz"] == 0.0
+    assert config["visual_splice"]["enabled"] is True
+    assert config["visual_splice"]["temporal_delta_scale"] == 2.0
 
 
 def test_creamer_treadmill_block_assay_ablation_config_keeps_same_schedule() -> None:

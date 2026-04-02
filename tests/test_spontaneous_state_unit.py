@@ -464,12 +464,47 @@ def test_endogenous_neuromodulatory_states_accumulate_from_graded_activity(
     )
 
     backend.reset(seed=2)
-    backend.step({}, num_steps=40, direct_current_by_id={1001: 500.0})
+    backend.step({"mech_f_bilateral": 75.0}, num_steps=40, direct_current_by_id={1001: 500.0})
     summary = backend.state_summary()
 
     assert summary["graded_release_mean"] > 0.0
     assert summary["modulatory_arousal_mean"] > 0.0
     assert summary["modulatory_exafference_mean"] > 0.0
+    assert summary["public_exafference_target_mean"] > 0.0
+
+
+def test_endogenous_exafference_state_requires_public_body_drive(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    backend = _build_small_backend(
+        monkeypatch,
+        tmp_path,
+        spontaneous_state=None,
+        backend_dynamics={
+            "mode": "grouped_glif_scaffold",
+            "spontaneous_source": "endogenous",
+            "neuromodulation_enabled": True,
+            "modulatory_group_names": ["default"],
+            "default_group": {
+                "release_mode": "graded",
+                "tau_release_ms": 8.0,
+                "release_v_half_mv": -55.0,
+                "release_slope_mv": 2.0,
+                "noise_sigma": 0.0,
+            },
+        },
+        dt_ms=1.0,
+    )
+
+    backend.reset(seed=2)
+    backend.step({}, num_steps=40, direct_current_by_id={1001: 500.0})
+    summary = backend.state_summary()
+
+    assert summary["graded_release_mean"] > 0.0
+    assert summary["modulatory_arousal_mean"] > 0.0
+    assert summary["modulatory_exafference_mean"] == pytest.approx(0.0)
+    assert summary["public_exafference_target_mean"] == pytest.approx(0.0)
 
 
 def test_endogenous_intracellular_calcium_state_accumulates_and_persists(
@@ -596,6 +631,137 @@ def test_endogenous_routed_recurrent_classes_split_fast_slow_and_modulatory_sour
     assert summary["routed_fast_source_fraction"] > 0.0
     assert summary["routed_slow_source_fraction"] > 0.0
     assert summary["routed_modulatory_source_fraction"] > 0.0
+
+
+def test_endogenous_distributed_temporal_state_accumulates_and_persists(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    flyid_to_index = {1001: 0, 1002: 1}
+    index_to_flyid = {index: neuron_id for neuron_id, index in flyid_to_index.items()}
+    weights = torch.tensor(
+        [
+            [0.0, 6.0],
+            [0.0, 0.0],
+        ],
+        dtype=torch.float32,
+    )
+
+    monkeypatch.setattr(WholeBrainTorchBackend, "_load_hash_tables", lambda self: (flyid_to_index, index_to_flyid))
+    monkeypatch.setattr(WholeBrainTorchBackend, "_load_weights", lambda self: weights)
+
+    backend = WholeBrainTorchBackend(
+        completeness_path="unused.csv",
+        connectivity_path="unused.parquet",
+        cache_dir=tmp_path / "cache",
+        device="cpu",
+        dt_ms=1.0,
+        backend_dynamics={
+            "mode": "grouped_glif_scaffold",
+            "spontaneous_source": "endogenous",
+            "neuromodulation_enabled": True,
+            "modulatory_group_names": ["default"],
+            "default_group": {
+                "release_mode": "graded",
+                "tau_release_ms": 8.0,
+                "release_v_half_mv": -55.0,
+                "release_slope_mv": 2.0,
+                "tau_context_exc_ms": 120.0,
+                "tau_context_inh_ms": 180.0,
+                "tau_context_mod_ms": 240.0,
+                "context_exc_gain": 0.0,
+                "context_inh_gain": 0.0,
+                "context_mod_gain": 0.0,
+                "noise_sigma": 0.0,
+            },
+        },
+    )
+
+    backend.reset(seed=0)
+    weighted_fast = torch.zeros((1, 2), dtype=torch.float32)
+    weighted_slow = torch.tensor([[4.0, -2.0]], dtype=torch.float32)
+    weighted_modulatory = torch.tensor([[1.5, 0.0]], dtype=torch.float32)
+    monkeypatch.setattr(
+        backend,
+        "_compute_routed_weighted_components",
+        lambda: (weighted_fast, weighted_slow, weighted_modulatory),
+    )
+    backend._update_distributed_temporal_state()
+    exc_after_drive = float(backend.distributed_context_exc_state.mean().item())
+    mod_after_drive = float(backend.distributed_context_mod_state.mean().item())
+    summary = backend.state_summary()
+    monkeypatch.setattr(
+        backend,
+        "_compute_routed_weighted_components",
+        lambda: (
+            torch.zeros((1, 2), dtype=torch.float32),
+            torch.zeros((1, 2), dtype=torch.float32),
+            torch.zeros((1, 2), dtype=torch.float32),
+        ),
+    )
+    for _ in range(40):
+        backend._update_distributed_temporal_state()
+    exc_after_persist = float(backend.distributed_context_exc_state.mean().item())
+    mod_after_persist = float(backend.distributed_context_mod_state.mean().item())
+    for _ in range(400):
+        backend._update_distributed_temporal_state()
+    exc_after_decay = float(backend.distributed_context_exc_state.mean().item())
+    mod_after_decay = float(backend.distributed_context_mod_state.mean().item())
+
+    assert exc_after_drive > 0.0
+    assert mod_after_drive > 0.0
+    assert exc_after_persist > 0.0
+    assert mod_after_persist > 0.0
+    assert exc_after_decay >= 0.0
+    assert exc_after_decay < exc_after_persist
+    assert mod_after_decay <= mod_after_persist
+    assert summary["distributed_context_exc_mean"] > 0.0
+
+
+def test_routed_class_inputs_include_distributed_temporal_feedback(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    flyid_to_index = {1001: 0, 1002: 1, 1003: 2}
+    index_to_flyid = {index: neuron_id for neuron_id, index in flyid_to_index.items()}
+    weights = torch.zeros((3, 3), dtype=torch.float32)
+
+    monkeypatch.setattr(WholeBrainTorchBackend, "_load_hash_tables", lambda self: (flyid_to_index, index_to_flyid))
+    monkeypatch.setattr(WholeBrainTorchBackend, "_load_weights", lambda self: weights)
+
+    backend = WholeBrainTorchBackend(
+        completeness_path="unused.csv",
+        connectivity_path="unused.parquet",
+        cache_dir=tmp_path / "cache",
+        device="cpu",
+        dt_ms=1.0,
+        backend_dynamics={
+            "mode": "grouped_glif_scaffold",
+            "spontaneous_source": "endogenous",
+            "neuromodulation_enabled": True,
+            "modulatory_group_names": ["default"],
+            "default_group": {
+                "release_mode": "graded",
+                "tau_context_exc_ms": 120.0,
+                "tau_context_inh_ms": 200.0,
+                "tau_context_mod_ms": 320.0,
+                "context_exc_gain": 0.5,
+                "context_inh_gain": 0.4,
+                "context_mod_gain": 0.3,
+            },
+        },
+    )
+
+    backend.reset(seed=0)
+    backend.distributed_context_exc_state[0, 0] = 2.0
+    backend.distributed_context_inh_state[0, 1] = 3.0
+    backend.distributed_context_mod_state[0, 2] = 4.0
+
+    class_inputs = backend._build_routed_recurrent_class_inputs(torch.zeros((1, 3), dtype=torch.float32))
+
+    assert float(class_inputs[1, 0, 0]) > 0.0
+    assert float(class_inputs[3, 0, 1]) > 0.0
+    assert float(class_inputs[4, 0, 2]) > 0.0
 
 
 def test_backend_dynamics_catalog_uses_group_overrides(

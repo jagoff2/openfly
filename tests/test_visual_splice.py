@@ -101,3 +101,50 @@ def test_visual_splice_include_cell_types_filters_overlap_groups(tmp_path: Path)
     currents, info = injector.build(_obs(current, cache))
     assert info["nonzero_root_count"] == 4
     assert set(currents) == {5, 6, 7, 8}
+
+
+def test_visual_splice_temporal_delta_scale_adds_transient_current(tmp_path: Path) -> None:
+    annotation_path = tmp_path / "annot.tsv"
+    _write_annotation(annotation_path)
+    cache = FlyVisConnectomeCache(
+        node_types=np.asarray(["TmY14", "TmY14", "T5d", "T5d"], dtype=object),
+        node_u=np.asarray([0.0, 1.0, 0.0, 1.0], dtype=float),
+        node_v=np.asarray([0.0, 0.0, 1.0, 1.0], dtype=float),
+    )
+    baseline = np.ones((2, 4), dtype=float)
+    current = baseline.copy()
+    current[0, 0] = 0.5
+    current[1, 1] = 1.5
+    injector_static = VisualSpliceInjector(
+        VisualSpliceConfig(
+            enabled=True,
+            annotation_path=str(annotation_path),
+            spatial_mode="axis1d",
+            spatial_bins=2,
+            min_roots_per_bin=1,
+            value_scale=2.0,
+            max_abs_current=10.0,
+            temporal_delta_scale=0.0,
+        )
+    )
+    injector_transient = VisualSpliceInjector(
+        VisualSpliceConfig(
+            enabled=True,
+            annotation_path=str(annotation_path),
+            spatial_mode="axis1d",
+            spatial_bins=2,
+            min_roots_per_bin=1,
+            value_scale=2.0,
+            max_abs_current=10.0,
+            temporal_delta_scale=2.0,
+        )
+    )
+
+    injector_static.build(_obs(baseline, cache))
+    injector_transient.build(_obs(baseline, cache))
+    currents_static, info_static = injector_static.build(_obs(current, cache))
+    currents_transient, info_transient = injector_transient.build(_obs(current, cache))
+
+    assert info_static["max_abs_temporal_delta"] > 0.0
+    assert info_transient["max_abs_temporal_delta"] > 0.0
+    assert max(abs(value) for value in currents_transient.values()) > max(abs(value) for value in currents_static.values())

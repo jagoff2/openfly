@@ -57,6 +57,8 @@ def score_aimon_trial_matrix(
     simulated_matrix: np.ndarray,
     *,
     simulated_timebase_s: np.ndarray | None = None,
+    max_lag_steps: int = 0,
+    max_lag_seconds: float | None = 0.5,
 ) -> dict[str, Any]:
     simulated_matrix = np.asarray(simulated_matrix, dtype=np.float32)
     if simulated_matrix.shape[0] != observed_trial.matrix.shape[0]:
@@ -70,6 +72,8 @@ def score_aimon_trial_matrix(
                 simulated_values=simulated_matrix[trace_index],
                 observed_timebase=observed_trial.timebase_s,
                 simulated_timebase=simulated_timebase_s,
+                max_lag_steps=max_lag_steps,
+                max_lag_seconds=max_lag_seconds,
             )
         )
     return {

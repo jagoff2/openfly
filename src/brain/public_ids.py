@@ -103,6 +103,9 @@ DEFAULT_FLOW_CELLS = ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
 PUBLIC_INPUT_IDS = {
     "vision_bilateral": LC4_IDS,
     "mech_bilateral": JON_CE_IDS,
+    "mech_ce_bilateral": JON_CE_IDS,
+    "mech_f_bilateral": JON_F_IDS,
+    "mech_dm_bilateral": JON_DM_IDS,
 }
 
 
@@ -111,9 +114,17 @@ def collapse_sensor_pool_rates(sensor_pool_rates: dict[str, float]) -> dict[str,
     vision_right = float(sensor_pool_rates.get("vision_right", 0.0))
     mech_left = float(sensor_pool_rates.get("mech_left", 0.0))
     mech_right = float(sensor_pool_rates.get("mech_right", 0.0))
+    has_subgroup_mech = any(
+        key in sensor_pool_rates
+        for key in ("mech_ce_bilateral", "mech_f_bilateral", "mech_dm_bilateral")
+    )
+    legacy_mech = max(0.0, 0.5 * (mech_left + mech_right))
     return {
         "vision_bilateral": 0.5 * (vision_left + vision_right),
-        "mech_bilateral": 0.5 * (mech_left + mech_right),
+        "mech_bilateral": 0.0 if has_subgroup_mech else legacy_mech,
+        "mech_ce_bilateral": max(0.0, float(sensor_pool_rates.get("mech_ce_bilateral", 0.0))),
+        "mech_f_bilateral": max(0.0, float(sensor_pool_rates.get("mech_f_bilateral", 0.0))),
+        "mech_dm_bilateral": max(0.0, float(sensor_pool_rates.get("mech_dm_bilateral", 0.0))),
     }
 
 MOTOR_READOUT_IDS = {

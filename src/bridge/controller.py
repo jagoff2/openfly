@@ -170,6 +170,8 @@ class ClosedLoopBridge:
             self.brain_context_injector.reset()
         if reset_visual_splice and hasattr(self.visual_splice_injector, "reset"):
             self.visual_splice_injector.reset()
+        if hasattr(self.vision_extractor, "reset"):
+            self.vision_extractor.reset()
         self._previous_salience_diff = None
         self._previous_forward_salience = None
         self._previous_shadow_raw_turn_state.clear()

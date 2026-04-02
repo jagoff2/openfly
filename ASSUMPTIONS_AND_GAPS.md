@@ -19,7 +19,9 @@
 - Realistic vision is mandatory for the production path; the mock path exists only for tests and fast smoke runs.
 - Hard rule for the active embodiment path:
   - no controller-side or body-side shortcut heuristics
+  - no decoder-side or shadow-decoder-side shortcut promotion from visual-area activity, target metadata, or any non-descending signal into body control
   - no motor-floor or behavior-floor patches outside the brain
+  - visual/object influence on behavior must pass through lawful sensory inputs, internal brain dynamics, and downstream descending outputs only
   - primary-branch behavior changes must be brain-driven and biologically plausible
   - monitoring-only and explicitly rejected experimental branches may still exist for diagnosis, but they must stay clearly labeled as non-production
 - Evaluation-duration rule:

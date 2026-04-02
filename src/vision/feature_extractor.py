@@ -55,6 +55,10 @@ class VisionFeatures:
     inferred_turn_bias: float = 0.0
     inferred_turn_confidence: float = 0.0
     inferred_candidate_count: int = 0
+    balance_velocity: float = 0.0
+    forward_salience_velocity: float = 0.0
+    looming_evidence: float = 0.0
+    receding_evidence: float = 0.0
 
     @classmethod
     def from_dict(cls, values: Mapping[str, Any]) -> "VisionFeatures":
@@ -68,6 +72,10 @@ class VisionFeatures:
             inferred_turn_bias=float(values.get("inferred_turn_bias", 0.0)),
             inferred_turn_confidence=float(values.get("inferred_turn_confidence", 0.0)),
             inferred_candidate_count=int(values.get("inferred_candidate_count", 0)),
+            balance_velocity=float(values.get("balance_velocity", 0.0)),
+            forward_salience_velocity=float(values.get("forward_salience_velocity", 0.0)),
+            looming_evidence=float(values.get("looming_evidence", 0.0)),
+            receding_evidence=float(values.get("receding_evidence", 0.0)),
         )
 
     @property
@@ -79,6 +87,10 @@ class VisionFeatures:
     def forward_salience(self) -> float:
         return 0.5 * (self.salience_left + self.salience_right)
 
+    @property
+    def flow_balance(self) -> float:
+        return float(self.flow_right - self.flow_left)
+
     def to_dict(self) -> dict[str, float]:
         return {
             "salience_left": self.salience_left,
@@ -87,11 +99,16 @@ class VisionFeatures:
             "flow_right": self.flow_right,
             "balance": self.balance,
             "forward_salience": self.forward_salience,
+            "flow_balance": self.flow_balance,
             "inferred_left_evidence": self.inferred_left_evidence,
             "inferred_right_evidence": self.inferred_right_evidence,
             "inferred_turn_bias": self.inferred_turn_bias,
             "inferred_turn_confidence": self.inferred_turn_confidence,
             "inferred_candidate_count": self.inferred_candidate_count,
+            "balance_velocity": self.balance_velocity,
+            "forward_salience_velocity": self.forward_salience_velocity,
+            "looming_evidence": self.looming_evidence,
+            "receding_evidence": self.receding_evidence,
         }
 
 class RealisticVisionFeatureExtractor:
@@ -104,6 +121,56 @@ class RealisticVisionFeatureExtractor:
         self.tracking_cells = list(tracking_cells or DEFAULT_TRACKING_CELLS)
         self.flow_cells = list(flow_cells or DEFAULT_FLOW_CELLS)
         self.inferred_turn_extractor = inferred_turn_extractor
+        self.reset()
+
+    def reset(self) -> None:
+        self._last_feature_snapshot: VisionFeatures | None = None
+        self._last_sim_time: float | None = None
+
+    @staticmethod
+    def _bounded_velocity(delta: float, dt: float, *, scale_per_s: float = 0.02) -> float:
+        if dt <= 1e-9:
+            return 0.0
+        return float(np.tanh((float(delta) / float(dt)) * float(scale_per_s)))
+
+    def _with_temporal_features(self, features: VisionFeatures, sim_time: float | None) -> VisionFeatures:
+        if sim_time is None or self._last_feature_snapshot is None or self._last_sim_time is None:
+            enriched = VisionFeatures(
+                salience_left=features.salience_left,
+                salience_right=features.salience_right,
+                flow_left=features.flow_left,
+                flow_right=features.flow_right,
+                inferred_left_evidence=features.inferred_left_evidence,
+                inferred_right_evidence=features.inferred_right_evidence,
+                inferred_turn_bias=features.inferred_turn_bias,
+                inferred_turn_confidence=features.inferred_turn_confidence,
+                inferred_candidate_count=features.inferred_candidate_count,
+            )
+        else:
+            dt = max(0.0, float(sim_time) - float(self._last_sim_time))
+            balance_velocity = self._bounded_velocity(features.balance - self._last_feature_snapshot.balance, dt)
+            forward_salience_velocity = self._bounded_velocity(
+                features.forward_salience - self._last_feature_snapshot.forward_salience,
+                dt,
+            )
+            enriched = VisionFeatures(
+                salience_left=features.salience_left,
+                salience_right=features.salience_right,
+                flow_left=features.flow_left,
+                flow_right=features.flow_right,
+                inferred_left_evidence=features.inferred_left_evidence,
+                inferred_right_evidence=features.inferred_right_evidence,
+                inferred_turn_bias=features.inferred_turn_bias,
+                inferred_turn_confidence=features.inferred_turn_confidence,
+                inferred_candidate_count=features.inferred_candidate_count,
+                balance_velocity=balance_velocity,
+                forward_salience_velocity=forward_salience_velocity,
+                looming_evidence=max(0.0, forward_salience_velocity),
+                receding_evidence=max(0.0, -forward_salience_velocity),
+            )
+        self._last_feature_snapshot = enriched
+        self._last_sim_time = None if sim_time is None else float(sim_time)
+        return enriched
 
     def build_index_cache(self, node_types: np.ndarray) -> VisionIndexCache:
         return VisionIndexCache.from_node_types(node_types, tracking_cells=self.tracking_cells, flow_cells=self.flow_cells)
@@ -188,6 +255,7 @@ class RealisticVisionFeatureExtractor:
         precomputed = getattr(observation, "realistic_vision_features", None)
         vision_array = getattr(observation, "realistic_vision_array", None)
         index_cache = getattr(observation, "realistic_vision_index_cache", None)
+        current_features: VisionFeatures
         if vision_array is not None and index_cache is not None:
             array_features = self.extract_from_array(vision_array, index_cache)
             if precomputed:
@@ -201,9 +269,12 @@ class RealisticVisionFeatureExtractor:
                         "inferred_candidate_count": array_features.inferred_candidate_count,
                     }
                 )
-                return VisionFeatures.from_dict(merged)
-            return array_features
-        if precomputed:
-            return VisionFeatures.from_dict(precomputed)
-        realistic_vision = getattr(observation, "realistic_vision", {})
-        return self.extract(realistic_vision)
+                current_features = VisionFeatures.from_dict(merged)
+            else:
+                current_features = array_features
+        elif precomputed:
+            current_features = VisionFeatures.from_dict(precomputed)
+        else:
+            realistic_vision = getattr(observation, "realistic_vision", {})
+            current_features = self.extract(realistic_vision)
+        return self._with_temporal_features(current_features, getattr(observation, "sim_time", None))

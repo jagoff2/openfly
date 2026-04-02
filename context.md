@@ -1,6 +1,6 @@
 # Context Handoff for OpenFly
 
-Last updated: 2026-03-11
+Last updated: 2026-04-02
 
 ## Purpose of this file
 
@@ -68,6 +68,77 @@ The key unresolved control issue is the output side:
 - but the mapping from those outputs into high-quality target-conditioned motor
   commands remains the main bottleneck.
 
+As of `2026-04-02`, one specific lawful target-interaction bottleneck has been
+materially improved. The active routed target/no-target configs now carry a
+stateful temporal sensory patch:
+
+- stateful temporal visual features in
+  `src/vision/feature_extractor.py`
+- a small bilateral looming gain in `src/bridge/encoder.py`
+- and, most importantly, a transient retinotopic motion term in
+  `src/bridge/visual_splice.py`
+
+This was done under the strict no-bypass rule:
+
+- no target metadata into control
+- no decoder/shadow promotion from visual-area activity into body control
+- no controller-side shortcut heuristics
+
+The active routed target/no-target configs are now also `splice-only` on the
+visual encoder side:
+
+- `encoder.visual_gain_hz = 0.0`
+- `encoder.visual_looming_gain_hz = 0.0`
+
+So target/object interaction in that branch is now driven only by:
+
+- lawful realistic-vision feature extraction
+- the retinotopic temporal visual splice
+- brain dynamics
+- descending outputs
+
+The first parity-time embodied target retest on this lawful branch,
+`outputs/requested_1p1s_endogenous_routed_target_parity_temporal/flygym-demo-20260401-235448`,
+materially improved target clearance in the old failure window:
+
+- old first-`1.1 s` slice from the exact `2.0 s` target run:
+  - minimum target distance `0.5780 mm`
+  - `119` cycles under `2.0 mm`
+  - `86` cycles under `1.5 mm`
+- new lawful temporal branch:
+  - minimum target distance `2.4862 mm`
+  - `0` cycles under `2.0 mm`
+  - `0` cycles under `1.5 mm`
+
+That result matters because it shows the object-response miss was not only a
+decoder/output problem. A lawful sensory-path improvement alone was enough to
+change the embodied target interaction materially. The full `2.0 s` retest on
+the same branch has now completed on the stricter splice-only visual setting:
+
+- `outputs/requested_2s_endogenous_routed_target_parity_temporal_splice_only/flygym-demo-20260402-003922`
+
+That exact full `2.0 s` run removed the old overlap failure completely:
+
+- old exact target run:
+  - minimum target distance `0.5780 mm`
+  - `86` cycles under `1.5 mm`
+  - `119` cycles under `2.0 mm`
+- new splice-only exact target run:
+  - minimum target distance `3.0065 mm`
+  - `0` cycles under `1.5 mm`
+  - `0` cycles under `2.0 mm`
+  - `0` cycles under `3.0 mm`
+
+The remaining target-side problem is no longer catastrophic overlap. It is weak
+target fixation / bearing improvement over the full run:
+
+- `fixation_fraction_20deg = 0.076`
+- `fixation_fraction_30deg = 0.113`
+- `bearing_reduction_rad = -0.9223`
+
+So the active lawful target branch is now materially safer, but still not
+correct target-oriented behavior.
+
 ## Mission and standards that govern this repo
 
 The repo was built under a strict reproduction brief:
@@ -78,6 +149,10 @@ The repo was built under a strict reproduction brief:
 - measure parity using observable outputs,
 - keep everything local, scripted, benchmarked, and testable,
 - maintain explicit task tracking and a dated lab notebook,
+- no bypass, no faking, no laziness:
+  - no target metadata shortcuts into control
+  - no decoder-side or shadow-decoder-side promotion from visual-area activity directly into body control
+  - visual/object effects on behavior must pass through lawful sensory pathways, brain dynamics, and descending outputs only
 - and never hand-wave missing glue code.
 
 The repo therefore includes:
@@ -118,6 +193,68 @@ If the fresh session is specifically about visual neuron mapping, add:
 If the fresh session is specifically about motor/output semantics, add:
 
 - `docs/descending_motor_atlas.md`
+
+## April 1, 2026 harness repair patch
+
+The parity loop changed materially on April 1, 2026 and this matters more than
+the recent tiny metric deltas.
+
+What was repaired:
+
+- The Aimon replay path in
+  [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+  was partially poisoned.
+  - `spontaneous_walk` no longer hard-codes all-zero regressors.
+  - `forced_walk` no longer takes `abs()` and per-trial max normalization.
+  - invalid `window_start/window_stop` metadata no longer collapses replay to
+    constants or tail-stretched covariates.
+- The canonical exporter in
+  [aimon_canonical_dataset.py](/G:/flysim/src/analysis/aimon_canonical_dataset.py)
+  now writes trial-aligned regressor files instead of leaving the fitter to
+  guess how to slice incompatible raw arrays.
+- Both parity configs no longer contain duplicate top-level `encoder:` blocks:
+  - [brain_endogenous_public_parity.yaml](/G:/flysim/configs/brain_endogenous_public_parity.yaml)
+  - [brain_endogenous_public_parity_routed_only.yaml](/G:/flysim/configs/brain_endogenous_public_parity_routed_only.yaml)
+- The scorer in
+  [public_neural_measurement_harness.py](/G:/flysim/src/analysis/public_neural_measurement_harness.py)
+  now reports lag-aware timing metrics in addition to strict zero-lag metrics.
+- The Aimon body-feedback path no longer reuses transition-derived drive in
+  multiple positive encoder channels:
+  - [public_body_feedback.py](/G:/flysim/src/analysis/public_body_feedback.py)
+  - [encoder.py](/G:/flysim/src/bridge/encoder.py)
+- The fit head in
+  [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+  now sees slow endogenous backend state directly:
+  - conductance summaries
+  - adaptation
+  - intrinsic noise
+  - graded release
+  - intracellular calcium
+  - distributed temporal state
+  - synapse-class state
+  - modulatory state
+- The backend in
+  [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py)
+  now separates public exafference target tracking from internal arousal.
+  `modulatory_exafference_state` is no longer just the same internal target as
+  arousal with a different tau.
+
+Validation state:
+
+- Focused repair slice passed:
+  - `51 passed, 1 warning`
+- The Aimon canonical bundle was regenerated from:
+  - [external/spontaneous/aimon2023_dryad](/G:/flysim/external/spontaneous/aimon2023_dryad)
+- The first repaired short exact-identity retest is:
+  - [aimon_b350_forced_window_routed_v5_replayfix](/G:/flysim/outputs/metrics/aimon_b350_forced_window_routed_v5_replayfix)
+
+Operational consequence:
+
+- Any Aimon timing conclusion from before the April 1 repair patch should be
+  treated as provisional unless it is reconfirmed on the repaired path.
+- The next admissible metric comparison is the repaired
+  `B350_forced_walk` 4-window split against the old `v2 continuity` and `v4
+  body-feedback` baselines.
 - `docs/descending_monitoring_atlas.md`
 - `docs/neck_output_mapping_strategy.md`
 - `docs/neck_output_motor_basis.md`
@@ -1948,3 +2085,685 @@ Next admissible run:
   observation harness
 - recommended output root:
   - `outputs/metrics/schaffer_endogenous_tiny_v2_routed`
+
+## March 31, 2026 routed Schaffer result landed and narrowed the remaining temporal miss
+
+Routed Schaffer result:
+
+- `outputs/metrics/schaffer_endogenous_tiny_v2_routed/schaffer_spontaneous_fit_summary.json`
+
+Honest split using `fit_trial_ids = 000-003` and held-out trials `004-005`:
+
+- routed fit mean:
+  - `pearson = 0.1131`
+  - `nrmse = 0.4517`
+  - `abs_error = 0.004225`
+  - `sign = 0.5581`
+- routed held-out mean:
+  - `pearson = -0.0140`
+  - `nrmse = 1.2182`
+  - `abs_error = 0.00986`
+  - `sign = 0.4770`
+
+Comparison with the earlier Schaffer holdout:
+
+- prior held-out:
+  - `pearson = -0.0011`
+  - `nrmse = 1.3698`
+  - `abs_error = 0.01098`
+  - `sign = 0.5032`
+
+Interpretation:
+
+- routed recurrent pathways are a real backend gain for amplitude/error
+- they did not fix temporal alignment on held-out late-session intervals
+- Aimon and Schaffer now agree on the same pattern:
+  - endogenous backend changes improve scale / magnitude first
+  - temporal correlation remains the stubborn miss
+
+Current strongest diagnosis:
+
+- true routed slow pathways were necessary but not sufficient
+- the remaining missing mechanism is likely richer distributed temporal state in
+  the recurrent core, not just local intracellular memory and not just readout
+  or observation modeling
+
+## March 31, 2026 distributed temporal-state backend slice validated
+
+New backend mechanism now added on top of routed recurrence:
+
+- distributed slow context states inside the recurrent core for:
+  - excitatory recurrence
+  - inhibitory recurrence
+  - modulatory recurrence
+- group-specific time constants and gains live in:
+  - `configs/brain_endogenous_public_parity.yaml`
+- those states feed back only inside the brain backend through:
+  - routed slow recurrent-class inputs
+  - internal neuromodulatory state drive
+  - backend state summaries
+
+Important validation:
+
+- focused backend/parity slice passed:
+  - `python -m pytest tests/test_spontaneous_state_unit.py tests/test_brain_backend.py tests/test_aimon_spontaneous_fit.py -q`
+  - `30 passed, 1 warning`
+
+Important operational rule:
+
+- full-session Schaffer parity reruns are too slow for normal iteration and are
+  no longer admissible as the default retest loop
+- future Schaffer retests must use explicit staged-trial subsets and record the
+  subset in the run manifest
+
+Next admissible result:
+
+- held-out Aimon rerun on the new distributed-context backend
+- then subset-only Schaffer retests if Aimon shows a real temporal gain
+
+## March 31, 2026 distributed-context Aimon rerun regressed versus routed recurrence
+
+The first distributed-context Aimon attempt failed numerically in the shared
+reduced-projection fit:
+
+- `outputs/metrics/aimon_endogenous_tiny_v4_context/fit_run_status.json`
+- error:
+  - `LinAlgError('SVD did not converge')`
+
+That failure was not scientific evidence. The shared fitter was then hardened
+with:
+
+- finite-safe normalization
+- SVD fallback to covariance eigendecomposition
+- linear-solve fallback to `lstsq`
+- finite-safe prediction path
+
+The corrected rerun completed at:
+
+- `outputs/metrics/aimon_endogenous_tiny_v4_context_retry/aimon_spontaneous_fit_summary.json`
+
+Honest held-out `B1269_*` mean:
+
+- `v1 endogenous tiny`:
+  - `pearson = -0.0754`
+  - `nrmse = 0.2688`
+  - `abs_error = 0.00750`
+  - `sign = 0.4221`
+- `v2 calcium`:
+  - `pearson = -0.0516`
+  - `nrmse = 0.2745`
+  - `abs_error = 0.00761`
+  - `sign = 0.4305`
+- `v3 routed`:
+  - `pearson = +0.0065`
+  - `nrmse = 0.2685`
+  - `abs_error = 0.00750`
+  - `sign = 0.4551`
+- `v4 distributed context`:
+  - `pearson = -0.0384`
+  - `nrmse = 0.2716`
+  - `abs_error = 0.00751`
+  - `sign = 0.4385`
+
+Interpretation:
+
+- the current distributed-context formulation still beats `v1` and `v2`, so it
+  is not useless
+- but it regresses materially versus `v3 routed` on every held-out metric that
+  matters
+- current read:
+  - routed recurrence remains the best endogenous temporal baseline
+  - simple distributed context accumulation is not yet the right missing
+    temporal mechanism
+
+Operational rule remains:
+
+- future Schaffer retests must use explicit staged-trial subsets only
+
+## March 31, 2026 Aimon exact-parity mistake identified
+
+Two important corrections now exist.
+
+1. Scorer bug fixed:
+
+- consolidated parity means had been counting traces with `n_samples = 0`
+- the scorer now drops empty traces from means and reports:
+  - `valid_trace_count`
+  - `dropped_empty_trace_count`
+  - `sample_count`
+  - sample-weighted metrics
+
+2. Bigger exact-parity mistake:
+
+- the current Aimon canonical bundle is not exporting exact neurons
+- it explicitly says:
+  - modality: `region_component_timeseries`
+  - `recorded_entity_id = region_component_*`
+  - `flywire_mapping_key = null`
+  - `flywire_mapping_confidence = none`
+  - identity note: public region/component traces, not exact neurons
+
+Implication:
+
+- direct `B350 -> B1269` trace-index scoring is not admissible as exact 1:1
+  neural parity evidence
+- those cross-experiment Aimon results are still useful as coarse
+  regime-transfer signals
+- but exact temporal parity must prioritize:
+  - within-experiment Aimon holdouts
+  - same-session Schaffer subset retests
+
+Current routed/context Aimon read after dropping empty traces:
+
+- `v3 routed`, valid-only sample-weighted:
+  - `pearson = 0.00084`
+  - `nrmse = 0.28052`
+  - `abs_error = 0.00777`
+  - `sign = 0.46634`
+- `v4 context`, valid-only sample-weighted:
+  - `pearson = -0.04294`
+  - `nrmse = 0.27987`
+  - `abs_error = 0.00767`
+  - `sign = 0.45034`
+
+So the earlier broad conclusion survives:
+
+- `v4` still does not beat `v3`
+- but the current Aimon cross-experiment held-out KPI should no longer be read
+  as an exact 1:1 parity target
+
+## April 1, 2026 Aimon exact-parity loop moved to within-trial windowed assays
+
+The exact-identity Aimon lane is now:
+
+- within-experiment only
+- windowed holdouts on the same trace identities
+- short enough to iterate quickly
+
+New runner and mechanism baseline:
+
+- runner:
+  - [run_aimon_windowed_fit.py](/G:/flysim/scripts/run_aimon_windowed_fit.py)
+- explicit routed-only baseline config:
+  - [brain_endogenous_public_parity_routed_only.yaml](/G:/flysim/configs/brain_endogenous_public_parity_routed_only.yaml)
+
+Windowed-fit implementation details:
+
+- trials are split into fixed windows while preserving:
+  - trace identity
+  - sliced timebase
+  - sliced regressor values
+- current exact-identity split:
+  - `4` windows per trial
+  - fit windows `0-1`
+  - test windows `2-3`
+
+Focused validation for the new path passed:
+
+- `python -m pytest tests/test_aimon_spontaneous_fit.py tests/test_public_neural_measurement_harness.py -q`
+- `13 passed, 1 warning`
+
+First live exact-identity assays:
+
+- [aimon_b350_spont_window_routed_v1](/G:/flysim/outputs/metrics/aimon_b350_spont_window_routed_v1)
+- [aimon_b350_forced_window_routed_v1](/G:/flysim/outputs/metrics/aimon_b350_forced_window_routed_v1)
+
+Those runs use:
+
+- routed-only endogenous backend
+- tiny readout
+- `obs_tau = 0.5 s`
+- spontaneous on `cuda:0`
+- forced on `cuda:1`
+
+Meaning:
+
+- Aimon exact parity is no longer being iterated through invalid
+  `B350 -> B1269` aggregate transfer
+- the next real discriminator is whether the remaining temporal miss is worse in
+  spontaneous or forced windows of the same experiment
+
+## April 1, 2026 First exact-identity forced Aimon result
+
+The first within-trial routed-only exact-identity result is now real:
+
+- [aimon_b350_forced_window_routed_v1](/G:/flysim/outputs/metrics/aimon_b350_forced_window_routed_v1)
+
+Setup:
+
+- source trial: `B350_forced_walk`
+- `4` windows total
+- fit on windows `00-01`
+- hold out windows `02-03`
+- routed-only endogenous backend
+- tiny readout
+- `obs_tau = 0.5 s`
+
+Result:
+
+- train windows:
+  - `win_00`: `pearson=0.6592`, `nrmse=0.1687`, `sign=0.7944`
+  - `win_01`: `pearson=0.6950`, `nrmse=0.1538`, `sign=0.7883`
+- held windows:
+  - `win_02`: `pearson=-0.2139`, `nrmse=0.4988`, `sign=0.4419`
+  - `win_03`: `pearson=0.0751`, `nrmse=0.5043`, `sign=0.5222`
+- held mean:
+  - `pearson=-0.0694`
+  - `nrmse=0.5015`
+  - `abs_error=0.00782`
+  - `sign=0.4821`
+
+Interpretation:
+
+- the remaining temporal miss is real even when trace identity is exact
+- the forced regime currently generalizes poorly across time within the same
+  experiment
+
+Operational follow-up:
+
+- the original full `30 s` spontaneous `B350` window run was too expensive for
+  the short loop and was interrupted
+- it was replaced by a true short spontaneous assay that keeps only the first
+  two `2.5 s` windows out of a `12`-window split:
+  - [aimon_b350_spont_window_routed_v2_short](/G:/flysim/outputs/metrics/aimon_b350_spont_window_routed_v2_short)
+
+## April 1, 2026 Second Aimon exact-parity harness bug: reset between contiguous windows
+
+Another real evaluator problem was found after the first exact-identity forced
+result.
+
+Bug:
+
+- the windowed Aimon runner was still resetting the brain between windows of the
+  same source trial
+- that is wrong for exact within-trial temporal parity, because those windows are
+  contiguous segments of one recording
+
+Fix:
+
+- [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+  now has:
+  - `TrialExecutionPlan`
+  - `build_trial_execution_plan(...)`
+  - `preserve_continuity_by_source_trial`
+- [run_aimon_windowed_fit.py](/G:/flysim/scripts/run_aimon_windowed_fit.py)
+  now requests continuity preservation for within-trial windowed fits
+- contiguous windows from the same `source_trial_id` no longer reset the brain
+  between segments
+
+Implication:
+
+- the first reset-based within-trial Aimon scores are only provisional
+- the admissible exact-identity reruns are now:
+  - [aimon_b350_forced_window_routed_v2_cont](/G:/flysim/outputs/metrics/aimon_b350_forced_window_routed_v2_cont)
+  - [aimon_b350_spont_window_routed_v3_short_cont](/G:/flysim/outputs/metrics/aimon_b350_spont_window_routed_v3_short_cont)
+
+## April 1, 2026 Corrected continuity-preserving B350 split
+
+The first admissible within-trial forced-versus-spontaneous split is now on
+disk.
+
+Corrected `B350` held-out results:
+
+- forced continuity holdout:
+  - `pearson = 0.0848`
+  - `nrmse = 0.9100`
+  - `abs_error = 0.01438`
+  - `sign = 0.5589`
+- spontaneous continuity holdout:
+  - `pearson = 0.1166`
+  - `nrmse = 0.4182`
+  - `abs_error = 0.00554`
+  - `sign = 0.5474`
+
+Meaning:
+
+- spontaneous continuity is still imperfect, so the mismatch is not limited to
+  one behavior regime
+- but forced/exafferent windows are materially worse, especially on
+  amplitude/baseline control
+- continuity preservation recovered some forced timing/sign structure relative
+  to the reset-based read, but it also exposed a stronger later-window state
+  offset problem
+
+Current leading diagnosis:
+
+- the routed recurrent core plus continuity is still missing a mechanism for
+  stable late forced-state regulation
+- this looks more like forced/exafferent gain/baseline control than a pure
+  "more temporal memory" problem
+
+Next live discriminator:
+
+- [aimon_b1269_forced_window_routed_v2_cont](/G:/flysim/outputs/metrics/aimon_b1269_forced_window_routed_v2_cont)
+
+## April 1, 2026 Public-data answer on disembodiment / proprioception
+
+The current exact Aimon parity lane is still too numb.
+
+Current harness reality:
+
+- [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+  constructs only a synthetic scalar body observation for public fitting:
+  - fixed pose
+  - fixed yaw
+  - fixed yaw rate
+  - scalar `forward_speed`
+  - scalar `contact_force`
+  - zero vision
+- [encoder.py](/G:/flysim/src/bridge/encoder.py) then maps that only into
+  coarse speed/contact/yaw pool rates
+
+Public-data answer:
+
+- enough public data exists for a grounded first-order reafferent /
+  proprioceptive feedback lane
+- not enough staged public data exists yet for full exact proprioceptor
+  reconstruction
+
+Best current public supports:
+
+- Schaffer staged NWBs:
+  - aligned treadmill ball motion
+  - aligned behavioral-state matrices
+- Dallmann 2025:
+  - best public treadmill proprioceptive / joint-variable fit target
+  - raw Dryad downloads still blocked locally
+
+Meaning:
+
+- disembodiment is a serious likely contributor to the remaining mismatch
+- the next acceptable harness upgrade should add public-constrained body-derived
+  feedback channels rather than invent a free-form feedback head
+
+## April 1, 2026 First grounded body-feedback lane implemented
+
+The first real public-constrained body-derived feedback upgrade is now in the
+codebase.
+
+What changed:
+
+- [public_body_feedback.py](/G:/flysim/src/analysis/public_body_feedback.py)
+  now includes explicit `exafferent_drive` in addition to speed, contact,
+  acceleration, walk/stop, transition, and behavioral-state summaries.
+- [interfaces.py](/G:/flysim/src/body/interfaces.py) now exposes
+  `BodyObservation.exafferent_drive`.
+- [encoder.py](/G:/flysim/src/bridge/encoder.py) now emits three grounded
+  mechanosensory subgroup pools:
+  - `mech_ce_bilateral`
+  - `mech_f_bilateral`
+  - `mech_dm_bilateral`
+- [public_ids.py](/G:/flysim/src/brain/public_ids.py) maps those pools onto the
+  already-preserved public `JON_CE`, `JON_F`, and `JON_DM` subgroup boundaries.
+- The public input collapse path now preserves those subgroup pools without
+  double-counting the legacy mechanosensory bucket.
+
+Current status:
+
+- Focused validation:
+  - `58 passed, 1 warning`
+- Immediate short evidence run:
+  - [aimon_b350_forced_window_routed_v4_bodyfeedback](/G:/flysim/outputs/metrics/aimon_b350_forced_window_routed_v4_bodyfeedback)
+
+Interpretation:
+
+- The parity harness is no longer "just one scalar forward/contact cue".
+- It is still only a first-order grounded reafferent lane, not full exact
+  proprioceptor realism.
+- The next read from the short `B350_forced_walk` rerun will tell us whether
+  disembodiment was a large enough blocker to reduce the forced late-window
+  amplitude / baseline drift with this change alone.
+
+## April 1, 2026 Grounded body feedback improved scale but hurt timing
+
+The first exact-identity forced-window rerun with grounded public body feedback
+is now complete:
+
+- [aimon_b350_forced_window_routed_v4_bodyfeedback](/G:/flysim/outputs/metrics/aimon_b350_forced_window_routed_v4_bodyfeedback/aimon_spontaneous_fit_summary.json)
+
+Held-out comparison versus the previous routed continuity baseline:
+
+- previous [v2 continuity baseline](/G:/flysim/outputs/metrics/aimon_b350_forced_window_routed_v2_cont/aimon_spontaneous_fit_summary.json):
+  - `pearson = 0.0848`
+  - `nrmse = 0.9100`
+  - `abs_error = 0.01438`
+  - `sign = 0.5589`
+- new [v4 body-feedback rerun](/G:/flysim/outputs/metrics/aimon_b350_forced_window_routed_v4_bodyfeedback/aimon_spontaneous_fit_summary.json):
+  - `pearson = -0.1967`
+  - `nrmse = 0.7122`
+  - `abs_error = 0.01187`
+  - `sign = 0.4232`
+
+Interpretation:
+
+- grounded body feedback materially improved amplitude / baseline control in
+  late forced windows
+- but temporal alignment became worse
+- therefore disembodiment was part of the problem, but the current public
+  reafferent encoding or its routing into the recurrent core is still
+  mechanistically wrong for timing under sustained forced drive
+
+## April 1, 2026 Root-cause audit: most of the Aimon timing loop has been using wrong replay semantics
+
+This is the biggest new finding from the timing investigation.
+
+Verified code-level problems:
+
+- In [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py),
+  `_trial_regressor_values()` currently:
+  - returns zeros for every `spontaneous_walk`
+  - applies `abs()` and per-trial normalization to `forced_walk`
+  - slices regressor files using stimulus `window_start/window_stop` values
+    that are incompatible with the stored regressor-array lengths for `3/4`
+    current Aimon trials
+
+Current concrete outcomes:
+
+- `B350_forced_walk` replay regressor is all ones
+- `B350_spontaneous_walk` replay regressor is all zeros
+- `B1269_forced_walk` only replays the last `58` samples stretched over the
+  full `297`-sample trial
+
+Implication:
+
+- a large part of the Aimon temporal-mismatch loop has been contaminated before
+  the brain even runs
+- therefore recent Aimon timing failures cannot be interpreted purely as
+  backend-dynamics failures
+
+Other verified contributors:
+
+- both parity YAMLs have duplicate top-level `encoder:` blocks, so the second
+  silently overwrites the first and disables at least the intended
+  `exafference_gain_hz` path
+- the public parity scorer currently uses strict zero-lag pointwise correlation
+  after resampling, which is too strict to be the only timing KPI for
+  imaging-like traces
+- the fit head still does not expose most of the slow endogenous backend state
+  directly
+
+Current conclusion:
+
+- the continued timing mismatch has been partly real mechanism mismatch and
+  partly evaluator / replay-semantics mismatch
+- `T215` is now mandatory before drawing further temporal-mechanism conclusions
+
+## April 1, 2026 Timing audit found real code and assumption faults
+
+The continued timing mismatch is not explained only by "the backend is still too
+simple." A focused audit found several higher-leverage timing faults:
+
+- [aimon_canonical_dataset.py](/G:/flysim/src/analysis/aimon_canonical_dataset.py)
+  still hard-codes a synthetic `100 Hz` timebase for Aimon exports.
+- The Aimon paper methods report variable imaging speed by preparation and
+  explicitly state that behavioral regressors were convolved with the GCaMP
+  single-spike response and processed through the same `dF/F` pipeline as the
+  fluorescence traces:
+  - [PMC article]https://pmc.ncbi.nlm.nih.gov/articles/PMC10168698/
+- [public_body_feedback.py](/G:/flysim/src/analysis/public_body_feedback.py)
+  uses a centered finite difference, so public body-feedback derivatives are
+  acausal for interior samples.
+- Those derivatives are taken on normalized behavior regressors and can become
+  very large, which then overdrives [encoder.py](/G:/flysim/src/bridge/encoder.py)
+  acceleration channels.
+- [brain_endogenous_public_parity_routed_only.yaml](/G:/flysim/configs/brain_endogenous_public_parity_routed_only.yaml)
+  has a duplicate `encoder:` key, so the intended first block is silently
+  overridden and `exafference_gain_hz` is lost.
+- [public_ids.py](/G:/flysim/src/brain/public_ids.py) still assigns `JON_CE`,
+  `JON_F`, and `JON_DM` by slicing one flat ID list rather than loading explicit
+  subgroup membership.
+- [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py) currently updates
+  `modulatory_exafference_state` from internal modulatory activity rather than
+  from exafferent sensory drive.
+
+Current interpretation:
+
+- recent tiny metric changes were not only a mechanism problem
+- the timing path itself is still partially wrong
+- further backend tuning is not cleanly interpretable until these timing-root
+  faults are fixed
+
+## April 1, 2026 Root-cause audit for the persistent timing mismatch
+
+The current timing problem is not just "small gains" or "not enough backend
+state".
+
+The audit found several structural reasons that explain why timing has remained
+stubborn:
+
+- [aimon_spontaneous_fit.py](/G:/flysim/src/analysis/aimon_spontaneous_fit.py)
+  still reads out family-averaged voltage, not family spike / release /
+  calcium observables, even though the public targets are calcium / `dff_like`
+  traces.
+- [imaging_observation_model.py](/G:/flysim/src/analysis/imaging_observation_model.py)
+  only adds a post-hoc causal low-pass basis; it does not convert the observed
+  family state into an interval-integrated calcium-like measurement.
+- [brain_endogenous_public_parity_routed_only.yaml](/G:/flysim/configs/brain_endogenous_public_parity_routed_only.yaml)
+  sets all distributed-context gains to zero, so the exact-identity routed-only
+  Aimon loop was not actually testing the richer distributed temporal-state
+  mechanism.
+- Both parity configs contain duplicate top-level `encoder:` blocks, so the
+  earlier block is silently overwritten at YAML load time. That means some
+  intended body-feedback gains were not actually active in recent runs.
+- [public_body_feedback.py](/G:/flysim/src/analysis/public_body_feedback.py)
+  expands one mostly flat Aimon forced-walk regressor into many simultaneous
+  tonic channels. That can help amplitude / baseline control, but it cannot add
+  much temporal structure in held forced windows.
+- The parity harness records end-of-interval feature snapshots instead of
+  interval-integrated spike/release/calcium features, which is the wrong
+  geometry for imaging targets.
+
+The strongest current read is:
+
+- the timing mismatch persists because the observation / parity harness is still
+  structurally wrong in addition to the backend still being incomplete
+- several recent exact-identity assays were not actually exercising the intended
+  temporal mechanisms due config drift
+
+## April 1, 2026 Timing audit: the mismatch is not just one backend problem
+
+Root-cause audit now says the persistent timing failure is a mixture of
+evaluation confounds, harness blind spots, and one real backend state-semantics
+error.
+
+Concrete findings:
+
+- both public parity brain configs contain duplicate top-level `encoder:` keys,
+  so the second one silently overwrites the first and disables intended gains
+  like `exafference_gain_hz`
+- the recent `v4 body-feedback` comparison against `v2 continuity` was not a
+  clean A/B because `v4` ran with no observation low-pass basis while `v2` used
+  `observation_taus_s = [0.5]`
+- zero-lag scoring is overstating the remaining timing miss on Aimon:
+  - `v2 B350_forced_walk win_02`: `0.215 -> 0.468` at best lag
+  - `v2 B350_forced_walk win_03`: `-0.046 -> 0.419`
+  - `v4 B350_forced_walk win_03`: `-0.159 -> 0.368`
+- the parity fit head is still mostly voltage-only and does not directly expose
+  graded release, intracellular calcium, distributed context, or modulatory
+  state to the readout
+- the first grounded body-feedback encoder double-counts transition drive and
+  is therefore likely misphased
+- inside the backend, `modulatory_arousal_state` and
+  `modulatory_exafference_state` are currently driven by the same internal
+  source and differ only by tau, so forced/exafferent regulation is not truly
+  represented as a distinct state
+
+Current interpretation:
+
+- the continued timing mismatch is real
+- but the repo has also been measuring it through partially invalid or
+  confounded assays
+- the next correct work is to remove those confounds and expose the slow
+  endogenous state to the public fit before further backend mechanism claims
+
+## April 1, 2026 repaired Aimon exact-identity baseline
+
+The first short repaired exact-identity retest on `B350_forced_walk` completed
+at
+[aimon_b350_forced_window_routed_v5_replayfix](/G:/flysim/outputs/metrics/aimon_b350_forced_window_routed_v5_replayfix/aimon_spontaneous_fit_summary.json).
+
+Important result:
+
+- fixing replay semantics, aligned regressor export, parity-config overwrite,
+  lag-aware temporal scoring, body-feedback phase handling, slow-state feature
+  exposure, and distinct public exafference semantics changed the held-out
+  baseline materially
+- held `B350_forced_walk` windows improved from the old `v2 continuity`
+  baseline:
+  - `pearson 0.0848 -> 0.2315`
+  - `nrmse 0.9100 -> 0.7011`
+  - `abs_error 0.01438 -> 0.01027`
+  - `sign 0.5589 -> 0.6040`
+- lag-aware held timing is much stronger than zero-lag timing on the repaired
+  path:
+  - `lagged_pearson = 0.7311`
+  - `lagged_sign = 0.8195`
+  - `best_lag_seconds = 0.0254`
+
+Interpretation:
+
+- the old Aimon timing gap was substantially inflated by harness/evaluator
+  errors
+- backend temporal-state work still matters, but the corrected Aimon baseline
+  is now much healthier than the earlier numbers implied
+- next exact-identity checks must use the repaired path before drawing new
+  backend conclusions
+
+## April 1, 2026 short embodied demo on the repaired endogenous brain
+
+The repaired endogenous routed brain is now wired into a real FlyGym embodied
+demo config:
+
+- [flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_endogenous_routed.yaml](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_endogenous_routed.yaml)
+
+For an interactive `2.0 s` visualization artifact, a demo-only coarser
+discretization variant was added:
+
+- [flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_endogenous_routed_demo_fast.yaml](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_endogenous_routed_demo_fast.yaml)
+
+That run completed at:
+
+- [flygym-demo-20260401-221940](/G:/flysim/outputs/requested_2s_endogenous_routed_demo_fast/flygym-demo-20260401-221940)
+
+Key read:
+
+- full embodied FlyGym run completed `2.0 s` with realistic vision fast path,
+  uv-grid splice, and the repaired endogenous routed backend
+- output artifacts include:
+  - [demo.mp4](/G:/flysim/outputs/requested_2s_endogenous_routed_demo_fast/flygym-demo-20260401-221940/demo.mp4)
+  - [activation_side_by_side.mp4](/G:/flysim/outputs/requested_2s_endogenous_routed_demo_fast/flygym-demo-20260401-221940/activation_side_by_side.mp4)
+  - [summary.json](/G:/flysim/outputs/requested_2s_endogenous_routed_demo_fast/flygym-demo-20260401-221940/summary.json)
+- metrics:
+  - `avg_forward_speed = 0.6911`
+  - `path_length = 1.3753`
+  - `net_displacement = 0.9778`
+  - `trajectory_smoothness = 0.9030`
+  - `wall_seconds = 215.8743`
+  - `real_time_factor = 0.00926`
+
+Interpretation:
+
+- the repaired endogenous routed brain can now drive a real embodied 2 s FlyGym
+  demo locally
+- for user-visible demos, the parity-time integration settings are too slow and
+  should not be used directly

@@ -86,6 +86,22 @@ def _row_window_overlap_fraction(row: pd.Series) -> float | None:
     return float(overlap) / denom
 
 
+def _resample_array_to_length(values: np.ndarray, target_length: int) -> np.ndarray:
+    values = np.asarray(values, dtype=np.float32).reshape(-1)
+    target_length = max(0, int(target_length))
+    if target_length == 0:
+        return np.zeros((0,), dtype=np.float32)
+    if values.size == 0:
+        return np.zeros((target_length,), dtype=np.float32)
+    if values.size == target_length:
+        return values.astype(np.float32, copy=False)
+    if values.size == 1:
+        return np.full((target_length,), float(values[0]), dtype=np.float32)
+    source_time = np.linspace(0.0, 1.0, values.size, dtype=np.float32)
+    target_time = np.linspace(0.0, 1.0, target_length, dtype=np.float32)
+    return np.interp(target_time, source_time, values).astype(np.float32)
+
+
 def export_aimon_canonical_dataset(
     dataset_root: str | Path,
     *,
@@ -223,9 +239,17 @@ def export_aimon_canonical_dataset(
                     if regressor_member:
                         try:
                             archive = regions_archive if regressor_member in region_member_names else additional_archive
-                            regressor = np.asarray(_load_archive_array(archive, regressor_member)).squeeze()
+                            regressor = np.asarray(_load_archive_array(archive, regressor_member), dtype=np.float32).squeeze()
+                            if regressor.ndim != 1:
+                                regressor = regressor.reshape(-1)
+                            if regressor.size == region_matrix.shape[1]:
+                                aligned = regressor[current_slice]
+                            elif current_slice.stop <= regressor.size:
+                                aligned = regressor[current_slice]
+                            else:
+                                aligned = _resample_array_to_length(regressor, matrix.shape[1])
                             regressor_path = exp_dir / f"{label}_regressor.npy"
-                            np.save(regressor_path, np.asarray(regressor, dtype=np.float32))
+                            np.save(regressor_path, np.asarray(aligned, dtype=np.float32))
                             behavior_paths["walk_regressor_path"] = str(regressor_path)
                         except Exception:  # noqa: BLE001
                             pass
@@ -247,6 +271,7 @@ def export_aimon_canonical_dataset(
                             "region_source": region_source,
                             "trace_count": int(matrix.shape[0]),
                             "time_count": int(matrix.shape[1]),
+                            "regressor_alignment": "trial_timebase" if behavior_paths else "missing",
                         },
                     )
                     trials.append(trial)

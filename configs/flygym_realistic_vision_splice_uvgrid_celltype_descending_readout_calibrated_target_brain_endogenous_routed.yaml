@@ -48,9 +48,9 @@ brain:
       tau_context_exc_ms: 140.0
       tau_context_inh_ms: 260.0
       tau_context_mod_ms: 700.0
-      context_exc_gain: 0.18
-      context_inh_gain: 0.22
-      context_mod_gain: 0.10
+      context_exc_gain: 0.0
+      context_inh_gain: 0.0
+      context_mod_gain: 0.0
       release_v_half_mv: -50.0
       release_slope_mv: 2.0
       synaptic_gain_scale: 1.0
@@ -73,9 +73,9 @@ brain:
         tau_context_exc_ms: 190.0
         tau_context_inh_ms: 340.0
         tau_context_mod_ms: 850.0
-        context_exc_gain: 0.28
-        context_inh_gain: 0.34
-        context_mod_gain: 0.14
+        context_exc_gain: 0.0
+        context_inh_gain: 0.0
+        context_mod_gain: 0.0
       ascending:
         tau_mem_ms: 18.0
         tau_adapt_ms: 70.0
@@ -92,9 +92,9 @@ brain:
         tau_context_exc_ms: 120.0
         tau_context_inh_ms: 210.0
         tau_context_mod_ms: 520.0
-        context_exc_gain: 0.16
-        context_inh_gain: 0.20
-        context_mod_gain: 0.08
+        context_exc_gain: 0.0
+        context_inh_gain: 0.0
+        context_mod_gain: 0.0
       visual_projection:
         tau_mem_ms: 16.0
         tau_adapt_ms: 60.0
@@ -111,9 +111,9 @@ brain:
         tau_context_exc_ms: 90.0
         tau_context_inh_ms: 140.0
         tau_context_mod_ms: 320.0
-        context_exc_gain: 0.10
-        context_inh_gain: 0.12
-        context_mod_gain: 0.05
+        context_exc_gain: 0.0
+        context_inh_gain: 0.0
+        context_mod_gain: 0.0
         release_gain_scale: 1.1
       visual_centrifugal:
         tau_mem_ms: 18.0
@@ -131,9 +131,9 @@ brain:
         tau_context_exc_ms: 105.0
         tau_context_inh_ms: 170.0
         tau_context_mod_ms: 400.0
-        context_exc_gain: 0.12
-        context_inh_gain: 0.14
-        context_mod_gain: 0.06
+        context_exc_gain: 0.0
+        context_inh_gain: 0.0
+        context_mod_gain: 0.0
         release_gain_scale: 1.05
       endocrine:
         tau_mem_ms: 24.0
@@ -151,14 +151,24 @@ brain:
         tau_context_exc_ms: 260.0
         tau_context_inh_ms: 420.0
         tau_context_mod_ms: 950.0
-        context_exc_gain: 0.12
-        context_inh_gain: 0.16
-        context_mod_gain: 0.28
+        context_exc_gain: 0.0
+        context_inh_gain: 0.0
+        context_mod_gain: 0.0
         release_gain_scale: 1.2
         neuromod_gain_scale: 1.4
+body:
+  terrain_type: flat
+  leading_fly_speed: 15.0
+  leading_fly_radius: 10.0
+  target_fly_enabled: true
+  target_initial_phase_rad: 0.0
+  target_angular_direction: 1.0
+brain_context:
+  mode: none
 encoder:
   visual_base_hz: 0.0
-  visual_gain_hz: 120.0
+  visual_gain_hz: 0.0
+  visual_looming_gain_hz: 0.0
   mech_base_hz: 0.0
   yaw_gain_hz: 70.0
   speed_gain_hz: 25.0
@@ -168,3 +178,51 @@ encoder:
   transition_gain_hz: 22.0
   exafference_gain_hz: 10.0
   stop_suppression_hz: 8.0
+visual_splice:
+  enabled: true
+  annotation_path: outputs/cache/flywire_annotation_supplement.tsv
+  spatial_mode: uv_grid
+  spatial_u_bins: 2
+  spatial_v_bins: 2
+  spatial_flip_v: true
+  spatial_mirror_u_by_side: true
+  spatial_cell_type_transforms_path: outputs/metrics/splice_celltype_alignment_recommended.json
+  min_roots_per_bin: 20
+  value_scale: 62.96215524698159
+  max_abs_current: 120.0
+  baseline_update_alpha: 0.0
+  temporal_delta_scale: 2.0
+decoder:
+  forward_gain: 1.2
+  turn_gain: 0.65
+  signal_smoothing_alpha: 0.06
+  forward_asymmetry_scale_hz: 40.0
+  forward_asymmetry_turn_gain: 0.3
+  population_candidates_json: outputs/metrics/descending_readout_candidates_strict.json
+  population_forward_cell_types:
+    - DNp103
+    - DNp06
+    - DNp18
+    - DNp35
+  population_turn_cell_types:
+    - DNpe056
+    - DNp71
+    - DNpe040
+  population_forward_scale_hz: 60.0
+  population_turn_scale_hz: 25.0
+  population_forward_weight: 1.0
+  population_turn_weight: 0.75
+  monitor_candidates_json: outputs/metrics/jump_brain_driven_relay_monitor_candidates.json
+  turn_voltage_signal_library_json: outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_library.json
+  turn_voltage_weight: 0.3
+runtime:
+  seed: 0
+  duration_s: 2.0
+  body_timestep_s: 0.0001
+  control_interval_s: 0.002
+  initial_left_drive: 0.0
+  initial_right_drive: 0.0
+  force_cpu_vision: true
+  vision_payload_mode: fast
+  video_stride: 5
+  video_fps: 24

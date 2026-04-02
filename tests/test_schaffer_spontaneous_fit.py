@@ -14,6 +14,7 @@ from analysis.schaffer_spontaneous_fit import (
     SchafferReplayConfig,
     run_schaffer_spontaneous_fit,
 )
+from analysis.public_body_feedback import public_body_feedback_from_schaffer_covariates
 
 
 def _trial() -> SchafferCanonicalTrialData:
@@ -60,6 +61,29 @@ def test_trial_ball_motion_values_handles_missing_covariate() -> None:
     )
     values = _trial_ball_motion_values(missing)
     np.testing.assert_allclose(values, np.zeros(3, dtype=np.float32), atol=1e-6)
+
+
+def test_public_body_feedback_from_schaffer_covariates_exposes_exafferent_and_state_channels() -> None:
+    channels = public_body_feedback_from_schaffer_covariates(
+        timebase_s=np.asarray([0.0, 0.5, 1.0], dtype=np.float32),
+        ball_motion_values=np.asarray([0.0, 0.5, 1.0], dtype=np.float32),
+        behavioral_state_values=np.asarray(
+            [
+                [0.0, 0.5, 1.0],
+                [1.0, 0.5, 0.0],
+            ],
+            dtype=np.float32,
+        ),
+        sample_index=1,
+        forward_speed_scale=2.0,
+        contact_force_scale=3.0,
+    )
+
+    assert channels.forward_speed == pytest.approx(1.0)
+    assert channels.contact_force >= 1.5
+    assert channels.exafferent_drive == pytest.approx(0.5)
+    assert channels.behavioral_state_level > 0.0
+    assert channels.behavioral_state_transition > 0.0
 
 
 def _synthetic_trial(trial_id: str, *, split: str, trace_count: int) -> SchafferCanonicalTrialData:

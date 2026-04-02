@@ -64,6 +64,14 @@ class BodyObservation:
     forward_speed: float
     yaw_rate: float
     contact_force: float
+    forward_accel: float = 0.0
+    walk_state: float = 0.0
+    stop_state: float = 0.0
+    transition_on: float = 0.0
+    transition_off: float = 0.0
+    exafferent_drive: float = 0.0
+    behavioral_state_level: float = 0.0
+    behavioral_state_transition: float = 0.0
     realistic_vision: Mapping[str, Any] = field(default_factory=dict)
     realistic_vision_array: Any = None
     realistic_vision_features: Mapping[str, Any] | None = None

@@ -7,6 +7,7 @@ from body.interfaces import BodyCommand, BodyObservation, HybridDriveCommand
 from bridge.brain_context import BrainContextConfig, BrainContextInjector
 from bridge.controller import ClosedLoopBridge
 from bridge.decoder import DecoderConfig, MotorDecoder, MotorReadout
+from bridge.encoder import EncoderConfig, SensoryEncoder
 from brain.mock_backend import MockWholeBrainBackend
 from brain.public_ids import (
     DNA01_LEFT,
@@ -63,6 +64,9 @@ def test_zero_input_produces_zero_motor_command() -> None:
         "vision_right": 0.0,
         "mech_left": 0.0,
         "mech_right": 0.0,
+        "mech_ce_bilateral": 0.0,
+        "mech_f_bilateral": 0.0,
+        "mech_dm_bilateral": 0.0,
     }
     assert readout.command.left_drive == 0.0
     assert readout.command.right_drive == 0.0
@@ -82,7 +86,71 @@ def test_public_input_collapse_uses_bilateral_means() -> None:
     assert collapsed == {
         "vision_bilateral": 40.0,
         "mech_bilateral": 40.0,
+        "mech_ce_bilateral": 0.0,
+        "mech_f_bilateral": 0.0,
+        "mech_dm_bilateral": 0.0,
     }
+
+
+def test_public_input_collapse_preserves_subgroup_mech_pools_without_legacy_duplication() -> None:
+    collapsed = collapse_sensor_pool_rates(
+        {
+            "vision_left": 10.0,
+            "vision_right": 14.0,
+            "mech_left": 70.0,
+            "mech_right": 10.0,
+            "mech_ce_bilateral": 3.0,
+            "mech_f_bilateral": 5.0,
+            "mech_dm_bilateral": 7.0,
+        }
+    )
+
+    assert collapsed == {
+        "vision_bilateral": 12.0,
+        "mech_bilateral": 0.0,
+        "mech_ce_bilateral": 3.0,
+        "mech_f_bilateral": 5.0,
+        "mech_dm_bilateral": 7.0,
+    }
+
+
+def test_encoder_emits_public_subgroup_mech_pools_from_body_feedback() -> None:
+    backend = MockWholeBrainBackend()
+    bridge = ClosedLoopBridge(
+        backend,
+        encoder=SensoryEncoder(
+            EncoderConfig(
+                accel_gain_hz=5.0,
+                state_gain_hz=7.0,
+                transition_gain_hz=11.0,
+                exafference_gain_hz=13.0,
+                stop_suppression_hz=3.0,
+            )
+        ),
+    )
+    observation = BodyObservation(
+        sim_time=0.0,
+        position_xy=(0.0, 0.0),
+        yaw=0.0,
+        forward_speed=0.4,
+        yaw_rate=0.0,
+        contact_force=0.6,
+        forward_accel=0.2,
+        walk_state=0.7,
+        stop_state=0.1,
+        transition_on=0.3,
+        transition_off=0.0,
+        exafferent_drive=0.5,
+        behavioral_state_level=0.4,
+        behavioral_state_transition=0.2,
+        realistic_vision={},
+    )
+
+    _, info = bridge.step(observation, num_brain_steps=1)
+
+    assert info["sensor_pool_rates"]["mech_ce_bilateral"] > 0.0
+    assert info["sensor_pool_rates"]["mech_f_bilateral"] > 0.0
+    assert info["sensor_pool_rates"]["mech_dm_bilateral"] > 0.0
 
 
 def test_public_p9_context_mode_injects_brain_side_drive_without_decoder_fallback() -> None:

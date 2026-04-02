@@ -10,8 +10,8 @@ import numpy as np
 from analysis.aimon_spontaneous_fit import (
     _current_feature_vector,
     _feature_name_list,
+    _zero_vision,
     choose_tiny_feature_indices_from_fit_rows,
-    _sensor_pool_rates_from_regressor_value,
     apply_reduced_linear_projection,
     build_backend_from_config,
     build_family_basis_operators,
@@ -21,6 +21,10 @@ from analysis.aimon_spontaneous_fit import (
 from analysis.imaging_observation_model import (
     augment_feature_matrix_with_observation_basis,
     normalize_observation_taus,
+)
+from analysis.public_body_feedback import (
+    public_body_feedback_from_schaffer_covariates,
+    public_body_observation_from_channels,
 )
 from analysis.schaffer_parity_harness import (
     SchafferCanonicalTrialData,
@@ -186,13 +190,20 @@ def simulate_schaffer_trial_feature_matrix(
         if sample_index > 0:
             delta_s = max(0.0, current_time_s - last_time_s)
             num_steps = max(1, int(round(delta_s * 1000.0 / float(backend.dt_ms))))
-            pool_rates = _sensor_pool_rates_from_regressor_value(
-                encoder,
-                sim_time_s=last_time_s,
-                regressor_value=float(ball_motion_values[sample_index - 1]) if sample_index - 1 < ball_motion_values.size else 0.0,
-                force_forward_speed=float(force_forward_speed),
-                force_contact_force=float(force_contact_force),
+            channels = public_body_feedback_from_schaffer_covariates(
+                timebase_s=timebase_s,
+                ball_motion_values=ball_motion_values,
+                behavioral_state_values=behavioral_state_values,
+                sample_index=sample_index - 1,
+                forward_speed_scale=float(force_forward_speed),
+                contact_force_scale=float(force_contact_force),
             )
+            observation = public_body_observation_from_channels(
+                sim_time_s=last_time_s,
+                channels=channels,
+                metadata={"public_feedback_source": "schaffer_behavior"},
+            )
+            pool_rates = encoder.encode(observation, _zero_vision()).pool_rates
             backend.step(pool_rates, num_steps=num_steps)
         brain_features = _current_feature_vector(
             backend,

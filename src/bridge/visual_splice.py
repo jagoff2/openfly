@@ -52,6 +52,7 @@ class VisualSpliceConfig:
     value_scale: float = 101.94613788960949
     max_abs_current: float = 120.0
     baseline_update_alpha: float = 0.0
+    temporal_delta_scale: float = 0.0
 
     @classmethod
     def from_mapping(cls, mapping: dict[str, Any] | None) -> "VisualSpliceConfig":
@@ -79,6 +80,7 @@ class VisualSpliceConfig:
             value_scale=float(mapping.get("value_scale", 101.94613788960949)),
             max_abs_current=float(mapping.get("max_abs_current", 120.0)),
             baseline_update_alpha=float(mapping.get("baseline_update_alpha", 0.0)),
+            temporal_delta_scale=float(mapping.get("temporal_delta_scale", 0.0)),
         )
 
 
@@ -90,6 +92,7 @@ class VisualSpliceInjector:
     def reset(self) -> None:
         self._ready = False
         self._baseline_by_key: dict[tuple[str, str, int], float] = {}
+        self._previous_by_key: dict[tuple[str, str, int], float] = {}
         self._group_roots_by_key: dict[tuple[str, str, int], tuple[int, ...]] = {}
         self._flyvis_bins_by_key: dict[tuple[str, str, int], np.ndarray] = {}
 
@@ -224,6 +227,7 @@ class VisualSpliceInjector:
         current_by_key = self._group_means(nn_activities_arr)
         if not self._baseline_by_key:
             self._baseline_by_key = dict(current_by_key)
+            self._previous_by_key = dict(current_by_key)
             return {}, {
                 "enabled": True,
                 "mode": self.config.spatial_mode,
@@ -231,18 +235,32 @@ class VisualSpliceInjector:
                 "num_groups": len(self._group_roots_by_key),
                 "nonzero_root_count": 0,
                 "max_abs_delta": 0.0,
+                "max_abs_temporal_delta": 0.0,
                 "max_abs_current": 0.0,
             }
         alpha = float(np.clip(self.config.baseline_update_alpha, 0.0, 1.0))
+        temporal_delta_scale = float(self.config.temporal_delta_scale)
+        vision_updated = bool(getattr(observation, "metadata", {}).get("vision_updated", True))
         direct_current_by_id: dict[int, float] = {}
         max_abs_delta = 0.0
+        max_abs_temporal_delta = 0.0
         max_abs_current = 0.0
         signed_current_sum = 0.0
         for key, current_value in current_by_key.items():
             baseline_value = float(self._baseline_by_key.get(key, current_value))
             delta = float(current_value - baseline_value)
+            previous_value = float(self._previous_by_key.get(key, current_value))
+            temporal_delta = float(current_value - previous_value) if vision_updated else 0.0
+            combined_delta = delta + temporal_delta_scale * temporal_delta
             max_abs_delta = max(max_abs_delta, abs(delta))
-            current = float(np.clip(delta * self.config.value_scale, -self.config.max_abs_current, self.config.max_abs_current))
+            max_abs_temporal_delta = max(max_abs_temporal_delta, abs(temporal_delta))
+            current = float(
+                np.clip(
+                    combined_delta * self.config.value_scale,
+                    -self.config.max_abs_current,
+                    self.config.max_abs_current,
+                )
+            )
             if not np.isclose(current, 0.0):
                 roots = self._group_roots_by_key.get(key, ())
                 for root_id in roots:
@@ -251,6 +269,8 @@ class VisualSpliceInjector:
                 max_abs_current = max(max_abs_current, abs(current))
             if alpha > 0.0:
                 self._baseline_by_key[key] = (1.0 - alpha) * baseline_value + alpha * current_value
+            if vision_updated:
+                self._previous_by_key[key] = current_value
         return direct_current_by_id, {
             "enabled": True,
             "mode": self.config.spatial_mode,
@@ -258,6 +278,8 @@ class VisualSpliceInjector:
             "num_groups": len(self._group_roots_by_key),
             "nonzero_root_count": len(direct_current_by_id),
             "max_abs_delta": max_abs_delta,
+            "max_abs_temporal_delta": max_abs_temporal_delta,
             "max_abs_current": max_abs_current,
             "signed_current_sum": signed_current_sum,
+            "temporal_delta_scale": temporal_delta_scale,
         }

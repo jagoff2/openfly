@@ -63,6 +63,12 @@ class BackendDynamicsGroupConfig:
     calcium_release_gain: float = 0.0
     calcium_adapt_gain: float = 0.0
     calcium_release_feedback_gain: float = 0.0
+    tau_context_exc_ms: float = 120.0
+    tau_context_inh_ms: float = 220.0
+    tau_context_mod_ms: float = 600.0
+    context_exc_gain: float = 0.0
+    context_inh_gain: float = 0.0
+    context_mod_gain: float = 0.0
     synaptic_gain_scale: float = 1.0
     release_gain_scale: float = 1.0
     neuromod_gain_scale: float = 1.0
@@ -109,6 +115,12 @@ class BackendDynamicsGroupConfig:
             calcium_release_feedback_gain=float(
                 mapping.get("calcium_release_feedback_gain", base.calcium_release_feedback_gain)
             ),
+            tau_context_exc_ms=float(mapping.get("tau_context_exc_ms", base.tau_context_exc_ms)),
+            tau_context_inh_ms=float(mapping.get("tau_context_inh_ms", base.tau_context_inh_ms)),
+            tau_context_mod_ms=float(mapping.get("tau_context_mod_ms", base.tau_context_mod_ms)),
+            context_exc_gain=float(mapping.get("context_exc_gain", base.context_exc_gain)),
+            context_inh_gain=float(mapping.get("context_inh_gain", base.context_inh_gain)),
+            context_mod_gain=float(mapping.get("context_mod_gain", base.context_mod_gain)),
             synaptic_gain_scale=float(mapping.get("synaptic_gain_scale", base.synaptic_gain_scale)),
             release_gain_scale=float(mapping.get("release_gain_scale", base.release_gain_scale)),
             neuromod_gain_scale=float(mapping.get("neuromod_gain_scale", base.neuromod_gain_scale)),
@@ -476,8 +488,12 @@ class WholeBrainTorchBackend:
         self.intrinsic_noise_state = torch.zeros_like(self.rates)
         self.graded_release_state = torch.zeros_like(self.rates)
         self.intracellular_calcium_state = torch.zeros_like(self.rates)
+        self.distributed_context_exc_state = torch.zeros_like(self.rates)
+        self.distributed_context_inh_state = torch.zeros_like(self.rates)
+        self.distributed_context_mod_state = torch.zeros_like(self.rates)
         self.modulatory_arousal_state = torch.zeros((1, 1), device=self.device)
         self.modulatory_exafference_state = torch.zeros((1, 1), device=self.device)
+        self.public_exafference_target = torch.zeros((1, 1), device=self.device)
         self.reset()
 
     @property
@@ -682,6 +698,12 @@ class WholeBrainTorchBackend:
                 "calcium_release_gain": float(group.config.calcium_release_gain),
                 "calcium_adapt_gain": float(group.config.calcium_adapt_gain),
                 "calcium_release_feedback_gain": float(group.config.calcium_release_feedback_gain),
+                "tau_context_exc_ms": float(group.config.tau_context_exc_ms),
+                "tau_context_inh_ms": float(group.config.tau_context_inh_ms),
+                "tau_context_mod_ms": float(group.config.tau_context_mod_ms),
+                "context_exc_gain": float(group.config.context_exc_gain),
+                "context_inh_gain": float(group.config.context_inh_gain),
+                "context_mod_gain": float(group.config.context_mod_gain),
             }
             for group in self.backend_dynamics_groups
         ]
@@ -715,6 +737,12 @@ class WholeBrainTorchBackend:
             "calcium_release_feedback_gain",
             default_group.calcium_release_feedback_gain,
         )
+        self.group_tau_context_exc_ms = _tensor_for("tau_context_exc_ms", default_group.tau_context_exc_ms)
+        self.group_tau_context_inh_ms = _tensor_for("tau_context_inh_ms", default_group.tau_context_inh_ms)
+        self.group_tau_context_mod_ms = _tensor_for("tau_context_mod_ms", default_group.tau_context_mod_ms)
+        self.group_context_exc_gain = _tensor_for("context_exc_gain", default_group.context_exc_gain)
+        self.group_context_inh_gain = _tensor_for("context_inh_gain", default_group.context_inh_gain)
+        self.group_context_mod_gain = _tensor_for("context_mod_gain", default_group.context_mod_gain)
         self.group_release_gain_scale = _tensor_for("release_gain_scale", default_group.release_gain_scale)
         self.group_synaptic_gain_scale = _tensor_for("synaptic_gain_scale", default_group.synaptic_gain_scale)
         self.group_neuromod_gain_scale = _tensor_for("neuromod_gain_scale", default_group.neuromod_gain_scale)
@@ -782,12 +810,9 @@ class WholeBrainTorchBackend:
             )
         return release_gain, syn_gain
 
-    def _build_routed_recurrent_class_inputs(self, rates_hz: torch.Tensor) -> torch.Tensor | None:
-        if not self.backend_dynamics.endogenous_path_selected:
-            return None
-        spikes_input = self.model.poisson(rates_hz)
-        weighted_fast = torch.matmul(self.spikes * self.group_spike_recurrent_mask, self.weights.transpose(0, 1))
+    def _compute_routed_weighted_components(self) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         release_gain, syn_gain = self._routed_release_gain_terms()
+        weighted_fast = torch.matmul(self.spikes * self.group_spike_recurrent_mask, self.weights.transpose(0, 1))
         weighted_slow = torch.matmul(
             self.graded_release_state * self.group_graded_recurrent_mask * release_gain * syn_gain,
             self.weights.transpose(0, 1),
@@ -797,13 +822,20 @@ class WholeBrainTorchBackend:
             modulatory_source * self.modulatory_population_mask * release_gain * syn_gain,
             self.weights.transpose(0, 1),
         )
+        return weighted_fast, weighted_slow, weighted_modulatory
+
+    def _build_routed_recurrent_class_inputs(self, rates_hz: torch.Tensor) -> torch.Tensor | None:
+        if not self.backend_dynamics.endogenous_path_selected:
+            return None
+        spikes_input = self.model.poisson(rates_hz)
+        weighted_fast, weighted_slow, weighted_modulatory = self._compute_routed_weighted_components()
         class_inputs = torch.stack(
             (
                 spikes_input + torch.relu(weighted_fast),
-                torch.relu(weighted_slow),
+                torch.relu(weighted_slow) + self.group_context_exc_gain * self.distributed_context_exc_state,
                 torch.relu(-weighted_fast),
-                torch.relu(-weighted_slow),
-                torch.relu(weighted_modulatory),
+                torch.relu(-weighted_slow) + self.group_context_inh_gain * self.distributed_context_inh_state,
+                torch.relu(weighted_modulatory) + self.group_context_mod_gain * self.distributed_context_mod_state,
             ),
             dim=0,
         )
@@ -826,11 +858,35 @@ class WholeBrainTorchBackend:
         drive = self.spikes * self.group_calcium_spike_gain + self.graded_release_state * self.group_calcium_release_gain
         self.intracellular_calcium_state = decay * self.intracellular_calcium_state + (1.0 - decay) * drive
 
+    def _update_distributed_temporal_state(self) -> None:
+        if not self.backend_dynamics.endogenous_path_selected:
+            return
+        _, weighted_slow, weighted_modulatory = self._compute_routed_weighted_components()
+
+        tau_context_exc_ms = torch.clamp(self.group_tau_context_exc_ms, min=max(self.dt_ms, 1e-6))
+        tau_context_inh_ms = torch.clamp(self.group_tau_context_inh_ms, min=max(self.dt_ms, 1e-6))
+        tau_context_mod_ms = torch.clamp(self.group_tau_context_mod_ms, min=max(self.dt_ms, 1e-6))
+
+        decay_exc = torch.exp(torch.full_like(tau_context_exc_ms, -self.dt_ms) / tau_context_exc_ms)
+        decay_inh = torch.exp(torch.full_like(tau_context_inh_ms, -self.dt_ms) / tau_context_inh_ms)
+        decay_mod = torch.exp(torch.full_like(tau_context_mod_ms, -self.dt_ms) / tau_context_mod_ms)
+
+        target_exc = torch.relu(weighted_slow)
+        target_inh = torch.relu(-weighted_slow)
+        target_mod = torch.relu(weighted_modulatory)
+
+        self.distributed_context_exc_state = decay_exc * self.distributed_context_exc_state + (1.0 - decay_exc) * target_exc
+        self.distributed_context_inh_state = decay_inh * self.distributed_context_inh_state + (1.0 - decay_inh) * target_inh
+        self.distributed_context_mod_state = decay_mod * self.distributed_context_mod_state + (1.0 - decay_mod) * target_mod
+
     def _update_neuromodulatory_state(self) -> None:
         if not self.backend_dynamics.endogenous_path_selected or not self.backend_dynamics.neuromodulation_enabled:
             return
         mask_sum = torch.clamp(self.modulatory_population_mask.sum(), min=1.0)
-        modulatory_source = torch.clamp(self.graded_release_state + self.intracellular_calcium_state, min=0.0)
+        modulatory_source = torch.clamp(
+            self.graded_release_state + self.intracellular_calcium_state + self.distributed_context_mod_state,
+            min=0.0,
+        )
         drive = (modulatory_source * self.modulatory_population_mask).sum(dim=1, keepdim=True) / mask_sum
 
         def _advance_scalar_state(state: torch.Tensor, tau_ms: float, target: torch.Tensor) -> torch.Tensor:
@@ -846,7 +902,7 @@ class WholeBrainTorchBackend:
         self.modulatory_exafference_state = _advance_scalar_state(
             self.modulatory_exafference_state,
             self.backend_dynamics.exafference_tau_ms,
-            drive,
+            self.public_exafference_target,
         )
 
     def _ids_to_indices(self, ids: list[int]) -> list[int]:
@@ -862,8 +918,12 @@ class WholeBrainTorchBackend:
         self.intrinsic_noise_state.zero_()
         self.graded_release_state.zero_()
         self.intracellular_calcium_state.zero_()
+        self.distributed_context_exc_state.zero_()
+        self.distributed_context_inh_state.zero_()
+        self.distributed_context_mod_state.zero_()
         self.modulatory_arousal_state.zero_()
         self.modulatory_exafference_state.zero_()
+        self.public_exafference_target.zero_()
         self.tonic_background_rates.zero_()
         self.background_rates.zero_()
         cfg = self.spontaneous_state
@@ -996,6 +1056,13 @@ class WholeBrainTorchBackend:
             self._advance_background_state(window_steps)
             self.rates += self.background_rates
         public_input_rates = collapse_sensor_pool_rates(dict(sensor_pool_rates))
+        mech_rate_values = [
+            max(0.0, float(public_input_rates.get(pool_name, 0.0)))
+            for pool_name in ("mech_ce_bilateral", "mech_f_bilateral", "mech_dm_bilateral", "mech_bilateral")
+            if pool_name in public_input_rates
+        ]
+        mech_rate_mean = float(np.mean(mech_rate_values)) if mech_rate_values else 0.0
+        self.public_exafference_target.fill_(float(np.clip(mech_rate_mean / 50.0, 0.0, 1.0)))
         for pool_name, rate_hz in public_input_rates.items():
             indices = self.sensor_pool_indices.get(pool_name)
             if indices:
@@ -1027,9 +1094,13 @@ class WholeBrainTorchBackend:
         noise_mean_abs = float(self.intrinsic_noise_state.abs().mean().detach().cpu().item())
         graded_release_mean = float(self.graded_release_state.mean().detach().cpu().item())
         intracellular_calcium_mean = float(self.intracellular_calcium_state.mean().detach().cpu().item())
+        distributed_context_exc_mean = float(self.distributed_context_exc_state.mean().detach().cpu().item())
+        distributed_context_inh_mean = float(self.distributed_context_inh_state.mean().detach().cpu().item())
+        distributed_context_mod_mean = float(self.distributed_context_mod_state.mean().detach().cpu().item())
         synapse_class_summary = self.model.synapse_class_summary()
         modulatory_arousal_mean = float(self.modulatory_arousal_state.mean().detach().cpu().item())
         modulatory_exafference_mean = float(self.modulatory_exafference_state.mean().detach().cpu().item())
+        public_exafference_target_mean = float(self.public_exafference_target.mean().detach().cpu().item())
         return {
             "global_spike_fraction": spike_fraction,
             "global_mean_voltage": mean_voltage,
@@ -1047,6 +1118,9 @@ class WholeBrainTorchBackend:
             "intrinsic_noise_mean_abs": noise_mean_abs,
             "graded_release_mean": graded_release_mean,
             "intracellular_calcium_mean": intracellular_calcium_mean,
+            "distributed_context_exc_mean": distributed_context_exc_mean,
+            "distributed_context_inh_mean": distributed_context_inh_mean,
+            "distributed_context_mod_mean": distributed_context_mod_mean,
             "synapse_fast_exc_mean_abs": float(synapse_class_summary.get("fast_exc", 0.0)),
             "synapse_slow_exc_mean_abs": float(synapse_class_summary.get("slow_exc", 0.0)),
             "synapse_fast_inh_mean_abs": float(synapse_class_summary.get("fast_inh", 0.0)),
@@ -1054,6 +1128,7 @@ class WholeBrainTorchBackend:
             "synapse_modulatory_mean_abs": float(synapse_class_summary.get("modulatory", 0.0)),
             "modulatory_arousal_mean": modulatory_arousal_mean,
             "modulatory_exafference_mean": modulatory_exafference_mean,
+            "public_exafference_target_mean": public_exafference_target_mean,
             "routed_fast_source_fraction": float(self.group_spike_recurrent_mask.mean().detach().cpu().item()),
             "routed_slow_source_fraction": float(self.group_graded_recurrent_mask.mean().detach().cpu().item()),
             "routed_modulatory_source_fraction": float(self.modulatory_population_mask.mean().detach().cpu().item()),
@@ -1102,6 +1177,7 @@ class WholeBrainTorchBackend:
             self._update_endogenous_intrinsic_state()
             self._update_graded_release_state()
             self._update_intracellular_calcium_state()
+            self._update_distributed_temporal_state()
             self._update_neuromodulatory_state()
             spike_counts += self.spikes[0, self.monitored_indices]
             if collect_state and voltage_sums is not None and conductance_sums is not None:

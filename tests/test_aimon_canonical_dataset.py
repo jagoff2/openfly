@@ -61,6 +61,10 @@ def test_export_aimon_canonical_dataset_writes_bundle(tmp_path: Path) -> None:
     assert first_trial["traces"][0]["trace_index"] == 0
     assert (output_dir / "B350" / "spontaneous_walk_matrix.npy").exists()
     assert (output_dir / "B350" / "forced_walk_matrix.npy").exists()
+    spont_regressor = np.asarray(np.load(output_dir / "B350" / "spontaneous_walk_regressor.npy"), dtype=np.float32)
+    forced_regressor = np.asarray(np.load(output_dir / "B350" / "forced_walk_regressor.npy"), dtype=np.float32)
+    assert spont_regressor.shape == (10,)
+    assert forced_regressor.shape == (10,)
 
 
 def test_export_aimon_canonical_dataset_max_experiments_counts_survivors(tmp_path: Path) -> None:
