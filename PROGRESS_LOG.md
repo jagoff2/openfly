@@ -4,6 +4,37 @@
 
 Ground truth source: `AGENTS.MD`
 
+## 2026-04-02 01:49 - Rewrote the top-level whitepaper so README matches the current lawful branch and repaired findings
+
+1. What I did
+
+- Replaced the stale March 26 README paper with a current April 2 whitepaper in [README.md](/G:/flysim/README.md).
+- Folded in the current branch state:
+  - repaired Aimon / Schaffer parity harness findings
+  - the explicit no-bypass rule
+  - the splice-only lawful target branch
+  - the exact `2.0 s` splice-only parity-time target rerun
+  - the remaining fixation / bearing-reduction limitation
+- Reduced [docs/openfly_whitepaper.md](/G:/flysim/docs/openfly_whitepaper.md) to a canonical pointer so the repo has one authoritative whitepaper entrypoint instead of two drifting copies.
+
+2. What succeeded
+
+- The top-level README is now the project whitepaper and current operator entrypoint.
+- It now reflects the actual state of the branch instead of the older pre-repair picture.
+
+3. What failed
+
+- Nothing in the document rewrite itself.
+
+4. Evidence
+
+- [README.md](/G:/flysim/README.md)
+- [docs/openfly_whitepaper.md](/G:/flysim/docs/openfly_whitepaper.md)
+
+5. Next actions
+
+- Commit and push the whitepaper rewrite.
+
 ## 2026-04-02 01:33 - Exact full `2.0 s` splice-only parity-time target rerun removed the old overlap failure
 
 1. What I did
