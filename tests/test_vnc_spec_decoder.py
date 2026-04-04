@@ -179,7 +179,7 @@ def test_decoder_factory_builds_vnc_structural_spec_decoder(tmp_path: Path) -> N
         {
             "type": "vnc_structural_spec",
             "spec_json": str(spec_path),
-            "command_mode": "two_drive",
+            "command_mode": "hybrid_multidrive",
         }
     )
 

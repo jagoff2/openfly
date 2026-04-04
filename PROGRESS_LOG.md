@@ -4,6 +4,58 @@
 
 Ground truth source: `AGENTS.MD`
 
+## 2026-04-04 00:55 - Reviewed the journal draft, corrected stale claims, and synchronized the canonical whitepaper to the actual active parity path
+
+1. What I did
+
+- Reviewed the untracked manuscript draft at `openfly_whitepaper_journal_draft.md` against:
+  - the active parity guard in [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py)
+  - the active decoder defaults in [decoder.py](/G:/flysim/src/bridge/decoder.py)
+  - the active target/no-target endogenous routed parity configs
+  - the corrected Creamer command-side pair result
+  - the current long-form parity target artifact
+- Rewrote [README.md](/G:/flysim/README.md) so it again serves as the canonical whitepaper and operator entrypoint, but now with the current evidence boundary rather than the older April 2 snapshot.
+- Rewrote [openfly_whitepaper_journal_draft.md](/G:/flysim/openfly_whitepaper_journal_draft.md) into a synchronized mirror of the README so the journal draft cannot drift away from the live code and artifacts.
+- Updated [docs/openfly_whitepaper.md](/G:/flysim/docs/openfly_whitepaper.md) to point at both the canonical README and the synchronized journal draft mirror.
+
+2. What succeeded
+
+- The whitepaper now reflects the actual current canonical replication path:
+  - endogenous routed full-parity configs
+  - explicit `runtime.parity_path.required = true`
+  - explicit `decoder.command_mode = hybrid_multidrive`
+  - explicit `runtime.control_mode = hybrid_multidrive`
+  - splice-only encoder visual path
+  - latest turn-voltage latent library in the active decoder config
+- The older non-spontaneous brain-latent turn branch is no longer misrepresented as the active canonical branch. It is now clearly labeled as historical evidence only.
+- The corrected Creamer pair is now represented accurately:
+  - command-side primary readout
+  - front-to-back suppression is sign-consistent with Creamer
+  - `T4/T5` ablation weakens but does not abolish the effect
+  - treadmill ball motion remains a separate downstream mechanics failure
+- The later `10 s` full-parity target artifact is now incorporated as the sharper current behavioral boundary:
+  - strong target response exists
+  - close approach is still too aggressive
+  - the remaining defect is close-range regulation rather than generic blindness
+
+3. What failed
+
+- No new scientific failure in the document-sync step itself.
+- The underlying treadmill mechanics caveat remains unresolved and is preserved explicitly in the rewritten whitepaper rather than papered over.
+
+4. Evidence
+
+- [README.md](/G:/flysim/README.md)
+- [openfly_whitepaper_journal_draft.md](/G:/flysim/openfly_whitepaper_journal_draft.md)
+- [docs/openfly_whitepaper.md](/G:/flysim/docs/openfly_whitepaper.md)
+- [creamer2018_parity_open_loop_pair_summary.json](/G:/flysim/outputs/creamer2018_parity_open_loop_2p0_commandmetrics_v1/metrics/creamer2018_parity_open_loop_pair_summary.json)
+- [summary.json](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_birdeye_activation_parity/flygym-demo-20260402-104437/summary.json)
+
+5. Next actions
+
+- Commit the synchronized whitepaper plus the pending parity-path config/default cleanup.
+- Push the resulting README update to both `exp/spontaneous-brain-latent-turn` and `main`.
+
 ## 2026-04-02 01:49 - Rewrote the top-level whitepaper so README matches the current lawful branch and repaired findings
 
 1. What I did

@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from body.interfaces import BodyCommand, BodyObservation, HybridDriveCommand
 from bridge.brain_context import BrainContextConfig, BrainContextInjector
 from bridge.controller import ClosedLoopBridge
@@ -409,7 +411,7 @@ def test_decoder_can_monitor_population_groups_without_using_them_for_control(tm
     decoder = MotorDecoder(
         DecoderConfig(
             monitor_candidates_json=str(monitor_json),
-            command_mode="two_drive",
+            command_mode="hybrid_multidrive",
             signal_smoothing_alpha=1.0,
         )
     )
@@ -427,6 +429,44 @@ def test_decoder_can_monitor_population_groups_without_using_them_for_control(tm
     assert readout.neuron_rates["monitor_DNp103_right_hz"] == 60.0
     assert readout.neuron_rates["monitor_DNp103_bilateral_hz"] == 40.0
     assert readout.neuron_rates["monitor_DNp103_right_minus_left_hz"] == 40.0
+
+
+def test_encoder_ignores_treadmill_ball_speed_for_body_feedback() -> None:
+    backend = MockWholeBrainBackend()
+    bridge = ClosedLoopBridge(
+        backend,
+        encoder=SensoryEncoder(
+            EncoderConfig(
+                visual_gain_hz=0.0,
+                speed_gain_hz=10.0,
+                contact_gain_hz=0.0,
+                yaw_gain_hz=0.0,
+            )
+        ),
+    )
+    observation = BodyObservation(
+        sim_time=0.0,
+        position_xy=(0.0, 0.0),
+        yaw=0.0,
+        forward_speed=400.0,
+        yaw_rate=0.0,
+        contact_force=0.0,
+        realistic_vision={},
+        metadata={
+            "visual_speed_state": {
+                "enabled": True,
+                "geometry": "treadmill_ball",
+                "speed_source": "treadmill_ball",
+                "body_forward_speed_mm_s": 0.2,
+                "treadmill_forward_speed_mm_s": 400.0,
+            }
+        },
+    )
+
+    _, info = bridge.step(observation, num_brain_steps=1)
+
+    assert info["sensor_pool_rates"]["mech_f_bilateral"] == pytest.approx(2.0)
+    assert info["sensor_metadata"]["forward_speed"] == pytest.approx(0.2)
 
 
 def test_decoder_can_add_turn_voltage_latent_from_monitored_brain_state(tmp_path: Path) -> None:

@@ -104,7 +104,7 @@ def _load_forward_context_groups(path: str | None) -> list[ForwardContextLatentG
 
 @dataclass
 class DecoderConfig:
-    command_mode: str = "two_drive"
+    command_mode: str = "hybrid_multidrive"
     idle_drive: float = 0.0
     min_drive: float = 0.0
     max_drive: float = 1.2
@@ -167,7 +167,7 @@ class DecoderConfig:
     def from_mapping(cls, mapping: dict[str, Any] | None) -> "DecoderConfig":
         mapping = mapping or {}
         return cls(
-            command_mode=str(mapping.get("command_mode", "two_drive")),
+            command_mode=str(mapping.get("command_mode", "hybrid_multidrive")),
             idle_drive=float(mapping.get("idle_drive", 0.0)),
             min_drive=float(mapping.get("min_drive", 0.0)),
             max_drive=float(mapping.get("max_drive", 1.2)),

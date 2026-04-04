@@ -4,7 +4,10 @@ Canonical whitepaper location:
 
 - [README.md](../README.md)
 
-This file intentionally mirrors the top-level README role. The current project
-whitepaper, findings, results, parity boundaries, and operational instructions
-are maintained in `README.md` so that the same document serves both as the
-operator entrypoint and the current project paper.
+Journal-draft mirror:
+
+- [openfly_whitepaper_journal_draft.md](../openfly_whitepaper_journal_draft.md)
+
+The README is the authoritative current whitepaper and operator entrypoint. The
+journal draft is kept as a synchronized mirror so claims do not drift away from
+the live parity code and artifact base.

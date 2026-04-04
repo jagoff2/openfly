@@ -1,5 +1,8 @@
 # OpenFly: Public-Equivalent Embodied Drosophila Reconstruction
 
+This manuscript draft mirrors `README.md` so the journal draft and the
+operator-facing whitepaper stay synchronized.
+
 This repository is a local, public-equivalent reconstruction of an Eon-style embodied adult fly stack built from public components and explicit glue code:
 
 - FlyWire-derived whole-brain simulation
@@ -7,8 +10,6 @@ This repository is a local, public-equivalent reconstruction of an Eon-style emb
 - realistic vision
 - persistent online closed loop
 - parity harnesses against public neural and behavioral datasets
-
-This document is the canonical project whitepaper and operator entrypoint. `openfly_whitepaper_journal_draft.md` mirrors it to avoid drift.
 
 ## Claim Boundary
 

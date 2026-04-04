@@ -191,6 +191,7 @@ visual_splice:
   baseline_update_alpha: 0.0
   temporal_delta_scale: 2.0
 decoder:
+  command_mode: hybrid_multidrive
   forward_gain: 1.2
   turn_gain: 0.65
   signal_smoothing_alpha: 0.06
@@ -214,6 +215,9 @@ decoder:
   turn_voltage_signal_library_json: outputs/metrics/jump_brain_driven_turn_latent_2s_spontaneous_refit_library.json
   turn_voltage_weight: 0.3
 runtime:
+  parity_path:
+    required: true
+    profile: flygym_full_parity_v1
   seed: 0
   duration_s: 2.0
   body_timestep_s: 0.0001
@@ -222,5 +226,6 @@ runtime:
   initial_right_drive: 0.0
   force_cpu_vision: true
   vision_payload_mode: fast
+  control_mode: hybrid_multidrive
   video_stride: 5
   video_fps: 24
