@@ -4,6 +4,49 @@
 
 Ground truth source: `AGENTS.MD`
 
+## 2026-04-04 12:10 - Added the full vision-pipeline comparison to the related-work section
+
+1. What I did
+
+- Extended the related-work comparison in:
+  - [README.md](/G:/flysim/README.md)
+  - [openfly_whitepaper_journal_draft.md](/G:/flysim/openfly_whitepaper_journal_draft.md)
+- Added an explicit vision-stack comparison covering:
+  - scene input and sensor source
+  - early visual processing
+  - brain injection seam
+  - temporal handling
+  - motor consequence / bridge granularity
+
+2. What succeeded
+
+- The canonical whitepaper now distinguishes the two repos at the full visual-pipeline level instead of only at the README-claim level.
+- The comparison now makes the key implementation contrast explicit:
+  - OpenFly parity path: realistic vision -> FlyVis forward step -> retinotopic inferred splice -> whole-brain backend -> richer multidrive locomotor latents
+  - `erojasoficial-byte/fly-brain`: realistic sensor source -> hand-computed visual firing rates / T2-dominant injection -> coarser DN-to-`[left_drive,right_drive]` bridge
+
+3. What failed
+
+- Nothing failed.
+
+4. Evidence
+
+- [README.md](/G:/flysim/README.md)
+- [openfly_whitepaper_journal_draft.md](/G:/flysim/openfly_whitepaper_journal_draft.md)
+- Local code:
+  - [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py)
+  - [fast_realistic_vision_fly.py](/G:/flysim/src/body/fast_realistic_vision_fly.py)
+  - [feature_extractor.py](/G:/flysim/src/vision/feature_extractor.py)
+  - [visual_splice.py](/G:/flysim/src/bridge/visual_splice.py)
+  - [controller.py](/G:/flysim/src/bridge/controller.py)
+  - [decoder.py](/G:/flysim/src/bridge/decoder.py)
+  - [connectome_turning_fly.py](/G:/flysim/src/body/connectome_turning_fly.py)
+
+5. Next actions
+
+- Commit the documentation update.
+- Push the same commit to `main` and `exp/spontaneous-brain-latent-turn`.
+
 ## 2026-04-04 11:55 - Recast the external repo comparison in research-paper tone
 
 1. What I did
