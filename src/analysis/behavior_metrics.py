@@ -22,11 +22,18 @@ def _float_array(values: Iterable[Any], *, default: float = 0.0) -> np.ndarray:
     return np.asarray([float(default if value is None else value) for value in values], dtype=np.float32)
 
 
+def _record_forward_speed(record: Mapping[str, Any]) -> float:
+    visual_speed_state = record.get("body_metadata", {}).get("visual_speed_state", {})
+    if isinstance(visual_speed_state, Mapping) and str(visual_speed_state.get("speed_source", "")) == "treadmill_ball":
+        return float(visual_speed_state.get("fly_forward_speed_mm_s_measured", record.get("forward_speed", 0.0)))
+    return float(record.get("forward_speed", 0.0))
+
+
 def _extract_trace(records: list[Mapping[str, Any]]) -> dict[str, np.ndarray]:
     sim_time = _float_array(record.get("sim_time", 0.0) for record in records)
     left_drive = _float_array(record.get("left_drive", 0.0) for record in records)
     right_drive = _float_array(record.get("right_drive", 0.0) for record in records)
-    forward_speed = _float_array(record.get("forward_speed", 0.0) for record in records)
+    forward_speed = _float_array(_record_forward_speed(record) for record in records)
     yaw = _float_array(record.get("yaw", 0.0) for record in records)
     yaw_rate = _float_array(record.get("yaw_rate", 0.0) for record in records)
     forward_signal = _float_array(

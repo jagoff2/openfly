@@ -5,9 +5,17 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
-from body.interfaces import BodyCommand, BodyObservation
+import pytest
+
+from body.interfaces import BodyCommand, BodyObservation, HybridDriveCommand
 from bridge.decoder import DecoderConfig, MotorDecoder
-from runtime.closed_loop import build_body_runtime, build_bridge, load_config, run_closed_loop
+from runtime.closed_loop import (
+    assert_full_parity_flygym_config,
+    build_body_runtime,
+    build_bridge,
+    load_config,
+    run_closed_loop,
+)
 
 
 def test_closed_loop_smoke_generates_artifacts(tmp_path: Path) -> None:
@@ -327,6 +335,49 @@ def test_creamer_treadmill_motion_only_t4_t5_ablation_config_uses_treadmill_geom
     assert config["body"]["spawn_pos"] == [0.0, 0.0, 0.3]
     assert config["body"]["visual_speed_control"]["geometry"] == "treadmill_ball"
     assert config["runtime"]["visual_ablation_cell_types"] == ["T4a", "T4b", "T4c", "T4d", "T5a", "T5b", "T5c", "T5d"]
+
+
+def test_latest_treadmill_runtime_stays_quiet_during_settle_window(tmp_path: Path) -> None:
+    pytest.importorskip("flygym")
+    config = deepcopy(load_config("configs/flygym_visual_speed_control_living_motion_only_treadmill.yaml"))
+    config.setdefault("runtime", {})["force_cpu_vision"] = True
+    config["runtime"]["control_mode"] = "hybrid_multidrive"
+    config.setdefault("body", {}).setdefault("visual_speed_control", {})["treadmill_settle_time_s"] = 0.01
+
+    runtime = build_body_runtime("flygym", config, tmp_path, allow_non_parity=True)
+    try:
+        runtime.reset(seed=0)
+        command = HybridDriveCommand(
+            left_drive=0.0,
+            right_drive=0.0,
+            left_amp=0.0,
+            right_amp=0.0,
+            left_freq_scale=1.0,
+            right_freq_scale=1.0,
+            retraction_gain=1.0,
+            stumbling_gain=1.0,
+            reverse_gate=0.0,
+        )
+        settle_records: list[dict[str, Any]] = []
+        for _ in range(6):
+            obs = runtime.step(command, num_substeps=20)
+            settle_records.append(dict(obs.metadata.get("visual_speed_state", {})))
+    finally:
+        runtime.close()
+
+    assert settle_records
+    for idx, record in enumerate(settle_records[:5]):
+        assert record["measurement_valid"] is False, f"settle record {idx} unexpectedly valid"
+        assert record["in_settle_window"] is True
+        assert abs(float(record["fly_forward_speed_mm_s_filtered"])) < 1e-9
+        assert abs(float(record["fly_forward_speed_mm_s_measured"])) < 1e-9
+        assert abs(float(record["track_x_mm"])) < 1e-9
+
+    release_record = settle_records[5]
+    assert release_record["measurement_valid"] is True
+    assert release_record["in_settle_window"] is False
+    assert abs(float(release_record["fly_forward_speed_mm_s_filtered"])) < 10.0
+    assert abs(float(release_record["track_x_mm"])) < 0.1
 
 
 def test_creamer_treadmill_block_assay_config_uses_interleaved_blocks() -> None:
@@ -805,7 +856,7 @@ def test_build_body_runtime_passes_camera_mode_to_flygym_runtime(tmp_path: Path,
     config.setdefault("body", {})["target_schedule"] = [
         {"kind": "jump", "time_s": 0.5, "delta_phase_rad": 1.0472}
     ]
-    runtime = build_body_runtime("flygym", config, tmp_path)
+    runtime = build_body_runtime("flygym", config, tmp_path, allow_non_parity=True)
 
     assert isinstance(runtime, FakeFlyGymRuntime)
     assert captured["camera_mode"] == "follow_yaw"
@@ -823,11 +874,52 @@ def test_build_body_runtime_passes_visual_speed_camera_mode_to_flygym_runtime(tm
 
     monkeypatch.setattr(flygym_runtime_module, "FlyGymRealisticVisionRuntime", FakeFlyGymRuntime)
     config = deepcopy(load_config("configs/flygym_visual_speed_control_living.yaml"))
-    runtime = build_body_runtime("flygym", config, tmp_path)
+    runtime = build_body_runtime("flygym", config, tmp_path, allow_non_parity=True)
 
     assert isinstance(runtime, FakeFlyGymRuntime)
     assert captured["camera_mode"] == "fixed_birdeye"
     assert bool(captured["visual_speed_control"]["enabled"]) is True
+
+
+def test_build_body_runtime_passes_extra_targets_and_zoomed_camera(tmp_path: Path, monkeypatch) -> None:
+    import body.flygym_runtime as flygym_runtime_module
+
+    captured: dict[str, object] = {}
+
+    class FakeFlyGymRuntime:
+        def __init__(self, **kwargs) -> None:
+            captured.update(kwargs)
+
+    monkeypatch.setattr(flygym_runtime_module, "FlyGymRealisticVisionRuntime", FakeFlyGymRuntime)
+    config = deepcopy(load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_demo_fast.yaml"))
+    runtime = build_body_runtime("flygym", config, tmp_path, allow_non_parity=True)
+
+    assert isinstance(runtime, FakeFlyGymRuntime)
+    assert captured["camera_mode"] == "fixed_birdeye_zoomed_out"
+    assert len(captured["extra_targets"]) == 2
+
+
+def test_multitarget_birdeye_demo_config_requests_activation_capture() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_followyaw_10s.yaml")
+
+    assert config["runtime"]["camera_mode"] == "fixed_birdeye"
+    assert bool(config["runtime"]["capture_activation"]) is True
+    assert len(config["body"]["extra_targets"]) == 2
+
+
+def test_full_parity_validator_accepts_active_target_configs() -> None:
+    target_config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed.yaml")
+    follow_config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_followyaw_10s.yaml")
+
+    assert_full_parity_flygym_config(target_config)
+    assert_full_parity_flygym_config(follow_config)
+
+
+def test_full_parity_validator_rejects_demo_fast_config() -> None:
+    config = load_config("configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_demo_fast.yaml")
+
+    with pytest.raises(ValueError, match="Full parity FlyGym path required"):
+        assert_full_parity_flygym_config(config)
 
 
 def test_visual_speed_camera_uses_world_fixed_birdeye_parameters() -> None:
@@ -838,6 +930,16 @@ def test_visual_speed_camera_uses_world_fixed_birdeye_parameters() -> None:
     assert params["mode"] == "fixed"
     assert tuple(params["pos"]) == (0, 0, 120)
     assert tuple(params["euler"]) == (0, 0, 0)
+
+
+def test_zoomed_out_camera_uses_wide_world_fixed_parameters() -> None:
+    from body.flygym_runtime import FlyGymRealisticVisionRuntime
+
+    params = FlyGymRealisticVisionRuntime.zoomed_out_birdeye_camera_parameters()
+
+    assert params["mode"] == "fixed"
+    assert tuple(params["pos"]) == (0, 0, 380)
+    assert params["fovy"] == 90
 
 
 def test_closed_loop_smoke_writes_partial_metrics_on_runtime_failure(tmp_path: Path, monkeypatch) -> None:
@@ -1066,7 +1168,7 @@ def test_closed_loop_smoke_logs_shadow_decodes(tmp_path: Path) -> None:
         {
             "label": "shadow_sampled",
             "decoder": {
-                "command_mode": "two_drive",
+                "command_mode": "hybrid_multidrive",
                 "forward_gain": 0.6,
                 "turn_gain": 0.4,
             },

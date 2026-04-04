@@ -15,10 +15,27 @@ def _mean_or_zero(values: np.ndarray) -> float:
     return float(np.mean(values)) if values.size else 0.0
 
 
+def _command_gait_drive(record: Mapping[str, Any]) -> float:
+    left_amp = float(record.get("left_amp", abs(float(record.get("left_drive", 0.0)))))
+    right_amp = float(record.get("right_amp", abs(float(record.get("right_drive", 0.0)))))
+    left_freq = float(record.get("left_freq_scale", 0.0))
+    right_freq = float(record.get("right_freq_scale", 0.0))
+    return 0.5 * ((left_amp * left_freq) + (right_amp * right_freq))
+
+
+def _command_forward_signal(record: Mapping[str, Any]) -> float:
+    motor_signals = record.get("motor_signals", {})
+    if isinstance(motor_signals, Mapping) and "forward_signal" in motor_signals:
+        return float(motor_signals.get("forward_signal", 0.0))
+    return 0.5 * (float(record.get("left_drive", 0.0)) + float(record.get("right_drive", 0.0)))
+
+
 def _extract_visual_speed_table(records: list[Mapping[str, Any]]) -> dict[str, np.ndarray] | None:
     states = [record.get("body_metadata", {}).get("visual_speed_state") for record in records]
     if not states or not any(isinstance(state, Mapping) and bool(state.get("enabled", False)) for state in states):
         return None
+    command_forward_signal = _float_array([_command_forward_signal(record) for record in records])
+    gait_drive = _float_array([_command_gait_drive(record) for record in records])
     return {
         "sim_time": _float_array([record.get("sim_time", 0.0) for record in records]),
         "forward_speed": _float_array(
@@ -84,9 +101,24 @@ def _extract_visual_speed_table(records: list[Mapping[str, Any]]) -> dict[str, n
                 for state in states
             ]
         ),
+        "command_forward_signal": command_forward_signal,
+        "command_gait_drive": gait_drive,
+        "command_forward_proxy": command_forward_signal * gait_drive,
+        "left_amp": _float_array([record.get("left_amp", abs(float(record.get("left_drive", 0.0)))) for record in records]),
+        "right_amp": _float_array([record.get("right_amp", abs(float(record.get("right_drive", 0.0)))) for record in records]),
+        "left_freq_scale": _float_array([record.get("left_freq_scale", 0.0) for record in records]),
+        "right_freq_scale": _float_array([record.get("right_freq_scale", 0.0) for record in records]),
+        "reverse_gate": _float_array([record.get("reverse_gate", 0.0) for record in records]),
         "stimulus_active": np.asarray(
             [
                 bool(state.get("stimulus_active", False)) if isinstance(state, Mapping) else False
+                for state in states
+            ],
+            dtype=bool,
+        ),
+        "measurement_valid": np.asarray(
+            [
+                bool(state.get("measurement_valid", True)) if isinstance(state, Mapping) else True
                 for state in states
             ],
             dtype=bool,
@@ -223,6 +255,15 @@ def compute_visual_speed_control_metrics(records: list[Mapping[str, Any]]) -> di
     if table is None:
         return {"enabled": False}
 
+    raw_sample_count = int(table["sim_time"].size)
+    measurement_valid = table["measurement_valid"]
+    valid_sample_count = int(np.count_nonzero(measurement_valid))
+    if valid_sample_count > 0:
+        table = {
+            key: value[measurement_valid] if isinstance(value, np.ndarray) and value.shape[:1] == measurement_valid.shape else value
+            for key, value in table.items()
+        }
+
     sim_time = table["sim_time"]
     forward_speed = table["forward_speed"]
     scene_speed = table["scene_speed"]
@@ -232,6 +273,14 @@ def compute_visual_speed_control_metrics(records: list[Mapping[str, Any]]) -> di
     corridor_half_width = table["corridor_half_width"]
     fly_x = table["fly_x_mm"]
     track_x = table["track_x_mm"]
+    command_forward_signal = table["command_forward_signal"]
+    command_gait_drive = table["command_gait_drive"]
+    command_forward_proxy = table["command_forward_proxy"]
+    left_amp = table["left_amp"]
+    right_amp = table["right_amp"]
+    left_freq_scale = table["left_freq_scale"]
+    right_freq_scale = table["right_freq_scale"]
+    reverse_gate = table["reverse_gate"]
     stimulus_active = table["stimulus_active"]
     mode_values = [value for value in table["mode"] if value]
     mode = str(mode_values[0]) if mode_values else ""
@@ -255,15 +304,49 @@ def compute_visual_speed_control_metrics(records: list[Mapping[str, Any]]) -> di
     pre_mean = _mean_or_zero(pre_speed)
     stim_mean = _mean_or_zero(stim_speed)
     post_mean = _mean_or_zero(post_speed)
+    pre_command_forward_signal = _mean_or_zero(command_forward_signal[pre_mask])
+    stim_command_forward_signal = _mean_or_zero(command_forward_signal[stim_mask])
+    post_command_forward_signal = _mean_or_zero(command_forward_signal[post_mask])
+    pre_command_gait_drive = _mean_or_zero(command_gait_drive[pre_mask])
+    stim_command_gait_drive = _mean_or_zero(command_gait_drive[stim_mask])
+    post_command_gait_drive = _mean_or_zero(command_gait_drive[post_mask])
+    pre_command_forward_proxy = _mean_or_zero(command_forward_proxy[pre_mask])
+    stim_command_forward_proxy = _mean_or_zero(command_forward_proxy[stim_mask])
+    post_command_forward_proxy = _mean_or_zero(command_forward_proxy[post_mask])
 
     metrics: dict[str, Any] = {
         "enabled": True,
         "mode": mode,
-        "sample_count": int(sim_time.size),
+        "sample_count": raw_sample_count,
+        "valid_sample_count": valid_sample_count if valid_sample_count > 0 else raw_sample_count,
+        "primary_readout": "command_forward_proxy",
         "pre_mean_forward_speed": pre_mean,
         "stimulus_mean_forward_speed": stim_mean,
         "post_mean_forward_speed": post_mean,
         "speed_fold_change": float(stim_mean / max(pre_mean, 1e-6)),
+        "pre_mean_command_forward_signal": pre_command_forward_signal,
+        "stimulus_mean_command_forward_signal": stim_command_forward_signal,
+        "post_mean_command_forward_signal": post_command_forward_signal,
+        "command_forward_signal_delta": float(stim_command_forward_signal - pre_command_forward_signal),
+        "pre_mean_command_gait_drive": pre_command_gait_drive,
+        "stimulus_mean_command_gait_drive": stim_command_gait_drive,
+        "post_mean_command_gait_drive": post_command_gait_drive,
+        "command_gait_drive_fold_change": float(stim_command_gait_drive / max(pre_command_gait_drive, 1e-6)),
+        "pre_mean_command_forward_proxy": pre_command_forward_proxy,
+        "stimulus_mean_command_forward_proxy": stim_command_forward_proxy,
+        "post_mean_command_forward_proxy": post_command_forward_proxy,
+        "command_forward_proxy_fold_change": float(stim_command_forward_proxy / max(pre_command_forward_proxy, 1e-6)),
+        "command_forward_proxy_delta": float(stim_command_forward_proxy - pre_command_forward_proxy),
+        "pre_mean_left_amp": _mean_or_zero(left_amp[pre_mask]),
+        "stimulus_mean_left_amp": _mean_or_zero(left_amp[stim_mask]),
+        "pre_mean_right_amp": _mean_or_zero(right_amp[pre_mask]),
+        "stimulus_mean_right_amp": _mean_or_zero(right_amp[stim_mask]),
+        "pre_mean_left_freq_scale": _mean_or_zero(left_freq_scale[pre_mask]),
+        "stimulus_mean_left_freq_scale": _mean_or_zero(left_freq_scale[stim_mask]),
+        "pre_mean_right_freq_scale": _mean_or_zero(right_freq_scale[pre_mask]),
+        "stimulus_mean_right_freq_scale": _mean_or_zero(right_freq_scale[stim_mask]),
+        "pre_mean_reverse_gate": _mean_or_zero(reverse_gate[pre_mask]),
+        "stimulus_mean_reverse_gate": _mean_or_zero(reverse_gate[stim_mask]),
         "scene_speed_mean_mm_s": _mean_or_zero(scene_speed[stim_mask]) if np.any(stim_mask) else _mean_or_zero(scene_speed),
         "scene_speed_abs_mean_mm_s": _mean_or_zero(np.abs(scene_speed[stim_mask])) if np.any(stim_mask) else _mean_or_zero(np.abs(scene_speed)),
         "effective_visual_speed_mean_mm_s": _mean_or_zero(effective_visual_speed[stim_mask]) if np.any(stim_mask) else _mean_or_zero(effective_visual_speed),
@@ -273,6 +356,9 @@ def compute_visual_speed_control_metrics(records: list[Mapping[str, Any]]) -> di
         "speed_vs_effective_visual_corr": pearson_correlation(forward_speed, np.abs(effective_visual_speed)),
         "speed_vs_retinal_slip_corr": pearson_correlation(forward_speed, np.abs(retinal_slip)),
         "speed_vs_scene_speed_corr": pearson_correlation(forward_speed, np.abs(scene_speed)),
+        "command_forward_proxy_vs_scene_speed_corr": pearson_correlation(command_forward_proxy, np.abs(scene_speed)),
+        "command_forward_proxy_vs_retinal_slip_corr": pearson_correlation(command_forward_proxy, np.abs(retinal_slip)),
+        "command_gait_drive_vs_scene_speed_corr": pearson_correlation(command_gait_drive, np.abs(scene_speed)),
     }
     if mode == "interleaved_blocks":
         metrics.update(_summarize_interleaved_blocks(table))

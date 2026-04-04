@@ -24,11 +24,12 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
     target_initial_phase_rad: float = 0.0
     target_angular_direction: float = 1.0
     target_schedule: list[dict[str, Any]] | None = None
+    extra_targets: list[dict[str, Any]] | None = None
     output_dir: str | Path = "outputs/demos"
     camera_fps: int = 24
     force_cpu_vision: bool = False
     vision_payload_mode: str = "legacy"
-    control_mode: str = "legacy_2drive"
+    control_mode: str = "hybrid_multidrive"
     camera_mode: str = "fixed_birdeye"
     spawn_pos: tuple[float, float, float] = (0.0, 0.0, 0.3)
     fly_init_pose: str = "stretch"
@@ -46,6 +47,10 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
     def default_birdeye_camera_parameters() -> dict[str, Any]:
         return {"mode": "fixed", "pos": (5, 0, 35), "euler": (0, 0, 0), "fovy": 45}
 
+    @staticmethod
+    def zoomed_out_birdeye_camera_parameters() -> dict[str, Any]:
+        return {"mode": "fixed", "pos": (0, 0, 380), "euler": (0, 0, 0), "fovy": 90}
+
     def __post_init__(self) -> None:
         self.output_dir = Path(self.output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -59,6 +64,7 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
         self._last_position = None
         self._last_yaw = 0.0
         self._time = 0.0
+        self._scene_curr_time = 0.0
         self._target_current_theta = float(self.target_initial_phase_rad)
 
     def _setup_imports(self) -> None:
@@ -66,7 +72,7 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
             # Respect explicit CPU fallback requests even though the default
             # production path can now run FlyVis on the local GPUs.
             os.environ["CUDA_VISIBLE_DEVICES"] = ""
-        from flygym import Camera, SingleFlySimulation, YawOnlyCamera
+        from flygym import Camera, Fly, SingleFlySimulation, YawOnlyCamera
         from flygym.arena import FlatTerrain
         from flygym.examples.vision import MovingFlyArena
         from body.brain_only_realistic_vision_fly import BrainOnlyRealisticVisionFly
@@ -79,6 +85,7 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
         )
         self._flyvis_device_info = configure_flyvis_device(force_cpu=self.force_cpu_vision)
         self.Camera = Camera
+        self.Fly = Fly
         self.SingleFlySimulation = SingleFlySimulation
         self.YawOnlyCamera = YawOnlyCamera
         self.FlatTerrain = FlatTerrain
@@ -114,6 +121,9 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
             direction = 1.0 if float(self.target_angular_direction) >= 0.0 else -1.0
             self._target_angular_speed = direction * abs(float(self.leading_fly_speed)) / radius
         self._target_schedule_state = TargetScheduleState(parse_target_schedule(self.target_schedule))
+        self._extra_target_entities = self._build_extra_target_entities()
+        if self._extra_target_entities:
+            self._attach_extra_targets()
         if self.control_mode == "hybrid_multidrive":
             fly_cls = self.FastRealisticVisionFly if self.vision_payload_mode == "fast" else self.ConnectomeTurningFly
         else:
@@ -129,6 +139,7 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
         )
         corridor_birdeye_params = self.corridor_birdeye_camera_parameters()
         default_birdeye_params = self.default_birdeye_camera_parameters()
+        zoomed_out_birdeye_params = self.zoomed_out_birdeye_camera_parameters()
         if self.camera_mode == "follow_yaw":
             self.camera = self.YawOnlyCamera(
                 attachment_point=self.fly.model.worldbody,
@@ -147,6 +158,15 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
                 window_size=(800, 608),
                 fps=self.camera_fps,
             )
+        elif self.camera_mode == "fixed_birdeye_zoomed_out":
+            self.camera = self.Camera(
+                attachment_point=self.arena.root_element.worldbody,
+                camera_name="birdeye_zoomed_out_cam",
+                camera_parameters=dict(zoomed_out_birdeye_params),
+                play_speed=0.2,
+                window_size=(960, 720),
+                fps=self.camera_fps,
+            )
         else:
             cam_params = corridor_birdeye_params if self._visual_speed_cfg.enabled else default_birdeye_params
             self.camera = self.Camera(
@@ -158,8 +178,50 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
                 fps=self.camera_fps,
             )
         self.sim = self.SingleFlySimulation(fly=self.fly, cameras=[self.camera], arena=self.arena)
-        if self.target_fly_enabled and hasattr(self.arena, "freejoint"):
+        if self.target_fly_enabled or self._extra_target_entities:
             self.arena.step = types.MethodType(self._controlled_target_step, self.arena)
+
+    def _build_extra_target_entities(self) -> list[dict[str, Any]]:
+        entities: list[dict[str, Any]] = []
+        for index, item in enumerate(self.extra_targets or ()):
+            spec = dict(item or {})
+            radius = max(float(spec.get("radius", self.leading_fly_radius)), 1e-9)
+            move_speed = abs(float(spec.get("move_speed", self.leading_fly_speed)))
+            direction = 1.0 if float(spec.get("angular_direction", 1.0)) >= 0.0 else -1.0
+            height = float(spec.get("height", 0.5))
+            entities.append(
+                {
+                    "label": str(spec.get("label", f"extra_target_{index}")),
+                    "radius": radius,
+                    "move_speed": move_speed,
+                    "angular_speed": direction * move_speed / radius,
+                    "initial_phase_rad": float(spec.get("initial_phase_rad", 0.0)),
+                    "height": height,
+                    "freejoint": None,
+                }
+            )
+        return entities
+
+    def _attach_extra_targets(self) -> None:
+        for index, entity in enumerate(self._extra_target_entities):
+            fly = self.Fly().model
+            fly.model = f"Animat_extra_target_{index}"
+            for light in fly.find_all(namespace="light"):
+                light.remove()
+            position, heading, _velocity_xy = self._scene_target_pose(
+                radius=float(entity["radius"]),
+                theta=float(entity["initial_phase_rad"]),
+                height=float(entity["height"]),
+                angular_speed=float(entity["angular_speed"]),
+            )
+            quat = np.exp(1j * heading / 2.0)
+            spawn_site = self.arena.root_element.worldbody.add(
+                "site",
+                name=f"extra_target_site_{index}",
+                pos=position,
+                quat=(float(quat.real), 0.0, 0.0, float(quat.imag)),
+            )
+            entity["freejoint"] = spawn_site.attach(fly).add("freejoint")
 
     def _apply_target_pose(self, theta: float, physics: Any | None = None) -> None:
         if not self.target_fly_enabled or not hasattr(self.arena, "freejoint"):
@@ -182,8 +244,21 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
         physics.bind(self.arena.freejoint).qvel[:] = 0
 
     def _ghost_target_pose(self, theta: float) -> tuple[np.ndarray, float, tuple[float, float]]:
-        radius = float(self.arena.radius)
-        height = float(self.arena.init_fly_pos[2])
+        return self._scene_target_pose(
+            radius=float(self.leading_fly_radius),
+            theta=theta,
+            height=float(getattr(self.arena, "init_fly_pos", (0.0, 0.0, 0.5))[2]),
+            angular_speed=float(self._target_angular_speed),
+        )
+
+    def _scene_target_pose(
+        self,
+        *,
+        radius: float,
+        theta: float,
+        height: float,
+        angular_speed: float,
+    ) -> tuple[np.ndarray, float, tuple[float, float]]:
         position = np.array(
             [
                 radius * math.sin(theta),
@@ -192,8 +267,8 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
             ],
             dtype=float,
         )
-        velocity_x = radius * math.cos(theta) * float(self._target_angular_speed)
-        velocity_y = -radius * math.sin(theta) * float(self._target_angular_speed)
+        velocity_x = radius * math.cos(theta) * angular_speed
+        velocity_y = -radius * math.sin(theta) * angular_speed
         heading = math.atan2(velocity_y, velocity_x) if abs(velocity_x) + abs(velocity_y) > 1e-12 else 0.0
         return position, heading, (float(velocity_x), float(velocity_y))
 
@@ -211,10 +286,33 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
         else:
             self._apply_hidden_target_pose(physics)
 
+    def _update_extra_target_poses(self, current_time_s: float, physics: Any | None = None) -> None:
+        if not self._extra_target_entities:
+            return
+        physics = physics or self.sim.physics
+        for entity in self._extra_target_entities:
+            freejoint = entity.get("freejoint")
+            if freejoint is None:
+                continue
+            theta = float(entity["initial_phase_rad"]) + float(entity["angular_speed"]) * float(current_time_s)
+            position, heading, _velocity_xy = self._scene_target_pose(
+                radius=float(entity["radius"]),
+                theta=theta,
+                height=float(entity["height"]),
+                angular_speed=float(entity["angular_speed"]),
+            )
+            quat = np.exp(1j * heading / 2.0)
+            qpos = (*position, float(quat.real), 0.0, 0.0, float(quat.imag))
+            physics.bind(freejoint).qpos = qpos
+            physics.bind(freejoint).qvel[:] = 0
+
     def _controlled_target_step(self, arena: Any, dt: float, physics: Any) -> None:
         del arena
-        self._update_target_pose(float(self.arena.curr_time), physics)
-        self.arena.curr_time += dt
+        self._update_target_pose(self._scene_curr_time, physics)
+        self._update_extra_target_poses(self._scene_curr_time, physics)
+        self._scene_curr_time += float(dt)
+        if hasattr(self.arena, "curr_time"):
+            self.arena.curr_time = self._scene_curr_time
 
     def _target_state_metadata(self, position_xy: tuple[float, float], yaw: float) -> dict[str, Any]:
         if not self.target_fly_enabled or not hasattr(self.arena, "freejoint"):
@@ -245,10 +343,14 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
     def reset(self, seed: int = 0) -> BodyObservation:
         obs, info = self.sim.reset(seed=seed)
         self._time = 0.0
-        if self.target_fly_enabled and hasattr(self.arena, "curr_time"):
+        self._scene_curr_time = 0.0
+        if hasattr(self.arena, "curr_time"):
             self.arena.curr_time = 0.0
+        if self.target_fly_enabled:
             self._target_schedule_state.reset()
             self._update_target_pose(0.0)
+        if self._extra_target_entities:
+            self._update_extra_target_poses(0.0)
         self._last_position = np.array(obs["fly"][0, :2], dtype=float)
         self._last_yaw = float(np.arctan2(obs["fly_orientation"][1], obs["fly_orientation"][0])) if "fly_orientation" in obs else 0.0
         if hasattr(self.arena, "notify_fly_state"):
@@ -267,6 +369,8 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
         substep_prev_position = np.array(self._last_position, dtype=float) if self._last_position is not None else None
         for _ in range(max(1, num_substeps)):
             latest_obs, _, _, _, latest_info = self.sim.step(action=action)
+            if hasattr(self.arena, "stabilize_after_physics_step"):
+                self.arena.stabilize_after_physics_step(self.sim.physics)
             self._time += self.timestep
             if hasattr(self.arena, "notify_fly_state"):
                 current_position = np.array(latest_obs["fly"][0, :2], dtype=float)
@@ -281,18 +385,30 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
                     forward_velocity_x_mm_s=forward_velocity_x_mm_s,
                 )
                 substep_prev_position = current_position
-            rendered = self.sim.render()[0]
-            if rendered is not None:
-                self._last_frame = rendered
+        rendered = self.sim.render()[0]
+        if rendered is not None:
+            self._last_frame = rendered
         position = np.array(latest_obs["fly"][0, :2], dtype=float)
         yaw = float(np.arctan2(latest_obs["fly_orientation"][1], latest_obs["fly_orientation"][0])) if "fly_orientation" in latest_obs else self._last_yaw
-        forward_speed = float(np.linalg.norm(position - self._last_position) / (max(1, num_substeps) * self.timestep))
+        body_forward_speed = float(np.linalg.norm(position - self._last_position) / (max(1, num_substeps) * self.timestep))
+        forward_speed = body_forward_speed
+        treadmill_forward_speed = None
         if hasattr(self.arena, "filtered_fly_forward_speed_mm_s") and self._visual_speed_cfg.enabled and self._visual_speed_cfg.geometry == "treadmill_ball":
-            forward_speed = float(getattr(self.arena, "filtered_fly_forward_speed_mm_s", forward_speed))
+            treadmill_forward_speed = float(getattr(self.arena, "filtered_fly_forward_speed_mm_s", body_forward_speed))
+            # A tethered treadmill run should not feed support-jitter XY motion back
+            # into the brain as if it were true world-frame translation.
+            forward_speed = 0.0
         yaw_rate = float((yaw - self._last_yaw) / (max(1, num_substeps) * self.timestep))
         self._last_position = position
         self._last_yaw = yaw
-        return self._make_observation(latest_obs, latest_info, forward_speed=forward_speed, yaw_rate=yaw_rate)
+        return self._make_observation(
+            latest_obs,
+            latest_info,
+            forward_speed=forward_speed,
+            yaw_rate=yaw_rate,
+            treadmill_forward_speed=treadmill_forward_speed,
+            body_forward_speed=body_forward_speed,
+        )
 
     def _apply_visual_ablation(
         self,
@@ -332,7 +448,15 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
             updated_features = self._vision_feature_extractor.extract(ablated_mapping).to_dict()
         return ablated_mapping, ablated_array, updated_features
 
-    def _make_observation(self, obs: dict[str, Any], info: dict[str, Any], forward_speed: float, yaw_rate: float) -> BodyObservation:
+    def _make_observation(
+        self,
+        obs: dict[str, Any],
+        info: dict[str, Any],
+        forward_speed: float,
+        yaw_rate: float,
+        treadmill_forward_speed: float | None = None,
+        body_forward_speed: float | None = None,
+    ) -> BodyObservation:
         realistic_vision = {}
         nn_activities = info.get("nn_activities") if info else None
         if hasattr(nn_activities, "keys"):
@@ -357,6 +481,7 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
             "vision_updated": bool(info.get("vision_updated", False)) if info else False,
             "vision_payload_mode": vision_payload_mode,
             "target_fly_enabled": self.target_fly_enabled,
+            "extra_target_count": float(len(self._extra_target_entities)),
             "target_state": self._target_state_metadata((float(obs["fly"][0, 0]), float(obs["fly"][0, 1])), float(self._last_yaw)),
             "visual_ablation_cell_types": sorted(self._visual_ablation_cell_types),
             "body_state": {
@@ -369,7 +494,17 @@ class FlyGymRealisticVisionRuntime(EmbodiedRuntime):
             },
         }
         if hasattr(self.arena, "metadata"):
-            metadata["visual_speed_state"] = self.arena.metadata()
+            visual_speed_state = dict(self.arena.metadata())
+            if visual_speed_state.get("speed_source", "") == "treadmill_ball":
+                visual_speed_state["body_forward_speed_mm_s"] = float(
+                    body_forward_speed if body_forward_speed is not None else forward_speed
+                )
+                visual_speed_state["treadmill_forward_speed_mm_s"] = float(
+                    treadmill_forward_speed
+                    if treadmill_forward_speed is not None
+                    else visual_speed_state.get("fly_forward_speed_mm_s_filtered", 0.0)
+                )
+            metadata["visual_speed_state"] = visual_speed_state
         return BodyObservation(
             sim_time=self._time,
             position_xy=(float(obs["fly"][0, 0]), float(obs["fly"][0, 1])),

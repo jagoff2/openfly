@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Mapping
 
 from body.interfaces import BodyObservation
 from vision.feature_extractor import VisionFeatures
@@ -48,10 +48,17 @@ class SensoryEncoder:
     def __init__(self, config: EncoderConfig | None = None) -> None:
         self.config = config or EncoderConfig()
 
+    @staticmethod
+    def _body_feedback_forward_speed(observation: BodyObservation) -> float:
+        visual_speed_state = observation.metadata.get("visual_speed_state")
+        if isinstance(visual_speed_state, Mapping) and str(visual_speed_state.get("speed_source", "")) == "treadmill_ball":
+            return max(0.0, float(visual_speed_state.get("body_forward_speed_mm_s", 0.0)))
+        return max(0.0, float(observation.forward_speed))
+
     def encode(self, observation: BodyObservation, vision: VisionFeatures) -> SensorEncoding:
         cfg = self.config
         looming_term = max(0.0, float(vision.looming_evidence))
-        speed_term = max(0.0, observation.forward_speed)
+        speed_term = self._body_feedback_forward_speed(observation)
         contact_term = max(0.0, observation.contact_force)
         accel_term = abs(float(observation.forward_accel))
         state_term = max(0.0, max(float(observation.walk_state), float(observation.behavioral_state_level)))
@@ -97,7 +104,7 @@ class SensoryEncoder:
             "forward_salience_velocity": float(vision.forward_salience_velocity),
             "looming_evidence": float(vision.looming_evidence),
             "receding_evidence": float(vision.receding_evidence),
-            "forward_speed": observation.forward_speed,
+            "forward_speed": float(speed_term),
             "forward_accel": float(observation.forward_accel),
             "yaw_rate": observation.yaw_rate,
             "walk_state": float(observation.walk_state),

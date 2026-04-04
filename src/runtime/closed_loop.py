@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from time import perf_counter
 import shutil
+from typing import Sequence
 
 import numpy as np
 import yaml
@@ -27,18 +28,76 @@ from vision.inferred_lateralized import InferredLateralizedFeatureExtractor
 from visualization.session import ActivationCaptureSession
 
 
+FULL_PARITY_PROFILE = "flygym_full_parity_v1"
+
+
 def load_config(path: str | Path) -> dict:
     with open(path, "r", encoding="utf-8") as handle:
         return yaml.safe_load(handle)
 
 
-def build_body_runtime(mode: str, config: dict, run_dir: Path):
+def _nested_mapping_value(mapping: dict[str, object], path: Sequence[str]) -> object:
+    cursor: object = mapping
+    for key in path:
+        if not isinstance(cursor, dict) or key not in cursor:
+            return None
+        cursor = cursor[key]
+    return cursor
+
+
+def assert_full_parity_flygym_config(config: dict) -> None:
+    runtime_cfg = config.get("runtime") or {}
+    parity_cfg = runtime_cfg.get("parity_path") or {}
+    violations: list[str] = []
+
+    if str(parity_cfg.get("profile", "")).strip() != FULL_PARITY_PROFILE:
+        violations.append(f"runtime.parity_path.profile must be '{FULL_PARITY_PROFILE}'")
+    if bool(parity_cfg.get("required", False)) is not True:
+        violations.append("runtime.parity_path.required must be true")
+
+    expected_scalars: list[tuple[tuple[str, ...], object]] = [
+        (("brain", "dt_ms"), 0.1),
+        (("runtime", "body_timestep_s"), 0.0001),
+        (("runtime", "control_interval_s"), 0.002),
+        (("runtime", "vision_payload_mode"), "fast"),
+        (("runtime", "force_cpu_vision"), True),
+        (("runtime", "control_mode"), "hybrid_multidrive"),
+        (("visual_splice", "enabled"), True),
+        (("brain_context", "mode"), "none"),
+        (("encoder", "visual_gain_hz"), 0.0),
+        (("encoder", "visual_looming_gain_hz"), 0.0),
+        (("decoder", "command_mode"), "hybrid_multidrive"),
+    ]
+    for path, expected in expected_scalars:
+        actual = _nested_mapping_value(config, path)
+        label = ".".join(path)
+        if isinstance(expected, float):
+            if actual is None or abs(float(actual) - expected) > 1e-12:
+                violations.append(f"{label} must be {expected!r} (got {actual!r})")
+        else:
+            if actual != expected:
+                violations.append(f"{label} must be {expected!r} (got {actual!r})")
+
+    if config.get("steering_promotion"):
+        violations.append("steering_promotion must be absent on the full parity path")
+    if bool((config.get("inferred_visual") or {}).get("enabled", False)):
+        violations.append("inferred_visual.enabled must be false on the full parity path")
+    if violations:
+        raise ValueError(
+            "Full parity FlyGym path required. Non-parity embodied runs are blocked. "
+            + " ; ".join(violations)
+        )
+
+
+def build_body_runtime(mode: str, config: dict, run_dir: Path, *, allow_non_parity: bool = False):
     vision_payload_mode = config["runtime"].get("vision_payload_mode", "legacy")
     if mode == "mock":
         return MockEmbodiedRuntime(
             timestep=float(config["runtime"]["body_timestep_s"]),
             vision_payload_mode=str(vision_payload_mode),
         )
+    if not allow_non_parity:
+        assert_full_parity_flygym_config(config)
     from body.flygym_runtime import FlyGymRealisticVisionRuntime
     return FlyGymRealisticVisionRuntime(
         timestep=float(config["runtime"]["body_timestep_s"]),
@@ -49,11 +108,12 @@ def build_body_runtime(mode: str, config: dict, run_dir: Path):
         target_initial_phase_rad=float(config["body"].get("target_initial_phase_rad", 0.0)),
         target_angular_direction=float(config["body"].get("target_angular_direction", 1.0)),
         target_schedule=config["body"].get("target_schedule"),
+        extra_targets=config["body"].get("extra_targets"),
         output_dir=run_dir,
         camera_fps=int(config["runtime"].get("video_fps", 24)),
         force_cpu_vision=bool(config["runtime"].get("force_cpu_vision", False)),
         vision_payload_mode=str(vision_payload_mode),
-        control_mode=str(config["runtime"].get("control_mode", "legacy_2drive")),
+        control_mode=str(config["runtime"].get("control_mode", "hybrid_multidrive")),
         camera_mode=str(config["runtime"].get("camera_mode", "fixed_birdeye")),
         spawn_pos=tuple(config["body"].get("spawn_pos", (0.0, 0.0, 0.3))),
         fly_init_pose=str(config["body"].get("fly_init_pose", "stretch")),
@@ -173,6 +233,8 @@ def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, ou
     runtime_cfg = config["runtime"]
     control_interval_s = float(runtime_cfg["control_interval_s"])
     duration_s = float(duration_s or runtime_cfg["duration_s"])
+    if mode == "flygym":
+        assert_full_parity_flygym_config(config)
     run_dir = make_run_dir(output_root, f"{mode}-demo")
     body_runtime = build_body_runtime(mode, config, run_dir)
     brain_backend = build_brain_backend(mode, config)
@@ -181,12 +243,18 @@ def run_closed_loop(config: dict, mode: str, duration_s: float | None = None, ou
     if not bool(brain_warmup_summary.get("enabled", 0.0)):
         bridge.reset(seed=int(runtime_cfg.get("seed", 0)))
     observation = body_runtime.reset(seed=int(runtime_cfg.get("seed", 0)))
-    activation_capture, activation_status = ActivationCaptureSession.try_create(
-        config=config,
-        run_dir=run_dir,
-        initial_observation=observation,
-        title=str(runtime_cfg.get("activation_title", f"{mode.capitalize()} Closed-Loop Activation Visualization")),
-    )
+    if bool(runtime_cfg.get("capture_activation", True)):
+        activation_capture, activation_status = ActivationCaptureSession.try_create(
+            config=config,
+            run_dir=run_dir,
+            initial_observation=observation,
+            title=str(runtime_cfg.get("activation_title", f"{mode.capitalize()} Closed-Loop Activation Visualization")),
+        )
+    else:
+        activation_capture, activation_status = None, {
+            "status": "skipped",
+            "reason": "disabled by config",
+        }
     num_cycles = int(duration_s / control_interval_s)
     num_substeps = max(1, int(round(control_interval_s / body_runtime.timestep)))
     num_brain_steps = max(1, int(round(control_interval_s / (float(config["brain"].get("dt_ms", 0.1)) / 1000.0))))

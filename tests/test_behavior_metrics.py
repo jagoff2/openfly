@@ -213,3 +213,47 @@ def test_compute_behavior_metrics_captures_brief_target_removal() -> None:
     assert metrics["target_perturbation"]["removal_persistence_duration_s"] == pytest.approx(0.2)
     assert metrics["target_perturbation"]["removal_persistence_turn_alignment_fraction"] == 1.0
     assert metrics["target_perturbation"]["removal_post_return_refixation_latency_s"] == pytest.approx(0.0)
+
+
+def test_compute_behavior_metrics_uses_treadmill_measured_speed_for_treadmill_records() -> None:
+    records = [
+        {
+            "sim_time": 0.0,
+            "left_drive": 0.0,
+            "right_drive": 0.0,
+            "forward_speed": 0.0,
+            "yaw": 0.0,
+            "yaw_rate": 0.0,
+            "motor_signals": {"forward_signal": 0.0, "turn_signal": 0.0},
+            "target_state": {"enabled": False},
+            "body_metadata": {
+                "visual_speed_state": {
+                    "enabled": True,
+                    "speed_source": "treadmill_ball",
+                    "fly_forward_speed_mm_s_measured": 12.0,
+                }
+            },
+        },
+        {
+            "sim_time": 0.1,
+            "left_drive": 0.0,
+            "right_drive": 0.0,
+            "forward_speed": 0.0,
+            "yaw": 0.0,
+            "yaw_rate": 0.0,
+            "motor_signals": {"forward_signal": 0.0, "turn_signal": 0.0},
+            "target_state": {"enabled": False},
+            "body_metadata": {
+                "visual_speed_state": {
+                    "enabled": True,
+                    "speed_source": "treadmill_ball",
+                    "fly_forward_speed_mm_s_measured": 18.0,
+                }
+            },
+        },
+    ]
+
+    metrics = compute_behavior_metrics(records)
+
+    assert metrics["spontaneous_locomotion"]["mean_forward_speed"] == pytest.approx(15.0)
+    assert metrics["spontaneous_locomotion"]["locomotor_active_fraction"] == 1.0

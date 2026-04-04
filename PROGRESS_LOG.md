@@ -11358,3 +11358,757 @@ Next actions
 - keep the demo-fast config for short embodied visualization artifacts
 - keep parity-time configs for neural-fit and assay evidence, not interactive
   demo requests
+
+## 2026-04-02 03:44 - Completed a `30 s` lawful multi-target zoomed-out embodied demo
+
+Attempted
+
+- extended the FlyGym realistic-vision runtime to support multiple real ghost
+  fly targets in the arena instead of just one upstream `MovingFlyArena`
+  target
+- added a wide fixed overhead camera preset so long demos can keep the fly on
+  screen without a tracking-camera shortcut
+- added a demo-only runtime flag to disable activation capture, since the
+  activation side-by-side pass is unnecessary overhead for a long video request
+- built and ran a dedicated lawful splice-only multi-target demo config at
+  [flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_demo_fast.yaml](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_demo_fast.yaml)
+  under WSL `flysim-full` with `MUJOCO_GL=egl`
+
+Succeeded
+
+- runtime changes landed in:
+  - [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py)
+  - [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py)
+  - [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+- focused smoke coverage passed:
+  - `5 passed`
+- the final long run completed full duration at
+  [flygym-demo-20260402-031051](/G:/flysim/outputs/requested_30s_endogenous_routed_multitarget_zoomout_demo/flygym-demo-20260402-031051)
+- key artifacts:
+  - [demo.mp4](/G:/flysim/outputs/requested_30s_endogenous_routed_multitarget_zoomout_demo/flygym-demo-20260402-031051/demo.mp4)
+  - [summary.json](/G:/flysim/outputs/requested_30s_endogenous_routed_multitarget_zoomout_demo/flygym-demo-20260402-031051/summary.json)
+  - [metrics.csv](/G:/flysim/outputs/requested_30s_endogenous_routed_multitarget_zoomout_demo/flygym-demo-20260402-031051/metrics.csv)
+  - [run.jsonl](/G:/flysim/outputs/requested_30s_endogenous_routed_multitarget_zoomout_demo/flygym-demo-20260402-031051/run.jsonl)
+- completed metrics:
+  - `sim_seconds = 30.0`
+  - `completed_full_duration = 1.0`
+  - `avg_forward_speed = 0.8942`
+  - `path_length = 26.8092`
+  - `net_displacement = 9.1737`
+  - `trajectory_smoothness = 0.8734`
+  - `wall_seconds = 1965.92`
+  - `real_time_factor = 0.01526`
+  - `device = cuda:1`
+  - `target_condition_bearing_reduction_rad = 1.3417`
+  - `target_condition_fixation_fraction_20deg = 0.1233`
+  - `target_condition_fixation_fraction_30deg = 0.2240`
+- the scene used one primary target plus `2` extra ghost flies, confirmed in
+  the live run log as `extra_target_count = 2`
+
+Failed
+
+- the first wide-camera smoke exceeded MuJoCo's offscreen framebuffer height
+  because the new preset used `960 px` height; that was fixed by reducing the
+  zoomed-out camera window to `960x720`
+- an overly coarse `5 ms` demo scheduler made the fly nearly stationary; the
+  final demo used the less aggressive `brain.dt_ms = 2.0`,
+  `body_timestep_s = 0.002`, `control_interval_s = 0.02` compromise instead
+
+Evidence
+
+- [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py)
+- [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+- [flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_demo_fast.yaml](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_demo_fast.yaml)
+- [summary.json](/G:/flysim/outputs/requested_30s_endogenous_routed_multitarget_zoomout_demo/flygym-demo-20260402-031051/summary.json)
+- [run.jsonl](/G:/flysim/outputs/requested_30s_endogenous_routed_multitarget_zoomout_demo/flygym-demo-20260402-031051/run.jsonl)
+
+Next actions
+
+- keep the new multi-target / zoomed-out arena support available for longer
+  demo requests
+- improve lawful target fixation quality further without restoring coarse visual
+  pooling or target-metadata shortcuts
+- add a demo-only flag for reduced log density if long artifact wall time
+  becomes the next bottleneck
+
+## 2026-04-02 10:16 - Re-ran the multi-target demo with a fly-locked camera and restored activations
+
+Attempted
+
+- built a corrected follow-camera config at
+  [flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_followyaw_10s.yaml](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_followyaw_10s.yaml)
+  after the `30 s` zoomed-out artifact proved visually unusable
+- restored `capture_activation: true`
+- kept the same lawful multi-target routed branch and the same `2` extra ghost
+  flies
+- ran a real WSL smoke first to confirm activation artifacts actually write
+
+Succeeded
+
+- focused config/test slice passed:
+  - `3 passed`
+- the real `0.2 s` smoke completed with activation artifacts at
+  [flygym-demo-20260402-100134](/G:/flysim/outputs/requested_0p2s_endogenous_routed_multitarget_followyaw_activation_smoke/flygym-demo-20260402-100134)
+- the final `10.0 s` run completed at
+  [flygym-demo-20260402-100243](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243)
+- key artifacts:
+  - [demo.mp4](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/demo.mp4)
+  - [activation_side_by_side.mp4](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/activation_side_by_side.mp4)
+  - [activation_capture.npz](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/activation_capture.npz)
+  - [activation_overview.png](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/activation_overview.png)
+  - [summary.json](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/summary.json)
+  - [run.jsonl](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/run.jsonl)
+- summary metrics:
+  - `sim_seconds = 10.0`
+  - `completed_full_duration = 1.0`
+  - `avg_forward_speed = 0.7499`
+  - `path_length = 7.4842`
+  - `net_displacement = 3.2084`
+  - `trajectory_smoothness = 0.8991`
+  - `wall_seconds = 693.27`
+  - `real_time_factor = 0.01442`
+  - `target_condition_bearing_reduction_rad = 0.5184`
+  - `target_condition_fixation_fraction_20deg = 0.0`
+  - `target_condition_fixation_fraction_30deg = 0.0`
+
+Failed
+
+- nothing crashed in the corrected rerun
+- the only warning was `imageio` macro-block resizing when writing the
+  activation side-by-side video because the rendered frame height was
+  `1080 px`
+
+Evidence
+
+- [flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_followyaw_10s.yaml](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_followyaw_10s.yaml)
+- [summary.json](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/summary.json)
+- [activation_summary.json](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/activation_summary.json)
+
+Next actions
+
+- keep the fly-locked camera branch for any user-visible target demo requests
+- if needed, trim activation video resolution or macro-block alignment to avoid
+  ffmpeg resize warnings without removing activation capture
+- continue improving lawful fixation quality rather than only late-run bearing
+  reduction
+## 2026-04-02 10:35 - Diagnosed the apparent shortness of the `10 s` follow-camera rerun and the dark activation panels
+
+What I attempted:
+- audited the completed `10 s` follow-camera multi-target activation rerun to determine whether the encoded video was actually shorter than the requested simulated duration
+- inspected the activation-capture payload and renderer scaling to explain why some activation panels looked dead or excessively dark
+
+What succeeded:
+- verified the rerun did satisfy the request in fly time: [summary.json](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/summary.json) reports `sim_seconds = 10.000000000000009`, and both [demo.mp4](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/demo.mp4) and [activation_side_by_side.mp4](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/activation_side_by_side.mp4) encode to `10.42 s` at `24 fps`
+- established that the clip feels visually uninformative because the behavior is low-amplitude, not because ffmpeg truncated it: the fly only covered `7.48 mm` of path with `0.75 mm/s` mean forward speed and `3.21 mm` net displacement while the camera was locked to the body
+- established that some dark activation panels are real inactivity:
+  - `1 / 48` monitored population rows are identically zero
+  - `14 / 307` monitored rate rows are identically zero
+  - `29 / 307` monitored spike rows are identically zero
+- established that much of the dark whole-brain snapshot is a renderer clipping issue, not true silence: [activation_viz.py](/G:/flysim/src/visualization/activation_viz.py) maps voltages only over `[-55, -45] mV`, while the captured brain frames contain large negative tails down to about `-26k mV`; roughly `49-53%` of neurons in representative frames are below `-55 mV` and therefore clip to black
+
+What failed:
+- the first explanatory response to the user did not make the distinction clear between simulated duration, encoded video duration, and visually analyzable behavioral amplitude
+
+Evidence:
+- [summary.json](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/summary.json)
+- [activation_summary.json](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/activation_summary.json)
+- [demo.mp4](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/demo.mp4)
+- [activation_side_by_side.mp4](/G:/flysim/outputs/requested_10s_endogenous_routed_multitarget_followyaw_activation/flygym-demo-20260402-100243/activation_side_by_side.mp4)
+- [activation_viz.py](/G:/flysim/src/visualization/activation_viz.py)
+
+Next actions:
+- preserve the current activation artifacts but treat the rendering as diagnostically limited until the whole-brain color scaling is made percentile-robust instead of hard-clipped to a narrow fixed voltage window
+
+## 2026-04-02 10:49 - Restored the active `10 s` full-parity multi-target config to bird's-eye view without changing the parity path
+
+What I attempted:
+- revert the active `10 s` multi-target config away from the follow camera and back to the standard bird's-eye view
+- leave the full-parity runtime guard and timing invariants untouched
+
+What succeeded:
+- changed only `runtime.camera_mode` in [flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_followyaw_10s.yaml](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_followyaw_10s.yaml) from `follow_yaw` back to `fixed_birdeye`
+- updated the smoke assertion in [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py) so the repo's active-camera expectation now matches the config
+
+What failed:
+- nothing in code; the filename still contains `followyaw` for continuity even though the active camera mode is bird's-eye again
+
+Evidence:
+- [flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_followyaw_10s.yaml](/G:/flysim/configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed_multitarget_followyaw_10s.yaml)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+
+Next actions:
+- keep the active `10 s` multi-target config on the full parity path and treat camera framing as a presentation choice only, not a reason to relax parity timing
+
+## 2026-04-02 11:09 - Locked the behavioral interpretation of target demos to transient encounter realism rather than permanent pursuit
+
+What I attempted:
+- convert the repo continuity docs from a pursuit-biased interpretation of
+  target demos to an encounter-structure interpretation that matches the user's
+  correction about ordinary fly behavior
+
+What succeeded:
+- recorded in [ASSUMPTIONS_AND_GAPS.md](/G:/flysim/ASSUMPTIONS_AND_GAPS.md)
+  and [context.md](/G:/flysim/context.md) that generic object realism must not
+  be judged by endless pursuit or permanent fixation
+- demoted `bearing_reduction` and `fixation_fraction_*` to diagnostic-only
+  status for generic fly realism
+- promoted transient lawful response, minimum-distance regulation, low
+  overlap/pass-through, plausible pass-by/disengagement, and reacquisition as
+  the primary embodied encounter criteria
+
+What failed:
+- nothing in code or docs; the remaining work is to keep applying this rule to
+  live-run analysis instead of slipping back into fixation-biased language
+
+Evidence:
+- [ASSUMPTIONS_AND_GAPS.md](/G:/flysim/ASSUMPTIONS_AND_GAPS.md)
+- [context.md](/G:/flysim/context.md)
+
+Next actions:
+- analyze the active full-parity `10 s` run under this encounter-style
+  criterion instead of using lock-on behavior as the default expectation
+
+## 2026-04-03 09:35 - Retried the Creamer treadmill assay on the full parity endogenous brain with the shortest lawful synced block schedules and hit a runtime wall
+
+What I attempted:
+- narrowed the full-parity guard in [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py) so lawful treadmill assays under `body.visual_speed_control` are allowed on the parity path instead of being rejected outright
+- added a parity-short Creamer builder in [creamer_parity_short.py](/G:/flysim/src/analysis/creamer_parity_short.py), a reproducible runner in [run_creamer2018_parity_short.py](/G:/flysim/scripts/run_creamer2018_parity_short.py), and focused tests in [test_creamer_parity_short.py](/G:/flysim/tests/test_creamer_parity_short.py)
+- launched two synced shortest-possible parity probes:
+  - `0.4 s` total with `0.1 s` blocks at [run.jsonl](/G:/flysim/outputs/creamer2018_parity_short_synced/baseline/flygym-demo-20260403-092353/run.jsonl)
+  - `0.2 s` total with `0.05 s` blocks at [run.jsonl](/G:/flysim/outputs/creamer2018_parity_short_synced_0p05/baseline/flygym-demo-20260403-092721/run.jsonl)
+
+What succeeded:
+- the parity-short configs do stay on the enforced full-parity path: `4 passed` across the focused config/validator slice
+- the synced treadmill semantics are live on the parity branch:
+  - stationary blocks report true `retinal_slip_mm_s = 0.0`
+  - no coarse encoder visual gain is reintroduced
+  - the assay uses the active endogenous routed parity brain with lawful T4/T5-only splice input
+- the first `0.4 s` baseline probe already showed the important qualitative result before completion:
+  - by `baseline_a` at `sim_time = 0.128 s`, the treadmill branch had already snapped back into the old high-speed attractor regime around `557 mm/s` while stationary retinal slip remained `0.0`
+
+What failed:
+- neither parity probe completed a full matched baseline/ablated pair before wall-time became unacceptable
+- both probes had to be interrupted manually
+- the compute hotspot was inside repeated routed recurrent updates in [pytorch_backend.py](/G:/flysim/src/brain/pytorch_backend.py), specifically the routed weighted-component path used by the endogenous backend
+
+Evidence:
+- [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py)
+- [creamer_parity_short.py](/G:/flysim/src/analysis/creamer_parity_short.py)
+- [run_creamer2018_parity_short.py](/G:/flysim/scripts/run_creamer2018_parity_short.py)
+- [test_creamer_parity_short.py](/G:/flysim/tests/test_creamer_parity_short.py)
+- [run.jsonl](/G:/flysim/outputs/creamer2018_parity_short_synced/baseline/flygym-demo-20260403-092353/run.jsonl)
+- [run.jsonl](/G:/flysim/outputs/creamer2018_parity_short_synced_0p05/baseline/flygym-demo-20260403-092721/run.jsonl)
+
+Next actions:
+- treat parity-Creamer as runtime-blocked for full pair scoring until the endogenous routed backend can be made cheaper in the treadmill loop or the assay can be converted into a same-state replay fork that avoids full embodied wall time
+- keep the partial result: the parity brain did not magically remove the high-speed treadmill attractor during zero-slip baseline
+
+## 2026-04-03 16:55 - Removed the accidental legacy two-drive fallback from the active parity and Creamer treadmill paths
+
+What I attempted:
+- verify whether the parity-short Creamer retry had silently fallen back onto
+  the obsolete two-drive motor path instead of the current hybrid multidrive
+  path
+- if so, cut that fallback out of the active stack instead of only patching one
+  assay config
+
+What succeeded:
+- confirmed the bug:
+  - [creamer_parity_short.py](/G:/flysim/src/analysis/creamer_parity_short.py)
+    was loading the active routed parity config but not setting
+    `decoder.command_mode` or `runtime.control_mode`
+  - [decoder.py](/G:/flysim/src/bridge/decoder.py) still defaulted
+    `command_mode` to `two_drive`
+  - [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py) and
+    [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py) still defaulted the
+    body-side control mode to `legacy_2drive`
+- removed that fallback from the active/default path:
+  - decoder default is now `hybrid_multidrive`
+  - FlyGym runtime default control mode is now `hybrid_multidrive`
+  - full-parity validation now explicitly requires both
+    `decoder.command_mode = hybrid_multidrive` and
+    `runtime.control_mode = hybrid_multidrive`
+  - the active routed parity configs and the active `10 s` parity multi-target
+    config now declare those fields explicitly
+  - the Creamer parity-short builder now pins those fields explicitly too
+- focused regression slice passed:
+  - `7 passed, 117 deselected`
+
+What failed:
+- the corrected shortest parity Creamer rerun is still slow before first cycle
+  writeout, so the remaining blocker is now runtime in the parity treadmill
+  loop itself rather than an accidental fallback onto the obsolete control path
+
+Evidence:
+- [decoder.py](/G:/flysim/src/bridge/decoder.py)
+- [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py)
+- [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py)
+- [creamer_parity_short.py](/G:/flysim/src/analysis/creamer_parity_short.py)
+- [test_creamer_parity_short.py](/G:/flysim/tests/test_creamer_parity_short.py)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+- [test_bridge_unit.py](/G:/flysim/tests/test_bridge_unit.py)
+- [test_vnc_spec_decoder.py](/G:/flysim/tests/test_vnc_spec_decoder.py)
+
+Next actions:
+- let the corrected shortest parity Creamer rerun continue long enough to see
+  whether the first logged treadmill speeds are materially lower than the old
+  accidental-two-drive retry
+- if it still explodes, move the treadmill investigation squarely onto the ball
+  arena / embodied contact dynamics rather than decoder mode confusion
+
+## 2026-04-03 17:20 - Added a first-pass treadmill stabilization fix instead of treating the ball-speed blowup as a decoder problem
+
+What I attempted:
+- fix the treadmill itself rather than keep arguing from the earlier broken
+  parity-Creamer retries
+- target the two specific treadmill-path feedback loops that remained after the
+  multidrive correction:
+  - ball reset/contact transients immediately registering as real speed
+  - tether-root jitter being fed back into the brain as `forward_speed`
+
+What succeeded:
+- added a treadmill settle window in
+  [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py):
+  - new config field `treadmill_settle_time_s`
+  - treadmill joint `qvel` / `qacc` are zeroed on reset
+  - during the settle window, measured treadmill speed is forced to `0.0`
+    instead of being treated as locomotion
+- the treadmill runtime already had the complementary body-side correction in
+  [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py):
+  - treadmill-ball runs now set observation `forward_speed = 0.0`
+  - raw tether-root jitter is preserved only as metadata
+  - treadmill speed is preserved separately as assay metadata
+- added focused unit coverage in
+  [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+  for the settle-window suppression path
+- focused validation passed:
+  - `5 passed, 105 deselected`
+
+What failed:
+- the corrected shortest full-parity Creamer verification run is still slow
+  before first writeout, so I do not yet have completed embodied evidence that
+  the insane-speed treadmill regime is gone
+
+Evidence:
+- [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py)
+- [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py)
+- [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+- [creamer2018_parity_short_synced_0p05_multidrive_fix1](/G:/flysim/outputs/creamer2018_parity_short_synced_0p05_multidrive_fix1)
+
+Next actions:
+- wait for the corrected parity-Creamer baseline run to emit its first `jsonl`
+  records and compare the first stationary samples against the old
+  `-54.9 mm/s` and `419.7 mm/s` values
+- if those values remain absurd, move the next fix into deeper treadmill
+  contact/spawn geometry rather than decoder or parity control semantics
+
+## 2026-04-03 17:20 - Broke the treadmill-ball speed feedback loop in the active code path
+
+What I attempted:
+- fix the specific treadmill defect where ball-derived speed was being written
+  back into [BodyObservation.forward_speed](/G:/flysim/src/body/interfaces.py)
+  and then amplified by the encoder as if it were genuine body translation
+- also remove obvious ball-reset state contamination by zeroing the treadmill
+  joint velocity buffers on reset
+
+What succeeded:
+- [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py) now keeps
+  treadmill ball speed in `body_metadata.visual_speed_state` and no longer
+  overwrites the observation's body forward speed with the treadmill speed
+- [encoder.py](/G:/flysim/src/bridge/encoder.py) now explicitly ignores
+  treadmill-ball speed for mechanosensory forward-speed feedback and instead
+  reads `visual_speed_state.body_forward_speed_mm_s`
+- [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py) now
+  zeros treadmill joint `qvel` and `qacc` on arena reset
+- focused regression coverage now exists for both pieces:
+  - encoder treadmill feedback isolation
+  - treadmill reset zeroing the joint velocity buffers
+- passing slices:
+  - `11 passed, 43 deselected`
+  - `25 passed, 116 deselected`
+
+What failed:
+- the quick full-parity fixcheck rerun is still slow before first-cycle writeout
+  because the endogenous parity backend remains expensive in the treadmill loop
+- so I do not yet have a fresh parity artifact proving the speed numbers are now
+  sane end to end
+
+Evidence:
+- [encoder.py](/G:/flysim/src/bridge/encoder.py)
+- [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py)
+- [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py)
+- [test_bridge_unit.py](/G:/flysim/tests/test_bridge_unit.py)
+- [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+
+Next actions:
+- rerun the shortest admissible parity-Creamer baseline when wall time is
+  acceptable and check whether the previous `300-400+ mm/s` treadmill speeds
+  collapse now that the direct self-feedback loop is gone
+- if speeds are still absurd, investigate the remaining embodied source in the
+  treadmill ball / contact dynamics rather than the encoder path
+
+## 2026-04-03 18:05 - Hardened the short parity Creamer builder against spawn transients
+
+What I attempted:
+- keep the parity-short Creamer assay as short as possible without letting the
+  scored baseline start immediately after treadmill spawn
+- make the warmup/settle rule explicit in code and tests instead of relying on
+  memory or ad hoc operator caution
+
+What succeeded:
+- [creamer_parity_short.py](/G:/flysim/src/analysis/creamer_parity_short.py)
+  now inserts two synced warmup blocks before `baseline_a`
+- the same builder now sets
+  `body.visual_speed_control.treadmill_settle_time_s = 2 * block_duration_s`
+  so the treadmill and warmup schedule are matched structurally
+- [test_creamer_parity_short.py](/G:/flysim/tests/test_creamer_parity_short.py)
+  now locks that structure:
+  - schedule labels include `warmup_a`, `warmup_b`, then `baseline_a`
+  - `treadmill_settle_time_s` is asserted explicitly
+  - total short-run duration updates from `0.4 s` to `0.5 s`
+- focused regression slice passed:
+  - `5 passed, 25 deselected`
+
+What failed:
+- the fresh corrected parity-short rerun has only just been relaunched and has
+  not yet emitted admissible artifacts
+- so the mechanical fix is stronger, but end-to-end scientific confirmation is
+  still pending
+
+Evidence:
+- [creamer_parity_short.py](/G:/flysim/src/analysis/creamer_parity_short.py)
+- [test_creamer_parity_short.py](/G:/flysim/tests/test_creamer_parity_short.py)
+- [TASKS.md](/G:/flysim/TASKS.md)
+
+Next actions:
+- watch the new [creamer2018_parity_short_synced_0p05_treadmillfix_v2](/G:/flysim/outputs/creamer2018_parity_short_synced_0p05_treadmillfix_v2)
+  rerun for its first `run.jsonl` output
+- compare the first scored `baseline_a` samples against the old broken values
+  and decide whether the remaining failure is still treadmill mechanics or has
+  shifted upstream into the parity controller
+
+## 2026-04-03 18:22 - Added a post-physics treadmill freeze during the settle window
+
+What I attempted:
+- close the remaining mechanical gap in the treadmill settle logic
+- the previous code zeroed the ball joint only before each step, which still
+  allowed contact impulses during the physics step itself
+
+What succeeded:
+- [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py)
+  now factors joint zeroing into `_zero_treadmill_joint_state()`
+- the ball arena now exposes
+  `stabilize_after_physics_step()` and uses the same zeroing path there
+- [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py) now calls that
+  post-physics stabilizer on every substep when present
+- added regression coverage in
+  [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+- focused slice passed:
+  - `6 passed, 25 deselected`
+
+What failed:
+- no fresh parity artifact yet, because the already-launched reruns predate
+  this exact patch and the next admissible rerun still needs to start
+
+Evidence:
+- [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py)
+- [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py)
+- [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+
+Next actions:
+- relaunch the shortest parity Creamer rerun on this exact code state
+- inspect the first admissible stationary samples and compare them against the
+  old `-54.9 mm/s` first-cycle and `~419.7 mm/s` early-baseline failures
+
+## 2026-04-03 18:46 - Added explicit treadmill settle-validity metadata and a real latest-runtime smoke
+
+What I attempted:
+- tighten the treadmill settle boundary and add direct regression coverage
+  against the exact failure mode the old Creamer artifact showed
+- specifically, protect against treadmill spawn explosions reappearing in the
+  real FlyGym runtime even if the fake-physics unit seam still passes
+
+What succeeded:
+- [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py)
+  now treats the settle window as `<=` the settle cutoff, not `<`, so the
+  release sample is still frozen
+- treadmill metadata now records:
+  - `measurement_valid`
+  - `in_settle_window`
+  - `settle_remaining_s`
+- added a real-runtime smoke in
+  [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+  that resets the latest treadmill runtime, applies zero multidrive commands,
+  and asserts:
+  - no measured treadmill speed during settle
+  - no filtered treadmill speed during settle
+  - no virtual track drift during settle
+- focused validation passed:
+  - `23 passed, 1 skipped, 93 deselected`
+
+What failed:
+- the fresh end-to-end parity-short rerun still had not written files by the
+  time this entry was recorded, so this entry is code-level and smoke-level
+  evidence, not yet the final paired Creamer result
+
+Evidence:
+- [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py)
+- [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+- [creamer2018_parity_short_synced_0p05_treadmillfix_v4](/G:/flysim/outputs/creamer2018_parity_short_synced_0p05_treadmillfix_v4)
+
+Next actions:
+- watch the fresh `v4` parity-short rerun for its first `run.jsonl`
+- compare the first post-settle samples against the old broken warmup values
+- only then treat the treadmill fix as end-to-end confirmed
+
+## 2026-04-03 22:10 - Reviewed the full parity treadmill setup after the real 1.2 s Creamer run stayed flat
+
+What I attempted:
+- review the entire parity treadmill path after the user correctly pointed out
+  that the legs visibly move in the baseline video even though the scored
+  treadmill speed stayed at zero
+- separate a dead-brain / dead-decoder failure from a downstream body/treadmill
+  mechanics failure
+- compare the current parity run against older treadmill artifacts and the
+  direct treadmill-response tooling already in the repo
+
+What succeeded:
+- confirmed from the real parity baseline log at
+  [run.jsonl](/G:/flysim/outputs/creamer2018_parity_open_loop_1p2_treadmillfix_v1/baseline/flygym-demo-20260403-204123/run.jsonl)
+  that the decoder is producing strong nonzero commands after settle:
+  - pre-window means: `left_amp 0.9323`, `right_amp 0.6715`,
+    `left_drive 1.0241`, `right_drive 0.5190`,
+    `forward_signal 0.6074`, `turn_signal -0.4518`
+  - valid-row maxima reach roughly:
+    `left_amp 1.2074`, `right_amp 1.1749`,
+    `left_freq_scale 1.5048`, `right_freq_scale 1.4487`,
+    `forward_signal 1.0`, `|turn_signal| 1.0`
+- confirmed the monitored brain slice is active, not silent:
+  - pre-window monitored-rate mean about `21.74 Hz`
+  - stimulus-window monitored-rate mean about `17.52 Hz`
+- confirmed the treadmill/body seam is where the current failure lives:
+  - for all `500` valid rows, nested treadmill metadata stays at
+    `fly_forward_speed_mm_s_measured = 0.0`
+  - `track_x_mm = 0.0`
+  - `treadmill_forward_speed_mm_s = 0.0`
+  - body XY motion is tiny but nonzero, and yaw-rate is nonzero
+- confirmed the current logger shape was part of the confusion:
+  - treadmill state is nested under `body_metadata.visual_speed_state`
+    in [closed_loop.py](/G:/flysim/src/runtime/closed_loop.py)
+  - top-level `contact_force` is not logged there, so my earlier
+    top-level `None` interpretation was not valid evidence of missing contact
+- identified a stale diagnostic seam:
+  - [run_treadmill_hybrid_response_map.py](/G:/flysim/scripts/run_treadmill_hybrid_response_map.py)
+    still records `obs.forward_speed`
+  - but treadmill mode now intentionally writes
+    `BodyObservation.forward_speed = 0.0` in
+    [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py)
+    to keep ball motion out of proprioceptive body feedback
+  - so that script can no longer validate current treadmill motion unless it
+    is updated to read nested treadmill metadata instead
+- compared historical treadmill artifacts and found the spawn height itself is
+  not the leading new regression:
+  - current parity tripod run sits around `position_z = 1.5814`
+  - older treadmill tripod artifacts that did show nonzero ball speed used the
+    same `position_z` scale
+
+What failed:
+- the current real parity Creamer assay still produced no locomotor ball-speed
+  response, despite clear motor output
+- there is still no regression that proves the treadmill resumes nonzero ball
+  motion after the settle window; the current tests only prove suppression
+  during settle and a bounded release sample
+
+Evidence:
+- [run.jsonl](/G:/flysim/outputs/creamer2018_parity_open_loop_1p2_treadmillfix_v1/baseline/flygym-demo-20260403-204123/run.jsonl)
+- [summary.json](/G:/flysim/outputs/creamer2018_parity_open_loop_1p2_treadmillfix_v1/baseline/flygym-demo-20260403-204123/summary.json)
+- [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py)
+- [flygym_runtime.py](/G:/flysim/src/body/flygym_runtime.py)
+- [run_treadmill_hybrid_response_map.py](/G:/flysim/scripts/run_treadmill_hybrid_response_map.py)
+- [treadmill_hybrid_response_map.csv](/G:/flysim/outputs/metrics/treadmill_hybrid_response_map.csv)
+- [test_closed_loop_smoke.py](/G:/flysim/tests/test_closed_loop_smoke.py)
+- [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+
+Next actions:
+- add raw treadmill-joint and contact debug logging to the parity treadmill path
+- update the direct treadmill-response script to read nested treadmill metadata
+  instead of `obs.forward_speed`
+- add a post-settle positive-response regression using a direct hybrid command,
+  so the treadmill must prove nonzero measured ball motion after settle before
+  any future Creamer run is accepted
+
+## 2026-04-03 22:18 - Locked down the "ball gets reset every frame" suspicion with direct unit regressions
+
+What I attempted:
+- verify the specific user suspicion that the treadmill bug might simply be
+  caused by zeroing the treadmill ball every frame rather than only during the
+  settle window
+
+What succeeded:
+- added two explicit post-settle regressions in
+  [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+  that prove:
+  - `VisualSpeedBallTreadmillArena.step()` does not zero the treadmill joint
+    once `curr_time > _settle_until_s`
+  - `stabilize_after_physics_step()` also does not zero the treadmill joint
+    after settle
+- the focused settle/post-settle slice passed:
+  - `4 passed`
+
+What failed:
+- this does not fix the pinned-zero treadmill regression itself
+- it only rules out one concrete cause: unconditional per-frame treadmill reset
+
+Evidence:
+- [visual_speed_control.py](/G:/flysim/src/body/visual_speed_control.py)
+- [test_visual_speed_control.py](/G:/flysim/tests/test_visual_speed_control.py)
+
+Next actions:
+- instrument raw treadmill-joint and contact state in the live parity run path
+- add a positive-response regression that requires nonzero post-settle ball
+  motion under a direct hybrid command
+
+## 2026-04-03 22:44 - Split the Creamer assay into the right primary and secondary readouts
+
+What I attempted:
+- resolve the disagreement about whether a broken treadmill should block Creamer
+  interpretation on the current parity stack
+- directly inspect the current controller boundary and the live treadmill
+  mechanics seam
+
+What succeeded:
+- verified from direct probes that the parity and legacy treadmill paths both
+  show the same downstream mechanics failure:
+  - leg joints move strongly after settle
+  - `treadmill_joint.qvel` remains `[0, 0, 0]`
+  - a direct post-settle contact probe reports `ncon = 0`
+- that means the current treadmill failure is downstream of the brain and
+  decoder, and more specifically consistent with the fly effectively stepping
+  in air on the current tethered-ball setup
+- corrected the Creamer assay framing:
+  - on this stack, the brain drives a canned hybrid locomotor controller via
+    final latents, not raw per-joint actuation
+  - therefore the primary Creamer readout should be visual modulation of those
+    final locomotor outputs:
+    - `forward_signal`
+    - `turn_signal`
+    - `left/right_amp`
+    - `left/right_freq_scale`
+    - correction gains
+    - `reverse_gate`
+  - treadmill ball motion remains important, but as a secondary embodied
+    mechanics check rather than the primary assay target
+- updated the metric layer accordingly:
+  - [visual_speed_control_metrics.py](/G:/flysim/src/analysis/visual_speed_control_metrics.py)
+    now emits:
+    - `primary_readout = command_forward_proxy`
+    - `pre/stim/post_mean_command_forward_signal`
+    - `pre/stim/post_mean_command_gait_drive`
+    - `pre/stim/post_mean_command_forward_proxy`
+    - command-side fold changes and deltas
+  - [creamer_parity_open_loop.py](/G:/flysim/src/analysis/creamer_parity_open_loop.py)
+    and [run_creamer2018_parity_open_loop.py](/G:/flysim/scripts/run_creamer2018_parity_open_loop.py)
+    now promote those command-side metrics in the pair summary
+- added regression coverage and passed the focused slice:
+  - `6 passed`
+
+What failed:
+- the treadmill mechanics seam is still broken
+- the open-loop Creamer pair has not yet been rerun on the updated scorer in
+  this log entry
+
+Evidence:
+- [visual_speed_control_metrics.py](/G:/flysim/src/analysis/visual_speed_control_metrics.py)
+- [creamer_parity_open_loop.py](/G:/flysim/src/analysis/creamer_parity_open_loop.py)
+- [run_creamer2018_parity_open_loop.py](/G:/flysim/scripts/run_creamer2018_parity_open_loop.py)
+- [test_visual_speed_control_metrics.py](/G:/flysim/tests/test_visual_speed_control_metrics.py)
+- [test_creamer_parity_open_loop.py](/G:/flysim/tests/test_creamer_parity_open_loop.py)
+
+Next actions:
+- rerun exactly one parity open-loop Creamer baseline / T4/T5-ablated pair on
+  the updated scorer
+- report command-side visual-response modulation as the primary result
+- keep treadmill ball motion in the report as a separate downstream mechanics
+  status field
+
+## 2026-04-03 23:09 - Locked the Creamer sign interpretation to the paper
+
+What I attempted:
+- recheck the qualitative sign expectation for front-to-back motion against the
+  Creamer paper after noticing the current baseline command-side response was
+  suppressive
+
+What succeeded:
+- confirmed the paper-consistent qualitative rule:
+  - front-to-back translational motion slows walking
+  - back-to-front translational motion also slows walking
+  - back-to-front slowing is stronger
+- recorded that rule into the continuity files so future analysis does not
+  incorrectly treat front-to-back suppression as a sign failure
+
+What failed:
+- nothing technical failed in this step; this was an interpretation correction
+
+Evidence:
+- [ASSUMPTIONS_AND_GAPS.md](/G:/flysim/ASSUMPTIONS_AND_GAPS.md)
+- [context.md](/G:/flysim/context.md)
+
+Next actions:
+- keep evaluating the current parity open-loop pair on:
+  - suppressive sign
+  - magnitude
+  - `T4/T5` ablation sensitivity
+  - treadmill seam status as a separate downstream issue
+
+## 2026-04-04 00:14 - Corrected parity Creamer pair completed under command-side scoring
+
+What I attempted:
+- complete the updated `2.0 s` parity open-loop Creamer baseline / `T4/T5`
+  ablated pair after rewriting the scorer around decoder / locomotor-latent
+  outputs rather than treadmill ball speed
+
+What succeeded:
+- the pair completed at:
+  - [pair summary](/G:/flysim/outputs/creamer2018_parity_open_loop_2p0_commandmetrics_v1/metrics/creamer2018_parity_open_loop_pair_summary.json)
+  - [baseline summary](/G:/flysim/outputs/creamer2018_parity_open_loop_2p0_commandmetrics_v1/baseline/flygym-demo-20260403-223301/summary.json)
+  - [ablated summary](/G:/flysim/outputs/creamer2018_parity_open_loop_2p0_commandmetrics_v1/t4t5_ablated/flygym-demo-20260403-230440/summary.json)
+- the corrected assay is no longer flat
+- both baseline and `T4/T5` ablated runs show the Creamer-consistent sign for
+  front-to-back motion: suppressive slowing on the command-side locomotor
+  readout
+- baseline:
+  - `pre_mean_command_forward_proxy = 0.7100`
+  - `stimulus_mean_command_forward_proxy = 0.0886`
+  - `command_forward_proxy_fold_change = 0.1248`
+  - `command_forward_proxy_delta = -0.6214`
+- `T4/T5` ablated:
+  - `pre_mean_command_forward_proxy = 0.6477`
+  - `stimulus_mean_command_forward_proxy = 0.1176`
+  - `command_forward_proxy_fold_change = 0.1816`
+  - `command_forward_proxy_delta = -0.5301`
+- interpretation:
+  - `T4/T5` ablation weakens the suppressive front-to-back effect
+  - but does not abolish it
+  - so the current parity stack now shows a partial causal Creamer-like effect
+    on the command side
+
+What failed:
+- the treadmill mechanics seam is still broken in both runs:
+  - `pre_mean_forward_speed = 0.0`
+  - `stimulus_mean_forward_speed = 0.0`
+  - valid samples existed in both runs
+- the pair summary still leaves `summary_path` blank for each arm even though
+  the summaries exist on disk; that is a bookkeeping bug, not a scientific one
+
+Evidence:
+- [creamer2018_parity_open_loop_pair_summary.json](/G:/flysim/outputs/creamer2018_parity_open_loop_2p0_commandmetrics_v1/metrics/creamer2018_parity_open_loop_pair_summary.json)
+- [baseline summary](/G:/flysim/outputs/creamer2018_parity_open_loop_2p0_commandmetrics_v1/baseline/flygym-demo-20260403-223301/summary.json)
+- [ablated summary](/G:/flysim/outputs/creamer2018_parity_open_loop_2p0_commandmetrics_v1/t4t5_ablated/flygym-demo-20260403-230440/summary.json)
+
+Next actions:
+- keep the command-side Creamer pair as the current admissible parity result
+- continue treating treadmill ball motion as a separate downstream mechanics bug
+- investigate why the `T4/T5` ablation only weakens, rather than removes, the
+  suppressive effect

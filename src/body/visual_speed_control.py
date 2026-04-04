@@ -139,6 +139,7 @@ class VisualSpeedControlConfig:
     gain_baseline: float = 1.0
     gain_stimulus: float = 1.0
     fly_speed_smoothing_alpha: float = 0.2
+    treadmill_settle_time_s: float = 0.05
     treadmill_ball_radius_mm: float = 5.390852782067457
     treadmill_ball_pos_mm: tuple[float, float, float] = (
         -0.09867235483,
@@ -183,6 +184,7 @@ class VisualSpeedControlConfig:
             gain_baseline=float(raw.get("gain_baseline", 1.0)),
             gain_stimulus=float(raw.get("gain_stimulus", 1.0)),
             fly_speed_smoothing_alpha=float(raw.get("fly_speed_smoothing_alpha", 0.2)),
+            treadmill_settle_time_s=float(raw.get("treadmill_settle_time_s", 0.05)),
             treadmill_ball_radius_mm=float(raw.get("treadmill_ball_radius_mm", 5.390852782067457)),
             treadmill_ball_pos_mm=tuple(
                 float(value)
@@ -434,6 +436,7 @@ class VisualSpeedBallTreadmillArena(Ball):
         self.fly_yaw_rad = 0.0
         self.current_scene_world_speed_mm_s = 0.0
         self.current_flicker_phase_mm = 0.0
+        self._settle_until_s = float(max(self.config.treadmill_settle_time_s, 0.0))
         self._treadmill_joint = self.root_element.find("joint", "treadmill_joint")
         self._treadmill_geom = self.root_element.find("geom", "treadmill")
         self._treadmill_visual_rgba: np.ndarray | None = None
@@ -448,6 +451,15 @@ class VisualSpeedBallTreadmillArena(Ball):
         self._left_stripe_bodies: list[Any] = []
         self._right_stripe_bodies: list[Any] = []
         self._build_stripes()
+
+    def _zero_treadmill_joint_state(self, physics: Any) -> None:
+        if self._treadmill_joint is None:
+            return
+        bound_joint = physics.bind(self._treadmill_joint)
+        if hasattr(bound_joint, "qvel"):
+            bound_joint.qvel[:] = 0.0
+        if hasattr(bound_joint, "qacc"):
+            bound_joint.qacc[:] = 0.0
 
     def _build_stripes(self) -> None:
         z_pos = 0.5 * self.config.wall_height_mm
@@ -540,8 +552,10 @@ class VisualSpeedBallTreadmillArena(Ball):
         self.measured_forward_speed_mm_s = 0.0
         self.current_scene_world_speed_mm_s = 0.0
         self.current_flicker_phase_mm = 0.0
+        self._settle_until_s = float(max(self.config.treadmill_settle_time_s, 0.0))
         self._treadmill_visual_rgba = None
         super().reset(physics)
+        self._zero_treadmill_joint_state(physics)
         self._apply_stripe_positions(physics)
 
     def notify_fly_state(self, *, position_xy: tuple[float, float], yaw_rad: float, forward_velocity_x_mm_s: float) -> None:
@@ -552,7 +566,10 @@ class VisualSpeedBallTreadmillArena(Ball):
 
     def step(self, dt: float, physics: Any, *args, **kwargs) -> None:
         del args, kwargs
-        measured_speed = self._measure_forward_speed_mm_s(physics)
+        in_settle_window = float(self.curr_time) <= float(self._settle_until_s)
+        if in_settle_window:
+            self._zero_treadmill_joint_state(physics)
+        measured_speed = 0.0 if in_settle_window else self._measure_forward_speed_mm_s(physics)
         alpha = float(np.clip(self.config.fly_speed_smoothing_alpha, 0.0, 1.0))
         self.measured_forward_speed_mm_s = measured_speed
         self.filtered_fly_forward_speed_mm_s = float(
@@ -567,6 +584,10 @@ class VisualSpeedBallTreadmillArena(Ball):
         self.virtual_track_x_mm += float(self.filtered_fly_forward_speed_mm_s) * float(dt)
         self.curr_time += float(dt)
         self._apply_stripe_positions(physics)
+
+    def stabilize_after_physics_step(self, physics: Any) -> None:
+        if float(self.curr_time) <= float(self._settle_until_s):
+            self._zero_treadmill_joint_state(physics)
 
     def pre_visual_render_hook(self, physics: Any, *args, **kwargs) -> None:
         del args, kwargs
@@ -594,11 +615,16 @@ class VisualSpeedBallTreadmillArena(Ball):
         effective_visual_speed_mm_s = self._effective_visual_speed_mm_s()
         half_width = self.config.half_width_at_x(self.virtual_track_x_mm)
         block = self.config.block_for_time(self.curr_time)
+        settle_until_s = float(getattr(self, "_settle_until_s", 0.0))
+        in_settle_window = float(self.curr_time) <= settle_until_s
         return {
             "enabled": True,
             "geometry": self.config.geometry,
             "mode": self.config.mode,
             "stimulus_active": bool(stimulus_active),
+            "measurement_valid": not in_settle_window,
+            "in_settle_window": bool(in_settle_window),
+            "settle_remaining_s": float(max(0.0, settle_until_s - float(self.curr_time))),
             "scene_world_speed_mm_s": float(self.current_scene_world_speed_mm_s),
             "scene_world_motion_direction": direction_label_from_signed_speed(self.current_scene_world_speed_mm_s),
             "effective_visual_speed_mm_s": effective_visual_speed_mm_s,

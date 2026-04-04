@@ -4,6 +4,7 @@ import numpy as np
 
 from analysis.visual_speed_control_metrics import compute_visual_speed_control_metrics
 from body.visual_speed_control import (
+    Ball,
     FlatTerrain,
     VisualSpeedControlConfig,
     VisualSpeedBallTreadmillArena,
@@ -402,6 +403,170 @@ def test_counterphase_flicker_phase_offset_alternates_half_stripe() -> None:
     assert cfg.counterphase_flicker_phase_offset_mm(0.13) == 1.0
 
 
+def test_treadmill_ball_step_suppresses_measured_speed_during_settle_window() -> None:
+    arena = object.__new__(VisualSpeedBallTreadmillArena)
+    arena.config = VisualSpeedControlConfig.from_mapping(
+        {
+            "enabled": True,
+            "geometry": "treadmill_ball",
+            "mode": "interleaved_blocks",
+            "treadmill_settle_time_s": 0.05,
+        }
+    )
+    arena.curr_time = 0.0
+    arena.scene_offset_x_mm = 0.0
+    arena.virtual_track_x_mm = 0.0
+    arena.filtered_fly_forward_speed_mm_s = 0.0
+    arena.measured_forward_speed_mm_s = 0.0
+    arena.fly_x_mm = 0.0
+    arena.fly_y_mm = 0.0
+    arena.fly_yaw_rad = 0.0
+    arena.current_scene_world_speed_mm_s = 0.0
+    arena.current_flicker_phase_mm = 0.0
+    arena._settle_until_s = 0.05
+    arena._treadmill_joint = object()
+    arena._apply_stripe_positions = lambda physics: None
+    arena._measure_forward_speed_mm_s = lambda physics: 250.0
+
+    class _FakeBoundJoint:
+        def __init__(self) -> None:
+            self.qvel = np.array([4.0, 5.0, 6.0], dtype=float)
+            self.qacc = np.array([7.0, 8.0, 9.0], dtype=float)
+
+    class _FakePhysics:
+        def __init__(self) -> None:
+            self.bound_joint = _FakeBoundJoint()
+
+        def bind(self, obj):  # noqa: ANN001
+            assert obj is arena._treadmill_joint
+            return self.bound_joint
+
+    physics = _FakePhysics()
+    arena.step(0.002, physics)
+
+    assert arena.measured_forward_speed_mm_s == 0.0
+    assert arena.filtered_fly_forward_speed_mm_s == 0.0
+    assert arena.current_scene_world_speed_mm_s == 0.0
+    assert np.allclose(physics.bound_joint.qvel, np.zeros(3))
+    assert np.allclose(physics.bound_joint.qacc, np.zeros(3))
+
+
+def test_treadmill_ball_post_physics_stabilizer_zeros_joint_during_settle_window() -> None:
+    arena = object.__new__(VisualSpeedBallTreadmillArena)
+    arena.config = VisualSpeedControlConfig.from_mapping(
+        {
+            "enabled": True,
+            "geometry": "treadmill_ball",
+            "mode": "interleaved_blocks",
+            "treadmill_settle_time_s": 0.05,
+        }
+    )
+    arena.curr_time = 0.02
+    arena._settle_until_s = 0.05
+    arena._treadmill_joint = object()
+
+    class _FakeBoundJoint:
+        def __init__(self) -> None:
+            self.qvel = np.array([4.0, 5.0, 6.0], dtype=float)
+            self.qacc = np.array([7.0, 8.0, 9.0], dtype=float)
+
+    class _FakePhysics:
+        def __init__(self) -> None:
+            self.bound_joint = _FakeBoundJoint()
+
+        def bind(self, obj):  # noqa: ANN001
+            assert obj is arena._treadmill_joint
+            return self.bound_joint
+
+    physics = _FakePhysics()
+    arena.stabilize_after_physics_step(physics)
+
+    assert np.allclose(physics.bound_joint.qvel, np.zeros(3))
+    assert np.allclose(physics.bound_joint.qacc, np.zeros(3))
+
+
+def test_treadmill_ball_step_does_not_zero_joint_after_settle_window() -> None:
+    arena = object.__new__(VisualSpeedBallTreadmillArena)
+    arena.config = VisualSpeedControlConfig.from_mapping(
+        {
+            "enabled": True,
+            "geometry": "treadmill_ball",
+            "mode": "interleaved_blocks",
+            "treadmill_settle_time_s": 0.05,
+            "fly_speed_smoothing_alpha": 1.0,
+        }
+    )
+    arena.curr_time = 0.051
+    arena.scene_offset_x_mm = 0.0
+    arena.virtual_track_x_mm = 0.0
+    arena.filtered_fly_forward_speed_mm_s = 0.0
+    arena.measured_forward_speed_mm_s = 0.0
+    arena.fly_x_mm = 0.0
+    arena.fly_y_mm = 0.0
+    arena.fly_yaw_rad = 0.0
+    arena.current_scene_world_speed_mm_s = 0.0
+    arena.current_flicker_phase_mm = 0.0
+    arena._settle_until_s = 0.05
+    arena._treadmill_joint = object()
+    arena._apply_stripe_positions = lambda physics: None
+    arena._measure_forward_speed_mm_s = lambda physics: 250.0
+
+    class _FakeBoundJoint:
+        def __init__(self) -> None:
+            self.qvel = np.array([4.0, 5.0, 6.0], dtype=float)
+            self.qacc = np.array([7.0, 8.0, 9.0], dtype=float)
+
+    class _FakePhysics:
+        def __init__(self) -> None:
+            self.bound_joint = _FakeBoundJoint()
+
+        def bind(self, obj):  # noqa: ANN001
+            assert obj is arena._treadmill_joint
+            return self.bound_joint
+
+    physics = _FakePhysics()
+    arena.step(0.002, physics)
+
+    assert arena.measured_forward_speed_mm_s == 250.0
+    assert arena.filtered_fly_forward_speed_mm_s == 250.0
+    assert np.allclose(physics.bound_joint.qvel, np.array([4.0, 5.0, 6.0]))
+    assert np.allclose(physics.bound_joint.qacc, np.array([7.0, 8.0, 9.0]))
+
+
+def test_treadmill_ball_post_physics_stabilizer_does_not_zero_joint_after_settle_window() -> None:
+    arena = object.__new__(VisualSpeedBallTreadmillArena)
+    arena.config = VisualSpeedControlConfig.from_mapping(
+        {
+            "enabled": True,
+            "geometry": "treadmill_ball",
+            "mode": "interleaved_blocks",
+            "treadmill_settle_time_s": 0.05,
+        }
+    )
+    arena.curr_time = 0.051
+    arena._settle_until_s = 0.05
+    arena._treadmill_joint = object()
+
+    class _FakeBoundJoint:
+        def __init__(self) -> None:
+            self.qvel = np.array([4.0, 5.0, 6.0], dtype=float)
+            self.qacc = np.array([7.0, 8.0, 9.0], dtype=float)
+
+    class _FakePhysics:
+        def __init__(self) -> None:
+            self.bound_joint = _FakeBoundJoint()
+
+        def bind(self, obj):  # noqa: ANN001
+            assert obj is arena._treadmill_joint
+            return self.bound_joint
+
+    physics = _FakePhysics()
+    arena.stabilize_after_physics_step(physics)
+
+    assert np.allclose(physics.bound_joint.qvel, np.array([4.0, 5.0, 6.0]))
+    assert np.allclose(physics.bound_joint.qacc, np.array([7.0, 8.0, 9.0]))
+
+
 def test_treadmill_ball_visual_hooks_hide_ball_only_during_visual_render() -> None:
     arena = object.__new__(VisualSpeedBallTreadmillArena)
     arena._treadmill_geom = object()
@@ -439,3 +604,42 @@ def test_make_treadmill_visually_neutral_hides_ball_in_demo_render() -> None:
     arena._treadmill_geom = geom
     arena._make_treadmill_visually_neutral()
     assert geom.rgba == (0.35, 0.35, 0.35, 0.0)
+
+
+def test_treadmill_reset_zeros_joint_velocity_buffers(monkeypatch) -> None:
+    arena = object.__new__(VisualSpeedBallTreadmillArena)
+    arena.config = VisualSpeedControlConfig.from_mapping({"enabled": True, "geometry": "treadmill_ball"})
+    arena.curr_time = 1.0
+    arena.scene_offset_x_mm = 2.0
+    arena.virtual_track_x_mm = 3.0
+    arena.filtered_fly_forward_speed_mm_s = 4.0
+    arena.measured_forward_speed_mm_s = 5.0
+    arena.current_scene_world_speed_mm_s = 6.0
+    arena.current_flicker_phase_mm = 7.0
+    arena._treadmill_visual_rgba = np.array([1.0, 1.0, 1.0, 1.0], dtype=float)
+    arena._treadmill_joint = object()
+    arena._apply_stripe_positions = lambda physics: None
+
+    class _BoundJoint:
+        def __init__(self) -> None:
+            self.qvel = np.array([1.0, 2.0, 3.0], dtype=float)
+            self.qacc = np.array([4.0, 5.0, 6.0], dtype=float)
+
+    class _FakePhysics:
+        def __init__(self) -> None:
+            self.bound_joint = _BoundJoint()
+
+        def bind(self, joint):  # noqa: ANN001
+            assert joint is arena._treadmill_joint
+            return self.bound_joint
+
+    monkeypatch.setattr(Ball, "reset", lambda self, physics: None, raising=False)
+    physics = _FakePhysics()
+
+    arena.reset(physics)
+
+    assert np.allclose(physics.bound_joint.qvel, np.zeros(3))
+    assert np.allclose(physics.bound_joint.qacc, np.zeros(3))
+    assert arena.curr_time == 0.0
+    assert arena.scene_offset_x_mm == 0.0
+    assert arena.virtual_track_x_mm == 0.0

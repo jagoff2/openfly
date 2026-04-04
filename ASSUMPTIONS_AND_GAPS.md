@@ -308,3 +308,110 @@
 - Whether FlyVis nodes expose enough neuron-identity metadata to ground a direct overlap mapping into the whole-brain backend instead of only a cell-family-level splice
 - How to orient the current `uv_grid` splice so the stronger two-dimensional boundary fit also preserves the correct downstream turn sign
 - Why the calibrated splice preserves the correct downstream sign at `100 ms` but drifts by `500 ms`
+
+## Behavioral Interpretation Rule
+
+- Generic fly realism in target/object scenes must not be judged by permanent
+  fixation, endless pursuit, or "lock on and follow forever" behavior.
+- `bearing_reduction` and `fixation_fraction_*` remain useful diagnostics, but
+  they are not the primary biological success criteria for generic object
+  realism.
+- Primary embodied object-interaction criteria are:
+  - lawful transient response to object motion or appearance
+  - heading or speed perturbation during encounters
+  - minimum-distance regulation
+  - low overlap / pass-through frequency
+  - plausible pass-by, sidestep, inspection, or disengagement behavior
+  - reacquisition behavior after pass-by when it happens, without requiring
+    indefinite tracking
+- Future analyses of target demos should be framed around contingent
+  encounter behavior, not missile-lock pursuit.
+
+## Active Control-Path Rule
+
+- Active embodied runs must use the current hybrid multidrive control path.
+- The obsolete two-drive / `legacy_2drive` path is not admissible for active
+  parity, treadmill, or demo evidence.
+- Explicit compatibility support may still exist in isolated unit-level code,
+  but active configs, active defaults, and parity validation must stay on
+  `hybrid_multidrive`.
+- Any future treadmill or parity analysis that omits explicit
+  `decoder.command_mode = hybrid_multidrive` and
+  `runtime.control_mode = hybrid_multidrive` should be treated as invalid
+  evidence.
+
+## Treadmill Feedback Rule
+
+- In treadmill-ball assays, ball-derived treadmill speed is not to be treated
+  as interchangeable with genuine body translation for proprioceptive encoder
+  feedback.
+- Active code must keep those quantities separate:
+  - treadmill speed may be logged and used for treadmill visual-scene control
+  - body-feedback speed sent into the encoder must come from actual body
+    translation or another explicitly justified body-state proxy
+- Any future treadmill assay that writes ball speed back into
+  `BodyObservation.forward_speed` should be treated as invalid evidence.
+
+## Treadmill Warmup Rule
+
+- A scored treadmill baseline must not begin immediately after treadmill spawn.
+- Short parity treadmill assays must include an explicit warmup segment and a
+  matched treadmill settle window before the first scored baseline block.
+- For the active parity-short Creamer builder, that rule is encoded directly:
+  - two warmup blocks precede `baseline_a`
+  - `treadmill_settle_time_s = 2 * block_duration_s`
+- Any future treadmill summary that scores the first post-reset samples as
+  baseline evidence should be treated as suspect unless it explicitly
+  documents a comparable stabilization phase.
+
+## Treadmill Measurement Validity Rule
+
+- Treadmill samples are not admissible evidence merely because they were
+  logged.
+- For treadmill-ball runs, early samples during settle are explicitly marked
+  invalid in metadata:
+  - `measurement_valid = false`
+  - `in_settle_window = true`
+- Future treadmill analysis should treat only samples with
+  `measurement_valid = true` as mechanically admissible unless there is a
+  documented reason to do otherwise.
+- This rule exists because the observed failure mode was a spawn-time treadmill
+  explosion in `warmup_a`, not a subtle statistical bias.
+
+## Creamer Assay Readout Rule
+
+- For the current parity locomotor stack, the primary Creamer readout is not
+  raw treadmill ball speed.
+- The brain drives a canned hybrid locomotor controller through final latents
+  and decoder outputs, not through direct per-joint motor commands.
+- So the primary admissible Creamer response variables are the final locomotor
+  outputs and their derived command-side proxies, including:
+  - `forward_signal`
+  - `turn_signal`
+  - `left/right_amp`
+  - `left/right_freq_scale`
+  - `retraction_gain`
+  - `stumbling_gain`
+  - `reverse_gate`
+  - derived forward locomotor proxy metrics built from those fields
+- Treadmill ball motion remains useful, but only as a secondary embodied
+  mechanics check.
+- This rule exists because the current tethered-ball seam can fail downstream
+  of the decoder while command-side locomotor response remains real and
+  measurable.
+
+## Creamer Sign Rule
+
+- Do not interpret front-to-back translational motion as a walking-speed
+  increase in the Creamer 2018 sense.
+- The correct qualitative sign from Creamer et al. is:
+  - front-to-back motion slows walking
+  - back-to-front motion also slows walking
+  - back-to-front slowing is stronger than front-to-back slowing
+- So for the current open-loop front-to-back assay, a suppressive locomotor
+  response is sign-consistent with the paper.
+- Future Creamer analysis should judge:
+  - whether the sign is suppressive
+  - whether the magnitude is plausible
+  - whether `T4/T5` ablation weakens or removes that suppression
+  - separately from any treadmill mechanics failure
