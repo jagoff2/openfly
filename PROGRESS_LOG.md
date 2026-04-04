@@ -4,6 +4,58 @@
 
 Ground truth source: `AGENTS.MD`
 
+## 2026-04-04 11:40 - Added a source-verified external comparison against `erojasoficial-byte/fly-brain` and tightened the canonical parity reproduction commands
+
+1. What I did
+
+- Reviewed the current public `erojasoficial-byte/fly-brain` repo against its repo root and three implementation files rather than trusting the README claim surface alone:
+  - repo root README
+  - `brain_body_bridge.py`
+  - `fly_embodied.py`
+  - `visual_system.py`
+- Compared that public code against the current OpenFly canonical path and then added a new external-comparison section to:
+  - [README.md](/G:/flysim/README.md)
+  - [openfly_whitepaper_journal_draft.md](/G:/flysim/openfly_whitepaper_journal_draft.md)
+- Tightened the canonical reproduction commands in both documents so they now show the exact active WSL parity invocation on this machine:
+  - `wsl.exe --cd /mnt/g/flysim`
+  - `MUJOCO_GL=egl`
+  - `PYTHONPATH=src`
+  - `/root/.local/bin/micromamba run -n flysim-full`
+  - full-parity target / no-target configs
+  - corrected command-side Creamer parity runner
+
+2. What succeeded
+
+- The whitepaper now states a balanced external verdict:
+  - OpenFly is the stronger scientific audit artifact
+  - `erojasoficial-byte/fly-brain` is the stronger scope/demo artifact
+- The comparison is grounded in actual public code, not just README language:
+  - `brain_body_bridge.py` really does collapse the motor seam to DN rate decoding into `[left_drive, right_drive]` plus explicit bridge-level mode selection and backup routing
+  - `visual_system.py` really does state the early-visual scale mismatch and rate injection workaround
+  - `fly_embodied.py` really does add a manual proboscis hinge and overwrite the free-joint quaternion during flight stabilization
+- The canonical reproduction path is now more explicit than before and no longer leaves room to confuse generic host-side `python` invocations with the actual active parity run path.
+
+3. What failed
+
+- Nothing failed in this documentation pass.
+- The live `2.0 s` parity target activation run that was already in flight before the doc edit is still separate from this change and still running on the exact active parity path.
+
+4. Evidence
+
+- [README.md](/G:/flysim/README.md)
+- [openfly_whitepaper_journal_draft.md](/G:/flysim/openfly_whitepaper_journal_draft.md)
+- External repo:
+  - `https://github.com/erojasoficial-byte/fly-brain`
+  - `https://raw.githubusercontent.com/erojasoficial-byte/fly-brain/main/brain_body_bridge.py`
+  - `https://raw.githubusercontent.com/erojasoficial-byte/fly-brain/main/fly_embodied.py`
+  - `https://raw.githubusercontent.com/erojasoficial-byte/fly-brain/main/visual_system.py`
+
+5. Next actions
+
+- Commit this documentation update on `main`.
+- Push it to `origin/main`.
+- Move `exp/spontaneous-brain-latent-turn` to the same commit so both branches stay synchronized.
+
 ## 2026-04-04 00:55 - Reviewed the journal draft, corrected stale claims, and synchronized the canonical whitepaper to the actual active parity path
 
 1. What I did

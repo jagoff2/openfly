@@ -88,6 +88,43 @@ So the Creamer parity assays use the same active brain family, the same endogeno
 
 The older decoder-internal brain-latent turn branch is still an important historical result for jump perturbation recovery, but it is not the current canonical replication path. It remains useful as historical evidence that brain-side latent state improved non-spontaneous perturbation recovery without a control bypass.
 
+## External Comparison: `erojasoficial-byte/fly-brain`
+
+As of the 2026-04-04 review of the public repo, OpenFly is the stronger scientific audit artifact, while `erojasoficial-byte/fly-brain` is the stronger scope/demo artifact.
+
+### Architecture
+
+OpenFly is narrower, more modular, and more falsification-oriented. The canonical path is explicitly constrained to parity-enforced configs, splice-only visual input, `hybrid_multidrive`, matched controls, and named evidence artifacts. `erojasoficial-byte/fly-brain` presents a broader bundled system with multimodal modules, two-fly experiments, plasticity, and bundled paper regeneration, which is a wider public feature surface than OpenFly currently claims.
+
+The key architectural caveat is the actual bridge. In `brain_body_bridge.py`, the public motor seam is explicitly a DN firing-rate decoder feeding `[left_drive, right_drive]` into FlyGym's `HybridTurningController`, with behavior routed through bridge-level mode logic rather than a richer descending-control substrate. OpenFly is more limited, but its active bridge is described more narrowly and more accurately.
+
+### Honesty Boundary
+
+OpenFly states its unresolved gaps directly: no private Eon glue, no exact neuron-identity visual continuity, no solved close-range target regulation, no solved treadmill-ball mechanics seam, and no full biological motor equivalence. That is the main reason it is easier to trust under audit.
+
+`erojasoficial-byte/fly-brain` overstates relative to its current public code. Its README says behavior emerges through the real connectome with "no hand-coded rules", but `brain_body_bridge.py` contains explicit thresholded mode selection with the stated priority `escape > grooming > feeding > walking`, bridge-level tactile / bitter / olfactory escape backups, and direct sound / olfactory turning gains. `fly_embodied.py` also adds a manual proboscis hinge because the stock body lacks one, and directly overwrites the free-joint quaternion and angular velocity during flight stabilization. Those are valid engineering scaffolds, but they are not the same thing as a fully lawful closed-loop claim.
+
+### Reproducibility
+
+`erojasoficial-byte/fly-brain` is easier to rerun as the author's packaged story because it bundles sessions, figures, PDFs, and one-shot regeneration scripts. OpenFly is easier to audit because it exposes canonical configs, focused tests, matched controls, named artifact paths, and preserved negative results instead of only packaging the showcase path.
+
+### Likely Biological Fidelity
+
+Both repos are still far from real fly. OpenFly's main weakness is that it openly does not yet know the full lawful sensor-to-brain-to-descending mapping, so it keeps its claim surface narrow. `erojasoficial-byte/fly-brain` claims broader biological richness, but `visual_system.py` explicitly injects firing rates into the early visual pathway because of a scale mismatch, and its bridge-level behavior routing is more synthetic than the README language suggests. The practical consequence is that OpenFly is more believable for the specific causal claims it currently makes, while `erojasoficial-byte/fly-brain` is better read as an ambitious embodied connectome demo platform.
+
+### Net Judgment
+
+- More impressive public scope and packaging: `erojasoficial-byte/fly-brain`
+- Stronger audit artifact and stricter claim boundary: OpenFly
+- More likely to survive hostile review on whether the claimed behavior really comes through the lawful sensory-to-brain-to-descending-to-body path: OpenFly
+
+Sources reviewed for this comparison:
+
+- [`erojasoficial-byte/fly-brain` repo README](https://github.com/erojasoficial-byte/fly-brain)
+- [`brain_body_bridge.py`](https://raw.githubusercontent.com/erojasoficial-byte/fly-brain/main/brain_body_bridge.py)
+- [`fly_embodied.py`](https://raw.githubusercontent.com/erojasoficial-byte/fly-brain/main/fly_embodied.py)
+- [`visual_system.py`](https://raw.githubusercontent.com/erojasoficial-byte/fly-brain/main/visual_system.py)
+
 ## Current Best-Supported Findings
 
 ### A. The stack is real
@@ -274,35 +311,52 @@ python -m pytest tests/test_visual_speed_control_metrics.py tests/test_creamer_p
 
 ## Reproduction Commands
 
-### Canonical embodied parity run
+Canonical production runs on this machine use WSL2, `MUJOCO_GL=egl`, `PYTHONPATH=src`, and the `flysim-full` micromamba environment. The commands below are the exact active parity invocations, not shortened host-side approximations.
+
+### Canonical embodied parity target run
 
 ```bash
-python -m runtime.closed_loop ^
-  --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed.yaml ^
-  --mode flygym ^
-  --duration 2.0
+wsl.exe --cd /mnt/g/flysim bash -lc "
+  export MUJOCO_GL=egl
+  export PYTHONPATH=src
+  /root/.local/bin/micromamba run -n flysim-full \
+    python -m runtime.closed_loop \
+    --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_target_brain_endogenous_routed.yaml \
+    --mode flygym \
+    --duration 2.0
+"
 ```
 
 ### Canonical no-target parity run
 
 ```bash
-python -m runtime.closed_loop ^
-  --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_endogenous_routed.yaml ^
-  --mode flygym ^
-  --duration 2.0
+wsl.exe --cd /mnt/g/flysim bash -lc "
+  export MUJOCO_GL=egl
+  export PYTHONPATH=src
+  /root/.local/bin/micromamba run -n flysim-full \
+    python -m runtime.closed_loop \
+    --config configs/flygym_realistic_vision_splice_uvgrid_celltype_descending_readout_calibrated_no_target_brain_endogenous_routed.yaml \
+    --mode flygym \
+    --duration 2.0
+"
 ```
 
 ### Canonical command-side Creamer parity pair
 
 ```bash
-python scripts/run_creamer2018_parity_open_loop.py ^
-  --mode flygym ^
-  --output-root outputs/creamer2018_parity_open_loop_2p0_commandmetrics_v1 ^
-  --duration 2.0 ^
-  --stimulus-start 0.5 ^
-  --stimulus-end 2.0 ^
-  --scene-velocity -30.0 ^
-  --treadmill-settle-time 0.2
+wsl.exe --cd /mnt/g/flysim bash -lc "
+  export MUJOCO_GL=egl
+  export PYTHONPATH=src
+  /root/.local/bin/micromamba run -n flysim-full \
+    python scripts/run_creamer2018_parity_open_loop.py \
+    --mode flygym \
+    --output-root outputs/creamer2018_parity_open_loop_2p0_commandmetrics_v1 \
+    --duration 2.0 \
+    --stimulus-start 0.5 \
+    --stimulus-end 2.0 \
+    --scene-velocity -30.0 \
+    --treadmill-settle-time 0.2
+"
 ```
 
 ### Benchmarks

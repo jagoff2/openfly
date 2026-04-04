@@ -1,6 +1,6 @@
 # Context Handoff for OpenFly
 
-Last updated: 2026-04-02
+Last updated: 2026-04-04
 
 ## Purpose of this file
 
@@ -21,6 +21,17 @@ This document is intentionally verbose. It is not only a summary. It is meant to
 be a practical memory scaffold for re-entry.
 
 ## Executive summary
+
+2026-04-04 addendum:
+
+- The canonical whitepaper now includes a source-verified external comparison against `erojasoficial-byte/fly-brain`.
+- The canonical reproduction commands now show the exact active parity invocation on this machine:
+  - WSL2
+  - `MUJOCO_GL=egl`
+  - `PYTHONPATH=src`
+  - `/root/.local/bin/micromamba run -n flysim-full`
+  - full-parity endogenous routed configs only
+- `main` and `exp/spontaneous-brain-latent-turn` were synchronized to the same parity commit before this addendum.
 
 The repository at `G:\flysim` is a public-equivalent reconstruction of an
 Eon-style embodied fruit-fly simulation stack. It combines:
