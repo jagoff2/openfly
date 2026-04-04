@@ -4,6 +4,40 @@
 
 Ground truth source: `AGENTS.MD`
 
+## 2026-04-04 11:55 - Recast the external repo comparison in research-paper tone
+
+1. What I did
+
+- Rewrote the new `erojasoficial-byte/fly-brain` comparison section in:
+  - [README.md](/G:/flysim/README.md)
+  - [openfly_whitepaper_journal_draft.md](/G:/flysim/openfly_whitepaper_journal_draft.md)
+- Removed adversarial framing and replaced it with related-work language:
+  - `External Comparison` -> `Comparison with Related Public Work`
+  - removed phrases like `overstates`, `hostile review`, and similar audit-style wording
+  - kept the implementation caveats, but expressed them as comparative interpretation rather than accusation
+
+2. What succeeded
+
+- The section now reads like a comparison section in a real research paper.
+- The substantive points are unchanged:
+  - OpenFly is framed as narrower and more conservative in claim boundary
+  - `erojasoficial-byte/fly-brain` is framed as broader in public scope and packaged demo surface
+  - the bridge, flight-stabilization, and early-visual injection caveats remain present, but in neutral comparative language
+
+3. What failed
+
+- Nothing failed.
+
+4. Evidence
+
+- [README.md](/G:/flysim/README.md)
+- [openfly_whitepaper_journal_draft.md](/G:/flysim/openfly_whitepaper_journal_draft.md)
+
+5. Next actions
+
+- Commit the tone correction.
+- Push the same commit to `main` and `exp/spontaneous-brain-latent-turn`.
+
 ## 2026-04-04 11:40 - Added a source-verified external comparison against `erojasoficial-byte/fly-brain` and tightened the canonical parity reproduction commands
 
 1. What I did
